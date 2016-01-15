@@ -1,0 +1,16 @@
+bms:
+    resource:
+    resource: "@BmsBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+bms_visualization:
+    resource: "@BmsVisualizationBundle/Resources/config/routing.yml"
+    prefix:   /bms_admin/wizualizacja
+
+bms_configuration:
+    resource: "@BmsConfigurationBundle/Resources/config/routing.yml"
+    prefix:   /bms_admin/konfiguracja
+    
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+    

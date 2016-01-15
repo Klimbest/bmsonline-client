@@ -1,0 +1,56 @@
+<div class="dialog-image-panel-settings" title="Właściwości nowego panelu:">
+    <div class="form-group-sm">
+        <div class="row">
+            <div class="col-md-2">
+                <h6><label class="control-label">Wybierz nowy obraz..</label></h6>
+                <span class="btn btn-sm btn-default btn-file">
+                    Browse <input id="image" type="file" accept='image/*'>
+                </span>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">Nazwa</label>
+                <input id="imageName" type="text" class="form-control" />
+            </div>
+            <div class="col-md-2">
+                <label for="topPosition">Od góry:</label>
+                <input id="topPosition" type="number" class="form-control" value="50"/>
+            </div>
+            <div class="col-md-2">
+                <label for="leftPosition">Od lewej:</label>
+                <input id="leftPosition" type="number" class="form-control" value="50"/>
+            </div>
+            <div class="col-md-2">
+                <label for="width">Szerokość:</label>
+                <input id="width" type="number" class="form-control" value="100"/>
+            </div>
+            <div class="col-md-2">
+                <label for="height">Wysokość:</label>
+                <input id="height" type="number" class="form-control" value="100"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 image-list">
+            <h6><label class="control-label">...lub któryś z dodanych wcześniej.</label></h6>
+            {% for image in images %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span class="label label-primary">{{image}} <i class="fa fa-remove fa-red fa-fw"></i></span>
+                            {#<a href="#" class="thumbnail">
+                                <img src="{{path}}{{image}}" alt="{{image}}"/>
+                            </a>#}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-10 canvas">
+            <canvas id="myCanvas" width="500" height="375"></canvas> 
+        </div>
+    </div>
+    <div class="row image-list-bottom">
+        <div class="col-md-12">
+
+        </div>
+    </div>
+</div>
+</div>

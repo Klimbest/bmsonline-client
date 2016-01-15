@@ -1,0 +1,150 @@
+{# src/BmsConfigurationBundle/Resources/views/communicationType.html.twig #}
+
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+<div class="col-md-12 text-left">
+    <div class="row">
+        <div class="col-md-12">
+            <span class="label label-primary hide-mainrow-label">{{ comm.name }} - konfiguracja <i class="fa fa-angle-left fa-fw"></i></span>
+        </div>
+    </div>
+    <div class="well text-left hidden-item">
+        {{form_start(form)}}
+        <div class="row">
+            <div class="col-md-6 col-md-offset-1">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name)}}
+            </div>
+            <div class="col-md-3 col-md-offset-1">
+                {{ form_label(form.type) }}
+                {{ form_widget(form.type)}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-1 rtuascii">
+                {{ form_label(form.baudRate) }}
+                {{ form_widget(form.baudRate)}}
+            </div>
+            <div class="col-md-4 col-md-offset-2 rtuascii">
+                {{ form_label(form.parity) }}
+                {{ form_widget(form.parity)}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-1 rtuascii">
+                {{ form_label(form.dataBits) }}
+                {{ form_widget(form.dataBits)}}
+            </div>
+            <div class="col-md-4 col-md-offset-2 rtuascii">
+                {{ form_label(form.stopBits) }}
+                {{ form_widget(form.stopBits)}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-1 tcpip">
+                {{ form_label(form.ipAddress) }}
+                {{ form_widget(form.ipAddress)}}
+            </div>
+            <div class="col-md-4 col-md-offset-2 tcpip">
+                {{ form_label(form.port) }}
+                {{ form_widget(form.port)}}
+            </div>
+        </div>
+        <div class="row text-right">
+            <div class="col-md-12 ">
+                <input class="btn btn-default btn-edit" type="button" value="Edytuj" />
+                <input class="btn btn-default btn-save" type="submit" value="Zapisz zmiany" />
+                <input class="btn btn-default btn-cancel" type="button" value="Anuluj" />
+                <button class="btn btn-default btn-save" type="submit">Zapisz</button>
+            </div>
+        </div>
+        {{form_rest(form)}}
+        {{form_end(form)}}
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <span class="label label-primary hide-mainrow-label">Utworzone urządzenia <i class="fa fa-angle-left fa-angle-down fa-fw"></i></span>
+        </div>
+        <div class="col-md-6 text-right">
+            <span class="label label-primary"><a href="#">Filtruj <i class="fa fa-filter fa-fw"></i></a></span>
+        </div>
+    </div>
+    <div class="well text-left">
+        <form action="{{ path('bms_configuration_del_many_devices', {'comm_id': comm.id}) }}" method="POST">
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="label label-default label-title">{{ comm.name }}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <span class="label label-primary hide-button-label">Ukryj / Pokaż kolumny <i class="fa fa-angle-left fa-fw"></i></span>
+                </div>
+                <div class="col-md-6 text-right">
+                    <span class="label label-primary">Liczba urządzeń: {{ comm.devices|length}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 hide-button-container hidden-item">
+                    <input id="modbus_address_hex" type="button" class="btn btn-default btn-xs hidding" value="Adres modbus(HEX)"></input>
+                    <input id="modbus_address_dec" type="button" class="btn btn-default btn-xs hidding" value="Adres modbus(DEC)"></input>
+                    <input id="name" type="button" class="btn btn-default btn-xs hidding" value="Nazwa skrócona"></input>
+                    <input id="description" type="button" class="btn btn-default btn-xs hidding clicked" value="Pełna nazwa"></input>
+                    <input id="localization" type="button" class="btn btn-default btn-xs hidding" value="Lokalizacja"></input>
+                    <input id="active" type="button" class="btn btn-default btn-xs hidding" value="Aktywne"></input>
+                    <input id="manage" type="button" class="btn btn-default btn-xs hidding" value="Zarządzaj"></input>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <input type="button" class="btn btn-default btn-xs checkAll" value="Zaznacz wszystkie"></input>
+                    <button type="button" class="btn btn-default btn-xs refresh"><i class="fa fa-refresh fa-fw fa-blue"></i></button>
+                    <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-remove fa-fw fa-red remove-many"></i></button>
+                </div>
+            </div>
+            <div class="row">
+                <table class="table table-bordered small">
+                    <thead>
+                        <tr>
+                            <th class="modbus_address_hex">Adres modbus(HEX)</th>
+                            <th class="modbus_address_dec">Adres modbus(DEC)</th>
+                            <th class="name">Nazwa skrócona</th>
+                            <th class="description">Pełna nazwa</th>
+                            <th class="localization">Lokalizacja</th>
+                            <th class="active">Aktywne</th>
+                            <th class="active">Zarządzaj</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if comm.devices|length > 0 %}
+                            {% for device in comm.devices %}
+                                <tr>
+                                    <td class="modbus_address_hex">{{ device.modbusAddress }}</td>
+                                    <td class="modbus_address_dec">{{ device.modbusAddress }}</td>
+                                    <td class="name">{{ device.name }}</td>
+                                    <td class="description">{{ device.description}}</td>
+                                    <td class="localization">{{ device.localization }}</td>
+                                    <td class="active_read text-center">
+                                        {% if device.active == 1 %}
+                                            <i class="fa fa-check-square-o fa-fw fa-green"></i>
+                                        {% else %}
+                                            <i class="fa fa-square-o fa-fw fa-red"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td class="manage text-center">
+                                        <i id="{{device.id}}" class="fa fa-edit fa-fw fa-green fa-device"></i>
+                                        <a href="{{ path('bms_configuration_del_device', {'comm_id': device.communicationType.id, 'device_id': device.id}) }}">
+                                            <i class="fa fa-remove fa-fw fa-red"></i>
+                                        </a>
+                                    </td>
+                                    <td><input type="checkbox" name="checkedDevId[]" value="{{device.id}}"/></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>

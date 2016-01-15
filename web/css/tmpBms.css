@@ -1,0 +1,16 @@
+/*BODY*/
+.page{
+    margin: 0 auto;
+    position: relative;
+    padding: 0px;
+    overflow: hidden;
+}
+/*PANELE*/
+.bms-panel{
+    position: absolute;
+    cursor: default;
+}
+
+.bms-panel.navigation-panel{
+    cursor: pointer;
+}

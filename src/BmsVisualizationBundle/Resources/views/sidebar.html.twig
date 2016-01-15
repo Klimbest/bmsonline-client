@@ -1,0 +1,92 @@
+<div class="navbar-default sidebar text-left" role="navigation">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default">Dodaj stronę</button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li><button type="button" class="btn btn-default btn-sm btn-add-page"><i class="fa fa-file-o fa-2x fa-fw"></i></button></li>
+        </ul>
+    </div>
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-default btn-add-panel">Dodaj panel</button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li><button type="button" class="btn btn-default btn-sm btn-add-area-panel"><i class="fa fa-square-o fa-2x fa-fw"></i></button></li>
+            <li><button type="button" class="btn btn-default btn-sm btn-add-text-panel"><i class="fa fa-font fa-2x fa-fw"></i></button></li>
+            <li><button type="button" class="btn btn-default btn-sm btn-add-image-panel"><i class="fa fa-picture-o fa-2x fa-fw"></i></button></li>
+            <li><button type="button" class="btn btn-default btn-sm btn-add-variable-panel"><i class="fa fa-hdd-o fa-2x fa-fw"></i></button></li>
+            <li><button type="button" class="btn btn-default btn-sm btn-add-navigation-panel"><i class="fa fa-link fa-2x fa-fw"></i></button></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <label for="pattern-net-size">Rozmiar siatki (px):</label>
+        </div>
+        <div class="col-md-4 text-right">
+            <label for="pattern-net-size">ON/OFF</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <input id="pattern-net-size" type="number" class="form-control" placeholder="min 50" min="50" step="25" />
+
+        </div>
+
+        <div class="col-md-5 text-right">
+            <button type="button" class="btn btn-default btn-pattern-net"><span class="toggler">&nbsp;</span></button>
+        </div>
+    </div>{#
+    <div class="row">
+        <div class="col-md-12">
+            <label for="pattern-net-size">Zakotwicz wszsytkie panele:</label>
+        </div>
+        <div class="col-md-12">
+            <button type="button" class="btn btn-default btn-anchore-all"><i class="fa fa-anchor fa-fw"></i> <span class="toggler off">&nbsp;</span></button>
+        </div>
+    </div>#}
+    <div class="row">
+        <div class="col-md-12">
+            <label for="pattern-net-size">Lista paneli:</label>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-5">
+                    <button type="button" class="btn btn-default btn-panel-list"><i class="fa fa-list-ul fa-fw"></i><span class="toggler">&nbsp;</span></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1">
+                    <label><i class="fa fa-square-o fa-1x fa-fw"></i></label>
+                    <input type="checkbox" id="panel-list-area" checked/>
+                </div>
+                <div class="col-md-1">
+                    <label><i class="fa fa-font fa-1x fa-fw"></i></label>
+                    <input type="checkbox" id="panel-list-text" checked/>
+                </div>
+                <div class="col-md-1">
+                    <label><i class="fa fa-picture-o fa-1x fa-fw"></i></label>
+                    <input type="checkbox" id="panel-list-image" checked/>
+                </div>
+                <div class="col-md-1">
+                    <label><i class="fa fa-hdd-o fa-1x fa-fw"></i></label>
+                    <input type="checkbox" id="panel-list-variable" checked/>
+                </div>
+                <div class="col-md-1">
+                    <label><i class="fa fa-link fa-1x fa-fw"></i></label>
+                    <input type="checkbox" id="panel-list-navigation" checked/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-list-container">
+        
+    </div>
+</div>
+
+{% include 'BmsVisualizationBundle:dialog:dialogPageSettings.html.twig' %}
+{% include 'BmsVisualizationBundle:dialog:dialogAreaPanelSettings.html.twig' %}
+{% include 'BmsVisualizationBundle:dialog:dialogTextPanelSettings.html.twig' %}

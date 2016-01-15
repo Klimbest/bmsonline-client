@@ -1,0 +1,37 @@
+{% extends "::base.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/bmsconfiguration/css/bmsConfiguration.css')}}">
+{% endblock %}
+
+
+{% block nav %}
+    {{ parent() }}
+    <a href="{{path('bms_index')}}">
+        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-building fa-fw"></i> BMS</button>
+    </a>
+    <a href="{{path('bms_configuration_index')}}">
+        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-wrench"></i> Konfiguracja</button>
+    </a>
+    <a href="{{path('bms_visualization_index')}}">
+        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-paint-brush"></i> Wizualizacja</button>
+    </a>
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'BmsConfigurationBundle::sidebar.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    <div class="row main-row">
+        {% include 'BmsConfigurationBundle::target.html.twig' %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/bmsconfiguration/js/bmsConfiguration.js') }}"></script>
+{% endblock %}
+
+

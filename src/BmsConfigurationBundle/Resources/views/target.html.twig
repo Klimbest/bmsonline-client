@@ -1,0 +1,81 @@
+{# src/BmsConfigurationBundle/Resources/views/target.html.twig #}
+
+
+<div class="col-md-12 text-left">
+    <div class="row">
+        <div class="col-md-12">
+{#            <span class="label label-primary hide-mainrow-label">{{target.name }} <i class="fa fa-angle-left fa-angle-down fa-fw"></i></span>#}
+        </div>
+    </div>
+    <div class="well device text-left">
+        <p>Witamy na stronie konfiguracyjnej sytemu BMS Online. </p>
+        <p>Po lewej stronie, widać dostępne interfejsy komunikacyjne.</p>
+        <p>Interfejsy skonfigurowane są domyślnie.</p>
+        <p>Aby zmienić ustawienia, przejdź na stronę wybranego interfejsu.</p>
+
+    </div>
+</div>
+
+{% if comms is not null %}  
+    <div class="col-md-12 text-left">
+        <div class="row">
+            <div class="col-md-12">
+                <span class="label label-primary hide-mainrow-label">Aktualne ustawienia <i class="fa fa-angle-left fa-angle-down fa-fw"></i></span>
+            </div>
+        </div>
+        <div class="well device text-center">
+
+            <div class="row ">
+                <div class="col-md-1">
+                    Typ
+                </div>
+                <div class="col-md-2">
+                    Nazwa
+                </div>
+                <div class="col-md-2">
+                    Transmisja
+                </div>
+                <div class="col-md-1">
+                    Parzystość
+                </div>
+                <div class="col-md-2">
+                    Bity danych
+                </div>
+                <div class="col-md-2">
+                    Bity stopu
+                </div>
+                <div class="col-md-2">
+                    Czas aktualizacji
+                </div>
+            </div>
+            {% for comm in comms %}
+                <div class="row">
+                    <div class="col-md-1">
+                        {{ comm.type }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ comm.name }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ comm.baudRate }}
+                    </div>
+                    <div class="col-md-1">
+                        {{ comm.parity }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ comm.dataBits }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ comm.stopBits }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ comm.updated|date('Y-m-d H:i') }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endif %}
+
+

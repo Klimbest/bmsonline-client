@@ -1,0 +1,14 @@
+<div class="dialog-navigation-panel-settings" title="Właściwości nowego panelu:">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="pages">Strony:</label>
+                <select class="form-control pages">
+                    {% for page in pages %}
+                        <option value="{{ page.id }}">{{ page.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

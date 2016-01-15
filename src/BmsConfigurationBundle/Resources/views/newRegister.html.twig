@@ -1,0 +1,117 @@
+{# src/BmsConfigurationBundle/Resources/views/newRegister.html.twig #}
+
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+
+<div class="col-md-12 text-left">
+    <span class="label label-primary">{{comm.name}} > {{device.name}} > Nowy rejestr - konfiguracja </span>
+    <div class="well device text-left">
+        {{ form_start(form)}}
+        <div class="row enabled">
+            <div class="col-md-5">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{form_label(form.name)}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-7">
+                        {{form_widget(form.name)}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                {{form_row(form.description)}}
+            </div>
+        </div>
+        <div class="row enabled">
+            <div class="col-md-5">
+                <div class="row">
+                    <div class="col-md-6">
+                        {{form_label(form.register_address)}}<br />
+                        (format szesnastkowy)
+                    </div>
+                    <div class="col-md-6">
+                        {{form_label(form.register_address)}}<br />
+                        (format dziesiętny)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 register_address_hex">
+                        {{form_widget(form.register_address)}}
+                    </div>
+                    <div class="col-md-5 col-md-offset-1 register_address_dec">
+                        <input type="text" disabled class="form-control" maxlength="5"></input>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{form_label(form.scan_queue)}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-9">
+                        {{form_widget(form.scan_queue)}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{form_label(form.display_suffix)}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        {{form_widget(form.display_suffix)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row enabled">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{form_label(form.modificator_read)}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        {{form_widget(form.modificator_read)}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{form_label(form.modificator_write)}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        {{form_widget(form.modificator_write)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row enabled">
+            <div class="col-md-6">
+                {{form_row(form.archive)}}
+            </div>
+            <div class="col-md-6">
+                {{form_row(form.active)}}
+            </div>
+        </div>
+        <div class="row text-right">
+            <div class="col-md-12">
+                <input class="btn btn-default" type="submit" value="Dodaj rejestr" />
+            </div>
+        </div>
+        {{form_rest(form)}}
+        {{form_end(form)}}
+    </div>
+</div>
+
+

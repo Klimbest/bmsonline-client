@@ -1,0 +1,108 @@
+{# /app/Resources/views/base.html.twig #}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>BMS OnLine {% block title %}-{% endblock %} Klimbest</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('css/bootstrap.css')}}">
+            <link rel="stylesheet" href="{{ asset('css/jquery-ui.css')}}">
+            <link rel="stylesheet" href="{{ asset('css/font-awesome.css')}}">
+            <link rel="stylesheet" href="{{ asset('css/main.css')}}">
+        {% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('web/favicon.ico') }}" />
+    </head>
+    <body>
+        {#<div class="cookie text-center">
+            <span style="background-color: ">Nasza strona używa plików cookie do prawidłowego działania. Pozostając na tej stronie, wyrażasz zgodę na korzystanie z plików cookie.</span><br/>
+            <a href="{{ path('app_homepage_private_policy') }}"> 
+                <button type="button" class="btn btn-default btn-xs">Polityka prywatności</button>
+            </a>
+            <button id="close-cookie" type="button" class="btn btn-success btn-xs">Ok, rozumiem</button>
+        </div>#}
+        <div class="container-fluid content-container">
+            <nav class="navbar navbar-default " role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Rozwiń nawigację</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="{{path('bms_index')}}">
+                            <img src="{{ asset('images/logo.jpg') }}">
+                        </a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-top-links navbar-right">
+                            <div class="text-right">
+                                {% block nav %}
+                                {% endblock %}
+
+                                <a href="#">
+                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-user"></i> Karta użytkownika</button>
+                                </a>
+
+                                <a href="#">
+                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-sign-out"></i> Wyloguj</button>                                
+                                </a>
+                            </div>
+                            <div class="text-right">
+                                {% if app.user %}
+                                    <small>Zalogowany jako <strong>{{ app.user.username }}</strong></small>
+                                {% else %}  
+                                    <small>Jesteś niezalogowany</small>
+                                {% endif %}
+                            </div>
+                        </ul>
+                    </div>
+
+                    {% block sidebar %}
+                    {% endblock %}
+
+                </div>
+            </nav>
+
+            {% block body %}
+
+            {% endblock %}  
+        </div>
+         <div class="row well footer-well navbar-fixed-bottom">
+             <div class="col-xs-3 col-xs-offset-1">
+                 Copyright: Klimbest © 2015<br/>
+                 31-752 Kraków, ul. K. Makuszyńskiego 15/3A
+             </div>
+             <div class="col-xs-4 text-center">
+                 <strong>BMSOnLine</strong><br/>
+                 Jest własnością firmy KLIMBEST
+             </div>
+             <div class="col-xs-3 text-right">
+                 <a href="#{#{ path('app_homepage_private_policy') }#}">Polityka prywatności</a><br/>
+                 <a href="https://plus.google.com/"><i class="fa fa-google-plus-square fa-2x" style="color: #dd4b39"></i></a>
+                 <a href="https://twitter.com/"><i class="fa fa-twitter-square fa-2x" style="color: #55acee"></i></a>
+                 <a href="https://www.facebook.com/share.php?u=http%3A%2F%2Fwww.bmsonline.pl%2F"><i class="fa fa-facebook-square fa-2x" style="color: #3b5998"></i></a>
+                 <a href="https://www.rss.com/"><i class="fa fa-rss-square fa-2x" style="color: #f26522"></i></a>
+             </div>
+         </div>
+
+    </div>
+    {% block javascripts %}
+        <script src="{{ asset('js/__jquery-1.11.3.js') }}"></script>
+        <script src="{{ asset('js/_bootstrap.js') }}"></script>
+        <script src="{{ asset('js/jquery.cookie.js') }}"></script>
+        <script src="{{ asset('js/jquery-ui.js') }}"></script>
+        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+                <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+        <script src="{{ asset('js/main.js') }}"></script>
+        <script src="{{ asset('js/jquery.formatDateTime.js') }}"></script>
+        <script src="{{ asset('js/jquery.ui.resizable.snap.ext.js') }}"></script>
+        <script src="{{ asset('js/jquery.ae.image.resize.js') }}"></script>
+
+
+    {% endblock %}
+</body>
+</html>

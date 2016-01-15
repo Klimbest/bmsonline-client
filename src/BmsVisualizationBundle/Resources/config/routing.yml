@@ -1,0 +1,101 @@
+bms_visualization_index:
+    path:     /
+    defaults: { _controller: BmsVisualizationBundle:Default:bmsVisualizationIndex }
+    options:
+        expose: true
+#PAGE START    
+bms_visualization_add_page:
+    path:   /add_page
+    defaults: { _controller: BmsVisualizationBundle:Ajax:addPage }
+    options:
+        expose: true
+        
+bms_visualization_delete_page:
+    path:   /delete_page
+    defaults: { _controller: BmsVisualizationBundle:Ajax:deletePage }
+    options:
+        expose: true
+        
+bms_visualization_change_page:
+    path:   /change_page
+    defaults: { _controller: BmsVisualizationBundle:Ajax:changePage }
+    options:
+        expose: true
+#PANEL START
+bms_visualization_add_panel:
+    path:     /add_panel
+    defaults: { _controller: BmsVisualizationBundle:Ajax:addPanel }
+    options:
+        expose: true
+
+bms_visualization_edit_panel:
+    path:     /edit_panel
+    defaults: { _controller: BmsVisualizationBundle:Ajax:editPanel }
+    options:
+        expose: true
+
+bms_visualization_edit_area_panel:
+    path:     /edit_area_panel
+    defaults: { _controller: BmsVisualizationBundle:Ajax:editAreaPanel }
+    options:
+        expose: true
+
+bms_visualization_edit_text_panel:
+    path:     /edit_text_panel
+    defaults: { _controller: BmsVisualizationBundle:Ajax:editTextPanel }
+    options:
+        expose: true
+        
+bms_visualization_edit_image_panel:
+    path:     /edit_image_panel
+    defaults: { _controller: BmsVisualizationBundle:Ajax:editImagePanel }
+    options:
+        expose: true
+        
+bms_visualization_edit_variable_panel:
+    path:     /edit_variable_panel
+    defaults: { _controller: BmsVisualizationBundle:Ajax:editVariablePanel }
+    options:
+        expose: true
+        
+bms_visualization_edit_navigation_panel:
+    path:     /edit_navigation_panel
+    defaults: { _controller: BmsVisualizationBundle:Ajax:editNavigationPanel }
+    options:
+        expose: true
+
+bms_visualization_copy_panel:
+    path:     /copy_panel
+    defaults: { _controller: BmsVisualizationBundle:Ajax:copyPanel }
+    options:
+        expose: true
+        
+bms_visualization_delete_panel:
+    path:     /delete_panel
+    defaults: { _controller: BmsVisualizationBundle:Ajax:deletePanel }
+    options:
+        expose: true
+#PANEL END        
+bms_visualization_load_variable_settings_panel:
+    path:   /load_variable_settings_panel
+    defaults: { _controller: BmsVisualizationBundle:Ajax:loadVariableSettingsPanel }
+    options:
+        expose: true
+        
+bms_visualization_load_navigation_settings_panel:
+    path:   /load_navigation_settings_panel
+    defaults: { _controller: BmsVisualizationBundle:Ajax:loadNavigationSettingsPanel }
+    options:
+        expose: true
+         
+bms_visualization_load_image_settings_panel:
+    path:   /load_image_settings_panel
+    defaults: { _controller: BmsVisualizationBundle:Ajax:loadImageSettingsPanel }
+    options:
+        expose: true
+    
+bms_visualization_load_panel_list:
+    path:   /load_panel_list
+    defaults: { _controller: BmsVisualizationBundle:Ajax:loadPanelList }
+    options:
+        expose: true

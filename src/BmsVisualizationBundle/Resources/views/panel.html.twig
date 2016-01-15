@@ -1,0 +1,32 @@
+<div id="{{panel.id}}" class="bms-panel {{panel.type}}-panel {{panel.textAlign}}" 
+     style="
+     top: {{panel.topPosition}}px; 
+     left: {{panel.leftPosition}}px; 
+     width: {{panel.width}}px; 
+     height: {{panel.height}}px;
+     border-width: {{panel.borderWidth}}px;
+     border-style: {{panel.borderStyle}};
+     border-color: {{panel.borderColor}};
+     border-radius: {{panel.borderRadius}};
+     background-color: {{panel.backgroundColor}};
+     font-weight: {{panel.fontWeight}};
+     text-decoration: {{panel.textDecoration}};
+     font-style: {{panel.fontStyle}};
+     font-family: {{panel.fontFamily}};
+     color: {{panel.fontColor}};
+     font-size: {{panel.fontSize}}px;
+     line-height: {{panel.height}}px;
+     z-index: {{panel.zIndex}};
+     ">
+    {% if panel.type == "image" %}
+        <img class="img-responsive" src="{{panel.content}}" />
+    {% elseif panel.type == "text" %}
+        <span class="content">{{panel.content}}</span>
+    {% elseif panel.type == "variable" %}
+        <span id="{{panel.content}}"></span>
+    {% elseif panel.type == "navigation" %}
+        <div id="{{panel.content}}"></div></a>
+        
+    {% endif %}
+</div>
+

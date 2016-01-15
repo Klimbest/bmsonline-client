@@ -1,0 +1,175 @@
+
+
+.hide-button-label, .hide-mainrow-label, 
+i.fa-edit, i.fa-refresh{
+    cursor: pointer;
+}
+
+.main-row div.well{
+    padding: 10px 30px;
+}
+form div.row{
+    padding-bottom: 5px;
+}
+.tcpip, .btn-save, .btn-cancel,
+.description, .modificator_read, .modificator_write,
+.register-level, .device-level, .hidden-item{
+    display: none;
+}
+
+.sidebar{
+    background-color: #FFF;
+    width: 210px;
+}
+
+@media(min-width:768px) {
+    .sidebar {
+        z-index: 1;
+        position: absolute;
+        width: 210px;
+        margin-top: 0px;
+        margin-left: 0px;
+    }
+
+    .navbar-top-links .dropdown-messages,
+    .navbar-top-links .dropdown-tasks,
+    .navbar-top-links .dropdown-alerts {
+        margin-left: auto;
+    }
+}
+
+.sidebar .sidebar-nav.navbar-collapse {
+    padding-right: 0;
+    padding-left: 0;
+    margin-left: -16px;
+    font-size: 12px;
+}
+
+.sidebar ul li div{
+    padding: 10px 15px;
+    margin: 0px;
+    color: #337AB7;
+}
+
+.sidebar ul li div.active{
+    padding: 10px 15px;
+    
+    color: #337AB7;
+}
+
+.sidebar ul li div:hover{
+    background-color: #337AB7;
+    color: #FFF;
+    cursor: pointer;
+}
+
+.sidebar ul li div.active,
+.sidebar ul li div.active a{
+    background-color: #337AB7;
+    border: 1px solid #337AB7;
+    color: #FFF;
+    border-radius: 0px 0px 90px 0px;
+    font-weight: bold;
+}
+
+.sidebar .communicationType-level li,
+.sidebar .device-level li,
+.sidebar .register-level li {
+    border-bottom: 0!important;
+    padding-top: 2px;
+}
+
+.sidebar .communicationType-level li div{
+    margin-left: 17px;
+    border: 1px solid #337AB7;    
+}
+
+.sidebar .device-level li div {
+    margin-left: 27px;
+    border: 1px solid #337AB7;
+}
+.sidebar .register-level li div{
+    border: none;
+    cursor: none;
+    padding: 0px;
+    padding-left: 13px;
+}
+.sidebar .register-level li div:hover{
+    background-color: #fff;
+    border: none;
+    
+}
+
+.sidebar .register-level li div div{
+    margin-left: 45px;
+    border-radius: 3px; 
+    float: left; 
+    margin: 2px 1px 2px 1px; 
+    width: 40px; 
+    border: 1px solid #337AB7;
+    padding: 0px;
+}
+.sidebar .register-level li div div:hover{
+    background-color: #337AB7;
+    color: #FFF;
+    cursor: pointer;
+    border: 1px solid #FFF;
+}
+
+.sidebar .device-level .new-item div{
+    border: 1px dashed #adadad;
+    color: #adadad;
+    margin-left: 32px;
+    padding: 5px;
+    font-size: 80%;
+}
+.sidebar .register-level .new-item{
+    border: 1px dashed #adadad;
+    color: #adadad;
+    padding: 5px;
+    margin-left: 45px;
+    margin-right: 10px;
+    font-size: 80%;
+}
+
+.sidebar .device-level .new-item div:hover,
+.sidebar .register-level .new-item:hover{
+    background-color: #337AB7;
+    border: 1px dashed #adadad;
+    color: #adadad;
+}
+
+
+/*end sidebar*/
+
+@media screen and (min-width: 768px){
+    .main-row{
+        margin-left: 225px;
+    }
+}
+.table{
+    margin-bottom: -2px;
+}
+
+.table, 
+.table-bordered tbody tr td,
+.table-bordered thead tr th{
+    border: 1px solid #337AB7;
+}
+
+.table-bordered thead tr th{
+    border-bottom-width: 2px;
+    border-top: 0px none;
+}
+input.clicked{
+    opacity: 0.30;
+}
+.label-title{
+    background-color: #005A78;
+    font-size: 88%;
+}
+
+.table tbody tr:hover{
+    font-weight: bold;
+    background-color: #adadad;
+}

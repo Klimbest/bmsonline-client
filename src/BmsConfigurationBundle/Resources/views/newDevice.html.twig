@@ -1,0 +1,57 @@
+{# src/BmsConfigurationBundle/Resources/views/newDevice.html.twig #}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+
+<div class="col-md-12 text-left">
+    <span class="label label-primary">{{comm.name}} > Nowe urządzenie - konfiguracja </span>
+    <div class="well device text-left">
+        {{ form_start(form)}}
+        <div class="row">
+            <div class="col-md-5 enabled">
+                {{ form_label(form.name)}}
+                {{ form_widget(form.name)}}
+            </div>
+            <div class="col-md-5 enabled">
+                <div class="row">
+                    <div class="col-md-6">
+                        {{form_label(form.modbusAddress)}}<br />
+                        (format szesnastkowy)
+                    </div>
+                    <div class="col-md-6">
+                        {{form_label(form.modbusAddress)}}<br />
+                        (format dziesiętny)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 address_modbus_hex">
+                        <input type="text" disabled class="form-control" maxlength="2"></input>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1 address_modbus_dec">
+                        {{form_widget(form.modbusAddress)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">    
+            <div class="col-md-5 enabled">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description)}}
+            </div>
+            <div class="col-md-5 enabled">
+                {{ form_row(form.active) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 enabled">
+                {{ form_row(form.localization) }}
+            </div>
+        </div>
+        <div class="row text-right">
+            <div class="col-md-12">
+                <input class="btn btn-default" type="submit" value="Dodaj urządzenie" />
+            </div>
+        </div>
+        {{form_rest(form)}}
+        {{form_end(form)}}
+    </div>
+</div>

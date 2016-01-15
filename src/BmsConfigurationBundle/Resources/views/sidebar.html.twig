@@ -1,0 +1,82 @@
+<div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse active">
+        <ul class="nav target-level">
+            <li>
+                <div class="row active">
+                    <strong>
+{#                        <i class="fa fa-building fa-fw"></i> {{ target.name|length > 27 ? target.name|slice(0, 27) ~ '...' : target.name }}#}
+                    </strong>
+                </div>
+            </li>
+        </ul>
+
+        <ul class="nav communicationType-level">
+            {% if comms|length > 0 %}
+                {% for comm in comms %}
+                    <li>
+                        {% if comm.id == comm_id %}
+                            <div id="{{comm.id}}" class="row active">
+                        {% else %}
+                            <div id="{{comm.id}}" class="row">
+                        {% endif %}
+                                <i class="fa fa-usb fa-fw"></i> 
+                                {{ comm.name|length > 20 ? comm.name|slice(0, 20) ~ '...' : comm.name }} 
+                                {% if comm.devices|length > 0 %}
+                                    <i class="fa fa-angle-left fa-fw"></i>
+                                {% endif %}
+                            </div>
+                            <ul class="nav device-level">
+                                {% if comm.devices|length > 0 %}
+                                    {% for device in comm.devices %}
+                                        <li>
+                                            {% if device.id == device_id %}
+                                                <div id="{{device.id}}" class="row active">
+                                            {% else %}
+                                                <div id="{{device.id}}" class="row">
+                                            {% endif %}
+                                                {% if device.active == 1 %}
+                                                    <i class="fa fa-gear fa-fw fa-spin fa-green"></i> 
+                                                {% else %}
+                                                    <i class="fa fa-gear fa-fw fa-red"></i> 
+                                                {% endif %}
+                                                {{ device.name|length > 20 ? device.name|slice(0, 20) ~ '...' : device.name }} 
+                                                {% if device.registers|length > 0 %}
+                                                    <i class="fa fa-angle-left fa-fw"></i>
+                                                {% endif %}
+                                            </div>
+                                            <ul class="nav register-level">
+                                                <li>
+                                                    <div class="row">
+                                                        {% if device.registers|length > 0 %}
+                                                            {% for register in device.registers|sort %}
+                                                                <div id="{{register.id}}" class="text-center">
+                                                                    {{ register.registerAddress }}
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="row new-item">
+                                                        <i class="fa fa-plus fa-fw"></i> Dodaj nowy rejestr 
+                                                    </div>
+                                                </li>
+
+                                            </ul>
+                                        </li>
+                                    {% endfor %}
+                                {% endif %}
+                                <li class="new-item">
+                                    <div>
+                                        <i class="fa fa-plus fa-fw"></i> Dodaj nowe urządzenie 
+                                    </div>
+                                </li>
+                            </ul>
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+    <div class="device_id hidden-item">{{device_id}}</div>
+    <div class="comm_id hidden-item">{{comm_id}}</div>
+</div>
+
+

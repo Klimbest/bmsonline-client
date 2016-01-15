@@ -1,0 +1,18 @@
+bms_index:
+    path:       /
+    defaults: { _controller: BmsBundle:Default:bmsIndex }
+    options:
+        expose: true
+        
+bms_change_page:
+    path:       /bms_change_page
+    defaults: { _controller: BmsBundle:Default:ajaxChangePage }
+    options:    
+        expose: true
+        
+bms_refresh_page:
+    path:       /bms_refresh_page
+    defaults: { _controller: BmsBundle:Default:ajaxRefreshPage }
+    options:    
+        expose: true
+        

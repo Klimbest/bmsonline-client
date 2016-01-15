@@ -1,0 +1,22 @@
+{% for panel in panels %}
+
+    <div id="{{panel.id}}" class="panel-list">
+        {% if panel.type == "text" %}
+            <i class="fa fa-font fa-fw icon-type"></i> 
+        {% elseif panel.type == "image" %}
+            <i class="fa fa-picture-o fa-fw icon-type"></i> 
+        {% elseif panel.type == "variable" %}
+            <i class="fa fa-hdd-o fa-fw icon-type"></i> 
+        {% elseif panel.type == "area" %}
+            <i class="fa fa-square-o fa-fw icon-type"></i> 
+        {% elseif panel.type == "navigation" %}
+            <i class="fa fa-link fa-fw icon-type"></i> 
+        {% endif %}
+        <span class="label label-primary panel-list-{{panel.type}}" value="{{panel.zIndex}}">#{{panel.id}} - {{panel.zIndex}}</span>
+        <i class="fa fa-arrow-up fa-fw"></i>
+        <i class="fa fa-arrow-down fa-fw"></i>
+        <i class='fa fa-fw fa-clone fa-blue'></i>
+        <i class='fa fa-fw fa-cogs fa-orange'></i>
+        <i class='fa fa-fw fa-remove fa-red'></i>
+    </div>
+{% endfor %}

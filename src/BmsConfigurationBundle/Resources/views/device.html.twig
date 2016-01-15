@@ -1,0 +1,196 @@
+{# src/BmsConfigurationBundle/Resources/views/device.html.twig #}
+
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+<div class="col-md-12 text-left">
+    <div class="row">
+        <div class="col-md-12">
+            <span class="label label-primary hide-mainrow-label">{{device.communicationType.name}} > {{ device.name}} - konfiguracja <i class="fa fa-angle-left fa-angle-down fa-fw"></i></span>
+        </div>
+    </div>
+    <div class="well text-left hidden-item">
+        {{form_start(form)}}
+        <div class="row">
+            <div class="col-md-5">
+                {{ form_label(form.name)}}
+                {{ form_widget(form.name)}}
+            </div>
+            <div class="col-md-5">
+                <div class="row">
+                    <div class="col-md-6">
+                        {{form_label(form.modbusAddress)}}<br />
+                        (format szesnastkowy)
+                    </div>
+                    <div class="col-md-6">
+                        {{form_label(form.modbusAddress)}}<br />
+                        (format dziesiętny)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 address_modbus_hex">
+                        <input type="text" disabled class="form-control" maxlength="2"></input>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1 address_modbus_dec">
+                        {{form_widget(form.modbusAddress)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">    
+            <div class="col-md-5">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description)}}
+            </div>
+            <div class="col-md-5">
+                {{ form_row(form.active) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                {{ form_row(form.localization) }}
+            </div>
+        </div>
+        <div class="row text-right">
+            <div class="col-md-12">
+                <input class="btn btn-default btn-edit" type="button" value="Edytuj" />
+                <input class="btn btn-default btn-save" type="submit" value="Zapisz zmiany" />
+                <input class="btn btn-default btn-cancel" type="button" value="Anuluj" />
+                <a  href="{{path('bms_configuration_del_device', {'comm_id': device.communicationType.id, 'device_id': device.id})}}">
+                    <button type="button" class="btn btn-default btn-delete">Usuń</button>
+                </a>
+            </div>
+        </div>
+        {{form_rest(form)}}
+        {{form_end(form)}}
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span class="label label-primary hide-mainrow-label">Rejestry dodane do urządzenia <i class="fa fa-angle-left fa-angle-down fa-fw"></i></span>
+        </div>
+        <div class="col-md-6 text-right">
+            <span class="label label-primary"><a href="#">Filtruj <i class="fa fa-filter fa-fw"></i></a></span>
+        </div>
+    </div>
+    <div class="well text-left">
+        <form action="{{ path('bms_configuration_del_many_registers', {'comm_id': device.communicationType.id, 'device_id': device.id }) }}" method="POST">
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="label label-default label-title">{{ device.description }}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <span class="label label-primary hide-button-label">Ukryj / Pokaż kolumny <i class="fa fa-angle-left fa-fw"></i></span>
+                </div>
+                <div class="col-md-4 text-center">
+                    <span id="{{device.id}}" class="label label-primary label-last-read">Ostatni odczyt: 
+
+                        {% set time = null %}
+                        {% if device.registers|length > 0 %}
+                            {% for register in device.registers %}
+                                {% if(time < register.registerCurrentData.timeOfUpdate) %}
+                                    {% set time = register.registerCurrentData.timeOfUpdate %}
+                                {% endif %}
+                            {% endfor %}
+
+                            <span>{{ time|date("Y-m-d H:i")}}</span>
+                        {% else %}
+                            <span>-</span>
+                        {%endif%}
+                    </span>
+                </div>
+                <div class="col-md-4 text-right">
+                    <span class="label label-primary">Liczba rejestrów: {{ device.registers|length}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 hide-button-container hidden-item">
+                    <input id="register_address_hex" type="button" class="btn btn-default btn-xs hidding" value="Adres rejestru(HEX)"></input>
+                    <input id="register_address_dec" type="button" class="btn btn-default btn-xs hidding" value="Adres rejestru(DEC)"></input>
+                    <input id="name" type="button" class="btn btn-default btn-xs hidding" value="Nazwa skrócona"></input>
+                    <input id="description" type="button" class="btn btn-default btn-xs hidding clicked" value="Pełna nazwa"></input>
+                    <input id="active_read" type="button" class="btn btn-default btn-xs hidding" value="Aktywny odczyt"></input>
+                    <input id="scan_queue" type="button" class="btn btn-default btn-xs hidding" value="Częstotliwość odczytu danych"></input>
+                    <input id="archive" type="button" class="btn btn-default btn-xs hidding" value="Archiwizacja"></input>
+                    <input id="modificator_read" type="button" class="btn btn-default btn-xs hidding clicked" value="Sposób przeliczania danych przy odczycie"></input>
+                    <input id="modificator_write" type="button" class="btn btn-default btn-xs hidding clicked" value="Sposób przeliczania danych przy zapisie"></input>
+                    <input id="fixed_value" type="button" class="btn btn-default btn-xs hidding" value="Aktualna wartość odczytana"></input>
+                    <input id="data_group" type="button" class="btn btn-default btn-xs hidding" value="Grupa danych"></input>
+                    <input id="manage" type="button" class="btn btn-default btn-xs hidding" value="Zarządzaj"></input>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <input type="button" class="btn btn-default btn-xs checkAll" value="Zaznacz wszystkie"></input>
+                    <button type="button" class="btn btn-default btn-xs refresh"><i class="fa fa-refresh fa-fw fa-blue"></i></button>
+                    <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-remove fa-fw fa-red remove-many"></i></button>
+                </div>
+            </div>
+            <div class="row">
+                <table class="table table-bordered small">
+                    <thead>
+                        <tr>
+                            <th class="register_address_hex">Adres rejestru(HEX)</th>
+                            <th class="register_address_dec">Adres rejestru(DEC)</th>
+                            <th class="name">Nazwa skrócona</th>
+                            <th class="description">Pełna nazwa</th>
+                            <th class="active_read">Aktywny odczyt</th>
+                            <th class="scan_queue">Kolejka odczytu danych</th>
+                            <th class="archive">Archiwizacja</th>
+                            <th class="modificator_read">Sposób przeliczania danych przy odczycie</th>
+                            <th class="modificator_write">Sposób przeliczania danych przy zapisie</th>
+                            <th class="fixed_value">Aktualna wartość</th>
+                            <th class="data_group">Grupa danych</th>
+                            <th class="manage">Zarządzaj</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if device.registers|length > 0 %}
+                            {% for register in device.registers|sort %}
+                                <tr>
+                                    <td class="register_address_hex">{{ register.registerAddress }}</td>
+                                    <td class="register_address_dec">{{ register.registerAddress }}</td>
+                                    <td class="name">{{ register.name }}</td>
+                                    <td class="description">{{ register.description}}</td>
+                                    <td class="active_read text-center">
+                                        {% if register.active == 1 %}
+                                            <i class="fa fa-check-square-o fa-fw fa-green"></i>
+                                        {% else %}
+                                            <i class="fa fa-square-o fa-fw fa-red"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td class="scan_queue">{{ register.scanQueue }}</td>
+                                    <td class="archive text-center">
+                                        {% if register.archive == 1 %}
+                                            <i class="fa fa-check-square-o fa-fw fa-green"></i>
+                                        {% else %}
+                                            <i class="fa fa-square-o fa-fw fa-red"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td class="modificator_read">{{ register.modificatorRead }}</td>
+                                    <td class="modificator_write">{{ register.modificatorWrite }}</td>
+                                    <td class="fixed_value">{{ register.registerCurrentData.fixedValue }}</td>
+                                    <td class="data_group">{{ register.displaySuffix }}</td>
+                                    <td class="manage text-center">
+                                        <i id="{{register.id}}" class="fa fa-refresh fa-fw fa-blue"></i>
+                                        <i id="{{register.id}}" class="fa fa-edit fa-fw fa-green fa-register"></i>
+                                        <a href="{{ path('bms_configuration_del_register', {'comm_id': device.communicationType.id, 'device_id': device.id, 'register_id': register.id}) }}">
+                                            <i class="fa fa-remove fa-fw fa-red"></i>
+                                        </a>
+                                    </td>
+                                    <td><input type="checkbox" name="checkedRegId[]" value="{{register.id}}"/></td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="11" class="text-center">
+                                    <h2><span class="label label-primary"> Brak rejestrów</span></h2>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
+
