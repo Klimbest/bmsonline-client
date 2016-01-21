@@ -24,7 +24,8 @@ security:
             form_login:
                 provider: fos_userbundle
                 csrf_token_generator: security.csrf.token_manager
-            logout: true
+            logout:
+                target: http://bmsonline.dev/logout
             anonymous: true
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }

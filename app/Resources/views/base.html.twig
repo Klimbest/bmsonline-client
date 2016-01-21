@@ -43,11 +43,11 @@
                                 {% block nav %}
                                 {% endblock %}
 
-                                <a href="#">
+                                <a href="{{path('fos_user_profile_show')}}">
                                     <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-user"></i> Karta użytkownika</button>
                                 </a>
 
-                                <a href="#">
+                                <a href="{{path('fos_user_security_logout')}}">
                                     <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-sign-out"></i> Wyloguj</button>                                
                                 </a>
                             </div>
