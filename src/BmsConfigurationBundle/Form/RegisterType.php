@@ -40,7 +40,7 @@ class RegisterType extends AbstractType{
                     'required' => false
                     ))
                 ->add('modificator_read', IntegerType::class, array(
-                    'attr' => array('disabled' => 'disabled'),
+                    'attr' => array('disabled' => 'disabled', 'step' => 0.001),
                     'label' => 'Sposób przeliczania danych przy odczycie'
                     ))
                 ->add('modificator_write', IntegerType::class, array(

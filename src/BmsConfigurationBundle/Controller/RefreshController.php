@@ -20,6 +20,7 @@ class RefreshController extends Controller {
             $registers = $registerRepo->findAll();
             $ret = array();
             $times = array();
+                $time = 0;
             foreach ($devices as $device) {
                 $did = $device->getId();
                 $active = $device->getActive();

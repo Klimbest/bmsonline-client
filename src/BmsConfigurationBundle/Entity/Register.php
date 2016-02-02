@@ -56,7 +56,7 @@ class Register
     /**
      * @var integer
      *
-     * @ORM\Column(name="modificator_read", type="integer", nullable=true)
+     * @ORM\Column(name="modificator_read", type="float", nullable=true)
      */
     private $modificatorRead;
 

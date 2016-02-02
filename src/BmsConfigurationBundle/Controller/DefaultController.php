@@ -218,7 +218,7 @@ class DefaultController extends Controller {
         //pobiera zasoby do zawartości strony
         $comm = $communicationRepo->find($comm_id);
         $device = new Device();
-        $form = $this->createForm(new DeviceType($em), $device, array(
+        $form = $this->createForm(DeviceType::class, $device, array(
             'action' => $this->generateUrl('bms_configuration_add_device', array('comm_id' => $comm_id)),
             'method' => 'POST'
         ));
@@ -273,7 +273,7 @@ class DefaultController extends Controller {
         $device = $deviceRepo->find($device_id);
         $register = new Register();
         $registerCD = new RegisterCurrentData();
-        $form = $this->createForm(new RegisterType($em), $register, array(
+        $form = $this->createForm(RegisterType::class, $register, array(
             'action' => $this->generateUrl('bms_configuration_add_register', array('comm_id' => $comm_id, 'device_id' => $device_id)),
             'method' => 'POST'
         ));

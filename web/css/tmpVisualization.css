@@ -65,7 +65,7 @@ div.panel-list-container{
 
 /*BODY*/
 .main-row{
-    //max-height: 79vh;
+    /*max-height: 79vh;*/
     max-width: 100%;
     overflow: auto;
     margin-right: 0px;
