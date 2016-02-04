@@ -54,9 +54,9 @@ class Register
     private $displaySuffix;
 
     /**
-     * @var integer
+     * @var decimal
      *
-     * @ORM\Column(name="modificator_read", type="float", nullable=true)
+     * @ORM\Column(name="modificator_read", type="decimal", precision=9, scale=6, nullable=true)
      */
     private $modificatorRead;
 

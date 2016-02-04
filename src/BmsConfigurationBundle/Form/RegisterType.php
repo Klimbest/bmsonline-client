@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class RegisterType extends AbstractType{
     
@@ -39,8 +40,9 @@ class RegisterType extends AbstractType{
                     'label' => 'Grupa danych',
                     'required' => false
                     ))
-                ->add('modificator_read', IntegerType::class, array(
-                    'attr' => array('disabled' => 'disabled', 'step' => 0.001),
+                ->add('modificator_read', NumberType::class, array(
+                    'scale' => 6,
+                    'attr' => array('disabled' => 'disabled', 'step' => 0.000001),
                     'label' => 'Sposób przeliczania danych przy odczycie'
                     ))
                 ->add('modificator_write', IntegerType::class, array(
