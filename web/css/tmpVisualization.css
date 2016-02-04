@@ -135,7 +135,8 @@ div.label-page:hover{
     z-index: 50;
 }
 /*okna ustawień paneli*/
-.dialog-page-settings,
+.dialog-page-add-settings,
+.dialog-page-edit-settings,
 .dialog-area-panel-settings,
 .dialog-text-panel-settings,
 .dialog-image-panel-settings,
@@ -155,7 +156,8 @@ div.panel-list i.active{
     display: inline;
 }
 
-.dialog-page-settings .row,
+.dialog-page-add-settings .row,
+.dialog-page-edit-settings .row,
 .dialog-area-panel-settings .row,
 .dialog-text-panel-settings .row,
 .dialog-image-panel-settings .row,

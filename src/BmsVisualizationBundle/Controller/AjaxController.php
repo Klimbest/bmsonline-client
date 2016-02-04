@@ -15,7 +15,7 @@ class AjaxController extends Controller {
     public function addPageAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
-            //popranie danych przesłanych żądaniem
+            //pobranie danych przesłanych żądaniem
             $height = $request->get("height");
             $width = $request->get("width");
             $name = $request->get("name");
@@ -60,6 +60,28 @@ class AjaxController extends Controller {
             $em->getConnection()->exec("ALTER TABLE page AUTO_INCREMENT = 1;");
 
             return new JsonResponse();
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
+
+    public function editPageAction(Request $request) {
+        if ($request->isXmlHttpRequest()) {
+            $page_id = $request->get("page_id");
+            $em = $this->getDoctrine()->getManager();
+            $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
+            $page = $pageRepo->find($page_id);
+
+            $height = $request->get("height");
+            $width = $request->get("width");
+            $name = $request->get("name");
+
+            $page->setHeight($height)
+                    ->setWidth($width)
+                    ->setName($name);
+            $em->flush();
+            $ret['page_id'] = $page_id;
+            return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
         }
@@ -341,7 +363,7 @@ class AjaxController extends Controller {
         }
     }
 
-    public function editNavigationPanelAction(Request $request){
+    public function editNavigationPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $panel_id = $request->get("panel_id");
             $em = $this->getDoctrine()->getManager();
@@ -371,7 +393,7 @@ class AjaxController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
-    
+
     public function loadVariableSettingsPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
@@ -384,7 +406,7 @@ class AjaxController extends Controller {
         }
     }
 
-    public function loadNavigationSettingsPanelAction(Request $request){
+    public function loadNavigationSettingsPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $pages = $pageRepo->findAll();
@@ -395,7 +417,7 @@ class AjaxController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
-    
+
     public function loadImageSettingsPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
 
@@ -445,14 +467,16 @@ class AjaxController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $panel = $panelRepo->find($panel_id);
-            $newLeftPosition = $panel->getLeftPosition() + 75;
-            $newTopPosition = $panel->getTopPosition() + 75;
+//            $newLeftPosition = $panel->getLeftPosition() + 75;
+//            $newTopPosition = $panel->getTopPosition() + 75;
 
 
             $newPanel = clone $panel;
-
-            $newPanel->setTopPosition($newTopPosition)
-                    ->setLeftPosition($newLeftPosition);
+            
+            $newPanel->setTopPosition(0)->setLeftPosition(0);
+            
+//            $newPanel->setTopPosition($newTopPosition)
+//                    ->setLeftPosition($newLeftPosition);
 
             $em->persist($newPanel);
             $em->flush();

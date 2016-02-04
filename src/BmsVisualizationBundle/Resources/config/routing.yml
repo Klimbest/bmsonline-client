@@ -16,6 +16,12 @@ bms_visualization_delete_page:
     options:
         expose: true
         
+bms_visualization_edit_page:
+    path:   /edit_page
+    defaults: { _controller: BmsVisualizationBundle:Ajax:editPage }
+    options:
+        expose: true
+        
 bms_visualization_change_page:
     path:   /change_page
     defaults: { _controller: BmsVisualizationBundle:Ajax:changePage }

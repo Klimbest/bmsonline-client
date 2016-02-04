@@ -1,4 +1,3 @@
-
 /* global parseInt */
 //w przyszłości pobrać z bazy 
 var defaultPatternNetSize = 150;
@@ -16,7 +15,7 @@ $(document).ready(function () {
 function setSidebarEvents() {
     //przycisk dodający stronę
     $("button.btn-add-page").click(function () {
-        createDialogPageSettings(null).dialog("open");
+        createDialogPageAddSettings().dialog("open");
     });
     //dodawanie panel obszaru
     $("button.btn-add-area-panel").click(function () {
@@ -103,22 +102,22 @@ function setSidebarEvents() {
 }
 
 //****SETTING DIALOGS START
-//PAGE SETTINGS
-function createDialogPageSettings(page_id) {
+//PAGE ADD SETTINGS
+function createDialogPageAddSettings() {
 
-    return $("div.dialog-page-settings").dialog({
+    return $("div.dialog-page-add-settings").dialog({
         autoOpen: false,
         height: 300,
         width: 450,
         modal: true,
         buttons: [
             {
-                text: "Zapisz",
+                text: "Dodaj",
                 click: function () {
                     var data = {
-                        width: $("div.dialog-page-settings input#width").val(),
-                        height: $("div.dialog-page-settings input#height").val(),
-                        name: $("div.dialog-page-settings input#name").val()
+                        width: $("div.dialog-page-add-settings input#width").val(),
+                        height: $("div.dialog-page-add-settings input#height").val(),
+                        name: $("div.dialog-page-add-settings input#name").val()
                     };
                     ajaxAddPage(data);
                     $(this).dialog("close");
@@ -140,13 +139,58 @@ function createDialogPageSettings(page_id) {
         }
     });
     function setFormField() {
-        console.log($('div.main-row div.well'));
         var width = parseInt($('div.main-row div.well').css("width"));
         var height = parseInt($('div.main-row div.well').css("height"));
         var name = $('div.label-page.active span#name').text();
-        $("div.dialog-page-settings input#width").val(width);
-        $("div.dialog-page-settings input#height").val(height);
-        $("div.dialog-page-settings input#name").val(name);
+        $("div.dialog-page-add-settings input#width").val(width);
+        $("div.dialog-page-add-settings input#height").val(height);
+        $("div.dialog-page-add-settings input#name").val(name);
+    }
+}
+//PAGE EDIT SETTINGS
+function createDialogPageEditSettings(page_id) {
+
+    return $("div.dialog-page-edit-settings").dialog({
+        autoOpen: false,
+        height: 300,
+        width: 450,
+        modal: true,
+        buttons: [
+            {
+                text: "Zapisz",
+                click: function () {
+                    var data = {
+                        page_id: page_id,
+                        width: $("div.dialog-page-edit-settings input#width").val(),
+                        height: $("div.dialog-page-edit-settings input#height").val(),
+                        name: $("div.dialog-page-edit-settings input#name").val()
+                    };
+                    ajaxEditPage(data);
+                    $(this).dialog("close");
+                }
+            },
+            {
+                text: "Anuluj",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }],
+        open: function () {
+            if (page_id !== null) {
+                setFormField();
+            }
+        },
+        close: function () {
+            $(this).dialog("close");
+        }
+    });
+    function setFormField() {
+        var width = parseInt($('div.main-row div.well').css("width"));
+        var height = parseInt($('div.main-row div.well').css("height"));
+        var name = $('div.label-page.active span#name').text();
+        $("div.dialog-page-edit-settings input#width").val(width);
+        $("div.dialog-page-edit-settings input#height").val(height);
+        $("div.dialog-page-edit-settings input#name").val(name);
     }
 }
 //AREA PANEL SETTINGS
@@ -725,7 +769,7 @@ function createDialogVariablePanelSettings(id) {
     }
 }
 //NAVIGATION PANEL SETTINGS
-function createDialogNavigationPanelSettings(id){
+function createDialogNavigationPanelSettings(id) {
     return $("div.dialog-navigation-panel-settings").dialog({
         autoOpen: false,
         width: 900,
@@ -739,9 +783,9 @@ function createDialogNavigationPanelSettings(id){
                     var data = {
                         panel_id: id,
                         content: $("select.pages").val(),
-                        topPosition: "50",//$("div.dialog-navigation-panel-settings input#topPosition").val(),
-                        leftPosition: "100",//$("div.dialog-navigation-panel-settings input#leftPosition").val(),
-                        width: 100,//dialog_panel.css("width"),
+                        topPosition: "50", //$("div.dialog-navigation-panel-settings input#topPosition").val(),
+                        leftPosition: "100", //$("div.dialog-navigation-panel-settings input#leftPosition").val(),
+                        width: 100, //dialog_panel.css("width"),
                         height: 50//dialog_panel.css("height")
                     };
                     ajaxEditNavigationPanel(data);
@@ -760,7 +804,7 @@ function createDialogNavigationPanelSettings(id){
                 }
             }],
         open: function () {
-            
+
         },
         close: function () {
             $(this).dialog('destroy').remove();
@@ -793,10 +837,31 @@ function ajaxDeletePage(data) {
         data: data,
         success: function () {
             $(".main-row").children(".fa-spinner").remove();
+//            var data = {
+//                page_id: 1
+//            };
+//            ajaxChangePage(data);
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
+//PAGE EDIT
+function ajaxEditPage(data) {
+    $.ajax({
+        type: "POST",
+        url: Routing.generate('bms_visualization_edit_page'),
+        data: data,
+        success: function (ret) {
+            $(".main-row").children(".fa-spinner").remove();
+            var data = {
+                page_id: ret['page_id']
+            };
+            ajaxChangePage(data);
+        }
+    });
+    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+}
+
 //PAGE CHANGE
 function ajaxChangePage(data) {
     $.ajax({
@@ -842,7 +907,7 @@ function ajaxAddPanel(data) {
                 ajaxEditImagePanel(data);
             } else if (ret["type"] === "variable") {
                 ajaxLoadVariableSettingsPanel(ret["panel_id"]);
-            } else if(ret["type"] === "navigation"){
+            } else if (ret["type"] === "navigation") {
                 ajaxLoadNavigationSettingsPanel(ret["panel_id"]);
             }
 //            return ret["panel_id"];
@@ -921,7 +986,7 @@ function ajaxEditVariablePanel(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
-function ajaxEditNavigationPanel(data){
+function ajaxEditNavigationPanel(data) {
     $.ajax({
         type: "POST",
         datatype: "application/json",
@@ -1002,7 +1067,7 @@ function ajaxLoadVariableSettingsPanel(panel_id) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
-function ajaxLoadNavigationSettingsPanel(panel_id){
+function ajaxLoadNavigationSettingsPanel(panel_id) {
     $.ajax({
         type: "POST",
         datatype: "application/json",
@@ -1115,7 +1180,10 @@ function ajaxLoadPanelList(data) {
             //kopiowanie
             $("div.panel-list i.fa-clone").click(function () {
                 var id = $(this).parent().attr("id");
-                console.log(id);
+                var data = {
+                    panel_id: id
+                };
+                ajaxCopyPanel(data);
             });
             //ustawienia
             $("div.panel-list i.fa-cogs").click(function () {
@@ -1222,7 +1290,7 @@ function setPageLabelsEvent() {
     //edycja strony
     function editPageEvent(label, page_id) {
         label.children("i.fa-cogs").click(function () {
-            createDialogPageSettings(page_id).dialog("open");
+            createDialogPageEditSettings(page_id).dialog("open");
         });
     }
 
@@ -1413,9 +1481,9 @@ function setPanelEvents() {
                 //ajaxLoadImageSettingsPanel(id);
             } else if ($("div#" + id + ".bms-panel").hasClass("variable-panel")) {
                 ajaxLoadVariableSettingsPanel(id);
-            } else if ($("div#" + id + ".bms-panel").hasClass("navigation-panel")){
+            } else if ($("div#" + id + ".bms-panel").hasClass("navigation-panel")) {
                 ajaxLoadNavigationSettingsPanel(id);
-            }else{
+            } else {
                 createDialogAreaPanelSettings(id).dialog("open");
             }
         });
