@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class RegisterType extends AbstractType{
     
@@ -23,9 +24,18 @@ class RegisterType extends AbstractType{
                     'attr' => array('disabled' => 'disabled', 'maxlength' => 4),
                     'label' => 'Adres rejestru'
                     ))
+                ->add('function', ChoiceType::class, array(
+                    'choices' => array('01 - Discrete Output Coils' => '01', 
+                                       '02 - Discrete Input Contacts' => '02', 
+                                       '03 - Analog Output Holding Registers' => '03', 
+                                       '04 - Analog Input Registers' => '04'),
+                    'label' => 'Funkcja odczytu modbus',
+                    'attr' => array('disabled' => 'disabled'),
+                    ))
                 ->add('scan_queue', IntegerType::class, array(
                     'attr' => array('disabled' => 'disabled', 'min' => 1, 'max' => 5),
-                    'label' => 'Kolejka odczytu danych(od 1 do 5)'
+                    'label' => 'Kolejka odczytu danych(od 1 do 5)',
+                    'data' => 1
                     ))
                 ->add('name', TextType::class, array(
                     'attr' => array('disabled' => 'disabled', 'maxlength' => 16),

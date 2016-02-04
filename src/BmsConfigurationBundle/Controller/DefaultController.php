@@ -167,6 +167,7 @@ class DefaultController extends Controller {
             $name = $form['name']->getData();
             $description = $form['description']->getData();
             $register_address = $form['register_address']->getData();
+            $function = $form ['function']->getData();
             $scan_queue = $form['scan_queue']->getData();
             $display_suffix = $form['display_suffix']->getData();
             $modificator_read = $form['modificator_read']->getData();
@@ -175,6 +176,7 @@ class DefaultController extends Controller {
             $active = $form['active']->getData();
 
             $register->setName($name)
+                    ->setFunction($function)
                     ->setDescription($description)
                     ->setRegisterAddress($register_address)
                     ->setScanQueue($scan_queue)
@@ -283,6 +285,7 @@ class DefaultController extends Controller {
         if ($form->isSubmitted() && $form->isValid()) {
 
             $registerAddress = $form['register_address']->getData();
+            $function = $form['function']->getData();
             $scanQueue = $form['scan_queue']->getData();
             $name = $form['name']->getData();
             $description = $form['description']->getData();
@@ -294,6 +297,7 @@ class DefaultController extends Controller {
 
 
             $register->setRegisterAddress($registerAddress)
+                    ->setFunction($function)
                     ->setScanQueue($scanQueue)
                     ->setName($name)
                     ->setDescription($description)

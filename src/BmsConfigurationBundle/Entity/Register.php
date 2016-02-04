@@ -8,7 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Register
  *
- * @ORM\Table(name="register", uniqueConstraints={@ORM\UniqueConstraint(name="device_id", columns={"device_id", "register_address"}),
+ * @ORM\Table(name="register", uniqueConstraints={@ORM\UniqueConstraint(name="device_id", columns={"device_id", "register_address", "function"}),
  *                                                @ORM\UniqueConstraint(name="reg_name", columns={"name"}) }, 
  *                             indexes={@ORM\Index(name="device", columns={"device_id"}),
  *                                      @ORM\Index(name="name", columns={"name"})
@@ -25,6 +25,14 @@ class Register
      */
     private $registerAddress;
 
+    /**
+     *
+     * @var string
+     *  
+     * @ORM\Column(name="function", type="string", length=2, nullable=false)
+     */
+    private $function;
+    
     /**
      * @var integer
      *
@@ -370,5 +378,29 @@ class Register
     public function getScanQueue()
     {
         return $this->scanQueue;
+    }
+
+    /**
+     * Set function
+     *
+     * @param string $function
+     *
+     * @return Register
+     */
+    public function setFunction($function)
+    {
+        $this->function = $function;
+
+        return $this;
+    }
+
+    /**
+     * Get function
+     *
+     * @return string
+     */
+    public function getFunction()
+    {
+        return $this->function;
     }
 }

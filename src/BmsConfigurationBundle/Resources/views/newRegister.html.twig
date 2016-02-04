@@ -2,7 +2,6 @@
 
 {% form_theme form 'bootstrap_3_layout.html.twig' %}
 
-
 <div class="col-md-12 text-left">
     <span class="label label-primary">{{comm.name}} > {{device.name}} > Nowy rejestr - konfiguracja </span>
     <div class="well device text-left">
@@ -45,45 +44,33 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="row">
                     <div class="col-md-12">
-                        {{form_label(form.scan_queue)}}
+                        {{form_label(form.function)}}<br /><br />
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-9">
-                        {{form_widget(form.scan_queue)}}
+                    <div class="col-md-10">
+                        {{form_widget(form.function)}}
                     </div>
                 </div>
-            </div>
-            <div class="col-md-2">
+            </div>     
+            <div class="col-md-3">
                 <div class="row">
                     <div class="col-md-12">
-                        {{form_label(form.display_suffix)}}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        {{form_widget(form.display_suffix)}}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row enabled">
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-12">
-                        {{form_label(form.modificator_read)}}
+                        {{form_label(form.modificator_read)}}<br /><br />
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                         {{form_widget(form.modificator_read)}}
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+        </div>
+        <div class="row hidden enabled">
+            <div class="col-md-3 col-md-offset-1">
                 <div class="row">
                     <div class="col-md-12">
                         {{form_label(form.modificator_write)}}
@@ -95,12 +82,34 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{form_label(form.scan_queue)}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        {{form_widget(form.scan_queue)}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{form_label(form.display_suffix)}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        {{form_widget(form.display_suffix)}}
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row enabled">
             <div class="col-md-6">
                 {{form_row(form.archive)}}
-            </div>
-            <div class="col-md-6">
                 {{form_row(form.active)}}
             </div>
         </div>

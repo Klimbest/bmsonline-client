@@ -3,11 +3,7 @@
 {% form_theme form 'bootstrap_3_layout.html.twig' %}
 
 <div class="col-md-12 text-left">
-    <div class="row">
-        <div class="col-md-12">
-            <span class="label label-primary hide-mainrow-label">{{register.device.communicationType.name}} > {{register.device.name}} > {{register.name}} - konfiguracja <i class="fa fa-angle-left fa-angle-down fa-fw"></i></span>
-        </div>
-    </div>
+    <span class="label label-primary hide-mainrow-label">{{register.device.communicationType.name}} > {{register.device.name}} > {{register.name}} - konfiguracja <i class="fa fa-angle-left fa-angle-down fa-fw"></i></span>
     <div class="well register text-left">
         {{form_start(form)}}
         <div class="row">
@@ -48,45 +44,33 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="row">
                     <div class="col-md-12">
-                        {{form_label(form.scan_queue)}}
+                        {{form_label(form.function)}}<br /><br />
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-9">
-                        {{form_widget(form.scan_queue)}}
+                    <div class="col-md-10">
+                        {{form_widget(form.function)}}
                     </div>
                 </div>
-            </div>
-            <div class="col-md-2">
+            </div>     
+            <div class="col-md-3">
                 <div class="row">
                     <div class="col-md-12">
-                        {{form_label(form.display_suffix)}}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        {{form_widget(form.display_suffix)}}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-12">
-                        {{form_label(form.modificator_read)}}
+                        {{form_label(form.modificator_read)}}<br /><br />
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                         {{form_widget(form.modificator_read)}}
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+        </div>
+        <div class="row hidden">
+            <div class="col-md-3 col-md-offset-1">
                 <div class="row">
                     <div class="col-md-12">
                         {{form_label(form.modificator_write)}}
@@ -98,12 +82,34 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{form_label(form.scan_queue)}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        {{form_widget(form.scan_queue)}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{form_label(form.display_suffix)}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        {{form_widget(form.display_suffix)}}
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                {{form_row(form.archive)}}
-            </div>
-            <div class="col-md-6">
+                {{form_row(form.archive)}}                
                 {{form_row(form.active)}}
             </div>
         </div>
