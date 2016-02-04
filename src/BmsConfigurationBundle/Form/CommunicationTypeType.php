@@ -29,7 +29,7 @@ class CommunicationTypeType extends AbstractType {
                     'label' => 'Szybkość transmisji',
                     'attr' => array('disabled' => 'disabled'),
                 ))->add('parity', ChoiceType::class, array(
-                    'choices' => array(2 => 'Parzyste', 1 => 'Nieparzyste', 0 => 'Brak', 3 => 'Znacznik', 4=> 'Spacja'),
+                    'choices' => array( 0 => 'Brak', 1 => 'Nieparzyste', 2 => 'Parzyste', 3 => 'Znacznik', 4=> 'Spacja'),
                     'label' => 'Parzystość',
                     'attr' => array('disabled' => 'disabled'),
                 ))->add('dataBits', ChoiceType::class, array(
