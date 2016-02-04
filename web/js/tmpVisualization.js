@@ -1061,7 +1061,7 @@ function ajaxLoadVariableSettingsPanel(panel_id) {
         url: Routing.generate('bms_visualization_load_variable_settings_panel'),
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
-            $(".container-fluid").append(ret['template']);
+            $("nav div.container-fluid").append(ret['template']);
             createDialogVariablePanelSettings(panel_id).dialog("open");
         }
     });
@@ -1074,7 +1074,7 @@ function ajaxLoadNavigationSettingsPanel(panel_id) {
         url: Routing.generate('bms_visualization_load_navigation_settings_panel'),
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
-            $(".container-fluid").append(ret['template']);
+            $("nav div.container-fluid").append(ret['template']);
             createDialogNavigationPanelSettings(panel_id).dialog("open");
         }
     });
@@ -1193,7 +1193,7 @@ function ajaxLoadPanelList(data) {
                 } else if ($("div#" + id + ".bms-panel").hasClass("image-panel")) {
                     //ajaxLoadImageSettingsPanel(id);
                 } else if ($("div#" + id + ".bms-panel").hasClass("variable-panel")) {
-                    ajaxLoadVariableSettingsPanel(id);
+                    //ajaxLoadVariableSettingsPanel(id);
                 } else {
 
                     createDialogAreaPanelSettings(id).dialog("open");
