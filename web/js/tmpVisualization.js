@@ -2,6 +2,7 @@
 //w przyszłości pobrać z bazy 
 var defaultPatternNetSize = 150;
 var tid = $("div#target_id.hidden").text();
+
 $(document).ready(function () {
 //wczytanie strony startowej
     var data = {
@@ -205,7 +206,7 @@ function createDialogAreaPanelSettings(id) {
             {
                 text: "Zapisz",
                 click: function () {
-                    var br = $(".dialog-panel").css("border-top-left-radius") + " " + $(".dialog-panel").css("border-top-right-radius") + " " + $(".dialog-panel").css("border-bottom-right-radius") + " " + $(".dialog-panel").css("border-bottom-left-radius")
+                    var br = $(".dialog-panel").css("border-top-left-radius") + " " + $(".dialog-panel").css("border-top-right-radius") + " " + $(".dialog-panel").css("border-bottom-right-radius") + " " + $(".dialog-panel").css("border-bottom-left-radius");
                     var data = {
                         panel_id: id,
                         topPosition: $("div.dialog-area-panel-settings input#topPosition").val(),
@@ -278,31 +279,31 @@ function createDialogAreaPanelSettings(id) {
         $("input#opacity").val(parseFloat(getColorValues(panel.css("background-color"))["alpha"]));
     }
     function setEvents() {
-        var panel = $("div.dialog-panel");
+        var panel = $(".dialog-area-panel-settings div.dialog-panel");
         //kolor
         var backgroundColor;
-        $("input#backgroundColor").on('input', function () {
-            backgroundColor = hex2rgba($(this).val(), parseFloat($("input#opacity").val()));
+        $(".dialog-area-panel-settings input#backgroundColor").on('input', function () {
+            backgroundColor = hex2rgba($(this).val(), parseFloat($(".dialog-area-panel-settings input#opacity").val()));
             panel.css({backgroundColor: backgroundColor});
         });
-        $("input#opacity").change(function () {
-            backgroundColor = hex2rgba($("input#backgroundColor").val(), parseFloat($(this).val()));
+        $(".dialog-area-panel-settings input#opacity").change(function () {
+            backgroundColor = hex2rgba($(".dialog-area-panel-settings input#backgroundColor").val(), parseFloat($(this).val()));
             panel.css({backgroundColor: backgroundColor});
         });
-        $("input#borderWidth").change(function () {
+        $(".dialog-area-panel-settings input#borderWidth").change(function () {
             panel.css({borderWidth: $(this).val()});
         });
-        $("input#borderStyle").change(function () {
+        $(".dialog-area-panel-settings select#borderStyle").change(function () {
             panel.css({borderStyle: $(this).val()});
         });
-        $("input#borderColor").on('input', function () {
+        $(".dialog-area-panel-settings input#borderColor").on('input', function () {
             panel.css({borderColor: hex2rgba($(this).val(), 1)});
         });
         //narożniki
-        $("input#borderRadiusTL").change(changeTL).mousemove(changeTL);
-        $("input#borderRadiusTR").change(changeTR).mousemove(changeTR);
-        $("input#borderRadiusBL").change(changeBL).mousemove(changeBL);
-        $("input#borderRadiusBR").change(changeBR).mousemove(changeBR);
+        $(".dialog-area-panel-settings input#borderRadiusTL").change(changeTL).mousemove(changeTL);
+        $(".dialog-area-panel-settings input#borderRadiusTR").change(changeTR).mousemove(changeTR);
+        $(".dialog-area-panel-settings input#borderRadiusBL").change(changeBL).mousemove(changeBL);
+        $(".dialog-area-panel-settings input#borderRadiusBR").change(changeBR).mousemove(changeBR);
         function changeTL() {
             panel.css({borderTopLeftRadius: $(this).val() + "px"});
         }
@@ -598,7 +599,7 @@ function createDialogImagePanelSettings() {
     }
 }
 //VARIABLE PANEL SETTINGS
-function createDialogVariablePanelSettings(id) {
+function createDialogVariablePanelSettings(id, mode) {
     return $("div.dialog-variable-panel-settings").dialog({
         autoOpen: false,
         width: 900,
@@ -629,14 +630,16 @@ function createDialogVariablePanelSettings(id) {
                 }
             },
             {
-                text: "Usuń",
+                text: "Anuluj",
                 click: function () {
                     $(this).dialog('destroy').remove();
-                    $("div#" + id + ".bms-panel").remove();
-                    var data = {
-                        panel_id: id
-                    };
-                    ajaxDeletePanel(data);
+                    if (mode === "add") {
+                        $("div#" + id + ".bms-panel").remove();
+                        var data = {
+                            panel_id: id
+                        };
+                        ajaxDeletePanel(data);
+                    }
                 }
             }],
         open: function () {
@@ -769,7 +772,7 @@ function createDialogVariablePanelSettings(id) {
     }
 }
 //NAVIGATION PANEL SETTINGS
-function createDialogNavigationPanelSettings(id) {
+function createDialogNavigationPanelSettings(id, mode) {
     return $("div.dialog-navigation-panel-settings").dialog({
         autoOpen: false,
         width: 900,
@@ -780,36 +783,160 @@ function createDialogNavigationPanelSettings(id) {
                 text: "Zapisz",
                 click: function () {
                     var dialog_panel = $(".dialog-navigation-panel-settings div.dialog-panel");
+                    var br = dialog_panel.css("border-top-left-radius") + " " + dialog_panel.css("border-top-right-radius") + " " + dialog_panel.css("border-bottom-right-radius") + " " + dialog_panel.css("border-bottom-left-radius");
                     var data = {
                         panel_id: id,
                         content: $("select.pages").val(),
-                        topPosition: "50", //$("div.dialog-navigation-panel-settings input#topPosition").val(),
-                        leftPosition: "100", //$("div.dialog-navigation-panel-settings input#leftPosition").val(),
-                        width: 100, //dialog_panel.css("width"),
-                        height: 50//dialog_panel.css("height")
+                        topPosition: $("div.dialog-navigation-panel-settings input#topPosition").val(),
+                        leftPosition: $("div.dialog-navigation-panel-settings input#leftPosition").val(),
+                        width: dialog_panel.css("width"),
+                        height: dialog_panel.css("height"),
+                        borderWidth: $("div.dialog-navigation-panel-settings input#borderWidth").val(),
+                        borderStyle: $("div.dialog-navigation-panel-settings select#borderStyle option:selected").val(),
+                        borderColor: hex2rgba($("div.dialog-navigation-panel-settings input#borderColor").val(), 1),
+                        borderRadius: br,
+                        backgroundColor: hex2rgba($("div.dialog-navigation-panel-settings input#backgroundColor").val(), parseFloat($("div.dialog-navigation-panel-settings input#opacity").val()))
                     };
                     ajaxEditNavigationPanel(data);
                     $(this).dialog('destroy').remove();
                 }
             },
             {
-                text: "Usuń",
+                text: "Anuluj",
                 click: function () {
                     $(this).dialog('destroy').remove();
-                    $("div#" + id + ".bms-panel").remove();
-                    var data = {
-                        panel_id: id
-                    };
-                    ajaxDeletePanel(data);
+                    if (mode === "add") {
+                        $("div#" + id + ".bms-panel").remove();
+                        var data = {
+                            panel_id: id
+                        };
+                        ajaxDeletePanel(data);
+                    }
+
                 }
             }],
         open: function () {
-
+            setDialog(id);
         },
         close: function () {
             $(this).dialog('destroy').remove();
         }
     });
+
+    function setDialog(id) {
+        var panel = $("div#" + id + ".navigation-panel");
+        var dialog_panel = $(".dialog-navigation-panel-settings div.dialog-panel");
+        //Strona
+        $("select.pages").val(parseInt(panel.children("div").attr("id")));
+        dialog_panel.text($("select.pages option:selected").text()).css({
+            width: panel.css("width"),
+            height: panel.css("height"),
+            textAlign: panel.css("textAlign"),
+            fontWeight: panel.css("fontWeight"),
+            borderWidth: panel.css("border-top-width"),
+            borderColor: panel.css("border-top-color"),
+            borderStyle: panel.css("border-top-style"),
+            borderTopLeftRadius: panel.css("border-top-left-radius"),
+            borderTopRightRadius: panel.css("border-top-right-radius"),
+            borderBottomRightRadius: panel.css("border-bottom-right-radius"),
+            borderBottomLeftRadius: panel.css("border-bottom-left-radius"),
+            backgroundColor: panel.css("background-color"),
+            display: "inline-block"
+        });
+
+        //var text = panel.children("span").clone().children().remove().end().text();
+        //Pozycja
+        $("input#topPosition").val(parseInt(panel.css("top")));
+        $("input#leftPosition").val(parseInt(panel.css("left")));
+        //Rozmiar
+        $("input#width").val(parseInt(panel.css("width")));
+        $("input#height").val(parseInt(panel.css("height")));
+        //Border
+        $("input#borderWidth").val(parseInt(panel.css("border-top-width")));
+        $("input#borderColor").val(rgb2hex(panel.css("border-top-color")));
+        $("select#borderStyle").val(panel.css("border-top-style"));
+        //Border Radius
+        //TL
+        $("input#borderRadiusTL").val(parseInt(panel.css("border-top-left-radius")));
+        $("label#borderRadiusTL").empty().append($("input#borderRadiusTL").val());
+        //TR
+        $("input#borderRadiusTR").val(parseInt(panel.css("border-top-right-radius")));
+        $("label#borderRadiusTR").empty().append($("input#borderRadiusTR").val());
+        //BR
+        $("input#borderRadiusBR").val(parseInt(panel.css("border-bottom-right-radius")));
+        $("label#borderRadiusBR").empty().append($("input#borderRadiusBR").val());
+        //BL
+        $("input#borderRadiusBL").val(parseInt(panel.css("border-bottom-left-radius")));
+        $("label#borderRadiusBL").empty().append($("input#borderRadiusBL").val());
+        //Size
+        $("input#width").val(parseInt(panel.css("width")));
+        $("input#height").val(parseInt(panel.css("height")));
+        //Background
+        var bC = panel.css("background-color");
+        if (bC === 'transparent') {
+            bC = 'rgba(0,0,0,0)';
+        }
+        $("input#backgroundColor").val(rgb2hex(bC));
+        $("input#opacity").val(parseFloat(getColorValues(bC)["alpha"]));
+        setDialogButtons();
+    }
+
+    function setDialogButtons() {
+        var dialog_panel = $(".dialog-navigation-panel-settings div.dialog-panel");
+
+        //size
+        $(".dialog-navigation-panel-settings input#width").change(function () {
+            dialog_panel.css({width: $(this).val() + "px"});
+        });
+        $(".dialog-navigation-panel-settings input#height").change(function () {
+            dialog_panel.css({height: $(this).val() + "px"});
+            dialog_panel.css({lineHeight: $(this).val() + "px"});
+        });
+        //kolor
+        var backgroundColor;
+        $(".dialog-navigation-panel-settings input#backgroundColor").on('input', function () {
+            backgroundColor = hex2rgba($(this).val(), parseFloat($(".dialog-navigation-panel-settings input#opacity").val()));
+            dialog_panel.css({backgroundColor: backgroundColor});
+        });
+
+        $(".dialog-navigation-panel-settings input#opacity").change(function () {
+            backgroundColor = hex2rgba($(".dialog-navigation-panel-settings input#backgroundColor").val(), parseFloat($(this).val()));
+            dialog_panel.css({backgroundColor: backgroundColor});
+        });
+
+        $(".dialog-navigation-panel-settings input#opacity").mousemove(function () {
+            backgroundColor = hex2rgba($(".dialog-navigation-panel-settings input#backgroundColor").val(), parseFloat($(this).val()));
+            dialog_panel.css({backgroundColor: backgroundColor});
+        });
+
+        $(".dialog-navigation-panel-settings input#borderWidth").change(function () {
+            dialog_panel.css({borderWidth: $(this).val()});
+        });
+        $(".dialog-navigation-panel-settings select#borderStyle").change(function () {
+            console.log($(this).val());
+            dialog_panel.css({borderStyle: $(this).val()});
+        });
+        $(".dialog-navigation-panel-settings input#borderColor").on('input', function () {
+            dialog_panel.css({borderColor: hex2rgba($(this).val(), 1)});
+        });
+        //narożniki
+        $(".dialog-navigation-panel-settings input#borderRadiusTL").change(changeTL).mousemove(changeTL);
+        $(".dialog-navigation-panel-settings input#borderRadiusTR").change(changeTR).mousemove(changeTR);
+        $(".dialog-navigation-panel-settings input#borderRadiusBL").change(changeBL).mousemove(changeBL);
+        $(".dialog-navigation-panel-settings input#borderRadiusBR").change(changeBR).mousemove(changeBR);
+        function changeTL() {
+            dialog_panel.css({borderTopLeftRadius: $(this).val() + "px"});
+        }
+        function changeTR() {
+            dialog_panel.css({borderTopRightRadius: $(this).val() + "px"});
+        }
+        function changeBL() {
+            dialog_panel.css({borderBottomLeftRadius: $(this).val() + "px"});
+        }
+        function changeBR() {
+            dialog_panel.css({borderBottomRightRadius: $(this).val() + "px"});
+        }
+    }
 }
 //****SETTING DIALOGS END
 
@@ -906,9 +1033,9 @@ function ajaxAddPanel(data) {
 //                        data.leftPosition =
                 ajaxEditImagePanel(data);
             } else if (ret["type"] === "variable") {
-                ajaxLoadVariableSettingsPanel(ret["panel_id"]);
+                ajaxLoadVariableSettingsPanel(ret["panel_id"], "add");
             } else if (ret["type"] === "navigation") {
-                ajaxLoadNavigationSettingsPanel(ret["panel_id"]);
+                ajaxLoadNavigationSettingsPanel(ret["panel_id"], "add");
             }
 //            return ret["panel_id"];
         }
@@ -1020,14 +1147,19 @@ function ajaxCopyPanel(data) {
             var id = ret["panel_id"];
             switch (type) {
                 case "area" :
-
+                    createDialogAreaPanelSettings(id).dialog("open");
                     break;
                 case "text" :
                     createDialogTextPanelSettings(id).dialog("open");
                     break;
                 case "image" :
+                    createDialogImagePanelSettings(id).dialog("open");
                     break;
                 case "variable" :
+                    ajaxLoadNavigationSettingsPanel(id, "add");
+                    break;
+                case "navigation" :
+                    ajaxLoadNavigationSettingsPanel(id, "add");
                     break;
             }
 
@@ -1054,7 +1186,7 @@ function ajaxDeletePanel(data) {
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
 //OTHER
-function ajaxLoadVariableSettingsPanel(panel_id) {
+function ajaxLoadVariableSettingsPanel(panel_id, mode) {
     $.ajax({
         type: "POST",
         datatype: "application/json",
@@ -1062,12 +1194,12 @@ function ajaxLoadVariableSettingsPanel(panel_id) {
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
             $("nav div.container-fluid").append(ret['template']);
-            createDialogVariablePanelSettings(panel_id).dialog("open");
+            createDialogVariablePanelSettings(panel_id, mode).dialog("open");
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
-function ajaxLoadNavigationSettingsPanel(panel_id) {
+function ajaxLoadNavigationSettingsPanel(panel_id, mode) {
     $.ajax({
         type: "POST",
         datatype: "application/json",
@@ -1075,7 +1207,7 @@ function ajaxLoadNavigationSettingsPanel(panel_id) {
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
             $("nav div.container-fluid").append(ret['template']);
-            createDialogNavigationPanelSettings(panel_id).dialog("open");
+            createDialogNavigationPanelSettings(panel_id, mode).dialog("open");
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -1095,7 +1227,7 @@ function ajaxLoadImageSettingsPanel() {
 }
 
 function ajaxLoadPanelList(data) {
-
+    $("input#panel-list-area, input#panel-list-text, input#panel-list-image, input#panel-list-variable, input#panel-list-navigation").prop("checked",true).unbind("click, change");
     if ($("button.btn-panel-list span.toggler").hasClass("off") === true) {
 
     } else {
@@ -1112,7 +1244,7 @@ function ajaxLoadPanelList(data) {
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
         function setSidebarPanelListEvents() {
-
+            
             $('input#panel-list-area').change(function () {
                 $(this).is(':checked') ? $("span.panel-list-area").parent("div.panel-list").show() : $("span.panel-list-area").parent("div.panel-list").hide();
             });
@@ -1124,6 +1256,9 @@ function ajaxLoadPanelList(data) {
             });
             $('input#panel-list-variable').change(function () {
                 $(this).is(':checked') ? $("span.panel-list-variable").parent("div.panel-list").show() : $("span.panel-list-variable").parent("div.panel-list").hide();
+            });
+            $('input#panel-list-navigation').change(function () {
+                $(this).is(':checked') ? $("span.panel-list-navigation").parent("div.panel-list").show() : $("span.panel-list-navigation").parent("div.panel-list").hide();
             });
             $('div.panel-list').hover(function () {
                 $(this).children("i.fa").addClass("active");
@@ -1191,11 +1326,12 @@ function ajaxLoadPanelList(data) {
                 if ($("div#" + id + ".bms-panel").hasClass("text-panel")) {
                     createDialogTextPanelSettings(id).dialog("open");
                 } else if ($("div#" + id + ".bms-panel").hasClass("image-panel")) {
-                    //ajaxLoadImageSettingsPanel(id);
+                    ajaxLoadImageSettingsPanel(id);
                 } else if ($("div#" + id + ".bms-panel").hasClass("variable-panel")) {
-                    //ajaxLoadVariableSettingsPanel(id);
+                    ajaxLoadVariableSettingsPanel(id, "edit");
+                } else if ($("div#" + id + ".bms-panel").hasClass("navigation-panel")) {
+                    ajaxLoadNavigationSettingsPanel(id, "edit");
                 } else {
-
                     createDialogAreaPanelSettings(id).dialog("open");
                 }
             });
@@ -1377,15 +1513,13 @@ function setPanelEvents() {
                 ui.element.removeClass("hover");
             }
         });
-        //dodanie przycisków po najechaniu na panel
-        $(this).hover(function () {
-            //console.log("asdasdas");
-        }, function () {
-            //console.log("asdasdas");
-
+        $(this).hover(function(){
+            $(".panel-list-container div#" + id + " span.label").addClass("active");
+        },function(){
+            $(".panel-list-container div#" + id + " span.label").removeClass("active");
         });
         $(this).click(function (e) {
-
+            $(this).css({zIndex: 100});
             if ($("span.label-bms-panel").length > 0) {
                 var relX = parseInt($("span.label-bms-panel").css("left"));
                 var relY = parseInt($("span.label-bms-panel").css("top"));
@@ -1413,17 +1547,13 @@ function setPanelEvents() {
                                 <i class='fa fa-fw fa-cogs fa-yellow'></i>\n\
                                 <i class='fa fa-fw fa-remove fa-red'></i>\n\
                             </div>\n\
-                            <div>\n\
-                                " + $(this).css("z-index") + "\n\
-                                <i class='fa fa-fw fa-arrow-up fa-blue'></i>\n\
-                                <i class='fa fa-fw fa-arrow-down fa-blue'></i>\n\
-                            </div>\n\
                         </span>";
             $(this).append(label);
             setPanelLabelEvents(id);
         });
         $(this).mouseleave(function () {
-//            $(this).css({zIndex: $(this).attr("id")});
+            var zI = $(".panel-list-container div#" + id + " span.label").attr("value");
+            $(this).css({zIndex: zI});
             $("span.label-bms-panel").remove();
         });
     });
@@ -1480,9 +1610,9 @@ function setPanelEvents() {
             } else if ($("div#" + id + ".bms-panel").hasClass("image-panel")) {
                 //ajaxLoadImageSettingsPanel(id);
             } else if ($("div#" + id + ".bms-panel").hasClass("variable-panel")) {
-                ajaxLoadVariableSettingsPanel(id);
+                ajaxLoadVariableSettingsPanel(id, "edit");
             } else if ($("div#" + id + ".bms-panel").hasClass("navigation-panel")) {
-                ajaxLoadNavigationSettingsPanel(id);
+                ajaxLoadNavigationSettingsPanel(id, "edit");
             } else {
                 createDialogAreaPanelSettings(id).dialog("open");
             }

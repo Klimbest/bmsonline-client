@@ -19,9 +19,10 @@ class DefaultController extends Controller {
         if ($request->isXmlHttpRequest()) {
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $page_id = $request->get("page_id");
+            $pages = $pageRepo->findAll();
             isset($page_id) ? $page = $pageRepo->find($page_id) : $page = $pageRepo->find(2);
 
-            $ret['template'] = $this->container->get('templating')->render('BmsBundle::page.html.twig', ['page' => $page]);
+            $ret['template'] = $this->container->get('templating')->render('BmsBundle::page.html.twig', ['pages' => $pages, 'page' => $page]);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();

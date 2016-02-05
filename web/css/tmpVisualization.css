@@ -161,7 +161,8 @@ div.panel-list i.active{
 .dialog-area-panel-settings .row,
 .dialog-text-panel-settings .row,
 .dialog-image-panel-settings .row,
-.dialog-variable-panel-settings .row{
+.dialog-variable-panel-settings .row,
+.dialog-navigation-panel-settings .row{
     margin-top: 6px;
 }
 

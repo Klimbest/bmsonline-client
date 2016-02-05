@@ -8,7 +8,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use BmsVisualizationBundle\Entity\Page;
 use BmsVisualizationBundle\Entity\Panel;
-use Gregwar\ImageBundle;
 
 class AjaxController extends Controller {
 
@@ -116,6 +115,7 @@ class AjaxController extends Controller {
 
             $pageRepo = $this->getDoctrine()->getRepository("BmsVisualizationBundle:Page");
             $page = $pageRepo->find($page_id);
+            $pages = $pageRepo->findAll();
             $panel = new Panel();
             switch ($type) {
                 case "area" :
@@ -137,7 +137,7 @@ class AjaxController extends Controller {
 
             $ret["panel_id"] = $panel->getId();
             $ret["type"] = $panel->getType();
-            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
+            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['pages' => $pages, 'panel' => $panel]);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -375,12 +375,23 @@ class AjaxController extends Controller {
             $css["height"] = $css["lineHeight"] = $height = $request->get("height");
             $css["top"] = $topPosition = $request->get("topPosition");
             $css["left"] = $leftPosition = $request->get("leftPosition");
-
+            $css["backgroundColor"] = $backgroundColor = $request->get("backgroundColor");
+            $css["borderColor"] = $borderColor = $request->get("borderColor");
+            $css["borderWidth"] = $borderWidth = $request->get("borderWidth");
+            $css["borderStyle"] = $borderStyle = $request->get("borderStyle");
+            $css["borderRadius"] = $borderRadius = $request->get("borderRadius");
+            
+            
             $panel->setContent($content)
                     ->setWidth($width)
                     ->setHeight($height)
                     ->setLeftPosition($leftPosition)
-                    ->setTopPosition($topPosition);
+                    ->setTopPosition($topPosition)
+                    ->setBackgroundColor($backgroundColor)
+                    ->setBorderColor($borderColor)
+                    ->setBorderStyle($borderStyle)
+                    ->setBorderWidth($borderWidth)
+                    ->setBorderRadius($borderRadius);
 
             $em->flush();
 
@@ -449,8 +460,8 @@ class AjaxController extends Controller {
                             ->select('p')
                             ->from('BmsVisualizationBundle:Panel', 'p')
                             ->where("p.page = " . $request->get("page_id"))
-                            ->addOrderBy('p.zIndex', 'DESC')
-                            ->addOrderBy('p.id', 'DESC')
+//                            ->addOrderBy('p.zIndex', 'DESC')
+//                            ->addOrderBy('p.id', 'DESC')
                             ->getQuery()->getResult();
 
             $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
@@ -588,7 +599,7 @@ class AjaxController extends Controller {
     private function setNavigationValue(Panel $p, Page $page, $type) {
         $em = $this->getDoctrine()->getManager();
 
-        $p->setBackgroundColor("rgba(200, 200, 200, 1 )")
+        $p->setBackgroundColor("rgba(200, 200, 200, 0.4 )")
                 ->setHeight(50)
                 ->setWidth(100)
                 ->setLeftPosition(300)
