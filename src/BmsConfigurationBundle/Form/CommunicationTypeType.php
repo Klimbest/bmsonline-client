@@ -29,15 +29,15 @@ class CommunicationTypeType extends AbstractType {
                     'label' => 'Szybkość transmisji',
                     'attr' => array('disabled' => 'disabled'),
                 ))->add('parity', ChoiceType::class, array(
-                    'choices' => array( 0 => 'Brak', 1 => 'Nieparzyste', 2 => 'Parzyste', 3 => 'Znacznik', 4=> 'Spacja'),
+                    'choices' => array( 'Brak' => 0, 'Nieparzyste' => 1, 'Parzyste' => 2),
                     'label' => 'Parzystość',
                     'attr' => array('disabled' => 'disabled'),
                 ))->add('dataBits', ChoiceType::class, array(
-                    'choices' => array(5 => '5', 6 => '6', 7 => '7', 8 => '8'),
+                    'choices' => array(5 => 5, 6 => 6, 7 => 7, 8 => 8),
                     'label' => 'Bity Danych',
                     'attr' => array('disabled' => 'disabled'),
                 ))->add('stopBits', ChoiceType::class, array(
-                    'choices' => array(0 => '1', 1 => '1.5', 2 => '2'),
+                    'choices' => array(1 => 1, 2 => 2),
                     'label' => 'Bity Stopu',
                     'attr' => array('disabled' => 'disabled'),
                 ))->add('ipAddress', TextType::class, array(

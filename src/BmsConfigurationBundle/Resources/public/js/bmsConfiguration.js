@@ -14,6 +14,9 @@ Number.prototype.pad = function (size) {
 };
 
 $(document).ready(function () {
+    
+    
+    
     setInterval(function () {
         refreshPage();
     }, 1000 * 60);
@@ -133,6 +136,7 @@ function setActiveLevel(item) {
 }
 
 function ajaxAppend(url) {
+    
     $.ajax({
         type: "POST",
         dataType: "json",
@@ -151,6 +155,7 @@ function ajaxAppend(url) {
         }
     });
     $(".main-row").addClass("text-center").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    
 }
 
 function formEvents() {
@@ -204,8 +209,22 @@ function formEvents() {
         $(this).parent().parent().next("div.well").toggle();
         $(this).children("i.fa").toggleClass('fa-angle-down');
     });
-
-
+    
+    $("input#read_mod_val").val($("input#bmsconfigurationbundle_register_modificator_read").val());
+    
+    $("select#read_mod_operator, input#read_mod_val").change(function(){
+        var oper = $("select#read_mod_operator").val();
+        var mod = $("input#read_mod_val").val();
+        if(oper === "*"){
+            console.log(mod);
+            $("#bmsconfigurationbundle_register_modificator_read").val(mod);    
+        }else if(oper === "/"){
+            mod = 1/mod;
+            console.log(mod);
+            $("input#bmsconfigurationbundle_register_modificator_read").val(mod);    
+        }
+    });
+            
 }
 
 function tableEvents() {

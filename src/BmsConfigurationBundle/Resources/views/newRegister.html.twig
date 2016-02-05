@@ -56,15 +56,28 @@
                     </div>
                 </div>
             </div>     
-            <div class="col-md-3">
+        </div>
+        <div class="row enabled">
+            <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
-                        {{form_label(form.modificator_read)}}<br /><br />
+                        {{form_label(form.modificator_read)}}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-8">
-                        {{form_widget(form.modificator_read)}}
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" value="wartość rzeczywista = wartość odczytana" disabled="disabled" />
+                        </div>
+                        <div class="col-md-1">
+                            <select class="form-control" disabled="disabled">
+                                <option value="*">*</option>
+                                <option value="/">/</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            {{form_widget(form.modificator_read)}}
+                        </div>
                     </div>
                 </div>
             </div>
