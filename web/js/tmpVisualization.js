@@ -1156,7 +1156,7 @@ function ajaxCopyPanel(data) {
                     createDialogImagePanelSettings(id).dialog("open");
                     break;
                 case "variable" :
-                    ajaxLoadNavigationSettingsPanel(id, "add");
+                    ajaxLoadVariableSettingsPanel(id, "add");
                     break;
                 case "navigation" :
                     ajaxLoadNavigationSettingsPanel(id, "add");
