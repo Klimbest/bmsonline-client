@@ -39,7 +39,13 @@ function setSidebarEvents() {
         ajaxAddPanel(data);
     });
     $("button.btn-add-image-panel").click(function () {
-        ajaxLoadImageSettingsPanel();
+        var page_id = $(".label-page.active").attr("id");
+        var type = "image";
+        var data = {
+            type: type,
+            page_id: page_id
+        };
+        ajaxAddPanel(data);
     });
     $("button.btn-add-variable-panel").click(function () {
         var page_id = $(".label-page.active").attr("id");
@@ -475,15 +481,8 @@ function createDialogTextPanelSettings(id) {
 
 }
 //IMAGE PANEL SETTINGS
-function createDialogImagePanelEdit() {
-
-}
-function createDialogImagePanelSettings() {
-    var canvas = document.getElementById('myCanvas');
-    var context = canvas.getContext('2d');
-    var imageObj = new Image();
-    var id;
-    var ar = canvas.width / canvas.height;
+function createDialogImagePanelSettings(id, mode) {
+    var input;
     return $("div.dialog-image-panel-settings").dialog({
         autoOpen: false,
         width: 1100,
@@ -493,27 +492,33 @@ function createDialogImagePanelSettings() {
             {
                 text: "Zapisz",
                 click: function () {
-                    var page_id = $(".label-page.active").attr("id");
-                    var type = "image";
-                    var data = {
-                        type: type,
-                        page_id: page_id,
-                        file: canvas.toDataURL(),
-                        fileName: $("input#imageName").val()
-                    };
-                    ajaxAddPanel(data);
+                    var data = new FormData();
+                    if (input) {
+                        data.append('file', input.files[0]);
+                    } else {
+                        data.append('file', null);
+                    }
+                    data.append("fileName", $("div.dialog-image-panel-settings input#imageName").val());
+                    data.append("width", $("div.dialog-image-panel-settings input#width").val());
+                    data.append("panel_id", id);
+                    data.append("height", $("div.dialog-image-panel-settings input#height").val());
+                    data.append("topPosition", $("div.dialog-image-panel-settings input#topPosition").val());
+                    data.append("leftPosition", $("div.dialog-image-panel-settings input#leftPosition").val());
+                    ajaxEditImagePanel(data);
                     $(this).dialog('destroy').remove();
                 }
             },
             {
-                text: "Usuń",
+                text: "Anuluj",
                 click: function () {
                     $(this).dialog('destroy').remove();
-                    $("div#" + id + ".bms-panel").remove();
-                    var data = {
-                        panel_id: id
-                    };
-                    ajaxDeletePanel(data);
+                    if (mode === "add") {
+                        $("div#" + id + ".bms-panel").remove();
+                        var data = {
+                            panel_id: id
+                        };
+                        ajaxDeletePanel(data);
+                    }
                 }
             }],
         open: function () {
@@ -521,82 +526,112 @@ function createDialogImagePanelSettings() {
         },
         close: function () {
             $(this).dialog('destroy').remove();
+            if (mode === "add") {
+                $("div#" + id + ".bms-panel").remove();
+                var data = {
+                    panel_id: id
+                };
+                ajaxDeletePanel(data);
+            }
         }
     });
     function setDialog(id) {
-        var panelImg = $("div#" + id + ".image-panel").children("img").attr("src");
-        loadCanvas(panelImg);
-        $("input#topPosition").val(0);
-        $("input#leftPosition").val(0);
-        $("input#width").val(canvas.width);
-        $("input#height").val(canvas.height);
-        setEvents();
-        function loadCanvas(dataURL) {
+        var panel = $("div#" + id + ".image-panel");
+        var dialog_panel = $(".dialog-image-panel-settings div.dialog-panel");
 
-            imageObj.onload = function () {
-                var pageW = $("div.main-row div.well").width();
-                var pageH = $("div.main-row div.well").height();
-                var aspectRatio = imageObj.naturalHeight / imageObj.naturalHeight;
-                //obrazek mniejszy niż strona
-                if (imageObj.naturalWidth <= pageW && imageObj.naturalHeight <= pageH) {
-                    canvas.width = imageObj.naturalWidth;
-                    canvas.height = imageObj.naturalHeight;
-                    context.drawImage(this, 0, 0);
-                    //obrazek szerszy
-                } else if (imageObj.naturalWidth > pageW && imageObj.naturalHeight <= pageH) {
+        if (mode === "edit") {
+            var url = panel.children("img").attr("src");
+            dialog_panel.css({
+                width: panel.css("width"),
+                height: panel.css("height")
+            }).children("img").attr("src", url);
 
-                    canvas.width = pageW;
-                    var imageH = pageW * imageObj.naturalHeight / imageObj.naturalWidth;
-                    canvas.height = imageH;
-                    context.drawImage(this, 0, 0, pageW, imageH);
-                    //obrazek wyższy
-                } else if (imageObj.naturalWidth <= pageW && imageObj.naturalHeight > pageH) {
-
-                    canvas.height = pageH;
-                    var imageW = pageH * imageObj.naturalWidth / imageObj.naturalHeight;
-                    canvas.width = imageW;
-                    context.drawImage(this, 0, 0, imageW, pageH);
-                    //obrazek szerszy i wyższy
-                } else {
-                    var w = $("canvas#myCanvas").parent().width();
-                    canvas.width = w;
-                    canvas.height = 450;
-                    context.drawImage(this, 0, 0, w);
-                }
-
-
-                ar = canvas.width / canvas.height;
-                $("input#width").val(canvas.width);
-                $("input#height").val(canvas.height);
-            };
-            imageObj.src = dataURL;
+            var imgName = url.substring(url.lastIndexOf('/') + 1);
+            $("div.dialog-image-panel-settings input#imageName").val(imgName);
         }
-        function setEvents() {
-            $("input#image").change(function (event) {
-                var input = event.target;
-                if (this.files && this.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        loadCanvas(e.target.result);
-                    };
-                    reader.readAsDataURL(input.files[0]);
-                }
-                $("input#imageName").val(input.files[0].name.replace(/\..*$/, ""));
-            });
-            $("input#width").change(function () {
-                console.log(ar);
-                console.log($(this).val());
-                console.log(canvas.height);
-                console.log(canvas.width);
-                canvas.width = $(this).val();
-                canvas.height = canvas.width / ar;
-                $("input#height").val(canvas.height);
-            });
-            $("input#height").change(function () {
-                console.log($(this).val());
-            });
-        }
+
+        $("div.dialog-image-panel-settings input#width").val(parseInt(panel.css("width")));
+        $("div.dialog-image-panel-settings input#height").val(parseInt(panel.css("height")));
+        $("div.dialog-image-panel-settings input#topPosition").val(parseInt(panel.css("top")));
+        $("div.dialog-image-panel-settings input#leftPosition").val(parseInt(panel.css("left")));
+        setDialogButtons(dialog_panel);
+
     }
+
+    function setDialogButtons(dp) {
+        
+        //loading image from disk
+        $("div.dialog-image-panel-settings input#image").change(function (event) {
+            input = event.target;
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = new Image();
+                    img.onload = function () {
+                        dp.css({
+                            width: this.width,
+                            height: this.height
+                        }).children("img").attr("src", e.target.result);
+                        ar = this.width / this.height;
+                        $("div.dialog-image-panel-settings input#width").val(parseInt(dp.css("width")));
+                        $("div.dialog-image-panel-settings input#height").val(parseInt(dp.css("height")));
+                    };
+                    img.src = e.target.result;
+
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+            var imgName = input.files[0].name;
+            $("div.dialog-image-panel-settings input#imageName").val(imgName);
+
+        });
+        //load image from server
+        $("div.dialog-image-panel-settings div.image-list span.label").click(function () {
+            var name = $(this).text();
+            var url = "/images/system/" + name;
+            var img = new Image();
+            img.onload = function () {
+                dp.css({
+                    width: this.width,
+                    height: this.height
+                }).children("img").attr("src", url);
+                ar = this.width / this.height;
+                $("div.dialog-image-panel-settings input#width").val(parseInt(dp.css("width")));
+                $("div.dialog-image-panel-settings input#height").val(parseInt(dp.css("height")));
+            };
+            img.src = url;
+            dp.children("img").attr("src", url);
+            $("div.dialog-image-panel-settings input#imageName").val(name);
+
+        });
+        //removing image from server
+        $("div.dialog-image-panel-settings div.image-list i.fa-remove").click(function () {
+            var name = $(this).parent().children("span.label").text();
+            var data = {
+                image_name: name
+            };
+            ajaxDeleteImage(data);
+            $(this).parent().parent().remove();
+        });
+        //change size of image
+        $("div.dialog-image-panel-settings input#width").change(function () {
+            var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
+            var h = $(this).val() / ar;
+            $("div.dialog-image-panel-settings input#height").val(Math.round(h));
+            var w = $(this).val();
+            dp.css({width: w+"px", height: h+"px"});
+        });
+
+        $("div.dialog-image-panel-settings input#height").change(function () {
+            var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
+            var w = $(this).val() * ar;
+            $("div.dialog-image-panel-settings input#width").val(Math.round(w));
+            var h = $(this).val();
+            console.log(w + " " + h);
+            dp.css({width: w+"px", height: h+"px"});
+        });
+    }
+
 }
 //VARIABLE PANEL SETTINGS
 function createDialogVariablePanelSettings(id, mode) {
@@ -647,6 +682,13 @@ function createDialogVariablePanelSettings(id, mode) {
         },
         close: function () {
             $(this).dialog('destroy').remove();
+            if (mode === "add") {
+                $("div#" + id + ".bms-panel").remove();
+                var data = {
+                    panel_id: id
+                };
+                ajaxDeletePanel(data);
+            }
         }
     });
 
@@ -820,6 +862,13 @@ function createDialogNavigationPanelSettings(id, mode) {
         },
         close: function () {
             $(this).dialog('destroy').remove();
+            if (mode === "add") {
+                $("div#" + id + ".bms-panel").remove();
+                var data = {
+                    panel_id: id
+                };
+                ajaxDeletePanel(data);
+            }
         }
     });
 
@@ -1027,11 +1076,9 @@ function ajaxAddPanel(data) {
             };
             ajaxLoadPanelList(d);
             setPanelEvents();
+
             if (ret["type"] === "image") {
-                data.panel_id = ret["panel_id"];
-//                data.topPosition =
-//                        data.leftPosition =
-                ajaxEditImagePanel(data);
+                ajaxLoadImageSettingsPanel(ret["panel_id"], "add");
             } else if (ret["type"] === "variable") {
                 ajaxLoadVariableSettingsPanel(ret["panel_id"], "add");
             } else if (ret["type"] === "navigation") {
@@ -1087,11 +1134,27 @@ function ajaxEditTextPanel(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
+//function ajaxAddImage(fd, d) {
+//    $.ajax({
+//        type: "POST",
+//        url: Routing.generate('bms_visualization_add_image'),
+//        data: fd,
+//        contentType: false,
+//        processData: false,
+//        success: function (ret) {
+//            ajaxEditImagePanel(d);
+//            $(".main-row").children(".fa-spinner").remove();            
+//        }
+//    });
+//    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+//}
 function ajaxEditImagePanel(data) {
     $.ajax({
         type: "POST",
         url: Routing.generate('bms_visualization_edit_image_panel'),
         data: data,
+        contentType: false,
+        processData: false,
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
             $("div#" + ret['panel_id'] + ".image-panel").css(ret['css']).children("img").attr("src", ret["content"]);
@@ -1153,7 +1216,7 @@ function ajaxCopyPanel(data) {
                     createDialogTextPanelSettings(id).dialog("open");
                     break;
                 case "image" :
-                    createDialogImagePanelSettings(id).dialog("open");
+                    ajaxLoadImageSettingsPanel(id, "add");
                     break;
                 case "variable" :
                     ajaxLoadVariableSettingsPanel(id, "add");
@@ -1212,22 +1275,33 @@ function ajaxLoadNavigationSettingsPanel(panel_id, mode) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
-function ajaxLoadImageSettingsPanel() {
+function ajaxLoadImageSettingsPanel(panel_id, mode) {
     $.ajax({
         type: "POST",
         datatype: "application/json",
         url: Routing.generate('bms_visualization_load_image_settings_panel'),
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
-            $(".container-fluid").append(ret['template']);
-            createDialogImagePanelSettings().dialog("open");
+            $("nav div.container-fluid").append(ret['template']);
+            createDialogImagePanelSettings(panel_id, mode).dialog("open");
+        }
+    });
+    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+}
+function ajaxDeleteImage(data) {
+    $.ajax({
+        type: "POST",
+        url: Routing.generate('bms_visualization_delete_image'),
+        data: data,
+        success: function () {
+            $(".main-row").children(".fa-spinner").remove();
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
 
 function ajaxLoadPanelList(data) {
-    $("input#panel-list-area, input#panel-list-text, input#panel-list-image, input#panel-list-variable, input#panel-list-navigation").prop("checked",true).unbind("click, change");
+    $("input#panel-list-area, input#panel-list-text, input#panel-list-image, input#panel-list-variable, input#panel-list-navigation").prop("checked", true).unbind("click, change");
     if ($("button.btn-panel-list span.toggler").hasClass("off") === true) {
 
     } else {
@@ -1244,7 +1318,7 @@ function ajaxLoadPanelList(data) {
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
         function setSidebarPanelListEvents() {
-            
+
             $('input#panel-list-area').change(function () {
                 $(this).is(':checked') ? $("span.panel-list-area").parent("div.panel-list").show() : $("span.panel-list-area").parent("div.panel-list").hide();
             });
@@ -1326,7 +1400,7 @@ function ajaxLoadPanelList(data) {
                 if ($("div#" + id + ".bms-panel").hasClass("text-panel")) {
                     createDialogTextPanelSettings(id).dialog("open");
                 } else if ($("div#" + id + ".bms-panel").hasClass("image-panel")) {
-                    ajaxLoadImageSettingsPanel(id);
+                    ajaxLoadImageSettingsPanel(id, "edit");
                 } else if ($("div#" + id + ".bms-panel").hasClass("variable-panel")) {
                     ajaxLoadVariableSettingsPanel(id, "edit");
                 } else if ($("div#" + id + ".bms-panel").hasClass("navigation-panel")) {
@@ -1513,9 +1587,9 @@ function setPanelEvents() {
                 ui.element.removeClass("hover");
             }
         });
-        $(this).hover(function(){
+        $(this).hover(function () {
             $(".panel-list-container div#" + id + " span.label").addClass("active");
-        },function(){
+        }, function () {
             $(".panel-list-container div#" + id + " span.label").removeClass("active");
         });
         $(this).click(function (e) {
@@ -1608,7 +1682,7 @@ function setPanelEvents() {
             if ($("div#" + id + ".bms-panel").hasClass("text-panel")) {
                 createDialogTextPanelSettings(id).dialog("open");
             } else if ($("div#" + id + ".bms-panel").hasClass("image-panel")) {
-                //ajaxLoadImageSettingsPanel(id);
+                ajaxLoadImageSettingsPanel(id, "edit");
             } else if ($("div#" + id + ".bms-panel").hasClass("variable-panel")) {
                 ajaxLoadVariableSettingsPanel(id, "edit");
             } else if ($("div#" + id + ".bms-panel").hasClass("navigation-panel")) {

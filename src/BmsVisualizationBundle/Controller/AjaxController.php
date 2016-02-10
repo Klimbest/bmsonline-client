@@ -8,6 +8,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use BmsVisualizationBundle\Entity\Page;
 use BmsVisualizationBundle\Entity\Panel;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 class AjaxController extends Controller {
 
@@ -258,56 +260,38 @@ class AjaxController extends Controller {
 
     public function editImagePanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
-            $ret["panel_id"] = $panel_id = $request->get("panel_id");
+            
+            $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web/images/system/';
+            
+            $img = $request->files->get("file");
+            if($img){
+                $img->move($imagesDir, $img->getClientOriginalName());
+            }
+            
+            $ret["panel_id"] = $panel_id = $request->request->get("panel_id");
             $em = $this->getDoctrine()->getManager();
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $panel = $panelRepo->find($panel_id);
-
-
-            $session = $request->getSession();
-            $tid = $session->get('target_id');
-            $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web/images/' . $tid . "/";
+            
             $fileName = $request->get("fileName");
+            
 
-            if ($fileName !== "") {
-                $fileName .= '.png';
-            } else {
-                $fileName = uniqid() . '.png';
-            }
+            $ret["content"] = $content = "/images/system/" . $fileName;
+            $css['width'] = $width = $request->request->get("width");
+            $css['height'] = $height = $request->request->get("height");
+            $css["top"] = $topPosition = $request->request->get("topPosition");
+            $css["left"] = $leftPosition = $request->request->get("leftPosition");
 
-            if ($panel->getContent() == null) {
-                $img = $request->get("file");
-                $img = str_replace('data:image/png;base64,', '', $img);
-                $img = str_replace(' ', '+', $img);
-                $data = base64_decode($img);
+            $panel->setContent($content)
+                    ->setWidth($width)
+                    ->setHeight($height)
+                    ->setLeftPosition($leftPosition)
+                    ->setTopPosition($topPosition);
 
-                $file = $imagesDir . $fileName;
+            $em->flush();
 
-                file_put_contents($file, $data);
-
-                $fileInfo = getimagesize($file);
-
-                $ret["content"] = $content = "/images/" . $tid . "/" . $fileName;
-                $css['width'] = $width = $fileInfo[0];
-                $css['height'] = $height = $fileInfo[1];
-
-                $panel->setContent($content)
-                        ->setWidth($width)
-                        ->setHeight($height);
-
-                $em->flush();
-
-                $ret["css"] = $css;
-            } else {
-                print_r($imagesDir . $fileName);
-                die;
-                $file = glob($imagesDir . $fileName);
-                print_r($file);
-                die;
-                $ret['css'] = "css";
-                $ret["content"] = "asd";
-                $ret["info"] = "Obraz istnieje";
-            }
+            $ret["css"] = $css;
+            
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -380,8 +364,8 @@ class AjaxController extends Controller {
             $css["borderWidth"] = $borderWidth = $request->get("borderWidth");
             $css["borderStyle"] = $borderStyle = $request->get("borderStyle");
             $css["borderRadius"] = $borderRadius = $request->get("borderRadius");
-            
-            
+
+
             $panel->setContent($content)
                     ->setWidth($width)
                     ->setHeight($height)
@@ -432,22 +416,37 @@ class AjaxController extends Controller {
     public function loadImageSettingsPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
 
-            $session = $request->getSession();
-            $tid = $session->get('target_id');
-            $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web/images/' . $tid . "/";
+            $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web/images/system/';
             $handle = opendir($imagesDir);
             $images = array();
 
             while ($file = readdir($handle)) {
                 if ($file !== '.' && $file !== '..') {
-                    $file = preg_replace('/\..*$/', "", $file);
                     array_push($images, $file);
                 }
             }
 
-            $images_path = "/images/" . $tid . "/";
+            $images_path = "/images/system/";
             $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogImagePanelSettings.html.twig', ['images' => $images, 'path' => $images_path]);
             return new JsonResponse($ret);
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
+
+    public function deleteImageFromServerAction(Request $request) {
+        if ($request->isXmlHttpRequest()) {
+
+            $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web/images/system/';
+            $imageName = $request->get("image_name");
+            $fs = new Filesystem();
+
+            try {
+                $fs->remove($imagesDir . $imageName);
+            } catch (IOExceptionInterface $e) {
+                echo "An error occurred while creating your directory at " . $e->getPath();
+            }
+            return new JsonResponse();
         } else {
             throw new AccessDeniedHttpException();
         }
@@ -483,9 +482,9 @@ class AjaxController extends Controller {
 
 
             $newPanel = clone $panel;
-            
+
             $newPanel->setTopPosition(0)->setLeftPosition(0);
-            
+
 //            $newPanel->setTopPosition($newTopPosition)
 //                    ->setLeftPosition($newLeftPosition);
 

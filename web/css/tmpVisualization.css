@@ -192,22 +192,13 @@ div.panel-list i.active{
 .dialog-image-panel-settings div.image-list{
     border-right: 1px solid #000;
     overflow: auto;
-    height: 390px;
+    height: 450px;
 }
 
-.dialog-image-panel-settings div.image-list-bottom{
-    border-top: 1px solid #000;
-    height: 80px;
-}
-
-.dialog-image-panel-settings canvas{
-    border: 5px dotted #333;
-    background-color: #FFF;
-
-}
-.dialog-image-panel-settings div.canvas{
-    overflow: auto;
-    max-height: 390px;
+.dialog-image-panel-settings div.image-list span.label:hover,
+.dialog-image-panel-settings div.image-list i.fa-remove:hover,
+.dialog-image-panel-settings div.image-list-bottom span.thumbnail:hover{
+    cursor: pointer;
 }
 
 .btn-file {
@@ -229,6 +220,8 @@ div.panel-list i.active{
     cursor: inherit;
     display: block;
 }
+
+
 
 /*
 .new-panel:hover{

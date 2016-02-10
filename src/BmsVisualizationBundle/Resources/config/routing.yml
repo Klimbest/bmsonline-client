@@ -105,3 +105,9 @@ bms_visualization_load_panel_list:
     defaults: { _controller: BmsVisualizationBundle:Ajax:loadPanelList }
     options:
         expose: true
+
+bms_visualization_delete_image:
+    path: /delete_image
+    defaults: { _controller: BmsVisualizationBundle:Ajax:deleteImageFromServer }
+    options:
+        expose: true

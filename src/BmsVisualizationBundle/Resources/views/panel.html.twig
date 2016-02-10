@@ -19,7 +19,7 @@
      z-index: {{panel.zIndex}};
      ">
     {% if panel.type == "image" %}
-        <img class="img-responsive" src="{{panel.content}}" />
+        <img class="img-responsive" src="{{panel.content}}"/>
     {% elseif panel.type == "text" %}
         <span class="content">{{panel.content}}</span>
     {% elseif panel.type == "variable" %}

@@ -5,6 +5,7 @@
                 <h6><label class="control-label">Wybierz nowy obraz..</label></h6>
                 <span class="btn btn-sm btn-default btn-file">
                     Browse <input id="image" type="file" accept='image/*'>
+                    
                 </span>
             </div>
             <div class="col-md-2">
@@ -35,21 +36,15 @@
             {% for image in images %}
                 <div class="row">
                     <div class="col-xs-12">
-                        <span class="label label-primary">{{image}} <i class="fa fa-remove fa-red fa-fw"></i></span>
-                            {#<a href="#" class="thumbnail">
-                                <img src="{{path}}{{image}}" alt="{{image}}"/>
-                            </a>#}
+                        <span class="label label-primary">{{image}} </span><i class="fa fa-remove fa-red fa-fw"></i>
                     </div>
                 </div>
             {% endfor %}
         </div>
-        <div class="col-md-10 canvas">
-            <canvas id="myCanvas" width="500" height="375"></canvas> 
-        </div>
-    </div>
-    <div class="row image-list-bottom">
-        <div class="col-md-12">
-
+        <div class="col-md-10">
+            <div class="dialog-panel">
+                <img class="img-responsive" src="" />
+            </div>
         </div>
     </div>
 </div>
