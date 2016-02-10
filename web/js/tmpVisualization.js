@@ -572,7 +572,6 @@ function createDialogImagePanelSettings(id, mode) {
                             width: this.width,
                             height: this.height
                         }).children("img").attr("src", e.target.result);
-                        ar = this.width / this.height;
                         $("div.dialog-image-panel-settings input#width").val(parseInt(dp.css("width")));
                         $("div.dialog-image-panel-settings input#height").val(parseInt(dp.css("height")));
                     };
@@ -595,7 +594,6 @@ function createDialogImagePanelSettings(id, mode) {
                     width: this.width,
                     height: this.height
                 }).children("img").attr("src", url);
-                ar = this.width / this.height;
                 $("div.dialog-image-panel-settings input#width").val(parseInt(dp.css("width")));
                 $("div.dialog-image-panel-settings input#height").val(parseInt(dp.css("height")));
             };
@@ -627,7 +625,6 @@ function createDialogImagePanelSettings(id, mode) {
             var w = $(this).val() * ar;
             $("div.dialog-image-panel-settings input#width").val(Math.round(w));
             var h = $(this).val();
-            console.log(w + " " + h);
             dp.css({width: w+"px", height: h+"px"});
         });
     }
