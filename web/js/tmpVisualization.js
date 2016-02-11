@@ -606,7 +606,7 @@ function createDialogImagePanelSettings(id, mode) {
         $("div.dialog-image-panel-settings div.image-list i.fa-remove").click(function () {
             var name = $(this).parent().children("span.label").text();
             var data = {
-                image_name: name
+                image_name: name.replace(" ", "")
             };
             ajaxDeleteImage(data);
             $(this).parent().parent().remove();
