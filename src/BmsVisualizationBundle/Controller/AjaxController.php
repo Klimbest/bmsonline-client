@@ -297,12 +297,7 @@ class AjaxController extends Controller {
                 $finder = new Finder();
                 $finder->files()->name($fileName)->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
                 foreach($finder as $file){
-                    $relativePath = $file -> getRelativePathname();
-                }
-                $rel = explode("\\", $relativePath);
-                $relativePath = "/images";
-                foreach($rel as $r){
-                    $relativePath = $relativePath."/".$r;
+                    $relativePath = "/images/".$file -> getRelativePathname();
                 }
                 $ret["content"] = $content = $relativePath;
             }
@@ -451,7 +446,7 @@ class AjaxController extends Controller {
             $images = array();
             foreach ($finder as $dir) {
                 $finder2 = new Finder();
-                $dirDet = explode("\\", $dir->getRelativePathname());
+                $dirDet = explode("/", $dir->getRelativePathname());
                 switch (sizeof($dirDet)) {
                     case 1 :
                         !isset($images[$dirDet[0]]) ? $images[$dirDet[0]] = array() : null;

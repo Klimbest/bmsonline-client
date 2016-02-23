@@ -1072,12 +1072,14 @@ function ajaxChangePage(data) {
             //console.log(ret["terms"]);
             createPage(ret["template"]);
 
+            setVariables(ret["registers"], ret["terms"]);
             ajaxLoadPanelList(data);
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    function setVariables(registers) {
-        $.each(registers, function (key, value) {
+    function setVariables(registers, terms) {
+        console.log(terms);
+        $.each(registers, function (key, value, terms) {
             $("div.variable-panel").children("span#" + key).append(value);
 
         });
