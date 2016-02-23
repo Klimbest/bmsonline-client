@@ -77,3 +77,14 @@ fos_user:
     firewall_name: main
     user_class: BmsBundle\Entity\User
     
+liip_imagine:
+    resolvers:
+       default:
+          web_path:
+              web_root: %kernel.root_dir%/../web/images          
+    filter_sets:
+        cache: ~
+        resize:
+            quality: 100
+            filters:
+                resize: { size: [120, 90], mode: inset }

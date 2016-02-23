@@ -1,51 +1,146 @@
-<div class="dialog-image-panel-settings" title="Właściwości panelu obrazu:">
-    <div class="form-group-sm">
-        <div class="row">
-            <div class="col-md-2">
-                <h6><label class="control-label">Wybierz nowy obraz..</label></h6>
-                <span class="btn btn-sm btn-default btn-file">
-                    Browse <input id="image" type="file" accept='image/*'>
-                    
-                </span>
-            </div>
-            <div class="col-md-2">
-                <label class="control-label">Nazwa</label>
-                <input id="imageName" type="text" class="form-control" />
-            </div>
-            <div class="col-md-2">
-                <label for="topPosition">Od góry:</label>
-                <input id="topPosition" type="number" class="form-control" value="50"/>
-            </div>
-            <div class="col-md-2">
-                <label for="leftPosition">Od lewej:</label>
-                <input id="leftPosition" type="number" class="form-control" value="50"/>
-            </div>
-            <div class="col-md-2">
-                <label for="width">Szerokość:</label>
-                <input id="width" type="number" class="form-control" value="100"/>
-            </div>
-            <div class="col-md-2">
-                <label for="height">Wysokość:</label>
-                <input id="height" type="number" class="form-control" value="100"/>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-2 image-list">
-            <h6><label class="control-label">...lub któryś z dodanych wcześniej.</label></h6>
-            {% for image in images %}
-                <div class="row">
-                    <div class="col-xs-12">
-                        <span class="label label-primary">{{image}} </span><i class="fa fa-remove fa-red fa-fw"></i>
+<div class="dialog-image-panel-settings text-center" title="Właściwości panelu obrazu:">
+    <div class="row form-group-sm">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Wybierz nowy obraz..</label>
+                        </div> 
+                        <div class="col-md-12">
+                            <div class="btn btn-sm btn-default btn-file">Browse <input class="" id="image" type="file" accept='image/*'></div>
+                        </div>                    
                     </div>
                 </div>
-            {% endfor %}
+            </div>
+            <div class="row">
+                <div class="col-md-12 image-list">
+                    <h6><label class="control-label">...lub któryś z dodanych wcześniej.</label></h6>
+                    {% for key,dir in images %}
+                        <div class="row image-container text-left">
+                            <div class="col-xs-12">
+                                <i class="fa fa-folder fa-blue"></i><span class="small"> {{key}}</span> <i class="fa fa-plus-circle fa-blue"></i>
+                                <div id="{{key}}" class="images hidden">
+                                    {% for key,subdir in dir %}
+                                        {% if subdir is iterable %}
+                                            <div class="col-xs-12">
+                                                <i class="fa fa-folder fa-green"></i><span class="small"> {{key}}</span> <i class="fa fa-plus-circle fa-blue"></i>
+                                                <div id="{{key}}" class="images hidden">
+                                                    {% for key,subsubdir in subdir %}
+                                                        {% if subsubdir is iterable %}
+                                                            <div class="col-xs-12">
+                                                                <i class="fa fa-folder fa-red"></i><span class="small"> {{key}}</span> <i class="fa fa-plus-circle fa-blue"></i>
+                                                                <div id="{{key}}" class="images hidden">
+                                                                    {% for image in subsubdir %}
+                                                                        <div class="col-xs-12">
+                                                                            <span class="label label-warning">{{image}}</span> {#<span class="small">{{image.sizeKB}} KB</span>#}
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                </div> 
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="col-xs-12">
+                                                                <span class="label label-danger">{{subsubdir}}</span> {#<span class="small">{{image.sizeKB}} KB</span>#}
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div> 
+                                            </div>
+                                        {% else %}
+                                            <div class="col-xs-12">
+                                                <span class="label label-success">{{subdir}}</span> {#<span class="small">{{image.sizeKB}} KB</span>#}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div> 
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-        <div class="col-md-10">
-            <div class="dialog-panel">
-                <img class="img-responsive" src="" />
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="label label-primary">Obraz:</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Nazwa:</label>
+                        </div>                    
+                        <div class="col-md-6">
+                            <label>Rozdzielczość:</label>
+                        </div>
+                    </div>
+                    <div class="row">                        
+                        <div class="col-md-6">
+                            <input id="imageName" type="text" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <input id="resolutionX" type="number" class="form-control"/>
+                        </div>
+                        <div class="col-md-3">
+                            <input id="resolutionY" type="number" class="form-control"/>
+                        </div>                    
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="label label-primary">Pozycja panelu:</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="topPosition">Od góry:</label>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="leftPosition">Od lewej:</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input id="topPosition" type="number" class="form-control"/>
+                        </div>
+                        <div class="col-md-6">
+                            <input id="leftPosition" type="number" class="form-control"/>
+                        </div>                    
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="label label-primary">Rozmiar panelu:</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="width">Szerokość:</label>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="height">Wysokość:</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input id="width" type="number" class="form-control" value="100"/>
+                        </div>
+                        <div class="col-md-6">
+                            <input id="height" type="number" class="form-control" value="100"/>
+                        </div>                    
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="dialog-panel">
+                        <img class="img-responsive" src="" />
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>

@@ -221,6 +221,9 @@ div.panel-list i.active{
     display: block;
 }
 
+i.fa-plus-circle:hover{
+    cursor: pointer;
+}
 
 
 /*

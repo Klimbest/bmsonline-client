@@ -10,6 +10,8 @@ use BmsVisualizationBundle\Entity\Page;
 use BmsVisualizationBundle\Entity\Panel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Finder\Finder;
+use Doctrine\ORM\Query;
 
 class AjaxController extends Controller {
 
@@ -45,22 +47,21 @@ class AjaxController extends Controller {
     public function deletePageAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $page_id = $request->get("page_id");
-            $em = $this->getDoctrine()->getManager();
-            $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
-            $page = $pageRepo->find($page_id);
-
-            $panels = $page->getPanels();
-            foreach ($panels as $panel) {
-                $em->remove($panel);
+            if ($page_id == 1) {
+                $ret['result'] = "Nie można usunąć strony głównej";
+            } else {
+                $em = $this->getDoctrine()->getManager();
+                $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
+                $panels = $pageRepo->find($page_id)->getPanels();
+                foreach ($panels as $panel) {
+                    $em->remove($panel);
+                }
+                $em->flush()->remove($page)->flush();
+                $em->getConnection()->exec("ALTER TABLE panel AUTO_INCREMENT = 1;");
+                $em->getConnection()->exec("ALTER TABLE page AUTO_INCREMENT = 1;");
+                $ret['result'] = "Usunięto stronę: id = " . $page_id . ", wraz ze wszystkimi panelami na tej stronie.";
             }
-            $em->flush();
-            $em->remove($page);
-            $em->flush();
-
-            $em->getConnection()->exec("ALTER TABLE panel AUTO_INCREMENT = 1;");
-            $em->getConnection()->exec("ALTER TABLE page AUTO_INCREMENT = 1;");
-
-            return new JsonResponse();
+            return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
         }
@@ -260,27 +261,56 @@ class AjaxController extends Controller {
 
     public function editImagePanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
-            
-            $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web/images/system/';
-            
-            $img = $request->files->get("file");
-            if($img){
-                $img->move($imagesDir, $img->getClientOriginalName());
-            }
-            
-            $ret["panel_id"] = $panel_id = $request->request->get("panel_id");
-            $em = $this->getDoctrine()->getManager();
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
-            $panel = $panelRepo->find($panel_id);
-            
-            $fileName = $request->get("fileName");
-            
 
-            $ret["content"] = $content = "/images/system/" . $fileName;
+            $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web';
+            //get data
+            $fileName = $request->get("fileName");
             $css['width'] = $width = $request->request->get("width");
             $css['height'] = $height = $request->request->get("height");
             $css["top"] = $topPosition = $request->request->get("topPosition");
             $css["left"] = $leftPosition = $request->request->get("leftPosition");
+            //save original file
+            $img = $request->files->get("file");
+            if ($img) {
+                $relativePath = '/images/user/';
+                $resolutionX = $request->request->get("resolutionX");
+                $resolutionY = $request->request->get("resolutionY");
+                $img->move($imagesDir . $relativePath, $fileName);
+                //setFilter
+                $filterConfiguration = $this->container->get('liip_imagine.filter.configuration');
+                $configuration = $filterConfiguration->get('resize');
+                $configuration['filters']['resize']['size'] = array($resolutionX, $resolutionY);
+                $filterConfiguration->set('resize', $configuration);
+
+                //filter image
+                $imagePath = $relativePath . $fileName;
+
+                $processedImage = $this->container->get('liip_imagine.data.manager')->find('resize', $imagePath);
+                $filteredImage = $this->container->get('liip_imagine.filter.manager')->applyFilter($processedImage, 'resize')->getContent();
+                //update file    
+                $f = fopen($imagesDir . $relativePath . $fileName, 'w+');
+                fwrite($f, $filteredImage);
+                fclose($f);
+                
+                $ret["content"] = $content = $relativePath . $fileName;
+            }else{
+                $finder = new Finder();
+                $finder->files()->name($fileName)->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
+                foreach($finder as $file){
+                    $relativePath = $file -> getRelativePathname();
+                }
+                $rel = explode("\\", $relativePath);
+                $relativePath = "/images";
+                foreach($rel as $r){
+                    $relativePath = $relativePath."/".$r;
+                }
+                $ret["content"] = $content = $relativePath;
+            }
+
+            $ret["panel_id"] = $panel_id = $request->request->get("panel_id");
+            $em = $this->getDoctrine()->getManager();
+            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $panel = $panelRepo->find($panel_id);
 
             $panel->setContent($content)
                     ->setWidth($width)
@@ -291,7 +321,7 @@ class AjaxController extends Controller {
             $em->flush();
 
             $ret["css"] = $css;
-            
+
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -415,19 +445,50 @@ class AjaxController extends Controller {
 
     public function loadImageSettingsPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
+            $finder = new Finder();
 
-            $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web/images/system/';
-            $handle = opendir($imagesDir);
+            $finder->directories()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
             $images = array();
-
-            while ($file = readdir($handle)) {
-                if ($file !== '.' && $file !== '..') {
-                    array_push($images, $file);
+            foreach ($finder as $dir) {
+                $finder2 = new Finder();
+                $dirDet = explode("\\", $dir->getRelativePathname());
+                switch (sizeof($dirDet)) {
+                    case 1 :
+                        !isset($images[$dirDet[0]]) ? $images[$dirDet[0]] = array() : null;
+                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                        foreach ($finder2 as $file) {
+                            $fn = $file->getFilename();
+                            $images[$dirDet[0]][$fn] = $fn;
+                        }
+                        break;
+                    case 2 :
+                        !isset($images[$dirDet[0]][$dirDet[1]]) ? $images[$dirDet[0]][$dirDet[1]] = array() : null;
+                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                        foreach ($finder2 as $file) {
+                            $fn = $file->getFilename();
+                            $images[$dirDet[0]][$dirDet[1]][$fn] = $fn;
+                        }
+                        break;
+                    case 3 :
+                        !isset($images[$dirDet[0]][$dirDet[1]][$dirDet[2]]) ? $images[$dirDet[0]][$dirDet[1]][$dirDet[2]] = array() : null;
+                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                        foreach ($finder2 as $file) {
+                            $fn = $file->getFilename();
+                            $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$fn] = $fn;
+                        }
+                        break;
+                    case 4 :
+                        !isset($images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]]) ? $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]] = array() : null;
+                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                        foreach ($finder2 as $file) {
+                            $fn = $file->getFilename();
+                            $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]][$fn] = $fn;
+                        }
+                        break;
                 }
             }
-
-            $images_path = "/images/system/";
-            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogImagePanelSettings.html.twig', ['images' => $images, 'path' => $images_path]);
+           
+            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogImagePanelSettings.html.twig', ['images' => $images]);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -477,16 +538,9 @@ class AjaxController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $panel = $panelRepo->find($panel_id);
-//            $newLeftPosition = $panel->getLeftPosition() + 75;
-//            $newTopPosition = $panel->getTopPosition() + 75;
-
-
             $newPanel = clone $panel;
 
             $newPanel->setTopPosition(0)->setLeftPosition(0);
-
-//            $newPanel->setTopPosition($newTopPosition)
-//                    ->setLeftPosition($newLeftPosition);
 
             $em->persist($newPanel);
             $em->flush();
@@ -528,8 +582,8 @@ class AjaxController extends Controller {
                 ->setBorderStyle("solid")
                 ->setHeight(150)
                 ->setWidth(300)
-                ->setLeftPosition(300)
-                ->setTopPosition(200)
+                ->setLeftPosition(0)
+                ->setTopPosition(0)
                 ->setOpacity(1)
                 ->setType($type)
                 ->setPage($page)
@@ -545,8 +599,9 @@ class AjaxController extends Controller {
 
         $p->setHeight(50)
                 ->setWidth(200)
-                ->setLeftPosition(300)
-                ->setTopPosition(200)
+                ->setLeftPosition(0)
+                ->setTopPosition(0)
+                ->setFontFamily("Arial")
                 ->setTextAlign("text-center")
                 ->setContent("Dodaj tekst")
                 ->setType($type)
@@ -579,8 +634,8 @@ class AjaxController extends Controller {
 
         $p->setHeight(50)
                 ->setWidth(50)
-                ->setLeftPosition(300)
-                ->setTopPosition(200)
+                ->setLeftPosition(0)
+                ->setTopPosition(0)
                 ->setTextAlign("text-center")
                 ->setBorderColor("rgba(0, 0, 0, 1)")
                 ->setBorderWidth(0)
@@ -601,8 +656,8 @@ class AjaxController extends Controller {
         $p->setBackgroundColor("rgba(200, 200, 200, 0.4 )")
                 ->setHeight(50)
                 ->setWidth(100)
-                ->setLeftPosition(300)
-                ->setTopPosition(200)
+                ->setLeftPosition(0)
+                ->setTopPosition(0)
                 ->setTextAlign("text-center")
                 ->setBorderColor("rgba(0, 0, 0, 1)")
                 ->setBorderWidth(1)

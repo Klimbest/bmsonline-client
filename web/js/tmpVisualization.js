@@ -1,7 +1,6 @@
 /* global parseInt */
 //w przyszłości pobrać z bazy 
-var defaultPatternNetSize = 150;
-var tid = $("div#target_id.hidden").text();
+var defaultPatternNetSize = 50;
 
 $(document).ready(function () {
 //wczytanie strony startowej
@@ -18,6 +17,7 @@ function setSidebarEvents() {
     $("button.btn-add-page").click(function () {
         createDialogPageAddSettings().dialog("open");
     });
+    //****ADD PANELS START
     //dodawanie panel obszaru
     $("button.btn-add-area-panel").click(function () {
         var page_id = $(".label-page.active").attr("id");
@@ -28,6 +28,7 @@ function setSidebarEvents() {
         };
         ajaxAddPanel(data);
     });
+    //dodawanie panel tekstowy
     $("button.btn-add-text-panel").click(function () {
 
         var page_id = $(".label-page.active").attr("id");
@@ -38,6 +39,7 @@ function setSidebarEvents() {
         };
         ajaxAddPanel(data);
     });
+    //dodawanie panel obrazu
     $("button.btn-add-image-panel").click(function () {
         var page_id = $(".label-page.active").attr("id");
         var type = "image";
@@ -47,6 +49,7 @@ function setSidebarEvents() {
         };
         ajaxAddPanel(data);
     });
+    //dodawanie panel zmiennej
     $("button.btn-add-variable-panel").click(function () {
         var page_id = $(".label-page.active").attr("id");
         var type = "variable";
@@ -56,6 +59,7 @@ function setSidebarEvents() {
         };
         ajaxAddPanel(data);
     });
+    //dodawanie panel nawigacyjny
     $("button.btn-add-navigation-panel").click(function () {
         var page_id = $(".label-page.active").attr("id");
         var type = "navigation";
@@ -499,8 +503,10 @@ function createDialogImagePanelSettings(id, mode) {
                         data.append('file', null);
                     }
                     data.append("fileName", $("div.dialog-image-panel-settings input#imageName").val());
-                    data.append("width", $("div.dialog-image-panel-settings input#width").val());
                     data.append("panel_id", id);
+                    data.append("resolutionX", $("div.dialog-image-panel-settings input#resolutionX").val());
+                    data.append("resolutionY", $("div.dialog-image-panel-settings input#resolutionY").val());
+                    data.append("width", $("div.dialog-image-panel-settings input#width").val());
                     data.append("height", $("div.dialog-image-panel-settings input#height").val());
                     data.append("topPosition", $("div.dialog-image-panel-settings input#topPosition").val());
                     data.append("leftPosition", $("div.dialog-image-panel-settings input#leftPosition").val());
@@ -559,7 +565,7 @@ function createDialogImagePanelSettings(id, mode) {
     }
 
     function setDialogButtons(dp) {
-        
+
         //loading image from disk
         $("div.dialog-image-panel-settings input#image").change(function (event) {
             input = event.target;
@@ -574,6 +580,8 @@ function createDialogImagePanelSettings(id, mode) {
                         }).children("img").attr("src", e.target.result);
                         $("div.dialog-image-panel-settings input#width").val(parseInt(dp.css("width")));
                         $("div.dialog-image-panel-settings input#height").val(parseInt(dp.css("height")));
+                        $("div.dialog-image-panel-settings input#resolutionX").val(parseInt(dp.css("width")));
+                        $("div.dialog-image-panel-settings input#resolutionY").val(parseInt(dp.css("height")));
                     };
                     img.src = e.target.result;
 
@@ -587,7 +595,14 @@ function createDialogImagePanelSettings(id, mode) {
         //load image from server
         $("div.dialog-image-panel-settings div.image-list span.label").click(function () {
             var name = $(this).text();
-            var url = "/images/system/" + name;
+            //var dir = [];
+            var url = name;
+            $(this).parents(".images").each(function(){ 
+                //dir.push($(this).attr("id"));
+                url = $(this).attr("id") + "/" + url; 
+            });
+            url = "/images/" + url;
+            
             var img = new Image();
             img.onload = function () {
                 dp.css({
@@ -596,6 +611,8 @@ function createDialogImagePanelSettings(id, mode) {
                 }).children("img").attr("src", url);
                 $("div.dialog-image-panel-settings input#width").val(parseInt(dp.css("width")));
                 $("div.dialog-image-panel-settings input#height").val(parseInt(dp.css("height")));
+                $("div.dialog-image-panel-settings input#resolutionX").val(parseInt(dp.css("width")));
+                $("div.dialog-image-panel-settings input#resolutionY").val(parseInt(dp.css("height")));
             };
             img.src = url;
             dp.children("img").attr("src", url);
@@ -617,7 +634,7 @@ function createDialogImagePanelSettings(id, mode) {
             var h = $(this).val() / ar;
             $("div.dialog-image-panel-settings input#height").val(Math.round(h));
             var w = $(this).val();
-            dp.css({width: w+"px", height: h+"px"});
+            dp.css({width: w + "px", height: h + "px"});
         });
 
         $("div.dialog-image-panel-settings input#height").change(function () {
@@ -625,8 +642,17 @@ function createDialogImagePanelSettings(id, mode) {
             var w = $(this).val() * ar;
             $("div.dialog-image-panel-settings input#width").val(Math.round(w));
             var h = $(this).val();
-            dp.css({width: w+"px", height: h+"px"});
+            dp.css({width: w + "px", height: h + "px"});
         });
+        //sidebar
+        var imageListItems = $("div.dialog-image-panel-settings div.row.image-container i.fa-plus-circle");
+        imageListItems.each(function(){
+            $(this).click(function(){
+                $(this).parent().children('.images').toggleClass('hidden');
+                $(this).toggleClass("fa-minus-circle");
+            });
+        });
+        
     }
 
 }
@@ -1010,10 +1036,10 @@ function ajaxDeletePage(data) {
         data: data,
         success: function () {
             $(".main-row").children(".fa-spinner").remove();
-//            var data = {
-//                page_id: 1
-//            };
-//            ajaxChangePage(data);
+            var data = {
+                page_id: 1
+            };
+            ajaxChangePage(data);
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -1034,7 +1060,6 @@ function ajaxEditPage(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
-
 //PAGE CHANGE
 function ajaxChangePage(data) {
     $.ajax({
@@ -1044,9 +1069,9 @@ function ajaxChangePage(data) {
         data: data,
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
+            //console.log(ret["terms"]);
             createPage(ret["template"]);
 
-            setVariables(ret["registers"]);
             ajaxLoadPanelList(data);
         }
     });
@@ -1054,7 +1079,10 @@ function ajaxChangePage(data) {
     function setVariables(registers) {
         $.each(registers, function (key, value) {
             $("div.variable-panel").children("span#" + key).append(value);
+
         });
+
+
     }
 }
 //PANEL ADD
@@ -1073,13 +1101,24 @@ function ajaxAddPanel(data) {
             };
             ajaxLoadPanelList(d);
             setPanelEvents();
-
-            if (ret["type"] === "image") {
-                ajaxLoadImageSettingsPanel(ret["panel_id"], "add");
-            } else if (ret["type"] === "variable") {
-                ajaxLoadVariableSettingsPanel(ret["panel_id"], "add");
-            } else if (ret["type"] === "navigation") {
-                ajaxLoadNavigationSettingsPanel(ret["panel_id"], "add");
+            var type = ret["type"];
+            var id = ret["panel_id"];
+            switch (type) {
+                case "area" :
+                    createDialogAreaPanelSettings(id).dialog("open");
+                    break;
+                case "text" :
+                    createDialogTextPanelSettings(id).dialog("open");
+                    break;
+                case "image" :
+                    ajaxLoadImageSettingsPanel(id, "add");
+                    break;
+                case "variable" :
+                    ajaxLoadVariableSettingsPanel(id, "add");
+                    break;
+                case "navigation" :
+                    ajaxLoadNavigationSettingsPanel(id, "add");
+                    break;
             }
 //            return ret["panel_id"];
         }
@@ -1131,20 +1170,6 @@ function ajaxEditTextPanel(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
-//function ajaxAddImage(fd, d) {
-//    $.ajax({
-//        type: "POST",
-//        url: Routing.generate('bms_visualization_add_image'),
-//        data: fd,
-//        contentType: false,
-//        processData: false,
-//        success: function (ret) {
-//            ajaxEditImagePanel(d);
-//            $(".main-row").children(".fa-spinner").remove();            
-//        }
-//    });
-//    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-//}
 function ajaxEditImagePanel(data) {
     $.ajax({
         type: "POST",
@@ -1285,6 +1310,7 @@ function ajaxLoadImageSettingsPanel(panel_id, mode) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
+
 function ajaxDeleteImage(data) {
     $.ajax({
         type: "POST",
@@ -1441,7 +1467,6 @@ function setPatternNet(x) {
         $(".pattern-net, .pattern-net-right").remove();
         var divItem;
         if (x.length === 0) {
-
             x = defaultPatternNetSize;
         } else if (x < 25) {
             x = 25;
@@ -1472,10 +1497,6 @@ function setPageLabelsEvent() {
                 page_id: id
             };
             ajaxChangePage(data);
-        }).hover(function () {
-            $(this).not(".active").children().toggleClass("hidden");
-        }, function () {
-            $(this).not(".active").children().toggleClass("hidden");
         });
         if ($(this).hasClass("active")) {
             $(this).unbind("click");
@@ -1572,6 +1593,7 @@ function setPanelEvents() {
                 ui.element.addClass("hover");
             },
             stop: function (event, ui) {
+                ui.element.removeClass("hover");
                 var data = {
                     panel_id: id,
                     topPosition: ui.helper.css("top"),
@@ -1581,7 +1603,6 @@ function setPanelEvents() {
                     zIndex: ui.element.css("zIndex")
                 };
                 ajaxEditPanel(data);
-                ui.element.removeClass("hover");
             }
         });
         $(this).hover(function () {

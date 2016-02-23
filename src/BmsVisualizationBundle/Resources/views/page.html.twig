@@ -4,12 +4,15 @@
         <div id="{{page.id}}" class="label label-primary label-page active">
             <span id="name">{{page.name}}</span><span id="id" class="hidden">{{page.id}}</span>
             <i class="fa fa-fw fa-cogs fa-yellow"></i>
-            <i class="fa fa-fw fa-remove fa-red"></i>
+            {% if page.id == 1 %}
+            {% else %}
+                <i class="fa fa-fw fa-remove fa-red"></i>
+            {% endif %}
         </div>
 
     {% else %}
         <div id="{{page.id}}" class="label label-default label-page">
-            <span id="id">{{page.id}}</span><span id="name" class="hidden">{{page.name}}</span>
+            <span id="id">{{page.id}}</span> - <span id="name">{{page.name}}</span>
         </div>
     {% endif %}
 {% endfor %}

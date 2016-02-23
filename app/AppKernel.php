@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new BmsBundle\BmsBundle(),
             new BmsConfigurationBundle\BmsConfigurationBundle(),
             new BmsVisualizationBundle\BmsVisualizationBundle(),
+            new Liip\ImagineBundle\LiipImagineBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle()
         ];
