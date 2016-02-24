@@ -127,9 +127,11 @@ function ajaxRefreshPage() {
             }
 
             function makeTerm(type) {
+                var content = eContent.split(";");
+                
                 switch (type) {
-                    case "backgroundColor" :
-                        $("div#" + ePanelId + ".bms-panel").css(eField, eContent);
+                    case "css" :
+                        $("div#" + ePanelId + ".bms-panel").css(content[0], content[1]);
                         break;
                     case "src" :
                         $("div#" + ePanelId + ".bms-panel img").attr("src", eContent);
