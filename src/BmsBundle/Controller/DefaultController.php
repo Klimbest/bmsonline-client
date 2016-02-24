@@ -51,6 +51,7 @@ class DefaultController extends Controller {
             foreach ($terms as $term) {
                 $id = $term->getId();
                 $t[$id]["register_id"] = $term->getRegister()->getId();
+                $t[$id]["register_val"] = $term->getRegister()->getRegisterCurrentData()->getFixedValue();
                 $t[$id]["condition"] = $term->getCondition();
                 $t[$id]["effect_field"] = $term->getEffectField();
                 $t[$id]["effect_content"] = $term->getEffectContent();
