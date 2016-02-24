@@ -34,9 +34,10 @@ class DefaultController extends Controller {
             $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-
+            $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
+            
             $page_id = $request->get("page_id");
-            isset($page_id) ? $page = $pageRepo->find($page_id) : $page = $pageRepo->find(2);
+            isset($page_id) ? $page = $pageRepo->find($page_id) : null;
 
             $vid = $qb->select('p.content')->from('BmsVisualizationBundle:Panel', 'p')->where("p.type = 'variable'")->getQuery()->getResult();
             
@@ -45,6 +46,18 @@ class DefaultController extends Controller {
                 $register = $registerRepo->find((int)$id['content']);
                 $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
             }
+            $terms = $termRepo->findAll();
+            $t = null;
+            foreach ($terms as $term) {
+                $id = $term->getId();
+                $t[$id]["register_id"] = $term->getRegister()->getId();
+                $t[$id]["condition"] = $term->getCondition();
+                $t[$id]["effect_field"] = $term->getEffectField();
+                $t[$id]["effect_content"] = $term->getEffectContent();
+                $t[$id]["effect_panel_id"] = $term->getEffectPanel()->getId();
+            }
+            
+            $ret["terms"] = $t;
             $ret['registers'] = $registers;
             return new JsonResponse($ret);
         } else {

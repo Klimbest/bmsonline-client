@@ -46,7 +46,7 @@ class Term {
     /**
      * @var Panel
      * 
-     * @ORM\ManyToOne(targetEntity="Panel")
+     * @ORM\OneToOne(targetEntity="Panel")
      * @ORM\JoinColumn(name="effect_panel_id", referencedColumnName="id")
      * 
      */

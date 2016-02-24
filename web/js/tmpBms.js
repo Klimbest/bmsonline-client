@@ -1,10 +1,12 @@
+/* global parseFloat */
+
 var i;
 
 $(document).ready(function () {
     ajaxChangePage(1);
     setInterval(function () {
         ajaxRefreshPage();
-    }, 20000);
+    }, 5000);
     setInterval(clock, 1000);
 
 });
@@ -70,21 +72,108 @@ function ajaxRefreshPage() {
         success: function (ret) {
             $(".content-container").children(".fa-spinner").remove();
             $("span.timer").removeClass("label-danger").addClass("label-primary");
-            var x = 20;
-            i = setInterval(function () {
-                $("span.timer").empty().append(x--);
-            }, 1000);
-            setRegisters(ret['registers']);
+//            var x = 5;
+//            i = setInterval(function () {
+//                $("span.timer").empty().append(x--);
+//            }, 1000);
+            setVariables(ret['registers'], ret["terms"]);
         }
     });
-    clearInterval(i);
+//    clearInterval(i);
     $("span.timer").removeClass("label-primary").addClass("label-danger");
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 
-    function setRegisters(registers) {
+    function setVariables(registers, terms) {
+        
+        $.each(terms, function(key, term){
+            var condition = term.condition.split(";");
+            condition[1] = parseFloat(condition[1]).toFixed(2);
+            var register_id = term.register_id;
+            var eContent = term.effect_content;
+            var eField = term.effect_field;
+            var ePanelId = term.effect_panel_id;
+            var value = registers[register_id];
+            switch(condition[0]){
+                case "==" :
+                    if(value === condition[1]){
+                        switch(eField){
+                            case "backgroundColor" :
+                                $("div#"+ ePanelId +".bms-panel").css(eField, eContent);    
+                                break;
+                            case "src" :
+                                $("div#"+ ePanelId +".bms-panel img").attr("src", eContent).addClass("fa-spin");
+                                break;
+                        }
+                    }
+                    break;
+                case "!=" :
+                    if(value !== condition[1]){
+                        switch(eField){
+                            case "backgroundColor" :
+                                $("div#"+ ePanelId +".bms-panel").css(eField, eContent);    
+                                break;
+                            case "src" :
+                                $("div#"+ ePanelId +".bms-panel img").attr("src", eContent).addClass("fa-spin");
+                                break;
+                        }
+                    }
+                    break;
+                case ">" :
+                    if(value > condition[1]){
+                        switch(eField){
+                            case "backgroundColor" :
+                                $("div#"+ ePanelId +".bms-panel").css(eField, eContent);    
+                                break;
+                            case "src" :
+                                $("div#"+ ePanelId +".bms-panel img").attr("src", eContent).addClass("fa-spin");
+                                break;
+                        }
+                    }
+                    break;
+                case "<" :
+                    if(value < condition[1]){
+                        switch(eField){
+                            case "backgroundColor" :
+                                $("div#"+ ePanelId +".bms-panel").css(eField, eContent);    
+                                break;
+                            case "src" :
+                                $("div#"+ ePanelId +".bms-panel img").attr("src", eContent).addClass("fa-spin");
+                                break;
+                        }
+                    }
+                    break;
+                case ">=" :
+                    if(value >= condition[1]){
+                        switch(eField){
+                            case "backgroundColor" :
+                                $("div#"+ ePanelId +".bms-panel").css(eField, eContent);    
+                                break;
+                            case "src" :
+                                $("div#"+ ePanelId +".bms-panel img").attr("src", eContent).addClass("fa-spin");
+                                break;
+                        }
+                    }
+                    break;
+                case "<=" :
+                    if(value <= condition[1]){
+                        switch(eField){
+                            case "backgroundColor" :
+                                $("div#"+ ePanelId +".bms-panel").css(eField, eContent);    
+                                break;
+                            case "src" :
+                                $("div#"+ ePanelId +".bms-panel img").attr("src", eContent).addClass("fa-spin");
+                                break;
+                        }
+                    }
+                    break;
+            }
+        });
+        
         $.each(registers, function (key, value) {
             $("div.variable-panel").children("span#" + key).empty().append(value);
         });
+
+
     }
 }
 

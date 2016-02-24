@@ -1,4 +1,4 @@
-/* global parseInt */
+/* global parseInt, parseFloat */
 //w przyszłości pobrać z bazy 
 var defaultPatternNetSize = 50;
 
@@ -626,9 +626,9 @@ function createDialogImagePanelSettings(id, mode) {
                 image_name: name.replace(" ", "")
             };
             ajaxDeleteImage(data);
-            $(this).parent().parent().remove();
+            $(this).parent().remove();
         });
-        //change size of image
+        //change size of panel
         $("div.dialog-image-panel-settings input#width").change(function () {
             var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
             var h = $(this).val() / ar;
@@ -643,6 +643,18 @@ function createDialogImagePanelSettings(id, mode) {
             $("div.dialog-image-panel-settings input#width").val(Math.round(w));
             var h = $(this).val();
             dp.css({width: w + "px", height: h + "px"});
+        });
+        //change sier of image
+        $("div.dialog-image-panel-settings input#resolutionX").change(function () {
+            var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
+            var h = $(this).val() / ar;
+            $("div.dialog-image-panel-settings input#resolutionY").val(Math.round(h));
+            
+        });
+        $("div.dialog-image-panel-settings input#resolutionY").change(function () {
+            var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
+            var w = $(this).val() * ar;
+            $("div.dialog-image-panel-settings input#resolutionX").val(Math.round(w));
         });
         //sidebar
         var imageListItems = $("div.dialog-image-panel-settings div.row.image-container i.fa-plus-circle");
@@ -1069,7 +1081,6 @@ function ajaxChangePage(data) {
         data: data,
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
-            //console.log(ret["terms"]);
             createPage(ret["template"]);
 
             setVariables(ret["registers"], ret["terms"]);
@@ -1078,10 +1089,60 @@ function ajaxChangePage(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     function setVariables(registers, terms) {
-        console.log(terms);
-        $.each(registers, function (key, value, terms) {
+        
+        $.each(terms, function(key, term){
+            var condition = term.condition.split(";");
+            condition[1] = parseFloat(condition[1]).toFixed(2);
+            var register_id = term.register_id;
+            var eContent = term.effect_content;
+            var eField = term.effect_field;
+            var ePanelId = term.effect_panel_id;
+            var value = registers[register_id];
+            console.log(value);
+            switch(condition[0]){
+                case "==" :
+                    if(value === condition[1]){
+                        switch(eField){
+                            case "backgroundColor" :
+                                $("div#"+ ePanelId +".bms-panel").css(eField, eContent);    
+                                break;
+                            case "src" :
+                                $
+                                break;
+                        }
+                        
+                    }
+                    break;
+                case "!=" :
+                    if(value !== condition[1]){
+                        $("div#"+ ePanelId +".bms-panel").css(eField, eContent);
+                    }
+                    break;
+                case ">" :
+                    if(value > condition[1]){
+                        $("div#"+ ePanelId +".bms-panel").css(eField, eContent);
+                    }
+                    break;
+                case "<" :
+                    if(value < condition[1]){
+                        $("div#"+ ePanelId +".bms-panel").css(eField, eContent);
+                    }
+                    break;
+                case ">=" :
+                    if(value >= condition[1]){
+                        $("div#"+ ePanelId +".bms-panel").css(eField, eContent);
+                    }
+                    break;
+                case "<=" :
+                    if(value <= condition[1]){
+                        $("div#"+ ePanelId +".bms-panel").css(eField, eContent);
+                    }
+                    break;
+            }
+        });
+        
+        $.each(registers, function (key, value) {
             $("div.variable-panel").children("span#" + key).append(value);
-
         });
 
 

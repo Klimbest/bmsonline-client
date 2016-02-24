@@ -47,16 +47,19 @@ class AjaxController extends Controller {
     public function deletePageAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $page_id = $request->get("page_id");
-            if ($page_id == 1) {
+            if($page_id == 1) {
                 $ret['result'] = "Nie można usunąć strony głównej";
             } else {
                 $em = $this->getDoctrine()->getManager();
                 $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
-                $panels = $pageRepo->find($page_id)->getPanels();
+                $page = $pageRepo->find($page_id);
+                $panels = $page->getPanels();
                 foreach ($panels as $panel) {
                     $em->remove($panel);
                 }
-                $em->flush()->remove($page)->flush();
+                $em->flush();
+                $em->remove($page);
+                $em->flush();
                 $em->getConnection()->exec("ALTER TABLE panel AUTO_INCREMENT = 1;");
                 $em->getConnection()->exec("ALTER TABLE page AUTO_INCREMENT = 1;");
                 $ret['result'] = "Usunięto stronę: id = " . $page_id . ", wraz ze wszystkimi panelami na tej stronie.";
@@ -95,6 +98,7 @@ class AjaxController extends Controller {
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $registerCDRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:RegisterCurrentData');
+            $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
             $pages = $pageRepo->findAll();
 
             $vpanels = $panelRepo->findByType("variable");
@@ -103,6 +107,18 @@ class AjaxController extends Controller {
                 $register = $registerCDRepo->find($vpanel->getContent());
                 $registers[$register->getRegister()->getId()] = $register->getFixedValue();
             }
+            $terms = $termRepo->findAll();
+            $t = null;
+            foreach ($terms as $term) {
+                $id = $term->getId();
+                $t[$id]["register_id"] = $term->getRegister()->getId();
+                $t[$id]["condition"] = $term->getCondition();
+                $t[$id]["effect_field"] = $term->getEffectField();
+                $t[$id]["effect_content"] = $term->getEffectContent();
+                $t[$id]["effect_panel_id"] = $term->getEffectPanel()->getId();
+            }
+            $t ? $ret["terms"] = $t : null;
+
             $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id]);
             $ret['registers'] = $registers;
             return new JsonResponse($ret);
@@ -297,7 +313,12 @@ class AjaxController extends Controller {
                 $finder = new Finder();
                 $finder->files()->name($fileName)->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
                 foreach($finder as $file){
-                    $relativePath = "/images/".$file -> getRelativePathname();
+                    $relativePath = $file -> getRelativePathname();
+                }
+                $rel = explode("\\", $relativePath);
+                $relativePath = "/images";
+                foreach($rel as $r){
+                    $relativePath = $relativePath."/".$r;
                 }
                 $ret["content"] = $content = $relativePath;
             }
@@ -444,9 +465,10 @@ class AjaxController extends Controller {
 
             $finder->directories()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
             $images = array();
+            $sizeOfImage = array();
             foreach ($finder as $dir) {
                 $finder2 = new Finder();
-                $dirDet = explode("/", $dir->getRelativePathname());
+                $dirDet = explode("\\", $dir->getRelativePathname());
                 switch (sizeof($dirDet)) {
                     case 1 :
                         !isset($images[$dirDet[0]]) ? $images[$dirDet[0]] = array() : null;
@@ -454,6 +476,7 @@ class AjaxController extends Controller {
                         foreach ($finder2 as $file) {
                             $fn = $file->getFilename();
                             $images[$dirDet[0]][$fn] = $fn;
+                            $sizeOfImage[$fn] = round($file->getSize()/1024);
                         }
                         break;
                     case 2 :
@@ -462,6 +485,7 @@ class AjaxController extends Controller {
                         foreach ($finder2 as $file) {
                             $fn = $file->getFilename();
                             $images[$dirDet[0]][$dirDet[1]][$fn] = $fn;
+                            $sizeOfImage[$fn] = round($file->getSize()/1024);
                         }
                         break;
                     case 3 :
@@ -470,6 +494,7 @@ class AjaxController extends Controller {
                         foreach ($finder2 as $file) {
                             $fn = $file->getFilename();
                             $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$fn] = $fn;
+                            $sizeOfImage[$fn] = round($file->getSize()/1024);
                         }
                         break;
                     case 4 :
@@ -478,12 +503,13 @@ class AjaxController extends Controller {
                         foreach ($finder2 as $file) {
                             $fn = $file->getFilename();
                             $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]][$fn] = $fn;
+                            $sizeOfImage[$fn] = round($file->getSize()/1024);
                         }
                         break;
                 }
             }
            
-            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogImagePanelSettings.html.twig', ['images' => $images]);
+            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogImagePanelSettings.html.twig', ['images' => $images, 'sizeOfImage' => $sizeOfImage]);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -493,12 +519,18 @@ class AjaxController extends Controller {
     public function deleteImageFromServerAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
 
-            $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web/images/system/';
+            $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web/images/';
             $imageName = $request->get("image_name");
+            
+            $finder = new Finder();
+            $finder->files()->name($imageName)->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
+            foreach($finder as $file){
+                $relativePath = $file -> getRelativePathname();
+            }
             $fs = new Filesystem();
 
             try {
-                $fs->remove($imagesDir . $imageName);
+                $fs->remove($imagesDir . $relativePath);
             } catch (IOExceptionInterface $e) {
                 echo "An error occurred while creating your directory at " . $e->getPath();
             }
