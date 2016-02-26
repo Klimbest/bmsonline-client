@@ -47,7 +47,7 @@ class AjaxController extends Controller {
     public function deletePageAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $page_id = $request->get("page_id");
-            if($page_id == 1) {
+            if ($page_id == 1) {
                 $ret['result'] = "Nie można usunąć strony głównej";
             } else {
                 $em = $this->getDoctrine()->getManager();
@@ -112,7 +112,7 @@ class AjaxController extends Controller {
             foreach ($terms as $term) {
                 $id = $term->getId();
                 $t[$id]["register_id"] = $term->getRegister()->getId();
-                $t[$id]["condition"] = $term->getCondition();
+                $t[$id]["condition"] = $term->getEffectCondition();
                 $t[$id]["effect_field"] = $term->getEffectField();
                 $t[$id]["effect_content"] = $term->getEffectContent();
                 $t[$id]["effect_panel_id"] = $term->getEffectPanel()->getId();
@@ -280,47 +280,52 @@ class AjaxController extends Controller {
 
             $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web';
             //get data
-            $fileName = $request->get("fileName");
             $css['width'] = $width = $request->request->get("width");
             $css['height'] = $height = $request->request->get("height");
             $css["top"] = $topPosition = $request->request->get("topPosition");
             $css["left"] = $leftPosition = $request->request->get("leftPosition");
-            //save original file
-            $img = $request->files->get("file");
-            if ($img) {
-                $relativePath = '/images/user/';
-                $resolutionX = $request->request->get("resolutionX");
-                $resolutionY = $request->request->get("resolutionY");
-                $img->move($imagesDir . $relativePath, $fileName);
-                //setFilter
-                $filterConfiguration = $this->container->get('liip_imagine.filter.configuration');
-                $configuration = $filterConfiguration->get('resize');
-                $configuration['filters']['resize']['size'] = array($resolutionX, $resolutionY);
-                $filterConfiguration->set('resize', $configuration);
+            $fileName = $request->get("fileName");
+            if ($fileName) {
 
-                //filter image
-                $imagePath = $relativePath . $fileName;
+                //save original file
+                $img = $request->files->get("file");
+                if ($img) {
+                    $relativePath = '/images/user/';
+                    $resolutionX = $request->request->get("resolutionX");
+                    $resolutionY = $request->request->get("resolutionY");
+                    $img->move($imagesDir . $relativePath, $fileName);
+                    //setFilter
+                    $filterConfiguration = $this->container->get('liip_imagine.filter.configuration');
+                    $configuration = $filterConfiguration->get('resize');
+                    $configuration['filters']['resize']['size'] = array($resolutionX, $resolutionY);
+                    $filterConfiguration->set('resize', $configuration);
 
-                $processedImage = $this->container->get('liip_imagine.data.manager')->find('resize', $imagePath);
-                $filteredImage = $this->container->get('liip_imagine.filter.manager')->applyFilter($processedImage, 'resize')->getContent();
-                //update file    
-                $f = fopen($imagesDir . $relativePath . $fileName, 'w+');
-                fwrite($f, $filteredImage);
-                fclose($f);
-                
-                $ret["content"] = $content = $relativePath . $fileName;
-            }else{
-                $finder = new Finder();
-                $finder->files()->name($fileName)->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
-                foreach($finder as $file){
-                    $relativePath = $file -> getRelativePathname();
+                    //filter image
+                    $imagePath = $relativePath . $fileName;
+
+                    $processedImage = $this->container->get('liip_imagine.data.manager')->find('resize', $imagePath);
+                    $filteredImage = $this->container->get('liip_imagine.filter.manager')->applyFilter($processedImage, 'resize')->getContent();
+                    //update file    
+                    $f = fopen($imagesDir . $relativePath . $fileName, 'w+');
+                    fwrite($f, $filteredImage);
+                    fclose($f);
+
+                    $ret["content"] = $content = $relativePath . $fileName;
+                } else {
+                    $finder = new Finder();
+                    $finder->files()->name($fileName)->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
+                    foreach ($finder as $file) {
+                        $relativePath = $file->getRelativePathname();
+                    }
+                    $rel = explode("\\", $relativePath);
+                    $relativePath = "/images";
+                    foreach ($rel as $r) {
+                        $relativePath = $relativePath . "/" . $r;
+                    }
+                    $ret["content"] = $content = $relativePath;
                 }
-                $rel = explode("\\", $relativePath);
-                $relativePath = "/images";
-                foreach($rel as $r){
-                    $relativePath = $relativePath."/".$r;
-                }
-                $ret["content"] = $content = $relativePath;
+            } else {
+                $ret["content"] = $content = null;
             }
 
             $ret["panel_id"] = $panel_id = $request->request->get("panel_id");
@@ -476,7 +481,7 @@ class AjaxController extends Controller {
                         foreach ($finder2 as $file) {
                             $fn = $file->getFilename();
                             $images[$dirDet[0]][$fn] = $fn;
-                            $sizeOfImage[$fn] = round($file->getSize()/1024);
+                            $sizeOfImage[$fn] = round($file->getSize() / 1024);
                         }
                         break;
                     case 2 :
@@ -485,7 +490,7 @@ class AjaxController extends Controller {
                         foreach ($finder2 as $file) {
                             $fn = $file->getFilename();
                             $images[$dirDet[0]][$dirDet[1]][$fn] = $fn;
-                            $sizeOfImage[$fn] = round($file->getSize()/1024);
+                            $sizeOfImage[$fn] = round($file->getSize() / 1024);
                         }
                         break;
                     case 3 :
@@ -494,7 +499,7 @@ class AjaxController extends Controller {
                         foreach ($finder2 as $file) {
                             $fn = $file->getFilename();
                             $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$fn] = $fn;
-                            $sizeOfImage[$fn] = round($file->getSize()/1024);
+                            $sizeOfImage[$fn] = round($file->getSize() / 1024);
                         }
                         break;
                     case 4 :
@@ -503,12 +508,12 @@ class AjaxController extends Controller {
                         foreach ($finder2 as $file) {
                             $fn = $file->getFilename();
                             $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]][$fn] = $fn;
-                            $sizeOfImage[$fn] = round($file->getSize()/1024);
+                            $sizeOfImage[$fn] = round($file->getSize() / 1024);
                         }
                         break;
                 }
             }
-           
+
             $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogImagePanelSettings.html.twig', ['images' => $images, 'sizeOfImage' => $sizeOfImage]);
             return new JsonResponse($ret);
         } else {
@@ -521,11 +526,11 @@ class AjaxController extends Controller {
 
             $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web/images/';
             $imageName = $request->get("image_name");
-            
+
             $finder = new Finder();
             $finder->files()->name($imageName)->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
-            foreach($finder as $file){
-                $relativePath = $file -> getRelativePathname();
+            foreach ($finder as $file) {
+                $relativePath = $file->getRelativePathname();
             }
             $fs = new Filesystem();
 
@@ -643,8 +648,8 @@ class AjaxController extends Controller {
     private function setImageValue(Panel $p, Page $page, $type) {
         $em = $this->getDoctrine()->getManager();
 
-        $p->setHeight(375)
-                ->setWidth(500)
+        $p->setHeight(100)
+                ->setWidth(100)
                 ->setLeftPosition(0)
                 ->setTopPosition(0)
                 ->setType($type)

@@ -556,6 +556,10 @@ function createDialogImagePanelSettings(id, mode) {
             $("div.dialog-image-panel-settings input#imageName").val(imgName);
         }
 
+        dialog_panel.css({
+            width: parseInt(panel.css("width")),
+            height: parseInt(panel.css("height"))
+        });
         $("div.dialog-image-panel-settings input#width").val(parseInt(panel.css("width")));
         $("div.dialog-image-panel-settings input#height").val(parseInt(panel.css("height")));
         $("div.dialog-image-panel-settings input#topPosition").val(parseInt(panel.css("top")));
@@ -597,12 +601,12 @@ function createDialogImagePanelSettings(id, mode) {
             var name = $(this).text();
             //var dir = [];
             var url = name;
-            $(this).parents(".images").each(function(){ 
+            $(this).parents(".images").each(function () {
                 //dir.push($(this).attr("id"));
-                url = $(this).attr("id") + "/" + url; 
+                url = $(this).attr("id") + "/" + url;
             });
             url = "/images/" + url;
-            
+
             var img = new Image();
             img.onload = function () {
                 dp.css({
@@ -630,26 +634,40 @@ function createDialogImagePanelSettings(id, mode) {
         });
         //change size of panel
         $("div.dialog-image-panel-settings input#width").change(function () {
-            var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
-            var h = $(this).val() / ar;
-            $("div.dialog-image-panel-settings input#height").val(Math.round(h));
-            var w = $(this).val();
-            dp.css({width: w + "px", height: h + "px"});
-        });
+            if ($(this).parent().parent().find("i#aspectRatio").hasClass("fa-chain")) {
+                var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
+                var h = $(this).val() / ar;
+                $("div.dialog-image-panel-settings input#height").val(Math.round(h));
+                var w = $(this).val();
+                dp.css({width: w + "px", height: h + "px"});
+            } else {
+                var w = $(this).val();
+                dp.css({width: w + "px"});
+            }
 
+        });
         $("div.dialog-image-panel-settings input#height").change(function () {
-            var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
-            var w = $(this).val() * ar;
-            $("div.dialog-image-panel-settings input#width").val(Math.round(w));
-            var h = $(this).val();
-            dp.css({width: w + "px", height: h + "px"});
+            if ($(this).parent().parent().find("i#aspectRatio").hasClass("fa-chain")) {
+                var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
+                var w = $(this).val() * ar;
+                $("div.dialog-image-panel-settings input#width").val(Math.round(w));
+                var h = $(this).val();
+                dp.css({width: w + "px", height: h + "px"});
+            } else {
+                var h = $(this).val();
+                dp.css({height: h + "px"});
+            }
+        });
+        //click chain
+        $("i#aspectRatio").click(function(){
+            $(this).toggleClass("fa-chain fa-chain-broken");
         });
         //change sier of image
         $("div.dialog-image-panel-settings input#resolutionX").change(function () {
             var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
             var h = $(this).val() / ar;
             $("div.dialog-image-panel-settings input#resolutionY").val(Math.round(h));
-            
+
         });
         $("div.dialog-image-panel-settings input#resolutionY").change(function () {
             var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
@@ -658,13 +676,13 @@ function createDialogImagePanelSettings(id, mode) {
         });
         //sidebar
         var imageListItems = $("div.dialog-image-panel-settings div.row.image-container i.fa-plus-circle");
-        imageListItems.each(function(){
-            $(this).click(function(){
+        imageListItems.each(function () {
+            $(this).click(function () {
                 $(this).parent().children('.images').toggleClass('hidden');
                 $(this).toggleClass("fa-minus-circle");
             });
         });
-        
+
     }
 
 }
@@ -997,7 +1015,7 @@ function createDialogNavigationPanelSettings(id, mode) {
             dialog_panel.css({borderWidth: $(this).val()});
         });
         $(".dialog-navigation-panel-settings select#borderStyle").change(function () {
-            console.log($(this).val());
+
             dialog_panel.css({borderStyle: $(this).val()});
         });
         $(".dialog-navigation-panel-settings input#borderColor").on('input', function () {
@@ -1089,58 +1107,66 @@ function ajaxChangePage(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     function setVariables(registers, terms) {
-        
-        $.each(terms, function(key, term){
+
+        $.each(terms, function (key, term) {
             var condition = term.condition.split(";");
             condition[1] = parseFloat(condition[1]).toFixed(2);
             var register_id = term.register_id;
             var eContent = term.effect_content;
             var eField = term.effect_field;
             var ePanelId = term.effect_panel_id;
-            var value = registers[register_id];
-            console.log(value);
-            switch(condition[0]){
+            var value = term.register_val;
+            switch (condition[0]) {
                 case "==" :
-                    if(value === condition[1]){
-                        switch(eField){
-                            case "backgroundColor" :
-                                $("div#"+ ePanelId +".bms-panel").css(eField, eContent);    
-                                break;
-                            case "src" :
-                                $
-                                break;
-                        }
-                        
+                    if (value === condition[1]) {
+                        makeTerm(eField);
                     }
                     break;
                 case "!=" :
-                    if(value !== condition[1]){
-                        $("div#"+ ePanelId +".bms-panel").css(eField, eContent);
+                    if (value !== condition[1]) {
+                        makeTerm(eField);
                     }
                     break;
                 case ">" :
-                    if(value > condition[1]){
-                        $("div#"+ ePanelId +".bms-panel").css(eField, eContent);
+                    if (value > condition[1]) {
+                        makeTerm(eField);
                     }
                     break;
                 case "<" :
-                    if(value < condition[1]){
-                        $("div#"+ ePanelId +".bms-panel").css(eField, eContent);
+                    if (value < condition[1]) {
+                        makeTerm(eField);
                     }
                     break;
                 case ">=" :
-                    if(value >= condition[1]){
-                        $("div#"+ ePanelId +".bms-panel").css(eField, eContent);
+                    if (value >= condition[1]) {
+                        makeTerm(eField);
                     }
                     break;
                 case "<=" :
-                    if(value <= condition[1]){
-                        $("div#"+ ePanelId +".bms-panel").css(eField, eContent);
+                    if (value <= condition[1]) {
+                        makeTerm(eField);
                     }
                     break;
             }
+
+            function makeTerm(type) {
+                var content = eContent.split(";");
+
+                switch (type) {
+                    case "css" :
+                        $("div#" + ePanelId + ".bms-panel").css(content[0], content[1]);
+                        break;
+                    case "src" :
+                        $("div#" + ePanelId + ".bms-panel img").attr("src", eContent);
+                        break;
+                    case "spin" :
+                        $("div#" + ePanelId + ".bms-panel").children().addClass("fa-spin");
+                        break;
+                }
+            }
+
         });
-        
+
         $.each(registers, function (key, value) {
             $("div.variable-panel").children("span#" + key).append(value);
         });

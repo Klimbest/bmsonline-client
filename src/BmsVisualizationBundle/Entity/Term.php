@@ -24,9 +24,9 @@ class Term {
     /**
      * @var string
      *
-     * @ORM\Column(name="condition", type="text", nullable=false)
+     * @ORM\Column(name="effect_condition", type="text", nullable=false)
      */
-    private $condition;
+    private $effectCondition;
     
     /**
      * @var string
@@ -53,7 +53,7 @@ class Term {
     private $effectPanel;
     
     /**
-     * @var Panel
+     * @var Register
      * 
      * @ORM\ManyToOne(targetEntity="\BmsConfigurationBundle\Entity\Register")
      * @ORM\JoinColumn(name="register_id", referencedColumnName="id")
@@ -70,30 +70,6 @@ class Term {
         return $this->id;
     }
 
-
-    /**
-     * Set condition
-     *
-     * @param string $condition
-     *
-     * @return Term
-     */
-    public function setCondition($condition)
-    {
-        $this->condition = $condition;
-
-        return $this;
-    }
-
-    /**
-     * Get condition
-     *
-     * @return string
-     */
-    public function getCondition()
-    {
-        return $this->condition;
-    }
 
     /**
      * Set effectField
@@ -191,5 +167,29 @@ class Term {
     public function getRegister()
     {
         return $this->register;
+    }
+
+    /**
+     * Set effectCondition
+     *
+     * @param string $effectCondition
+     *
+     * @return Term
+     */
+    public function setEffectCondition($effectCondition)
+    {
+        $this->effectCondition = $effectCondition;
+
+        return $this;
+    }
+
+    /**
+     * Get effectCondition
+     *
+     * @return string
+     */
+    public function getEffectCondition()
+    {
+        return $this->effectCondition;
     }
 }

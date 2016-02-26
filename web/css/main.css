@@ -116,6 +116,7 @@ a button{
     margin: 0 auto;
     font-size: 65%;
     box-shadow: none;
+    z-index: 100;
 }
 input.form-control{
     border-color: #337AB7;

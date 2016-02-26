@@ -6,7 +6,7 @@ $(document).ready(function () {
     ajaxChangePage(1);
     setInterval(function () {
         ajaxRefreshPage();
-    }, 5000);
+    }, 10000);
     setInterval(clock, 1000);
 
 });

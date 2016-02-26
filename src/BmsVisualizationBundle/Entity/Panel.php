@@ -172,14 +172,7 @@ class Panel {
      * })
      */
     private $page;
-    
-    /**
-     * @var Term 
-     * 
-     * @ORM\OneToMany(targetEntity="Term", mappedBy="panel")
-     */
-    private $terms;
-    
+  
     /**
      * Get id
      *
@@ -640,37 +633,5 @@ class Panel {
         $this->terms = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * Add term
-     *
-     * @param \BmsVisualizationBundle\Entity\Term $term
-     *
-     * @return Panel
-     */
-    public function addTerm(\BmsVisualizationBundle\Entity\Term $term)
-    {
-        $this->terms[] = $term;
-
-        return $this;
-    }
-
-    /**
-     * Remove term
-     *
-     * @param \BmsVisualizationBundle\Entity\Term $term
-     */
-    public function removeTerm(\BmsVisualizationBundle\Entity\Term $term)
-    {
-        $this->terms->removeElement($term);
-    }
-
-    /**
-     * Get terms
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTerms()
-    {
-        return $this->terms;
-    }
+    
 }

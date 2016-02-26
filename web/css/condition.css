@@ -1,0 +1,63 @@
+div#step1{
+    height: 95%;
+}
+
+div#step2{
+    height: 95%;
+    display: none;
+}
+
+div#step3{
+    height: 95%;
+    display: none;
+}
+
+div#step4{
+    height: 95%;
+    display: none;
+}
+
+div#step5{
+    height: 95%;
+    display: none;
+}
+
+div#step1 > div,
+div#step2 > div,
+div#step3 > div,
+div#step4 > div,
+div#step5 > div{
+    height: 90%;
+}
+
+div.row.body{
+    height: 85%;
+    overflow-y: auto;
+}
+
+div.row.header{
+    border-bottom: 1px solid rgba(0,0,0,1);
+}
+
+div.row.register-choice,
+div.row.panel-choice{
+    border-radius: 10px 10px 10px 10px;
+    cursor: pointer;
+}
+
+div.row-top,
+div.row-bottom{
+    height: 40%;
+}
+fiv.row-middle{
+    height: 10%;
+}
+
+div.effect_type{
+    display: none;
+}
+div.images span.label:hover,
+i.fa-remove:hover,
+i.fa-plus-circle:hover{
+    cursor: pointer;
+}

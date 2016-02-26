@@ -111,3 +111,15 @@ bms_visualization_delete_image:
     defaults: { _controller: BmsVisualizationBundle:Ajax:deleteImageFromServer }
     options:
         expose: true
+#CONDITION
+bms_visualization_create_condition_dialog:
+    path:   /create_condition_dialog
+    defaults: { _controller: BmsVisualizationBundle:Condition:createDialog }
+    options:
+        expose: true
+        
+bms_visualization_create_condition:
+    path:   /create_condition
+    defaults: { _controller: BmsVisualizationBundle:Condition:create }
+    options:
+        expose: true
