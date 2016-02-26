@@ -5,10 +5,7 @@ var i;
 $(document).ready(function () {
     ajaxChangePage(1);
     setInterval(function () {
-        var state = $("input#refresh").attr('checked');
-        if(state){
-            ajaxRefreshPage();
-        }
+        ajaxRefreshPage();
     }, 10000);
     setInterval(clock, 1000);
 
@@ -87,65 +84,66 @@ function ajaxRefreshPage() {
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 
     function setVariables(registers, terms) {
-        
-        $.each(terms, function (key, term) {
-            var condition = term.condition.split(";");
-            condition[1] = parseFloat(condition[1]).toFixed(2);
-            var register_id = term.register_id;
-            var eContent = term.effect_content;
-            var eField = term.effect_field;
-            var ePanelId = term.effect_panel_id;
-            var value = term.register_val;
-            switch (condition[0]) {
-                case "==" :
-                    if (value === condition[1]) {
-                        makeTerm(eField);
-                    }
-                    break;
-                case "!=" :
-                    if (value !== condition[1]) {
-                        makeTerm(eField);
-                    }
-                    break;
-                case ">" :
-                    if (value > condition[1]) {
-                        makeTerm(eField);
-                    }
-                    break;
-                case "<" :
-                    if (value < condition[1]) {
-                        makeTerm(eField);
-                    }
-                    break;
-                case ">=" :
-                    if (value >= condition[1]) {
-                        makeTerm(eField);
-                    }
-                    break;
-                case "<=" :
-                    if (value <= condition[1]) {
-                        makeTerm(eField);
-                    }
-                    break;
-            }
-
-            function makeTerm(type) {
-                var content = eContent.split(";");
-
-                switch (type) {
-                    case "css" :
-                        $("div#" + ePanelId + ".bms-panel").css(content[0], content[1]);
+        if(terms){
+            $.each(terms, function (key, term) {
+                var condition = term.condition.split(";");
+                condition[1] = parseFloat(condition[1]).toFixed(2);
+                var register_id = term.register_id;
+                var eContent = term.effect_content;
+                var eField = term.effect_field;
+                var ePanelId = term.effect_panel_id;
+                var value = term.register_val;
+                switch (condition[0]) {
+                    case "==" :
+                        if (value === condition[1]) {
+                            makeTerm(eField);
+                        }
                         break;
-                    case "src" :
-                        $("div#" + ePanelId + ".bms-panel img").attr("src", eContent);
+                    case "!=" :
+                        if (value !== condition[1]) {
+                            makeTerm(eField);
+                        }
                         break;
-                    case "spin" :
-                        $("div#" + ePanelId + ".bms-panel").children().addClass("fa-spin");
+                    case ">" :
+                        if (value > condition[1]) {
+                            makeTerm(eField);
+                        }
+                        break;
+                    case "<" :
+                        if (value < condition[1]) {
+                            makeTerm(eField);
+                        }
+                        break;
+                    case ">=" :
+                        if (value >= condition[1]) {
+                            makeTerm(eField);
+                        }
+                        break;
+                    case "<=" :
+                        if (value <= condition[1]) {
+                            makeTerm(eField);
+                        }
                         break;
                 }
-            }
 
-        });
+                function makeTerm(type) {
+                    var content = eContent.split(";");
+
+                    switch (type) {
+                        case "css" :
+                            $("div#" + ePanelId + ".bms-panel").css(content[0], content[1]);
+                            break;
+                        case "src" :
+                            $("div#" + ePanelId + ".bms-panel img").attr("src", eContent);
+                            break;
+                        case "spin" :
+                            $("div#" + ePanelId + ".bms-panel").children().addClass("fa-spin");
+                            break;
+                    }
+                }
+
+            });
+        }
 
         $.each(registers, function (key, value) {
             $("div.variable-panel").children("span#" + key).empty().append(value);
