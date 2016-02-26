@@ -32,6 +32,7 @@ class DefaultController extends Controller {
     public function ajaxRefreshPageAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
@@ -50,7 +51,10 @@ class DefaultController extends Controller {
             
             $t = null;
             foreach ($terms as $term) {
-                if($term->getEffectPanel()->getPage()->getId() != $page_id){
+                $pid = $term->getEffectPanel()->getId();
+                $panel = $panelRepo->findOneById($pid);
+                
+                if($panel->getPage()->getId() != $page_id){
                     $id = $term->getId();
                     $t[$id]["register_id"] = $term->getRegister()->getId();
                     $t[$id]["register_val"] = $term->getRegister()->getRegisterCurrentData()->getFixedValue();

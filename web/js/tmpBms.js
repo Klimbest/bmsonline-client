@@ -5,7 +5,10 @@ var i;
 $(document).ready(function () {
     ajaxChangePage(1);
     setInterval(function () {
-        ajaxRefreshPage();
+        var state = $("input#refresh").attr('checked');
+        if(state){
+            ajaxRefreshPage();
+        }
     }, 10000);
     setInterval(clock, 1000);
 
