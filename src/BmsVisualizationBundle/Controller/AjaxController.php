@@ -318,7 +318,7 @@ class AjaxController extends Controller {
                         $relativePath = $file->getRelativePathname();
                     }
 //                    $rel = explode("\\", $relativePath);
-                    $relativePath = "/images" . $relativePath;
+                    $relativePath = "/images/" . $relativePath;
 //                    foreach ($rel as $r) {
 //                        $relativePath = $relativePath . "/" . $r;
 //                    }
