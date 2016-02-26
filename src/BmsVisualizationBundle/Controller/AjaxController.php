@@ -473,7 +473,7 @@ class AjaxController extends Controller {
             $sizeOfImage = array();
             foreach ($finder as $dir) {
                 $finder2 = new Finder();
-                $dirDet = explode("\\", $dir->getRelativePathname());
+                $dirDet = explode("/", $dir->getRelativePathname());
                 switch (sizeof($dirDet)) {
                     case 1 :
                         !isset($images[$dirDet[0]]) ? $images[$dirDet[0]] = array() : null;
