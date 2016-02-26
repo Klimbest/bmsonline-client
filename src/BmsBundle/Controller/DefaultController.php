@@ -47,15 +47,18 @@ class DefaultController extends Controller {
                 $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
             }
             $terms = $termRepo->findAll();
+            
             $t = null;
             foreach ($terms as $term) {
-                $id = $term->getId();
-                $t[$id]["register_id"] = $term->getRegister()->getId();
-                $t[$id]["register_val"] = $term->getRegister()->getRegisterCurrentData()->getFixedValue();
-                $t[$id]["condition"] = $term->getEffectCondition();
-                $t[$id]["effect_field"] = $term->getEffectField();
-                $t[$id]["effect_content"] = $term->getEffectContent();
-                $t[$id]["effect_panel_id"] = $term->getEffectPanel()->getId();
+                if($terms->getEffectPanel()->getPage()->getId() != $page_id){
+                    $id = $term->getId();
+                    $t[$id]["register_id"] = $term->getRegister()->getId();
+                    $t[$id]["register_val"] = $term->getRegister()->getRegisterCurrentData()->getFixedValue();
+                    $t[$id]["condition"] = $term->getEffectCondition();
+                    $t[$id]["effect_field"] = $term->getEffectField();
+                    $t[$id]["effect_content"] = $term->getEffectContent();
+                    $t[$id]["effect_panel_id"] = $term->getEffectPanel()->getId();
+                }
             }
             
             $ret["terms"] = $t;
