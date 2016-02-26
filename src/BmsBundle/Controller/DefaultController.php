@@ -54,7 +54,7 @@ class DefaultController extends Controller {
                 $pid = $term->getEffectPanel()->getId();
                 $panel = $panelRepo->findOneById($pid);
                 
-                if($panel->getPage()->getId() != $page_id){
+                if($panel->getPage()->getId() == $page_id){
                     $id = $term->getId();
                     $t[$id]["register_id"] = $term->getRegister()->getId();
                     $t[$id]["register_val"] = $term->getRegister()->getRegisterCurrentData()->getFixedValue();
