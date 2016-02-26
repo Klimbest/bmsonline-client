@@ -317,11 +317,11 @@ class AjaxController extends Controller {
                     foreach ($finder as $file) {
                         $relativePath = $file->getRelativePathname();
                     }
-                    $rel = explode("\\", $relativePath);
-                    $relativePath = "/images";
-                    foreach ($rel as $r) {
-                        $relativePath = $relativePath . "/" . $r;
-                    }
+//                    $rel = explode("\\", $relativePath);
+                    $relativePath = "/images" . $relativePath;
+//                    foreach ($rel as $r) {
+//                        $relativePath = $relativePath . "/" . $r;
+//                    }
                     $ret["content"] = $content = $relativePath;
                 }
             } else {
