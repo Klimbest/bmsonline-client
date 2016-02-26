@@ -50,7 +50,7 @@ class DefaultController extends Controller {
             
             $t = null;
             foreach ($terms as $term) {
-                if($terms->getEffectPanel()->getPage()->getId() != $page_id){
+                if($term->getEffectPanel()->getPage()->getId() != $page_id){
                     $id = $term->getId();
                     $t[$id]["register_id"] = $term->getRegister()->getId();
                     $t[$id]["register_val"] = $term->getRegister()->getRegisterCurrentData()->getFixedValue();
