@@ -1148,24 +1148,24 @@ function ajaxChangePage(data) {
 //                    }
 //                    break;
 //            }
-
-            function makeTerm(type) {
-                var content = eContent.split(";");
-
-                switch (type) {
-                    case "css" :
-                        $("div#" + ePanelId + ".bms-panel").css(content[0], content[1]);
-                        break;
-                    case "src" :
-                        $("div#" + ePanelId + ".bms-panel img").attr("src", eContent);
-                        break;
-                    case "spin" :
-                        $("div#" + ePanelId + ".bms-panel").children().addClass("fa-spin");
-                        break;
-                }
-            }
-
-        });
+//
+//            function makeTerm(type) {
+//                var content = eContent.split(";");
+//
+//                switch (type) {
+//                    case "css" :
+//                        $("div#" + ePanelId + ".bms-panel").css(content[0], content[1]);
+//                        break;
+//                    case "src" :
+//                        $("div#" + ePanelId + ".bms-panel img").attr("src", eContent);
+//                        break;
+//                    case "spin" :
+//                        $("div#" + ePanelId + ".bms-panel").children().addClass("fa-spin");
+//                        break;
+//                }
+//            }
+//
+//        });
 
         $.each(registers, function (key, value) {
             $("div.variable-panel").children("span#" + key).append(value);
