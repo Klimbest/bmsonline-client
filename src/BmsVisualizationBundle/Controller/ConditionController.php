@@ -48,7 +48,7 @@ class ConditionController extends Controller {
             
             $register_id = $request->get('register_id');
             $condition = $request->get('condition');
-            $effect_field = $request->get('effect_field');
+            $effect_type = $request->get('effect_field');
             $effect_content = $request->get('effect_content');
             $effect_panel_id = $request->get('effect_panel_id');
            
@@ -58,7 +58,7 @@ class ConditionController extends Controller {
             $term = new Term();
             $term->setRegister($register)
                     ->setEffectCondition($condition)
-                    ->setEffectField($effect_field)
+                    ->setEffectType($effect_type)
                     ->setEffectContent($effect_content)
                     ->setEffectPanel($panel);
             

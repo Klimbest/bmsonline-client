@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Panel
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="BmsVisualizationBundle\Entity\PanelRepository")
+ * @ORM\Entity
  */
 class Panel {
 

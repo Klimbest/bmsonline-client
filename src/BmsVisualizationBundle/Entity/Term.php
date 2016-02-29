@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Panel
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="BmsVisualizationBundle\Entity\PanelRepository")
+ * @ORM\Entity
  */
 class Term {
 
@@ -31,9 +31,9 @@ class Term {
     /**
      * @var string
      *
-     * @ORM\Column(name="effect_field", type="text", nullable=false)
+     * @ORM\Column(name="effect_type", type="text", nullable=false)
      */
-    private $effectField;
+    private $effectType;
     
     /**
      * @var string
@@ -71,30 +71,7 @@ class Term {
     }
 
 
-    /**
-     * Set effectField
-     *
-     * @param string $effectField
-     *
-     * @return Term
-     */
-    public function setEffectField($effectField)
-    {
-        $this->effectField = $effectField;
-
-        return $this;
-    }
-
-    /**
-     * Get effectField
-     *
-     * @return string
-     */
-    public function getEffectField()
-    {
-        return $this->effectField;
-    }
-
+   
     /**
      * Set effectContent
      *
@@ -191,5 +168,29 @@ class Term {
     public function getEffectCondition()
     {
         return $this->effectCondition;
+    }
+
+    /**
+     * Set effectType
+     *
+     * @param string $effectType
+     *
+     * @return Term
+     */
+    public function setEffectType($effectType)
+    {
+        $this->effectType = $effectType;
+
+        return $this;
+    }
+
+    /**
+     * Get effectType
+     *
+     * @return string
+     */
+    public function getEffectType()
+    {
+        return $this->effectType;
     }
 }
