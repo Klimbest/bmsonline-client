@@ -122,6 +122,23 @@ function createConditionDialog() {
             var type = $(this).val();
             dialog.find("div.effect_type").hide();
             dialog.find("div#effect_type_" + type + ".effect_type").show();
+            switch(type){
+                case "src": 
+                    dialog.find("div.panel-choice").hide();
+                    dialog.find("div.panel-choice.image").show();
+                    break;
+                case "text": 
+                    dialog.find("div.panel-choice").hide();
+                    dialog.find("div.panel-choice.text").show();
+                    break;
+                case "css": 
+                    dialog.find("div.panel-choice").show();
+                    dialog.find("div.panel-choice.image, div.panel-choice.navigation").hide();
+                    break;
+                case "spin": 
+                    dialog.find("div.panel-choice").show();
+                    break;
+            }
         });
 
         dialog.find("input.device").change(function () {

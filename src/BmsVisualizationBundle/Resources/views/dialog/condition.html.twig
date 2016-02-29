@@ -236,7 +236,7 @@
                 <div class="col-md-12">
                     {% if panels|length > 0 %}
                         {% for panel in panels|sort %}
-                            <div id="{{panel.id}}" class="row panel-choice">
+                            <div id="{{panel.id}}" class="row panel-choice {{ panel.type }}">
                                 <div class="col-md-3 {{panel.page.id}}">{{ panel.page.name }}</div>
                                 <div class="col-md-3">{{ panel.id }}</div>
                                 <div class="col-md-3">{{ panel.type }}</div>
@@ -289,7 +289,7 @@
                     <h3><span class="label label-primary">Wybierz CSS:</span></h3>
                     <div class="row">
                         <div class="col-md-5">
-
+                            Nieaktywne.
                         </div>
                     </div>
                 </div>
@@ -358,7 +358,17 @@
                     <h3><span class="label label-primary">Wybierz SPIN:</span></h3>
                     <div class="row">
                         <div class="col-md-5">
-
+                            Brak dodatkowych opcji. Można zapisać.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="effect_type_spin" class="row effect_type">
+                <div class="col-md-12">
+                    <h3><span class="label label-primary">Wybierz SPIN:</span></h3>
+                    <div class="row">
+                        <div class="col-md-5">
+                            Brak dodatkowych opcji. Można zapisać.
                         </div>
                     </div>
                 </div>

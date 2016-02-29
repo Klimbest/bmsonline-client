@@ -140,7 +140,13 @@ function ajaxRefreshPage() {
                             $("div#" + ePanelId + ".bms-panel img").attr("src", eContent);
                             break;
                         case "spin" :
-                            $("div#" + ePanelId + ".bms-panel").children().addClass("fa-spin");
+                            if($("div#" + ePanelId + ".bms-panel").hasClass("text-panel") 
+                                    || $("div#" + ePanelId + ".bms-panel").hasClass("area-panel") 
+                                    || $("div#" + ePanelId + ".bms-panel").hasClass("variable-panel")){
+                                $("div#" + ePanelId + ".bms-panel").addClass("fa-spin");
+                            }else{
+                                $("div#" + ePanelId + ".bms-panel").children().addClass("fa-spin");
+                            }
                             break;
                         case "text" :
                             $("div#" + ePanelId + ".bms-panel span.content").text(eContent);
