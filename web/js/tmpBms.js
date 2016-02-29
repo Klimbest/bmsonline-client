@@ -84,7 +84,10 @@ function ajaxRefreshPage() {
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 
     function setVariables(registers, terms) {
-        if(terms){
+        var difference = registers[37] - registers[31];
+        $("div#91.bms-panel.area-panel").empty().append("<span>" + Math.round(difference*100)/100 +"</span>");
+
+        if (terms) {
             $.each(terms, function (key, term) {
                 var condition = term.condition.split(";");
                 condition[1] = parseFloat(condition[1]).toFixed(2);
