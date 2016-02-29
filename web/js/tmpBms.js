@@ -93,38 +93,38 @@ function ajaxRefreshPage() {
                 condition[1] = parseFloat(condition[1]).toFixed(2);
                 var register_id = term.register_id;
                 var eContent = term.effect_content;
-                var eField = term.effect_field;
+                var eType = term.effect_type;
                 var ePanelId = term.effect_panel_id;
                 var value = term.register_val;
                 switch (condition[0]) {
                     case "==" :
                         if (value === condition[1]) {
-                            makeTerm(eField);
+                            makeTerm(eType);
                         }
                         break;
                     case "!=" :
                         if (value !== condition[1]) {
-                            makeTerm(eField);
+                            makeTerm(eType);
                         }
                         break;
                     case ">" :
                         if (value > condition[1]) {
-                            makeTerm(eField);
+                            makeTerm(eType);
                         }
                         break;
                     case "<" :
                         if (value < condition[1]) {
-                            makeTerm(eField);
+                            makeTerm(eType);
                         }
                         break;
                     case ">=" :
                         if (value >= condition[1]) {
-                            makeTerm(eField);
+                            makeTerm(eType);
                         }
                         break;
                     case "<=" :
                         if (value <= condition[1]) {
-                            makeTerm(eField);
+                            makeTerm(eType);
                         }
                         break;
                 }
