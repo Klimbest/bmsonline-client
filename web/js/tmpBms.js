@@ -139,6 +139,9 @@ function ajaxRefreshPage() {
                         case "spin" :
                             $("div#" + ePanelId + ".bms-panel").children().addClass("fa-spin");
                             break;
+                        case "text" :
+                            $("div#" + ePanelId + ".bms-panel span.content").text(eContent);
+                            break;
                     }
                 }
 
