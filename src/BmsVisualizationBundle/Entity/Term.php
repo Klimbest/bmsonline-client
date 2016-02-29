@@ -31,9 +31,9 @@ class Term {
     /**
      * @var string
      *
-     * @ORM\Column(name="effect_type", type="text", nullable=false)
+     * @ORM\Column(name="effect_field", type="text", nullable=false)
      */
-    private $effectType;
+    private $effectField;
     
     /**
      * @var string
@@ -68,6 +68,31 @@ class Term {
      */
     public function getId() {
         return $this->id;
+    }
+
+
+    /**
+     * Set effectField
+     *
+     * @param string $effectField
+     *
+     * @return Term
+     */
+    public function setEffectField($effectField)
+    {
+        $this->effectField = $effectField;
+
+        return $this;
+    }
+
+    /**
+     * Get effectField
+     *
+     * @return string
+     */
+    public function getEffectField()
+    {
+        return $this->effectField;
     }
 
     /**
@@ -166,29 +191,5 @@ class Term {
     public function getEffectCondition()
     {
         return $this->effectCondition;
-    }
-
-    /**
-     * Set effectType
-     *
-     * @param string $effectType
-     *
-     * @return Term
-     */
-    public function setEffectType($effectType)
-    {
-        $this->effectType = $effectType;
-
-        return $this;
-    }
-
-    /**
-     * Get effectType
-     *
-     * @return string
-     */
-    public function getEffectType()
-    {
-        return $this->effectType;
     }
 }
