@@ -44,6 +44,7 @@ class DefaultController extends Controller {
             $vid = $qb->select('p.content')->from('BmsVisualizationBundle:Panel', 'p')->where("p.type = 'variable'")->getQuery()->getResult();
 
             $registers = array();
+            $t = array();
             foreach ($vid as $id) {
                 $register = $registerRepo->find((int) $id['content']);
                 $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
@@ -55,13 +56,8 @@ class DefaultController extends Controller {
                 $panel = $panelRepo->findOneById($pid);
 
                 if ($panel->getPage()->getId() == $page_id) {
-                   $condition_type = $term->getCondition()->getType();
-                    $t = $this->makeCondition($condition_type, $term);
-
-//                    $t[$id]["condition"] = $term->getEffectCondition();
-//                    $t[$id]["effect_type"] = $term->getEffectType();
-//                    $t[$id]["effect_content"] = $term->getEffectContent();
-//                    $t[$id]["effect_panel_id"] = $term->getEffectPanel()->getId();
+                    $condition_type = $term->getCondition()->getType();
+                    $t = array_merge($t, $this->makeCondition($condition_type, $term));
                 }
             }
 
@@ -77,7 +73,8 @@ class DefaultController extends Controller {
         $reg_val = $term->getRegister()->getRegisterCurrentData()->getFixedValue();
         $condition_value = $term->getCondition()->getValue();
         $id = $term->getId();
-        $t = null;
+        $t = array();
+
 
         switch ($condition_type) {
             case "==":
