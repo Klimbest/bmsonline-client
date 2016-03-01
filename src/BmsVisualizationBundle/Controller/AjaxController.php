@@ -109,15 +109,15 @@ class AjaxController extends Controller {
             }
             $terms = $termRepo->findAll();
             $t = null;
-            foreach ($terms as $term) {
-                $id = $term->getId();
-                $t[$id]["register_id"] = $term->getRegister()->getId();
-                $t[$id]["condition"] = $term->getEffectCondition();
-                $t[$id]["effect_type"] = $term->getEffectType();
-                $t[$id]["effect_content"] = $term->getEffectContent();
-                $t[$id]["effect_panel_id"] = $term->getEffectPanel()->getId();
-            }
-            $t ? $ret["terms"] = $t : null;
+//            foreach ($terms as $term) {
+//                $id = $term->getId();
+//                $t[$id]["register_id"] = $term->getRegister()->getId();
+//                $t[$id]["condition"] = $term->getEffectCondition();
+//                $t[$id]["effect_type"] = $term->getEffectType();
+//                $t[$id]["effect_content"] = $term->getEffectContent();
+//                $t[$id]["effect_panel_id"] = $term->getEffectPanel()->getId();
+//            }
+//            $t ? $ret["terms"] = $t : null;
 
             $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id]);
             $ret['registers'] = $registers;
