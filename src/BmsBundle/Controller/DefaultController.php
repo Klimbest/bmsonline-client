@@ -75,7 +75,6 @@ class DefaultController extends Controller {
         $id = $term->getId();
         $t = array();
 
-
         switch ($condition_type) {
             case "==":
                 if ($reg_val == $condition_value) {

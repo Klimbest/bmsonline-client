@@ -84,18 +84,19 @@ function ajaxRefreshPage() {
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 
     function setVariables(registers, terms) {
-        
+
         //Tymczasowe
         var difference = registers[37] - registers[31];
-        $("div#91.bms-panel.area-panel").empty().append("<span>" + Math.round(difference*100)/100 +"</span>");
+        $("div#91.bms-panel.area-panel").empty().append("<span>" + Math.round(difference * 100) / 100 + "</span>");
         //Tymczasowe
-        
+
         if (terms) {
             $.each(terms, function (key, term) {
                 var eContent = term.effect_content;
                 var content = eContent.split(";");
                 var panelId = term.panel_id;
-                
+                $("div#" + panelId + ".bms-panel").removeClass("shake-little shake-constant fa-spin");
+
                 switch (term.effect_type) {
                     case "css" :
                         $("div#" + panelId + ".bms-panel").css(content[0], content[1]);
@@ -103,29 +104,19 @@ function ajaxRefreshPage() {
                     case "src" :
                         $("div#" + panelId + ".bms-panel img").attr("src", eContent);
                         break;
-                    case "spin" :
-                        if($("div#" + panelId + ".bms-panel").hasClass("text-panel") 
-                                || $("div#" + panelId + ".bms-panel").hasClass("area-panel") 
-                                || $("div#" + panelId + ".bms-panel").hasClass("variable-panel")){
-                            $("div#" + panelId + ".bms-panel").addClass("fa-spin");
-                        }else{
-                            $("div#" + panelId + ".bms-panel").children().addClass("fa-spin");
-                        }
+                    case "animation" :
+                        $("div#" + panelId + ".bms-panel").addClass(eContent);
                         break;
                     case "text" :
                         $("div#" + panelId + ".bms-panel span.content").text(eContent);
                         break;
                 }
-
             });
         }
 
         $.each(registers, function (key, value) {
             $("div.variable-panel").children("span#" + key).empty().append(value);
         });
-
-
-
     }
 }
 
