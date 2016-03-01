@@ -20,107 +20,109 @@ class Term {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @var string
-     *
-     * @ORM\Column(name="effect_condition", type="text", nullable=false)
+     * 
+     * @ORM\Column(name="name", type="text")
      */
-    private $effectCondition;
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="effect_type", type="text", nullable=false)
-     */
-    private $effectType;
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="effect_content", type="text", nullable=false)
-     */
-    private $effectContent;
-    
-    
+    private $name;
+
     /**
      * @var Panel
      * 
      * @ORM\ManyToOne(targetEntity="Panel")
-     * @ORM\JoinColumn(name="effect_panel_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="panel_id", referencedColumnName="id", nullable=false)
      * 
      */
-    private $effectPanel;
-    
+    private $panel;
+
     /**
      * @var Register
      * 
      * @ORM\ManyToOne(targetEntity="\BmsConfigurationBundle\Entity\Register")
-     * @ORM\JoinColumn(name="register_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="register_id", referencedColumnName="id", nullable=false)
      * })
      */
     private $register;
+
+    /**
+     * @var MyCondition
+     * 
+     * @ORM\ManyToOne(targetEntity="\BmsVisualizationBundle\Entity\MyCondition")
+     * @ORM\JoinColumn(name="condition_id", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $condition;
+
+    /**
+     * @var Effect
+     * 
+     * @ORM\ManyToOne(targetEntity="\BmsVisualizationBundle\Entity\Effect")
+     * @ORM\JoinColumn(name="effect_id", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $effect;
+
     
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-
-   
     /**
-     * Set effectContent
+     * Set name
      *
-     * @param string $effectContent
+     * @param string $name
      *
      * @return Term
      */
-    public function setEffectContent($effectContent)
+    public function setName($name)
     {
-        $this->effectContent = $effectContent;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get effectContent
+     * Get name
      *
      * @return string
      */
-    public function getEffectContent()
+    public function getName()
     {
-        return $this->effectContent;
+        return $this->name;
     }
 
     /**
-     * Set effectPanel
+     * Set panel
      *
-     * @param \BmsVisualizationBundle\Entity\Panel $effectPanel
+     * @param \BmsVisualizationBundle\Entity\Panel $panel
      *
      * @return Term
      */
-    public function setEffectPanel(\BmsVisualizationBundle\Entity\Panel $effectPanel = null)
+    public function setPanel(\BmsVisualizationBundle\Entity\Panel $panel)
     {
-        $this->effectPanel = $effectPanel;
+        $this->panel = $panel;
 
         return $this;
     }
 
     /**
-     * Get effectPanel
+     * Get panel
      *
      * @return \BmsVisualizationBundle\Entity\Panel
      */
-    public function getEffectPanel()
+    public function getPanel()
     {
-        return $this->effectPanel;
+        return $this->panel;
     }
-
-   
 
     /**
      * Set register
@@ -129,7 +131,7 @@ class Term {
      *
      * @return Term
      */
-    public function setRegister(\BmsConfigurationBundle\Entity\Register $register = null)
+    public function setRegister(\BmsConfigurationBundle\Entity\Register $register)
     {
         $this->register = $register;
 
@@ -147,50 +149,50 @@ class Term {
     }
 
     /**
-     * Set effectCondition
+     * Set condition
      *
-     * @param string $effectCondition
+     * @param \BmsVisualizationBundle\Entity\MyCondition $condition
      *
      * @return Term
      */
-    public function setEffectCondition($effectCondition)
+    public function setCondition(\BmsVisualizationBundle\Entity\MyCondition $condition)
     {
-        $this->effectCondition = $effectCondition;
+        $this->condition = $condition;
 
         return $this;
     }
 
     /**
-     * Get effectCondition
+     * Get condition
      *
-     * @return string
+     * @return \BmsVisualizationBundle\Entity\MyCondition
      */
-    public function getEffectCondition()
+    public function getCondition()
     {
-        return $this->effectCondition;
+        return $this->condition;
     }
 
     /**
-     * Set effectType
+     * Set effect
      *
-     * @param string $effectType
+     * @param \BmsVisualizationBundle\Entity\Effect $effect
      *
      * @return Term
      */
-    public function setEffectType($effectType)
+    public function setEffect(\BmsVisualizationBundle\Entity\Effect $effect)
     {
-        $this->effectType = $effectType;
+        $this->effect = $effect;
 
         return $this;
     }
 
     /**
-     * Get effectType
+     * Get effect
      *
-     * @return string
+     * @return \BmsVisualizationBundle\Entity\Effect
      */
-    public function getEffectType()
+    public function getEffect()
     {
-        return $this->effectType;
+        return $this->effect;
     }
 }

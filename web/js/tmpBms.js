@@ -84,74 +84,37 @@ function ajaxRefreshPage() {
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 
     function setVariables(registers, terms) {
+        
+        //Tymczasowe
         var difference = registers[37] - registers[31];
         $("div#91.bms-panel.area-panel").empty().append("<span>" + Math.round(difference*100)/100 +"</span>");
-
+        //Tymczasowe
+        
         if (terms) {
             $.each(terms, function (key, term) {
-                var condition = term.condition.split(";");
-                condition[1] = parseFloat(condition[1]).toFixed(2);
-                var register_id = term.register_id;
                 var eContent = term.effect_content;
-                var eType = term.effect_type;
-                var ePanelId = term.effect_panel_id;
-                var value = term.register_val;
-                switch (condition[0]) {
-                    case "==" :
-                        if (value === condition[1]) {
-                            makeTerm(eType);
+                var content = eContent.split(";");
+                var panelId = term.panel_id;
+                
+                switch (term.effect_type) {
+                    case "css" :
+                        $("div#" + panelId + ".bms-panel").css(content[0], content[1]);
+                        break;
+                    case "src" :
+                        $("div#" + panelId + ".bms-panel img").attr("src", eContent);
+                        break;
+                    case "spin" :
+                        if($("div#" + panelId + ".bms-panel").hasClass("text-panel") 
+                                || $("div#" + panelId + ".bms-panel").hasClass("area-panel") 
+                                || $("div#" + panelId + ".bms-panel").hasClass("variable-panel")){
+                            $("div#" + panelId + ".bms-panel").addClass("fa-spin");
+                        }else{
+                            $("div#" + panelId + ".bms-panel").children().addClass("fa-spin");
                         }
                         break;
-                    case "!=" :
-                        if (value !== condition[1]) {
-                            makeTerm(eType);
-                        }
+                    case "text" :
+                        $("div#" + panelId + ".bms-panel span.content").text(eContent);
                         break;
-                    case ">" :
-                        if (value > condition[1]) {
-                            makeTerm(eType);
-                        }
-                        break;
-                    case "<" :
-                        if (value < condition[1]) {
-                            makeTerm(eType);
-                        }
-                        break;
-                    case ">=" :
-                        if (value >= condition[1]) {
-                            makeTerm(eType);
-                        }
-                        break;
-                    case "<=" :
-                        if (value <= condition[1]) {
-                            makeTerm(eType);
-                        }
-                        break;
-                }
-
-                function makeTerm(type) {
-                    var content = eContent.split(";");
-
-                    switch (type) {
-                        case "css" :
-                            $("div#" + ePanelId + ".bms-panel").css(content[0], content[1]);
-                            break;
-                        case "src" :
-                            $("div#" + ePanelId + ".bms-panel img").attr("src", eContent);
-                            break;
-                        case "spin" :
-                            if($("div#" + ePanelId + ".bms-panel").hasClass("text-panel") 
-                                    || $("div#" + ePanelId + ".bms-panel").hasClass("area-panel") 
-                                    || $("div#" + ePanelId + ".bms-panel").hasClass("variable-panel")){
-                                $("div#" + ePanelId + ".bms-panel").addClass("fa-spin");
-                            }else{
-                                $("div#" + ePanelId + ".bms-panel").children().addClass("fa-spin");
-                            }
-                            break;
-                        case "text" :
-                            $("div#" + ePanelId + ".bms-panel span.content").text(eContent);
-                            break;
-                    }
                 }
 
             });

@@ -1,0 +1,59 @@
+<div id="effect_type_src" class="row effect_type">
+    <div class="col-md-12">
+        <h3><span class="label label-primary">Wybierz obraz gdy warunek jest spełniony:</span></h3>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="row body">
+                    <div class="col-md-12 image-list">
+                        {% for k,dir in images %}
+                            <div class="row image-container text-left">
+                                <div class="col-xs-12">
+                                    <i class="fa fa-folder fa-blue"></i><span class="small"> {{k}}</span> <i class="fa fa-plus-circle fa-blue"></i>
+                                    <div id="{{k}}" class="images hidden">
+                                        {% for key,subdir in dir %}
+                                            {% if subdir is iterable %}
+                                                <div class="col-xs-12">
+                                                    <i class="fa fa-folder fa-green"></i><span class="small"> {{key}}</span> <i class="fa fa-plus-circle fa-blue"></i>
+                                                    <div id="{{key}}" class="images hidden">
+                                                        {% for key,subsubdir in subdir %}
+                                                            {% if subsubdir is iterable %}
+                                                                <div class="col-xs-12">
+                                                                    <i class="fa fa-folder fa-red"></i><span class="small"> {{key}}</span> <i class="fa fa-plus-circle fa-blue"></i>
+                                                                    <div id="{{key}}" class="images hidden">
+                                                                        {% for image in subsubdir %}
+                                                                            <div class="col-xs-12">
+                                                                                <span class="label label-warning">{{image}}</span> <span class="small">{{sizeOfImage[image]}} KB</span>
+                                                                            </div>
+                                                                        {% endfor %}
+                                                                    </div> 
+                                                                </div>
+                                                            {% else %}
+                                                                <div class="col-xs-12">
+                                                                    <span class="label label-danger">{{subsubdir}}</span> <span class="small">{{sizeOfImage[subsubdir]}} KB</span>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div> 
+                                                </div>
+                                            {% else %}
+                                                <div class="col-xs-12">
+                                                    <span class="label label-success">{{subdir}}</span> <span class="small">{{sizeOfImage[subdir]}} KB</span>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div> 
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="dialog-panel">
+                    <img class="img-responsive" src="" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

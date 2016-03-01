@@ -33,7 +33,7 @@ class ConditionController extends Controller {
                 'pages' => $pages
             ];
             $options = array_merge($options, $images);
-            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:condition.html.twig', $options);
+            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:condition:index.html.twig', $options);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();

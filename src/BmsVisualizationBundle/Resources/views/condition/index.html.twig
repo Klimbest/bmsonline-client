@@ -1,0 +1,216 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/condition.css')}}">
+{% endblock %}
+
+<div class="dialog-condition" title="Nowy warunek:">
+    <div id="step1" class="row">
+        <div class="col-md-1">
+            <div class="row row-top">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+            <div class="row row-middle">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+            <div class="row row-bottom">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10 text-center">
+            {% include 'BmsVisualizationBundle:condition:step1.html.twig'%} 
+        </div>
+        <div class="col-md-1">
+            <div class="row row-top">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+            <div class="row row-middle">
+                <div class="col-md-12">
+                    <button id="step2" class="btn btn-default btn-sm next">Krok 2 <i class="fa fa-arrow-circle-o-right"></i></button>
+                </div>
+            </div>
+            <div class="row row-bottom">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="step2" class="row">
+        <div class="col-md-1">
+            <div class="row row-top">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+            <div class="row row-middle">
+                <div class="col-md-12">
+                    <button id="step1" class="btn btn-default btn-sm prev"><i class="fa fa-arrow-circle-o-left"></i> Krok 1</button>
+                </div>
+            </div>
+            <div class="row row-bottom">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10 text-center">
+            {% include 'BmsVisualizationBundle:condition:step2.html.twig'%} 
+        </div>
+        <div class="col-md-1">
+            <div class="row row-top">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+            <div class="row row-middle">
+                <div class="col-md-1">
+                    <button id="step3" class="btn btn-default btn-sm next">Krok 3 <i class="fa fa-arrow-circle-o-right"></i></button>
+                </div>
+            </div>
+            <div class="row row-bottom">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="step3" class="row">
+        <div class="col-md-1">
+            <div class="row row-top">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+            <div class="row row-middle">
+                <div class="col-md-12">
+                    <button id="step2" class="btn btn-default btn-sm prev"><i class="fa fa-arrow-circle-o-left"></i> Krok 2</button>
+                </div>
+            </div>
+            <div class="row row-bottom">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10 text-center">
+            {% include 'BmsVisualizationBundle:condition:step3.html.twig'%} 
+        </div>
+        <div class="col-md-1">
+            <div class="row row-top">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+            <div class="row row-middle">
+                <div class="col-md-1">
+                    <button id="step4" class="btn btn-default btn-sm next">Krok 4 <i class="fa fa-arrow-circle-o-right"></i></button>
+                </div>
+            </div>
+            <div class="row row-bottom">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="step4" class="row">
+        <div class="col-md-1">
+            <div class="row row-top">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+            <div class="row row-middle">
+                <div class="col-md-12">
+                    <button id="step3" class="btn btn-default btn-sm prev"><i class="fa fa-arrow-circle-o-left"></i> Krok 3</button>
+                </div>
+            </div>
+            <div class="row row-bottom">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            {% include 'BmsVisualizationBundle:condition:step4.html.twig'%} 
+        </div>
+        <div class="col-md-1">
+            <div class="row row-top">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+            <div class="row row-middle">
+                <div class="col-md-1">
+                    <button id="step5" class="btn btn-default btn-sm next">Krok 5 <i class="fa fa-arrow-circle-o-right"></i></button>
+                </div>
+            </div>
+            <div class="row row-bottom">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="step5" class="row">         
+        <div class="col-md-1">
+            <div class="row row-top">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+            <div class="row row-middle">
+                <div class="col-md-12">
+                    <button id="step4" class="btn btn-default btn-sm prev"><i class="fa fa-arrow-circle-o-left"></i> Krok 4</button>
+                </div>
+            </div>
+            <div class="row row-bottom">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10 text-center">
+            {% include 'BmsVisualizationBundle:condition:step5_css.html.twig'%} 
+            {% include 'BmsVisualizationBundle:condition:step5_src.html.twig'%} 
+            {% include 'BmsVisualizationBundle:condition:step5_spin.html.twig'%} 
+            {% include 'BmsVisualizationBundle:condition:step5_blink.html.twig'%}
+        </div>
+        <div class="col-md-1">
+            <div class="row row-top">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+            <div class="row row-middle">
+                <div class="col-md-1">
+                    <button id="save" class="btn btn-default btn-sm next">Zapisz <i class="fa fa-arrow-circle-o-down"></i></button>
+                </div>
+            </div>
+            <div class="row row-bottom">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="progressbar">
+            </div>
+        </div>
+    </div>
+    <form class="hidden">
+        <input id="register_id" type="hidden" name="register_id" value="">
+        <input id="effect_content" type="hidden" name="effect_content" value="">
+        <input id="effect_panel_id" type="hidden" name="effect_panel_id" value="">
+    </form>
+</div>
+

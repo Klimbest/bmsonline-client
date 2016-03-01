@@ -1,0 +1,40 @@
+<h3><span class="label label-primary">Wybierz panel, do którego efekt ma być zastosowany:</span></h3>
+<div class="row header">
+    <div class="col-md-3 lead small">
+        <div class="row">
+            <div class="col-md-12">
+                Strona
+            </div>
+        </div>
+        {% for page in pages %}
+            <div class="row">
+                <div class="col-md-12">
+                    <input class="device" type="checkbox" name="device-{{page.id}}" value="{{page.id}}" checked/> {{page.name}}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="col-md-3">
+        <span class="lead small">Id</span>
+    </div>  
+    <div class="col-md-3">
+        <span class="lead small">Typ</span>
+    </div>
+    <div class="col-md-3">
+        <span class="lead small">Zawartość</span>
+    </div>
+</div>
+<div class="row body">
+    <div class="col-md-12">
+        {% if panels|length > 0 %}
+            {% for panel in panels|sort %}
+                <div id="{{panel.id}}" class="row panel-choice {{ panel.type }}">
+                    <div class="col-md-3 {{panel.page.id}}">{{ panel.page.name }}</div>
+                    <div class="col-md-3">{{ panel.id }}</div>
+                    <div class="col-md-3">{{ panel.type }}</div>
+                    <div class="col-md-3">{{ panel.content }}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>

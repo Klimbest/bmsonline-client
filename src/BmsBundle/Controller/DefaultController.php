@@ -6,12 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use BmsVisualizationBundle\Entity\Term;
 
 class DefaultController extends Controller {
 
     public function bmsIndexAction() {
 
-        
+
         return $this->render('BmsBundle::index.html.twig');
     }
 
@@ -36,41 +37,93 @@ class DefaultController extends Controller {
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
-            
+
             $page_id = $request->get("page_id");
             isset($page_id) ? $page = $pageRepo->find($page_id) : null;
 
             $vid = $qb->select('p.content')->from('BmsVisualizationBundle:Panel', 'p')->where("p.type = 'variable'")->getQuery()->getResult();
-            
+
             $registers = array();
-            foreach($vid as $id){
-                $register = $registerRepo->find((int)$id['content']);
+            foreach ($vid as $id) {
+                $register = $registerRepo->find((int) $id['content']);
                 $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
             }
             $terms = $termRepo->findAll();
-            
-            $t = null;
+
             foreach ($terms as $term) {
-                $pid = $term->getEffectPanel()->getId();
+                $pid = $term->getPanel()->getId();
                 $panel = $panelRepo->findOneById($pid);
-                
-                if($panel->getPage()->getId() == $page_id){
-                    $id = $term->getId();
-                    $t[$id]["register_id"] = $term->getRegister()->getId();
-                    $t[$id]["register_val"] = $term->getRegister()->getRegisterCurrentData()->getFixedValue();
-                    $t[$id]["condition"] = $term->getEffectCondition();
-                    $t[$id]["effect_type"] = $term->getEffectType();
-                    $t[$id]["effect_content"] = $term->getEffectContent();
-                    $t[$id]["effect_panel_id"] = $term->getEffectPanel()->getId();
+
+                if ($panel->getPage()->getId() == $page_id) {
+                   $condition_type = $term->getCondition()->getType();
+                    $t = $this->makeCondition($condition_type, $term);
+
+//                    $t[$id]["condition"] = $term->getEffectCondition();
+//                    $t[$id]["effect_type"] = $term->getEffectType();
+//                    $t[$id]["effect_content"] = $term->getEffectContent();
+//                    $t[$id]["effect_panel_id"] = $term->getEffectPanel()->getId();
                 }
             }
-            
+
             $ret["terms"] = $t;
             $ret['registers'] = $registers;
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
         }
+    }
+
+    public function makeCondition($condition_type, Term $term) {
+        $reg_val = $term->getRegister()->getRegisterCurrentData()->getFixedValue();
+        $condition_value = $term->getCondition()->getValue();
+        $id = $term->getId();
+        $t = null;
+
+        switch ($condition_type) {
+            case "==":
+                if ($reg_val == $condition_value) {
+                    $t[$id]["effect_content"] = $term->getEffect()->getContent();
+                    $t[$id]["panel_id"] = $term->getPanel()->getId();
+                    $t[$id]["effect_type"] = $term->getEffect()->getType();
+                }
+                break;
+            case "!=":
+                if ($reg_val != $condition_value) {
+                    $t[$id]["effect_content"] = $term->getEffect()->getContent();
+                    $t[$id]["panel_id"] = $term->getPanel()->getId();
+                    $t[$id]["effect_type"] = $term->getEffect()->getType();
+                }
+                break;
+            case ">":
+                if ($reg_val > $condition_value) {
+                    $t[$id]["effect_content"] = $term->getEffect()->getContent();
+                    $t[$id]["panel_id"] = $term->getPanel()->getId();
+                    $t[$id]["effect_type"] = $term->getEffect()->getType();
+                }
+                break;
+            case "<":
+                if ($reg_val < $condition_value) {
+                    $t[$id]["effect_content"] = $term->getEffect()->getContent();
+                    $t[$id]["panel_id"] = $term->getPanel()->getId();
+                    $t[$id]["effect_type"] = $term->getEffect()->getType();
+                }
+                break;
+            case ">=":
+                if ($reg_val >= $condition_value) {
+                    $t[$id]["effect_content"] = $term->getEffect()->getContent();
+                    $t[$id]["panel_id"] = $term->getPanel()->getId();
+                    $t[$id]["effect_type"] = $term->getEffect()->getType();
+                }
+                break;
+            case "<=":
+                if ($reg_val <= $condition_value) {
+                    $t[$id]["effect_content"] = $term->getEffect()->getContent();
+                    $t[$id]["panel_id"] = $term->getPanel()->getId();
+                    $t[$id]["effect_type"] = $term->getEffect()->getType();
+                }
+                break;
+        }
+        return $t;
     }
 
 }
