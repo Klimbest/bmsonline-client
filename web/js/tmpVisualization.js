@@ -250,7 +250,8 @@ function createDialogAreaPanelSettings(id) {
     });
     function setFormField() {
         var panel = $("div#" + id + ".area-panel");
-        $("div.dialog-panel").css({
+        
+        $("div.dialog-area-panel-settings div.dialog-panel").css({
             borderWidth: panel.css("border-top-width"),
             borderColor: panel.css("border-top-color"),
             borderStyle: panel.css("border-top-style"),
@@ -262,31 +263,31 @@ function createDialogAreaPanelSettings(id) {
 
         });
         //Position
-        $("input#topPosition").val(parseInt(panel.css("top")));
-        $("input#leftPosition").val(parseInt(panel.css("left")));
+        $("div.dialog-area-panel-settings input#topPosition").val(parseInt(panel.css("top")));
+        $("div.dialog-area-panel-settings input#leftPosition").val(parseInt(panel.css("left")));
         //Border
-        $("input#borderWidth").val(parseInt(panel.css("border-top-width")));
-        $("input#borderColor").val(rgb2hex(panel.css("border-top-color")));
-        $("select#borderStyle").val(panel.css("border-top-style"));
+        $("div.dialog-area-panel-settings input#borderWidth").val(parseInt(panel.css("border-top-width")));
+        $("div.dialog-area-panel-settings input#borderColor").val(rgb2hex(panel.css("border-top-color")));
+        $("div.dialog-area-panel-settings select#borderStyle").val(panel.css("border-top-style"));
         //Border Radius
         //TL
-        $("input#borderRadiusTL").val(parseInt(panel.css("border-top-left-radius")));
-        $("label#borderRadiusTL").empty().append($("input#borderRadiusTL").val());
+        $("div.dialog-area-panel-settings input#borderRadiusTL").val(parseInt(panel.css("border-top-left-radius")));
+        $("div.dialog-area-panel-settings label#borderRadiusTL").empty().append($("input#borderRadiusTL").val());
         //TR
-        $("input#borderRadiusTR").val(parseInt(panel.css("border-top-right-radius")));
-        $("label#borderRadiusTR").empty().append($("input#borderRadiusTR").val());
+        $("div.dialog-area-panel-settings input#borderRadiusTR").val(parseInt(panel.css("border-top-right-radius")));
+        $("div.dialog-area-panel-settings label#borderRadiusTR").empty().append($("input#borderRadiusTR").val());
         //BR
-        $("input#borderRadiusBR").val(parseInt(panel.css("border-bottom-right-radius")));
-        $("label#borderRadiusBR").empty().append($("input#borderRadiusBR").val());
+        $("div.dialog-area-panel-settings input#borderRadiusBR").val(parseInt(panel.css("border-bottom-right-radius")));
+        $("div.dialog-area-panel-settings label#borderRadiusBR").empty().append($("input#borderRadiusBR").val());
         //BL
-        $("input#borderRadiusBL").val(parseInt(panel.css("border-bottom-left-radius")));
-        $("label#borderRadiusBL").empty().append($("input#borderRadiusBL").val());
+        $("div.dialog-area-panel-settings input#borderRadiusBL").val(parseInt(panel.css("border-bottom-left-radius")));
+        $("div.dialog-area-panel-settings label#borderRadiusBL").empty().append($("input#borderRadiusBL").val());
         //Size
-        $("input#width").val(parseInt(panel.css("width")));
-        $("input#height").val(parseInt(panel.css("height")));
+        $("div.dialog-area-panel-settings input#width").val(parseInt(panel.css("width")));
+        $("div.dialog-area-panel-settings input#height").val(parseInt(panel.css("height")));
         //Background
-        $("input#backgroundColor").val(rgb2hex(panel.css("background-color")));
-        $("input#opacity").val(parseFloat(getColorValues(panel.css("background-color"))["alpha"]));
+        $("div.dialog-area-panel-settings input#backgroundColor").val(rgb2hex(panel.css("background-color")));
+        $("div.dialog-area-panel-settings input#opacity").val(parseFloat(getColorValues(panel.css("background-color"))["alpha"]));
     }
     function setEvents() {
         var panel = $(".dialog-area-panel-settings div.dialog-panel");

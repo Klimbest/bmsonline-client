@@ -32,7 +32,7 @@
             </div>
             <div class="row row-middle">
                 <div class="col-md-12">
-                    <button id="step2" class="btn btn-default btn-sm next">Krok 2 <i class="fa fa-arrow-circle-o-right"></i></button>
+                    <button id="step2" class="btn btn-default btn-sm next">Krok 2 <i class="fa fa-angle-double-right"></i></button>
                 </div>
             </div>
             <div class="row row-bottom">
@@ -51,7 +51,7 @@
             </div>
             <div class="row row-middle">
                 <div class="col-md-12">
-                    <button id="step1" class="btn btn-default btn-sm prev"><i class="fa fa-arrow-circle-o-left"></i> Krok 1</button>
+                    <button id="step1" class="btn btn-default btn-sm prev"><i class="fa fa-angle-double-left"></i> Krok 1</button>
                 </div>
             </div>
             <div class="row row-bottom">
@@ -71,7 +71,7 @@
             </div>
             <div class="row row-middle">
                 <div class="col-md-1">
-                    <button id="step3" class="btn btn-default btn-sm next">Krok 3 <i class="fa fa-arrow-circle-o-right"></i></button>
+                    <button id="step3" class="btn btn-default btn-sm next">Krok 3 <i class="fa fa-angle-double-right"></i></button>
                 </div>
             </div>
             <div class="row row-bottom">
@@ -90,7 +90,7 @@
             </div>
             <div class="row row-middle">
                 <div class="col-md-12">
-                    <button id="step2" class="btn btn-default btn-sm prev"><i class="fa fa-arrow-circle-o-left"></i> Krok 2</button>
+                    <button id="step2" class="btn btn-default btn-sm prev"><i class="fa fa-angle-double-left"></i> Krok 2</button>
                 </div>
             </div>
             <div class="row row-bottom">
@@ -110,7 +110,7 @@
             </div>
             <div class="row row-middle">
                 <div class="col-md-1">
-                    <button id="step4" class="btn btn-default btn-sm next">Krok 4 <i class="fa fa-arrow-circle-o-right"></i></button>
+                    <button id="step4" class="btn btn-default btn-sm next">Krok 4 <i class="fa fa-angle-double-right"></i></button>
                 </div>
             </div>
             <div class="row row-bottom">
@@ -129,7 +129,7 @@
             </div>
             <div class="row row-middle">
                 <div class="col-md-12">
-                    <button id="step3" class="btn btn-default btn-sm prev"><i class="fa fa-arrow-circle-o-left"></i> Krok 3</button>
+                    <button id="step3" class="btn btn-default btn-sm prev"><i class="fa fa-angle-double-left"></i> Krok 3</button>
                 </div>
             </div>
             <div class="row row-bottom">
@@ -149,7 +149,7 @@
             </div>
             <div class="row row-middle">
                 <div class="col-md-1">
-                    <button id="step5" class="btn btn-default btn-sm next">Krok 5 <i class="fa fa-arrow-circle-o-right"></i></button>
+                    <button id="step5" class="btn btn-default btn-sm next">Krok 5 <i class="fa fa-angle-double-right"></i></button>
                 </div>
             </div>
             <div class="row row-bottom">
@@ -168,7 +168,7 @@
             </div>
             <div class="row row-middle">
                 <div class="col-md-12">
-                    <button id="step4" class="btn btn-default btn-sm prev"><i class="fa fa-arrow-circle-o-left"></i> Krok 4</button>
+                    <button id="step4" class="btn btn-default btn-sm prev"><i class="fa fa-angle-double-left"></i> Krok 4</button>
                 </div>
             </div>
             <div class="row row-bottom">
@@ -180,8 +180,7 @@
         <div class="col-md-10 text-center">
             {% include 'BmsVisualizationBundle:condition:step5_css.html.twig'%} 
             {% include 'BmsVisualizationBundle:condition:step5_src.html.twig'%} 
-            {% include 'BmsVisualizationBundle:condition:step5_spin.html.twig'%} 
-            {% include 'BmsVisualizationBundle:condition:step5_blink.html.twig'%}
+            {% include 'BmsVisualizationBundle:condition:step5_animation.html.twig'%} 
         </div>
         <div class="col-md-1">
             <div class="row row-top">
@@ -191,13 +190,19 @@
             </div>
             <div class="row row-middle">
                 <div class="col-md-1">
-                    <button id="save" class="btn btn-default btn-sm next">Zapisz <i class="fa fa-arrow-circle-o-down"></i></button>
+                    <button id="save" class="btn btn-default btn-sm next">Zapisz <i class="fa fa-save"></i></button>
                 </div>
             </div>
             <div class="row row-bottom">
                 <div class="col-md-12">
 
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="description">
             </div>
         </div>
     </div>

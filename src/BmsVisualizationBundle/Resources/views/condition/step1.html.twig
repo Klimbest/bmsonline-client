@@ -1,41 +1,39 @@
 <h3><span class="label label-primary">Wybierz rejestr do którego chcesz zastosować warunek:</span></h3>
 <div class="row header">
-    <div class="col-md-2 lead small">
+    <div class="col-md-2">
         <div class="row">
             <div class="col-md-12">
-                Urządzenie
+                <label for="device_filter">Urządzenie</label>
+                <select id="device_filter" class="form-control small" name="device_filter">
+                    {% for device in devices %}
+                        <option value={{device.id}}>{{device.name}}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
-        {% for device in devices %}
-            <div class="row">
-                <div class="col-md-12">
-                    <input class="device" type="checkbox" name="device-{{device.id}}" value="{{device.id}}" checked/> {{device.name}}
-                </div>
-            </div>
-        {% endfor %}
     </div>
     <div class="col-md-1">
-        <span class="lead small">Funkcja odczytu</span>
-    </div>
-    <div class="col-md-1">
-        <span class="lead small">Adres rejestru(HEX)</span>
+        <label>Funkcja</label>
     </div>
     <div class="col-md-2">
-        <span class="lead small">Nazwa skrócona</span>
+        <label>Adres rejestru(HEX)</label>
+    </div>
+    <div class="col-md-2 text-left">
+        <label>Nazwa skrócona</label>
     </div>    
-    <div class="col-md-5">
-        <span class="lead small">Pełna nazwa</span>
+    <div class="col-md-5 text-left">
+        <label>Pełna nazwa</label>
     </div>
 </div>
 <div class="row body">
     <div class="col-md-12">
         {% if registers|length > 0 %}
             {% for register in registers|sort %}
-                <div id="{{register.id}}" class="row register-choice">
-                    <div class="col-md-2 {{register.device.id}}">{{ register.device.name }}</div>
+                <div id="{{register.id}}" class="row register-choice {{register.device.id}} ">
+                    <div class="col-md-2">{{ register.device.name }}</div>
                     <div class="col-md-1">{{ register.function }}</div>
-                    <div class="col-md-1">{{ register.registerAddress }}</div>
-                    <div class="col-md-2 text-left">{{ register.name }}</div>
+                    <div class="col-md-2">{{ register.registerAddress }}</div>
+                    <div class="col-md-2 text-left register_name">{{ register.name }}</div>
                     <div class="col-md-5 text-left">{{ register.description}}</div>
                 </div>
             {% endfor %}
