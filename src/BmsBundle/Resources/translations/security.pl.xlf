@@ -65,7 +65,7 @@
             </trans-unit>
             <trans-unit id="16">
                 <source>Account is locked.</source>
-                <target>Konto jest zablokowane. W ciągu 24h zostanie odblokowane przez administratora.</target>
+                <target>Poczekaj na potwierdzenie konta przez administratora.</target>
             </trans-unit>
         </body>
     </file>

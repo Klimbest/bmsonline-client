@@ -906,3 +906,11 @@
 .shake-chunk.shake-freeze,
 .shake-chunk.shake-constant {
   animation: shake-chunk 4s ease-in-out infinite; }
+
+.blink {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {  
+  50% { opacity: 0.0; }
+}

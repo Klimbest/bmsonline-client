@@ -19,18 +19,24 @@ class ConditionController extends Controller {
             $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $effectRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Effect');
+            $myConditionRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:MyCondition');
             
             $registers = $registerRepo->findAll();
             $devices = $deviceRepo->findAll();
             $pages = $pageRepo->findAll();
             $panels = $panelRepo->findAll();
+            $effects = $effectRepo->findAll();
+            $conditions = $myConditionRepo->findAll();
             
             $images = $this->getImages();
             $options = [
                 'registers' => $registers,
                 'devices' => $devices,
                 'panels' => $panels,
-                'pages' => $pages
+                'pages' => $pages,
+                'effects' => $effects,
+                'conditions' => $conditions
             ];
             $options = array_merge($options, $images);
             $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:condition:index.html.twig', $options);

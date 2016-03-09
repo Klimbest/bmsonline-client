@@ -24,4 +24,18 @@ class User extends BaseUser
         parent::__construct();
         // your own logic
     }
+    
+    public function setUsername($username)
+    {
+        $this->username = $this->emailCanonical;
+
+        return $this;
+    }
+
+    public function setUsernameCanonical($usernameCanonical)
+    {
+        $this->usernameCanonical = $this->emailCanonical;
+
+        return $this;
+    }
 }
