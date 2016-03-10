@@ -81,6 +81,7 @@ fos_user:
             enabled: true
         form:
             type: BmsBundle\Form\RegistrationFormType
+            validation_groups: null
     
 liip_imagine:
     resolvers:
