@@ -72,14 +72,23 @@ function ajaxRefreshPage() {
         success: function (ret) {
             $(".content-container").children(".fa-spinner").remove();
             $("span.timer").removeClass("label-danger").addClass("label-primary");
-//            var x = 5;
-//            i = setInterval(function () {
-//                $("span.timer").empty().append(x--);
-//            }, 1000);
-            setVariables(ret['registers'], ret["terms"]);
+            var x = 5;
+            i = setInterval(function () {
+                $("span.timer").empty().append(x--);
+            }, 1000);
+            var now = new Date;
+            now = Date.parse(now);
+            var readDelay = now - ret['time_of_update']*1000;
+            if(readDelay >= 300){
+                $("div.variable-panel span").empty();
+                $(".error-message span").empty().append("Od ponad 5 minut nie ma nowych danych!").show();
+            }else{
+                setVariables(ret['registers'], ret["terms"]);
+            }
+            
         }
     });
-//    clearInterval(i);
+    clearInterval(i);
     $("span.timer").removeClass("label-primary").addClass("label-danger");
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 

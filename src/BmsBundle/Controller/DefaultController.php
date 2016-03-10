@@ -60,7 +60,17 @@ class DefaultController extends Controller {
                     $t = array_merge($t, $this->makeCondition($condition_type, $term));
                 }
             }
+            $regsForTime = $registerRepo->findAll();
+            $time = 0;
+            foreach ($regsForTime as $rft) {
+                $lastRead = date_timestamp_get($rft->getRegisterCurrentData()->getTimeOfUpdate());
 
+                if ($lastRead > $time) {
+                    $time = $lastRead;
+                }
+            }
+            
+            $ret["time_of_update"] = $time;
             $ret["terms"] = $t;
             $ret['registers'] = $registers;
             return new JsonResponse($ret);

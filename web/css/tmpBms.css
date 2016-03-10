@@ -14,3 +14,7 @@
 .bms-panel.navigation-panel{
     cursor: pointer;
 }
+
+.error-message{
+/*    border: 1px solid red;*/
+}
