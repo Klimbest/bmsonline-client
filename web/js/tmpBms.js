@@ -78,7 +78,7 @@ function ajaxRefreshPage() {
             }, 1000);
             var now = new Date;
             now = Date.parse(now);
-            var readDelay = now - ret['time_of_update']*1000;
+            var readDelay = now/1000 - ret['time_of_update'];
             if(readDelay >= 300){
                 $("div.variable-panel span").empty();                
                 readDelay /= 1000;
