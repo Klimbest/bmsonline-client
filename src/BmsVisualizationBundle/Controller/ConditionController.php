@@ -27,7 +27,6 @@ class ConditionController extends Controller {
             $pages = $pageRepo->findAll();
             $panels = $panelRepo->findAll();
             $effects = $effectRepo->findAll();
-            $conditions = $myConditionRepo->findAll();
             
             $images = $this->getImages();
             $options = [
@@ -35,8 +34,7 @@ class ConditionController extends Controller {
                 'devices' => $devices,
                 'panels' => $panels,
                 'pages' => $pages,
-                'effects' => $effects,
-                'conditions' => $conditions
+                'effects' => $effects
             ];
             $options = array_merge($options, $images);
             $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:condition:index.html.twig', $options);

@@ -1,5 +1,6 @@
 $(document).ready(function () {
     $(".btn-add-condition").click(function () {
+        console.log($(this).parent().parent().parent());
         ajaxCreateConditionDialog();
     });
 });
@@ -47,6 +48,7 @@ function createConditionDialog() {
             $(this).parent().parent().parent().parent().hide("slide", {direction: "left"}, 500);
             var id = $(this).attr("id");
             dialog.find("div#" + id).delay(505).show("slide", {direction: "right"}, 500);
+            dialog.find("div#description span#"+id).show();
             var progress = dialog.find("div#progressbar").progressbar("value");
             dialog.find("div#progressbar").progressbar("value", progress + 25);
         });
@@ -78,7 +80,7 @@ function createConditionDialog() {
         $("#progressbar").progressbar({value: 0});
         //set initial list display
         dialog.find("div.register-choice:not(." + dialog.find("select#device_filter").val() + ")").hide();
-        dialog.find("div.condition-choice:not(." + dialog.find("select#condition_type_filter").val() + ")").hide();
+        dialog.find("div#description span#step2").append("<strong>równa</strong> ");
         dialog.find("div.effect_type:not(#effect_type_" + dialog.find("select#effect_type").val() + ")").hide();
     }
 
@@ -94,8 +96,8 @@ function createConditionDialog() {
                 $(this).unbind('mouseenter mouseleave').css({backgroundColor: "#337ab7", color: "#FFF"});
                 var register_id = $(this).attr("id");
                 dialog.find("input#register_id").val(register_id);
-                var description = "<span>Jeżeli wartość rejestru <strong>" + $(this).children(".register_name").text() + "</strong> jest ...</span>";
-                dialog.find("div#description").empty().append(description);
+                var description = "Jeżeli wartość rejestru <strong>" + $(this).children(".register_name").text() + "</strong> jest ";
+                dialog.find("div#description span#step1").empty().append(description);
             });
         });
         dialog.find("select#device_filter").change(function () {
@@ -103,29 +105,43 @@ function createConditionDialog() {
             dialog.find("div.register-choice").hide();
             dialog.find("div." + name).show();
         });
-        dialog.find("select#condition_type_filter").change(function () {
-            var name = $(this).val();
-            dialog.find("div.condition-choice").hide();
-            dialog.find("div." + name).show();
+        //step2
+        dialog.find("select#condition_type, input#condition_val").change(function(){
+            var condition_type = dialog.find("select#condition_type").val();
+            switch(condition_type){
+                case "==" : 
+                    var description = "<strong>równa</strong> " + dialog.find("input#condition_val").val();
+                    break;
+                case "!=" : 
+                    var description = "<strong>nierówna</strong> " + dialog.find("input#condition_val").val();
+                    break;
+                case ">" : 
+                    var description = "<strong>większa</strong> od " + dialog.find("input#condition_val").val();
+                    break;
+                case "<" : 
+                    var description = "<strong>mniejsza</strong> od " + dialog.find("input#condition_val").val();
+                    break;
+                case ">=" : 
+                    var description = "<strong>większa lub równa</strong> " + dialog.find("input#condition_val").val();
+                    break;
+                case "<=" : 
+                    var description = "<strong>mniejsza lub równa</strong> " + dialog.find("input#condition_val").val();
+                    break;
+            }
+            dialog.find("div#description span#step2").empty().append(description);
         });
         
-//        if ($(this).attr("id") === "step4" && dialog.find("select#effect_field").val() === "css") {
-//            dialog.find("div.effect_type").hide();
-//            dialog.find("div#effect_type_css.effect_type").show();
-//        }
-//        dialog.find("div#effect_type_css").show();
-//
-//        dialog.find("div.row.panel-choice").each(function () {
-//            setHover($(this));
-//            $(this).click(function () {
-//                $(this).parent().children("div.row.panel-choice").css({backgroundColor: "", color: ""}).unbind('mouseenter mouseleave').each(function () {
-//                    setHover($(this));
-//                });
-//                $(this).unbind('mouseenter mouseleave').css({backgroundColor: "#337ab7", color: "#FFF"});
-//                var effect_panel_id = $(this).attr("id");
-//                dialog.find("input#effect_panel_id").val(effect_panel_id);
-//            });
-//        });
+        dialog.find("div.row.panel-choice").each(function () {
+            setHover($(this));
+            $(this).click(function () {
+                $(this).parent().children("div.row.panel-choice").css({backgroundColor: "", color: ""}).unbind('mouseenter mouseleave').each(function () {
+                    setHover($(this));
+                });
+                $(this).unbind('mouseenter mouseleave').css({backgroundColor: "#337ab7", color: "#FFF"});
+                var effect_panel_id = $(this).attr("id");
+                dialog.find("input#effect_panel_id").val(effect_panel_id);
+            });
+        });
 //
 //        dialog.find("select#effect_type").change(function () {
 //            var type = $(this).val();

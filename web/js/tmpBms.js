@@ -80,8 +80,16 @@ function ajaxRefreshPage() {
             now = Date.parse(now);
             var readDelay = now - ret['time_of_update']*1000;
             if(readDelay >= 300){
-                $("div.variable-panel span").empty();
-                $(".error-message span").empty().append("Od ponad 5 minut nie ma nowych danych!").show();
+                $("div.variable-panel span").empty();                
+                readDelay /= 1000;
+                if(readDelay/60 < 60){
+                    $(".error-message span").empty().append("Od " + Math.round(readDelay/60) + " minut nie ma nowych danych!").show();    
+                }else if(readDelay/60/60 < 24){
+                    $(".error-message span").empty().append("Od " + Math.round(readDelay/60/60) + " godzin nie ma nowych danych!").show();
+                }else{
+                    $(".error-message span").empty().append("Od " + Math.round(readDelay/60/60/24) + " dni nie ma nowych danych!").show();
+                }
+                
             }else{
                 setVariables(ret['registers'], ret["terms"]);
             }

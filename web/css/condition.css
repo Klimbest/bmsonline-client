@@ -10,6 +10,14 @@ div#step5{
     display: none;
 }
 
+
+span#step2,
+span#step3,
+span#step4,
+span#step5{
+    display: none;
+}
+
 div#step1 > div,
 div#step2 > div,
 div#step3 > div,
@@ -43,6 +51,7 @@ fiv.row-middle{
 
 div.images span.label:hover,
 i.fa-remove:hover,
-i.fa-plus-circle:hover{
+i.fa-plus-circle:hover,
+span.btn-add-condition:hover{
     cursor: pointer;
 }
