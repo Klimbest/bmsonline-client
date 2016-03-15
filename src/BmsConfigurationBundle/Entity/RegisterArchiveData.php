@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * RegisterArchiveData
  *
  * @ORM\Table(name="register_archive_data", indexes={@ORM\Index(name="time_of_insert", columns={"time_of_insert"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BmsConfigurationBundle\Entity\RegisterArchiveDataRepository")
  */
 class RegisterArchiveData
 {

@@ -31,7 +31,8 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "symfony/filesystem": "dev-master",
         "symfony/serializer": "dev-master",
-        "liip/imagine-bundle": "*@dev"
+        "liip/imagine-bundle": "*@dev",
+        "ob/highcharts-bundle": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

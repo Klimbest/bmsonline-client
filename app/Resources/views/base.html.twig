@@ -43,7 +43,20 @@
                             <div class="text-right">
                                 {% block nav %}
                                 {% endblock %}
-
+                                <a href="{{path('bms_index')}}">
+                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-building fa-fw"></i> BMS</button>
+                                </a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{path('bms_configuration_index')}}">
+                                        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-wrench"></i> Konfiguracja</button>
+                                    </a>
+                                    <a href="{{path('bms_visualization_index')}}">
+                                        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-paint-brush"></i> Wizualizacja</button>
+                                    </a>
+                                    <a href="{{path('bms_data_analyze_index')}}">
+                                        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-line-chart"></i> Analiza danych</button>
+                                    </a>
+                                {% endif %}
                                 <a href="{{path('fos_user_profile_show')}}">
                                     <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-user"></i> Karta użytkownika</button>
                                 </a>

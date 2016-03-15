@@ -1,0 +1,36 @@
+<div class="row text-center">
+    <div class="col-sm-8 col-sm-offset-1">
+        <div class="progress progress-striped"><div class="progress-bar progress-bar-default"></div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <span id="timer" class="label label-primary">Auto odświeżanie za - s</span>
+    </div>
+</div>
+<div id="detailContainer" style="height: 500px"></div>
+<div id="masterContainer" style="height: 100px"></div>
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-1">
+        Początek: <input type="text" id="dtpStart">
+        Koniec: <input type="text" id="dtpEnd">
+        <button id="changeScope" type="button" class="btn btn-default">Zmień zakres</button>
+    </div>
+    <div class="col-sm-5">
+        <select id="avRegs">
+            {% for register in registers %}
+                <option id="{{register.id}}" value="{{register.id}}">{{register.id}} - ({{register.name}}) {{register.description}}</option>
+            {% endfor %}
+        </select>
+        <button id="addSeries" type="button" class="btn btn-default">Dodaj serie</button>
+    </div>
+</div>
+<div id="time_controls" class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+        <button id="setHour" type="button" class="btn btn-xs btn-primary">godzina</button>
+        <button id="setDay" type="button" class="btn btn-xs btn-primary">dzień</button>
+        <button id="setWeek" type="button" class="btn btn-xs btn-primary">tydzień</button>
+        <button id="setMonth" type="button" class="btn btn-xs btn-primary">miesiąc</button>
+        <button id="setYear" type="button" class="btn btn-xs btn-primary">rok</button>
+        <button id="setAll" type="button" class="btn btn-xs btn-primary">całość</button>
+    </div>
+</div>

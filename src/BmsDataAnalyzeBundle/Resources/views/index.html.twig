@@ -1,0 +1,42 @@
+{% extends "::base.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/tmpDataAnalyze.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/jquery.datetimepicker.css')}}">
+    
+{% endblock %}
+
+
+{% block nav %}
+    {{ parent() }}
+
+{% endblock %}
+
+{% block sidebar %}
+
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="row main-row">
+        <div class="col-md-12">
+            {% include 'BmsDataAnalyzeBundle::chart.html.twig' %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/highcharts.js')}}"></script>
+    <script src="{{ asset('js/modules/exporting.js')}}"></script>
+    <script type="text/javascript">
+        {{ chart(detailChart) }}
+        {{ chart(masterChart) }}
+    </script>
+    <script src="{{ asset('js/tmpBmsDataAnalyze.js') }}"></script>
+    <script src="{{ asset('js/jquery.datetimepicker.full.js') }}"></script>
+{% endblock %}
+

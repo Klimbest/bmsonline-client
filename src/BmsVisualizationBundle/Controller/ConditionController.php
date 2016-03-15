@@ -49,25 +49,25 @@ class ConditionController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
-            
+            $conditionRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:MyCondition');
             $register_id = $request->get('register_id');
             $condition = $request->get('condition');
             $effect_type = $request->get('effect_type');
             $effect_content = $request->get('effect_content');
             $effect_panel_id = $request->get('effect_panel_id');
            
-            $register = $registerRepo->findOneById($register_id);
-            $panel = $panelRepo->findOneById($effect_panel_id);
-            
-            $term = new Term();
-            $term->setRegister($register)
-                    ->setEffectCondition($condition)
-                    ->setEffectType($effect_type)
-                    ->setEffectContent($effect_content)
-                    ->setEffectPanel($panel);
-            
-            $em->persist($term);
-            $em->flush();       
+//            $register = $registerRepo->findOneById($register_id);
+//            $panel = $panelRepo->findOneById($effect_panel_id);
+//            
+//            $term = new Term();
+//            $term->setRegister($register)
+//                    ->setCondition($condition)
+//                    ->setType($effect_type)
+//                    ->setEffectContent($effect_content)
+//                    ->setEffectPanel($panel);
+//            
+//            $em->persist($term);
+//            $em->flush();       
             $ret = "Zrobione!";
             return new JsonResponse($ret);
         } else {
@@ -126,6 +126,5 @@ class ConditionController extends Controller {
         $options = ['images' => $images, 'sizeOfImage' => $sizeOfImage];
         return $options;
     }
-    
     
 }

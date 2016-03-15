@@ -112,105 +112,70 @@ function setSidebarEvents() {
     });
 }
 
-//****SETTING DIALOGS START
-//PAGE ADD SETTINGS
-function createDialogPageAddSettings() {
-
-    return $("div.dialog-page-add-settings").dialog({
-        autoOpen: false,
-        height: 300,
-        width: 450,
-        modal: true,
-        buttons: [
-            {
-                text: "Dodaj",
-                click: function () {
-                    var data = {
-                        width: $("div.dialog-page-add-settings input#width").val(),
-                        height: $("div.dialog-page-add-settings input#height").val(),
-                        name: $("div.dialog-page-add-settings input#name").val()
-                    };
-                    ajaxAddPage(data);
-                    $(this).dialog("close");
-                }
-            },
-            {
-                text: "Anuluj",
-                click: function () {
-                    $(this).dialog("close");
-                }
-            }],
-        open: function () {
-            if (page_id !== null) {
-                setFormField();
-            }
-        },
-        close: function () {
-            $(this).dialog("close");
+//*****PANEL START*****
+function ajaxAddPanel(data) {
+    $.ajax({
+        type: "POST",
+        datatype: "application/json",
+        url: Routing.generate('bms_visualization_add_panel'),
+        data: data,
+        success: function (ret) {
+            $(".main-row").children(".fa-spinner").remove();
+            $("div.main-row div.well").append(ret["template"]);
+            $("div.panel-list-container").hide().empty();
+            var page = {
+                page_id: $("div.label-page.active").attr("id")
+            };
+            ajaxLoadPanelList(page);
+            setPanelEvents();
+            var type = ret["type"];
+            var id = ret["panel_id"];
+            ajaxLoadSettingsPanel(id, "add", type);
         }
     });
-    function setFormField() {
-        var width = parseInt($('div.main-row div.well').css("width"));
-        var height = parseInt($('div.main-row div.well').css("height"));
-        var name = $('div.label-page.active span#name').text();
-        $("div.dialog-page-add-settings input#width").val(width);
-        $("div.dialog-page-add-settings input#height").val(height);
-        $("div.dialog-page-add-settings input#name").val(name);
-    }
+    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
-//PAGE EDIT SETTINGS
-function createDialogPageEditSettings(page_id) {
 
-    return $("div.dialog-page-edit-settings").dialog({
-        autoOpen: false,
-        height: 300,
-        width: 450,
-        modal: true,
-        buttons: [
-            {
-                text: "Zapisz",
-                click: function () {
-                    var data = {
-                        page_id: page_id,
-                        width: $("div.dialog-page-edit-settings input#width").val(),
-                        height: $("div.dialog-page-edit-settings input#height").val(),
-                        name: $("div.dialog-page-edit-settings input#name").val()
-                    };
-                    ajaxEditPage(data);
-                    $(this).dialog("close");
-                }
-            },
-            {
-                text: "Anuluj",
-                click: function () {
-                    $(this).dialog("close");
-                }
-            }],
-        open: function () {
-            if (page_id !== null) {
-                setFormField();
+function ajaxLoadSettingsPanel(panel_id, mode, type) {
+    var data = {
+        panel_id: panel_id
+    };
+    $.ajax({
+        type: "POST",
+        datatype: "application/json",
+        data: data,
+        url: Routing.generate('bms_visualization_load_settings_panel'),
+        success: function (ret) {
+            $(".main-row").children(".fa-spinner").remove();
+            $("nav div.container-fluid").append(ret['template']);
+            switch (type) {
+                case "area":
+                    createDialogAreaPanelSettings(panel_id, mode).dialog("open");
+                    break;
+                case "text":
+                    createDialogTextPanelSettings(panel_id, mode).dialog("open");
+                    break;
+                case "image":
+                    createDialogImagePanelSettings(panel_id, mode).dialog("open");
+                    break;
+                case "variable":
+                    createDialogVariablePanelSettings(panel_id, mode).dialog("open");
+                    break;
+                case "navigation":
+                    createDialogNavigationPanelSettings(panel_id, mode).dialog("open");
+                    break;
             }
-        },
-        close: function () {
-            $(this).dialog("close");
         }
     });
-    function setFormField() {
-        var width = parseInt($('div.main-row div.well').css("width"));
-        var height = parseInt($('div.main-row div.well').css("height"));
-        var name = $('div.label-page.active span#name').text();
-        $("div.dialog-page-edit-settings input#width").val(width);
-        $("div.dialog-page-edit-settings input#height").val(height);
-        $("div.dialog-page-edit-settings input#name").val(name);
-    }
+    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
-//AREA PANEL SETTINGS
-function createDialogAreaPanelSettings(id) {
+
+function createDialogAreaPanelSettings(id, mode) {
 
     return $("div.dialog-area-panel-settings").dialog({
         autoOpen: false,
-        width: 900,
-        height: 700,
+        width: $(window).width(),
+        height: $(window).height(),
         modal: true,
         buttons: [
             {
@@ -229,28 +194,41 @@ function createDialogAreaPanelSettings(id) {
                         borderRadius: br,
                         backgroundColor: hex2rgba($("div.dialog-area-panel-settings input#backgroundColor").val(), parseFloat($("div.dialog-area-panel-settings input#opacity").val()))
                     };
-                    ajaxEditAreaPanel(data);
-                    $(this).dialog("close");
+                    saveData(data);
+                    $(this).dialog('destroy').remove();
                 }
             },
             {
                 text: "Anuluj",
                 click: function () {
-                    $(this).dialog("close");
+                    $(this).dialog('destroy').remove();
+                    if (mode === "add") {
+                        $("div#" + id + ".bms-panel").remove();
+                        var data = {
+                            panel_id: id
+                        };
+                        ajaxDeletePanel(data);
+                    }
                 }
             }],
         open: function () {
-            setFormField();
-            setEvents();
+            setDialog();
+            setDialogButtons();
         },
         close: function () {
-
-            $(this).dialog("close");
+            $(this).dialog('destroy').remove();
+            if (mode === "add") {
+                $("div#" + id + ".bms-panel").remove();
+                var data = {
+                    panel_id: id
+                };
+                ajaxDeletePanel(data);
+            }
         }
     });
-    function setFormField() {
+    function setDialog() {
         var panel = $("div#" + id + ".area-panel");
-        
+
         $("div.dialog-area-panel-settings div.dialog-panel").css({
             borderWidth: panel.css("border-top-width"),
             borderColor: panel.css("border-top-color"),
@@ -289,7 +267,11 @@ function createDialogAreaPanelSettings(id) {
         $("div.dialog-area-panel-settings input#backgroundColor").val(rgb2hex(panel.css("background-color")));
         $("div.dialog-area-panel-settings input#opacity").val(parseFloat(getColorValues(panel.css("background-color"))["alpha"]));
     }
-    function setEvents() {
+    function setDialogButtons() {
+        $(".btn-add-condition").click(function () {
+            ajaxCreateConditionDialog();
+        });
+        
         var panel = $(".dialog-area-panel-settings div.dialog-panel");
         //kolor
         var backgroundColor;
@@ -330,13 +312,25 @@ function createDialogAreaPanelSettings(id) {
 
 
     }
+    function saveData(data) {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_edit_area_panel'),
+            data: data,
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $("div#" + data["panel_id"] + ".area-panel").css(ret["css"]);
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    }
 }
-//TEXT PANEL SETTINGS
-function createDialogTextPanelSettings(id) {
+function createDialogTextPanelSettings(id, mode) {
     return $("div.dialog-text-panel-settings").dialog({
         autoOpen: false,
-        width: 900,
-        height: 700,
+        width: $(window).width(),
+        height: $(window).height(),
         modal: true,
         buttons: [
             {
@@ -358,21 +352,35 @@ function createDialogTextPanelSettings(id) {
                         fontSize: textarea.css("fontSize"),
                         fontColor: textarea.css("color")
                     };
-                    ajaxEditTextPanel(data);
-                    $(this).dialog("close");
+                    saveData(data);
+                    $(this).dialog('destroy').remove();
                 }
             },
             {
                 text: "Anuluj",
                 click: function () {
-                    $(this).dialog("close");
+                    $(this).dialog('destroy').remove();
+                    if (mode === "add") {
+                        $("div#" + id + ".bms-panel").remove();
+                        var data = {
+                            panel_id: id
+                        };
+                        ajaxDeletePanel(data);
+                    }
                 }
             }],
         open: function () {
             setDialog(id);
         },
         close: function () {
-            $(this).dialog("close");
+            $(this).dialog('destroy').remove();
+            if (mode === "add") {
+                $("div#" + id + ".bms-panel").remove();
+                var data = {
+                    panel_id: id
+                };
+                ajaxDeletePanel(data);
+            }
         }
     });
     function setDialog(id) {
@@ -407,13 +415,15 @@ function createDialogTextPanelSettings(id) {
         textarea.css("fontStyle") === "italic" ? $(".btn-italic").addClass("active") : $(".btn-italic").removeClass("active");
         setDialogButtons();
     }
-
     function setDialogButtons() {
         $("div.dialog-text-panel-settings div.edit-controls div").children().unbind("click");
         var textarea = $("div.dialog-text-panel-settings textarea");
 
         setAlign(textarea.css("text-align"));
-
+        $(".btn-add-condition").click(function () {
+            ajaxCreateConditionDialog();
+        });
+        
         //pogrubienie
         $(".btn-bold").click(function () {
             $(this).hasClass("active") ? textarea.css({fontWeight: "initial"}) : textarea.css({fontWeight: "bold"});
@@ -483,15 +493,27 @@ function createDialogTextPanelSettings(id) {
         }
 
     }
-
+    function saveData(data) {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_edit_text_panel'),
+            data: data,
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                var panel = $("div#" + data["panel_id"] + ".text-panel");
+                panel.removeClass("text-left text-center text-right").addClass(ret["textAlign"]).css(ret["css"]).children("span.content").text(ret["content"]);
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    }
 }
-//IMAGE PANEL SETTINGS
 function createDialogImagePanelSettings(id, mode) {
     var input;
     return $("div.dialog-image-panel-settings").dialog({
         autoOpen: false,
-        width: 1100,
-        height: 700,
+        width: $(window).width(),
+        height: $(window).height(),
         modal: true,
         buttons: [
             {
@@ -511,7 +533,7 @@ function createDialogImagePanelSettings(id, mode) {
                     data.append("height", $("div.dialog-image-panel-settings input#height").val());
                     data.append("topPosition", $("div.dialog-image-panel-settings input#topPosition").val());
                     data.append("leftPosition", $("div.dialog-image-panel-settings input#leftPosition").val());
-                    ajaxEditImagePanel(data);
+                    saveData(data);
                     $(this).dialog('destroy').remove();
                 }
             },
@@ -568,9 +590,10 @@ function createDialogImagePanelSettings(id, mode) {
         setDialogButtons(dialog_panel);
 
     }
-
     function setDialogButtons(dp) {
-
+        $(".btn-add-condition").click(function () {
+            ajaxCreateConditionDialog();
+        });
         //loading image from disk
         $("div.dialog-image-panel-settings input#image").change(function (event) {
             input = event.target;
@@ -660,7 +683,7 @@ function createDialogImagePanelSettings(id, mode) {
             }
         });
         //click chain
-        $("i#aspectRatio").click(function(){
+        $("i#aspectRatio").click(function () {
             $(this).toggleClass("fa-chain fa-chain-broken");
         });
         //change sier of image
@@ -685,14 +708,26 @@ function createDialogImagePanelSettings(id, mode) {
         });
 
     }
-
+    function saveData(data) {
+        $.ajax({
+            type: "POST",
+            url: Routing.generate('bms_visualization_edit_image_panel'),
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $("div#" + ret['panel_id'] + ".image-panel").css(ret['css']).children("img").attr("src", ret["content"]);
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    }
 }
-//VARIABLE PANEL SETTINGS
 function createDialogVariablePanelSettings(id, mode) {
     return $("div.dialog-variable-panel-settings").dialog({
         autoOpen: false,
-        width: 900,
-        height: 700,
+        width: $(window).width(),
+        height: $(window).height(),
         modal: true,
         buttons: [
             {
@@ -714,7 +749,7 @@ function createDialogVariablePanelSettings(id, mode) {
                         fontSize: dialog_panel.css("fontSize"),
                         fontColor: dialog_panel.css("color")
                     };
-                    ajaxEditVariablePanel(data);
+                    saveData(data);
                     $(this).dialog('destroy').remove();
                 }
             },
@@ -791,11 +826,12 @@ function createDialogVariablePanelSettings(id, mode) {
 
         setDialogButtons();
     }
-
     function setDialogButtons() {
         $("div.dialog-variable-panel-settings div.edit-controls div").children().unbind("click");
         var dialog_panel = $(".dialog-variable-panel-settings div.dialog-panel");
-
+        $(".btn-add-condition").click(function () {
+            ajaxCreateConditionDialog();
+        });
         //pogrubienie
         $(".btn-bold").click(function () {
             $(this).hasClass("active") ? dialog_panel.css({fontWeight: "initial"}) : dialog_panel.css({fontWeight: "bold"});
@@ -847,9 +883,8 @@ function createDialogVariablePanelSettings(id, mode) {
         $("input#fontColor").on('input', function () {
             dialog_panel.css({color: hex2rgba($(this).val(), 1)});
         });
-
+        
     }
-
     function setAlign(align) {
         switch (align) {
             case "left":
@@ -866,13 +901,26 @@ function createDialogVariablePanelSettings(id, mode) {
                 break;
         }
     }
+    function saveData(data) {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_edit_variable_panel'),
+            data: data,
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                var panel = $("div#" + data["panel_id"] + ".variable-panel");
+                panel.removeClass("text-left text-center text-right").addClass(ret["textAlign"]).css(ret["css"]).children("span").attr("id", ret['content']).empty().append(ret['fixedValue']);
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    }
 }
-//NAVIGATION PANEL SETTINGS
 function createDialogNavigationPanelSettings(id, mode) {
     return $("div.dialog-navigation-panel-settings").dialog({
         autoOpen: false,
-        width: 900,
-        height: 700,
+        width: $(window).width(),
+        height: $(window).height(),
         modal: true,
         buttons: [
             {
@@ -893,7 +941,7 @@ function createDialogNavigationPanelSettings(id, mode) {
                         borderRadius: br,
                         backgroundColor: hex2rgba($("div.dialog-navigation-panel-settings input#backgroundColor").val(), parseFloat($("div.dialog-navigation-panel-settings input#opacity").val()))
                     };
-                    ajaxEditNavigationPanel(data);
+                    saveData(data);
                     $(this).dialog('destroy').remove();
                 }
             },
@@ -983,10 +1031,11 @@ function createDialogNavigationPanelSettings(id, mode) {
         $("input#opacity").val(parseFloat(getColorValues(bC)["alpha"]));
         setDialogButtons();
     }
-
     function setDialogButtons() {
         var dialog_panel = $(".dialog-navigation-panel-settings div.dialog-panel");
-
+        $(".btn-add-condition").click(function () {
+            ajaxCreateConditionDialog();
+        });
         //size
         $(".dialog-navigation-panel-settings input#width").change(function () {
             dialog_panel.css({width: $(this).val() + "px"});
@@ -1039,183 +1088,24 @@ function createDialogNavigationPanelSettings(id, mode) {
         function changeBR() {
             dialog_panel.css({borderBottomRightRadius: $(this).val() + "px"});
         }
+        
     }
-}
-//****SETTING DIALOGS END
-
-
-//****AJAX START
-//PAGE ADD
-function ajaxAddPage(data) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_add_page'),
-        data: data,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            createPage(ret["ret"]);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-//PAGE DELETE
-function ajaxDeletePage(data) {
-    $.ajax({
-        type: "POST",
-        url: Routing.generate('bms_visualization_delete_page'),
-        data: data,
-        success: function () {
-            $(".main-row").children(".fa-spinner").remove();
-            var data = {
-                page_id: 1
-            };
-            ajaxChangePage(data);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-//PAGE EDIT
-function ajaxEditPage(data) {
-    $.ajax({
-        type: "POST",
-        url: Routing.generate('bms_visualization_edit_page'),
-        data: data,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            var data = {
-                page_id: ret['page_id']
-            };
-            ajaxChangePage(data);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-//PAGE CHANGE
-function ajaxChangePage(data) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_change_page'),
-        data: data,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            createPage(ret["template"]);
-
-            setVariables(ret["registers"], ret["terms"]);
-            ajaxLoadPanelList(data);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    function setVariables(registers, terms) {
-
-//        $.each(terms, function (key, term) {
-//            var condition = term.condition.split(";");
-//            condition[1] = parseFloat(condition[1]).toFixed(2);
-//            var register_id = term.register_id;
-//            var eContent = term.effect_content;
-//            var eField = term.effect_field;
-//            var ePanelId = term.effect_panel_id;
-//            var value = term.register_val;
-//            switch (condition[0]) {
-//                case "==" :
-//                    if (value === condition[1]) {
-//                        makeTerm(eField);
-//                    }
-//                    break;
-//                case "!=" :
-//                    if (value !== condition[1]) {
-//                        makeTerm(eField);
-//                    }
-//                    break;
-//                case ">" :
-//                    if (value > condition[1]) {
-//                        makeTerm(eField);
-//                    }
-//                    break;
-//                case "<" :
-//                    if (value < condition[1]) {
-//                        makeTerm(eField);
-//                    }
-//                    break;
-//                case ">=" :
-//                    if (value >= condition[1]) {
-//                        makeTerm(eField);
-//                    }
-//                    break;
-//                case "<=" :
-//                    if (value <= condition[1]) {
-//                        makeTerm(eField);
-//                    }
-//                    break;
-//            }
-//
-//            function makeTerm(type) {
-//                var content = eContent.split(";");
-//
-//                switch (type) {
-//                    case "css" :
-//                        $("div#" + ePanelId + ".bms-panel").css(content[0], content[1]);
-//                        break;
-//                    case "src" :
-//                        $("div#" + ePanelId + ".bms-panel img").attr("src", eContent);
-//                        break;
-//                    case "spin" :
-//                        $("div#" + ePanelId + ".bms-panel").children().addClass("fa-spin");
-//                        break;
-//                }
-//            }
-//
-//        });
-
-        $.each(registers, function (key, value) {
-            $("div.variable-panel").children("span#" + key).append(value);
-        });
-
-
-    }
-}
-//PANEL ADD
-function ajaxAddPanel(data) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_add_panel'),
-        data: data,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            $("div.main-row div.well").append(ret["template"]);
-            $("div.panel-list-container").hide().empty();
-            var d = {
-                page_id: $("div.label-page.active").attr("id")
-            };
-            ajaxLoadPanelList(d);
-            setPanelEvents();
-            var type = ret["type"];
-            var id = ret["panel_id"];
-            switch (type) {
-                case "area" :
-                    createDialogAreaPanelSettings(id).dialog("open");
-                    break;
-                case "text" :
-                    createDialogTextPanelSettings(id).dialog("open");
-                    break;
-                case "image" :
-                    ajaxLoadImageSettingsPanel(id, "add");
-                    break;
-                case "variable" :
-                    ajaxLoadVariableSettingsPanel(id, "add");
-                    break;
-                case "navigation" :
-                    ajaxLoadNavigationSettingsPanel(id, "add");
-                    break;
+    function saveData(data) {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_edit_navigation_panel'),
+            data: data,
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                var panel = $("div#" + data["panel_id"] + ".navigation-panel");
+                panel.css(ret["css"]).children("div").attr("id", ret['content']);
             }
-//            return ret["panel_id"];
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    }
 }
-//PANEL EDIT
+
 function ajaxEditPanel(data) {
     $.ajax({
         type: "POST",
@@ -1233,76 +1123,6 @@ function ajaxEditPanel(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
-function ajaxEditAreaPanel(data) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_edit_area_panel'),
-        data: data,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            $("div#" + data["panel_id"] + ".area-panel").css(ret["css"]);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-function ajaxEditTextPanel(data) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_edit_text_panel'),
-        data: data,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            var panel = $("div#" + data["panel_id"] + ".text-panel");
-            panel.removeClass("text-left text-center text-right").addClass(ret["textAlign"]).css(ret["css"]).children("span.content").text(ret["content"]);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-function ajaxEditImagePanel(data) {
-    $.ajax({
-        type: "POST",
-        url: Routing.generate('bms_visualization_edit_image_panel'),
-        data: data,
-        contentType: false,
-        processData: false,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            $("div#" + ret['panel_id'] + ".image-panel").css(ret['css']).children("img").attr("src", ret["content"]);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-function ajaxEditVariablePanel(data) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_edit_variable_panel'),
-        data: data,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            var panel = $("div#" + data["panel_id"] + ".variable-panel");
-            panel.removeClass("text-left text-center text-right").addClass(ret["textAlign"]).css(ret["css"]).children("span").attr("id", ret['content']).empty().append(ret['fixedValue']);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-function ajaxEditNavigationPanel(data) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_edit_navigation_panel'),
-        data: data,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            var panel = $("div#" + data["panel_id"] + ".navigation-panel");
-            panel.css(ret["css"]).children("div").attr("id", ret['content']);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-//PANEL COPY
 function ajaxCopyPanel(data) {
     $.ajax({
         type: "POST",
@@ -1322,10 +1142,10 @@ function ajaxCopyPanel(data) {
             var id = ret["panel_id"];
             switch (type) {
                 case "area" :
-                    createDialogAreaPanelSettings(id).dialog("open");
+                    ajaxLoadAreaSettingsPanel(id, "add");
                     break;
                 case "text" :
-                    createDialogTextPanelSettings(id).dialog("open");
+                    ajaxLoadTextSettingsPanel(id, "add");
                     break;
                 case "image" :
                     ajaxLoadImageSettingsPanel(id, "add");
@@ -1342,7 +1162,6 @@ function ajaxCopyPanel(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
-//PANEL DELETE
 function ajaxDeletePanel(data) {
     $.ajax({
         type: "POST",
@@ -1360,261 +1179,7 @@ function ajaxDeletePanel(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
-//OTHER
-function ajaxLoadVariableSettingsPanel(panel_id, mode) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_load_variable_settings_panel'),
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            $("nav div.container-fluid").append(ret['template']);
-            createDialogVariablePanelSettings(panel_id, mode).dialog("open");
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-function ajaxLoadNavigationSettingsPanel(panel_id, mode) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_load_navigation_settings_panel'),
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            $("nav div.container-fluid").append(ret['template']);
-            createDialogNavigationPanelSettings(panel_id, mode).dialog("open");
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-function ajaxLoadImageSettingsPanel(panel_id, mode) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_load_image_settings_panel'),
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            $("nav div.container-fluid").append(ret['template']);
-            createDialogImagePanelSettings(panel_id, mode).dialog("open");
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
 
-function ajaxDeleteImage(data) {
-    $.ajax({
-        type: "POST",
-        url: Routing.generate('bms_visualization_delete_image'),
-        data: data,
-        success: function () {
-            $(".main-row").children(".fa-spinner").remove();
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-
-function ajaxLoadPanelList(data) {
-    $("input#panel-list-area, input#panel-list-text, input#panel-list-image, input#panel-list-variable, input#panel-list-navigation").prop("checked", true).unbind("click, change");
-    if ($("button.btn-panel-list span.toggler").hasClass("off") === true) {
-
-    } else {
-        $.ajax({
-            type: "POST",
-            datatype: "application/json",
-            url: Routing.generate('bms_visualization_load_panel_list'),
-            data: data,
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $("div.panel-list-container").empty().append(ret['template']).show();
-                setSidebarPanelListEvents();
-            }
-        });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-        function setSidebarPanelListEvents() {
-
-            $('input#panel-list-area').change(function () {
-                $(this).is(':checked') ? $("span.panel-list-area").parent("div.panel-list").show() : $("span.panel-list-area").parent("div.panel-list").hide();
-            });
-            $('input#panel-list-text').change(function () {
-                $(this).is(':checked') ? $("span.panel-list-text").parent("div.panel-list").show() : $("span.panel-list-text").parent("div.panel-list").hide();
-            });
-            $('input#panel-list-image').change(function () {
-                $(this).is(':checked') ? $("span.panel-list-image").parent("div.panel-list").show() : $("span.panel-list-image").parent("div.panel-list").hide();
-            });
-            $('input#panel-list-variable').change(function () {
-                $(this).is(':checked') ? $("span.panel-list-variable").parent("div.panel-list").show() : $("span.panel-list-variable").parent("div.panel-list").hide();
-            });
-            $('input#panel-list-navigation').change(function () {
-                $(this).is(':checked') ? $("span.panel-list-navigation").parent("div.panel-list").show() : $("span.panel-list-navigation").parent("div.panel-list").hide();
-            });
-            $('div.panel-list').hover(function () {
-                $(this).children("i.fa").addClass("active");
-                var id = $(this).attr("id");
-                $("div#" + id + ".bms-panel").css({zIndex: "100", boxShadow: "0px 0px 15px #000"});
-            }, function () {
-                $(this).children("span").hasClass("active") ? $(this).children("i.fa").addClass("active") : $(this).children("i.fa").removeClass("active");
-                var id = $(this).attr("id");
-                var zi = $(this).children("span").attr("value");
-                $("div#" + id + ".bms-panel").css({zIndex: zi, boxShadow: ""});
-            });
-            $("div.panel-list span").click(function () {
-                $(this).toggleClass("active");
-                var id = $(this).parent().attr('id');
-                $("div#" + id + ".bms-panel").toggleClass("active");
-            });
-            //edycja kolejności w górę
-            $("div.panel-list i.fa-arrow-up").click(function () {
-                var id = $(this).parent().attr("id");
-                var panel = $("div#" + id + ".bms-panel");
-                var zIndex = $(this).parent().children("span").attr("value");
-                zIndex++;
-                $("div#" + id + ".bms-panel").css({zIndex: zIndex});
-                var data = {
-                    panel_id: id,
-                    topPosition: panel.css("top"),
-                    leftPosition: panel.css("left"),
-                    width: panel.css("width"),
-                    height: panel.css("height"),
-                    zIndex: panel.css("zIndex")
-                };
-                ajaxEditPanel(data);
-            });
-            //edycja kolejności w dół
-            $("div.panel-list i.fa-arrow-down").click(function () {
-                var id = $(this).parent().attr("id");
-                var panel = $("div#" + id + ".bms-panel");
-                var zIndex = $(this).parent().children("span").attr("value");
-                zIndex--;
-                if (zIndex < 0) {
-                    zIndex = 0;
-                }
-                $("div#" + id + ".bms-panel").css({zIndex: zIndex});
-                var data = {
-                    panel_id: id,
-                    topPosition: panel.css("top"),
-                    leftPosition: panel.css("left"),
-                    width: panel.css("width"),
-                    height: panel.css("height"),
-                    zIndex: panel.css("zIndex")
-                };
-                ajaxEditPanel(data);
-            });
-            //kopiowanie
-            $("div.panel-list i.fa-clone").click(function () {
-                var id = $(this).parent().attr("id");
-                var data = {
-                    panel_id: id
-                };
-                ajaxCopyPanel(data);
-            });
-            //ustawienia
-            $("div.panel-list i.fa-cogs").click(function () {
-                var id = $(this).parent().attr("id");
-                if ($("div#" + id + ".bms-panel").hasClass("text-panel")) {
-                    createDialogTextPanelSettings(id).dialog("open");
-                } else if ($("div#" + id + ".bms-panel").hasClass("image-panel")) {
-                    ajaxLoadImageSettingsPanel(id, "edit");
-                } else if ($("div#" + id + ".bms-panel").hasClass("variable-panel")) {
-                    ajaxLoadVariableSettingsPanel(id, "edit");
-                } else if ($("div#" + id + ".bms-panel").hasClass("navigation-panel")) {
-                    ajaxLoadNavigationSettingsPanel(id, "edit");
-                } else {
-                    createDialogAreaPanelSettings(id).dialog("open");
-                }
-            });
-            //usuwanie
-            $("div.panel-list i.fa-remove").click(function () {
-                var id = $(this).parent().attr("id");
-                if (confirm("Na pewno chcesz to usunąć?")) {
-                    $("div#" + id + ".bms-panel").remove();
-                    var data = {
-                        panel_id: id
-                    };
-                    ajaxDeletePanel(data);
-                }
-            });
-        }
-    }
-
-}
-//****AJAX END
-
-//utworzenie strony
-function createPage(content) {
-    $(".main-row div.col-md-12").children().remove();
-    $(".main-row div.col-md-12").append(content).fadeIn("slow");
-    setPatternNet($("input#pattern-net-size").val());
-    setPageLabelsEvent();
-
-    setPanelEvents();
-}
-
-//ustaw siatkę pomocniczą
-function setPatternNet(x) {
-
-    var state = $("button.btn-pattern-net span").hasClass("off");
-    if (state === false) {
-        $(".pattern-net, .pattern-net-right").remove();
-        var divItem;
-        if (x.length === 0) {
-            x = defaultPatternNetSize;
-        } else if (x < 25) {
-            x = 25;
-        }
-        var mainWell = $("div.main-row div.well");
-        var nx = mainWell.width() / x,
-                ny = mainWell.height() / x;
-        for (var i = 0; i < Math.floor(nx) * Math.floor(ny) + Math.floor(nx); i++) {
-            divItem = "<div id=" + i + " class='pattern-net'></div>";
-            mainWell.append(divItem);
-            $("div#" + i + ".pattern-net").width(x).height(x);
-        }
-        for (i = 0; i < ny; i++) {
-            divItem = "<div id=" + i + " class='pattern-net-right'></div>";
-            mainWell.append(divItem);
-            $("div#" + i + ".pattern-net-right").height(x);
-        }
-    }
-}
-//przełączanie zakładek stron
-function setPageLabelsEvent() {
-    var pageLabels = $(".label-page");
-    pageLabels.unbind("click");
-    pageLabels.each(function () {
-        var id = $(this).attr("id");
-        $(this).click(function () {
-            var data = {
-                page_id: id
-            };
-            ajaxChangePage(data);
-        });
-        if ($(this).hasClass("active")) {
-            $(this).unbind("click");
-        }
-        deletePageEvent($(this), id);
-        editPageEvent($(this), id);
-    });
-    //usuwanie strony
-    function deletePageEvent(label, page_id) {
-        label.children("i.fa-remove").click(function () {
-            var data = {
-                page_id: page_id
-            };
-            ajaxDeletePage(data);
-            label.remove();
-            $("div.main-row div.well").remove();
-        });
-    }
-    //edycja strony
-    function editPageEvent(label, page_id) {
-        label.children("i.fa-cogs").click(function () {
-            createDialogPageEditSettings(page_id).dialog("open");
-        });
-    }
-
-
-}
-//dodanie obsługi zdarzeń na każdym panelu na stronie
 function setPanelEvents() {
     var panels = $(".bms-panel");
 
@@ -1787,16 +1352,16 @@ function setPanelEvents() {
         });
         //ustawienia
         $(label + " i.fa-cogs").click(function () {
-            if ($("div#" + id + ".bms-panel").hasClass("text-panel")) {
-                createDialogTextPanelSettings(id).dialog("open");
+            if ($("div#" + id + ".bms-panel").hasClass("area-panel")) {
+                ajaxLoadSettingsPanel(id, "edit", "area");
+            } else if ($("div#" + id + ".bms-panel").hasClass("text-panel")) {
+                ajaxLoadSettingsPanel(id, "edit", "text");
             } else if ($("div#" + id + ".bms-panel").hasClass("image-panel")) {
-                ajaxLoadImageSettingsPanel(id, "edit");
+                ajaxLoadSettingsPanel(id, "edit", "image");
             } else if ($("div#" + id + ".bms-panel").hasClass("variable-panel")) {
-                ajaxLoadVariableSettingsPanel(id, "edit");
+                ajaxLoadSettingsPanel(id, "edit", "variable");
             } else if ($("div#" + id + ".bms-panel").hasClass("navigation-panel")) {
-                ajaxLoadNavigationSettingsPanel(id, "edit");
-            } else {
-                createDialogAreaPanelSettings(id).dialog("open");
+                ajaxLoadSettingsPanel(id, "edit", "navigation");
             }
         });
         //usuwanie
@@ -1812,9 +1377,379 @@ function setPanelEvents() {
     }
 
 }
+//*****PANEL END*****
+
+//*****PAGE START*****
+function createDialogPageAddSettings() {
+
+    return $("div.dialog-page-add-settings").dialog({
+        autoOpen: false,
+        height: 300,
+        width: 450,
+        modal: true,
+        buttons: [
+            {
+                text: "Dodaj",
+                click: function () {
+                    var data = {
+                        width: $("div.dialog-page-add-settings input#width").val(),
+                        height: $("div.dialog-page-add-settings input#height").val(),
+                        name: $("div.dialog-page-add-settings input#name").val()
+                    };
+                    ajaxAddPage(data);
+                    $(this).dialog("close");
+                }
+            },
+            {
+                text: "Anuluj",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }],
+        open: function () {
+            if (page_id !== null) {
+                setFormField();
+            }
+        },
+        close: function () {
+            $(this).dialog("close");
+        }
+    });
+    function setFormField() {
+        var width = parseInt($('div.main-row div.well').css("width"));
+        var height = parseInt($('div.main-row div.well').css("height"));
+        var name = $('div.label-page.active span#name').text();
+        $("div.dialog-page-add-settings input#width").val(width);
+        $("div.dialog-page-add-settings input#height").val(height);
+        $("div.dialog-page-add-settings input#name").val(name);
+    }
+}
+function createDialogPageEditSettings(page_id) {
+
+    return $("div.dialog-page-edit-settings").dialog({
+        autoOpen: false,
+        height: 300,
+        width: 450,
+        modal: true,
+        buttons: [
+            {
+                text: "Zapisz",
+                click: function () {
+                    var data = {
+                        page_id: page_id,
+                        width: $("div.dialog-page-edit-settings input#width").val(),
+                        height: $("div.dialog-page-edit-settings input#height").val(),
+                        name: $("div.dialog-page-edit-settings input#name").val()
+                    };
+                    ajaxEditPage(data);
+                    $(this).dialog("close");
+                }
+            },
+            {
+                text: "Anuluj",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }],
+        open: function () {
+            if (page_id !== null) {
+                setFormField();
+            }
+        },
+        close: function () {
+            $(this).dialog("close");
+        }
+    });
+    function setFormField() {
+        var width = parseInt($('div.main-row div.well').css("width"));
+        var height = parseInt($('div.main-row div.well').css("height"));
+        var name = $('div.label-page.active span#name').text();
+        $("div.dialog-page-edit-settings input#width").val(width);
+        $("div.dialog-page-edit-settings input#height").val(height);
+        $("div.dialog-page-edit-settings input#name").val(name);
+    }
+}
+
+function ajaxAddPage(data) {
+    $.ajax({
+        type: "POST",
+        datatype: "application/json",
+        url: Routing.generate('bms_visualization_add_page'),
+        data: data,
+        success: function (ret) {
+            $(".main-row").children(".fa-spinner").remove();
+            createPage(ret["ret"]);
+        }
+    });
+    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+}
+function ajaxDeletePage(data) {
+    $.ajax({
+        type: "POST",
+        url: Routing.generate('bms_visualization_delete_page'),
+        data: data,
+        success: function () {
+            $(".main-row").children(".fa-spinner").remove();
+            var data = {
+                page_id: 1
+            };
+            ajaxChangePage(data);
+        }
+    });
+    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+}
+function ajaxEditPage(data) {
+    $.ajax({
+        type: "POST",
+        url: Routing.generate('bms_visualization_edit_page'),
+        data: data,
+        success: function (ret) {
+            $(".main-row").children(".fa-spinner").remove();
+            var data = {
+                page_id: ret['page_id']
+            };
+            ajaxChangePage(data);
+        }
+    });
+    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+}
+function ajaxChangePage(data) {
+    $.ajax({
+        type: "POST",
+        datatype: "application/json",
+        url: Routing.generate('bms_visualization_change_page'),
+        data: data,
+        success: function (ret) {
+            $(".main-row").children(".fa-spinner").remove();
+            createPage(ret["template"]);
+            setVariables(ret["registers"], ret["terms"]);
+            ajaxLoadPanelList(data);
+        }
+    });
+    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+
+    function createPage(content) {
+        $(".main-row div.col-md-12").children().remove();
+        $(".main-row div.col-md-12").append(content).fadeIn("slow");
+        setPatternNet($("input#pattern-net-size").val());
+        setPageLabelsEvent();
+
+        setPanelEvents();
+    }
+    //przełączanie zakładek stron
+    function setPageLabelsEvent() {
+        var pageLabels = $(".label-page");
+        pageLabels.unbind("click");
+        pageLabels.each(function () {
+            var id = $(this).attr("id");
+            $(this).click(function () {
+                var data = {
+                    page_id: id
+                };
+                ajaxChangePage(data);
+            });
+            if ($(this).hasClass("active")) {
+                $(this).unbind("click");
+            }
+            deletePageEvent($(this), id);
+            editPageEvent($(this), id);
+        });
+        //usuwanie strony
+        function deletePageEvent(label, page_id) {
+            label.children("i.fa-remove").click(function () {
+                var data = {
+                    page_id: page_id
+                };
+                ajaxDeletePage(data);
+                label.remove();
+                $("div.main-row div.well").remove();
+            });
+        }
+        //edycja strony
+        function editPageEvent(label, page_id) {
+            label.children("i.fa-cogs").click(function () {
+                createDialogPageEditSettings(page_id).dialog("open");
+            });
+        }
 
 
-//****TOOLS START
+    }
+    //wypełnienie zmiennych
+    function setVariables(registers, terms) {
+        $.each(registers, function (key, value) {
+            $("div.variable-panel").children("span#" + key).append(value);
+        });
+    }
+}
+//*****PAGE END*****
+
+//****TOOLS START*****
+//ustaw siatkę pomocniczą
+function setPatternNet(x) {
+
+    var state = $("button.btn-pattern-net span").hasClass("off");
+    if (state === false) {
+        $(".pattern-net, .pattern-net-right").remove();
+        var divItem;
+        if (x.length === 0) {
+            x = defaultPatternNetSize;
+        } else if (x < 25) {
+            x = 25;
+        }
+        var mainWell = $("div.main-row div.well");
+        var nx = mainWell.width() / x,
+                ny = mainWell.height() / x;
+        for (var i = 0; i < Math.floor(nx) * Math.floor(ny) + Math.floor(nx); i++) {
+            divItem = "<div id=" + i + " class='pattern-net'></div>";
+            mainWell.append(divItem);
+            $("div#" + i + ".pattern-net").width(x).height(x);
+        }
+        for (i = 0; i < ny; i++) {
+            divItem = "<div id=" + i + " class='pattern-net-right'></div>";
+            mainWell.append(divItem);
+            $("div#" + i + ".pattern-net-right").height(x);
+        }
+    }
+}
+//usuń obrazek z serwera
+function ajaxDeleteImage(data) {
+    $.ajax({
+        type: "POST",
+        url: Routing.generate('bms_visualization_delete_image'),
+        data: data,
+        success: function () {
+            $(".main-row").children(".fa-spinner").remove();
+        }
+    });
+    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+}
+//załaduj listę paneli
+function ajaxLoadPanelList(data) {
+    $("input#panel-list-area, input#panel-list-text, input#panel-list-image, input#panel-list-variable, input#panel-list-navigation").prop("checked", true).unbind("click, change");
+    if ($("button.btn-panel-list span.toggler").hasClass("off") === true) {
+
+    } else {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_load_panel_list'),
+            data: data,
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $("div.panel-list-container").empty().append(ret['template']).show();
+                setSidebarPanelListEvents();
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+        function setSidebarPanelListEvents() {
+
+            $('input#panel-list-area').change(function () {
+                $(this).is(':checked') ? $("span.panel-list-area").parent("div.panel-list").show() : $("span.panel-list-area").parent("div.panel-list").hide();
+            });
+            $('input#panel-list-text').change(function () {
+                $(this).is(':checked') ? $("span.panel-list-text").parent("div.panel-list").show() : $("span.panel-list-text").parent("div.panel-list").hide();
+            });
+            $('input#panel-list-image').change(function () {
+                $(this).is(':checked') ? $("span.panel-list-image").parent("div.panel-list").show() : $("span.panel-list-image").parent("div.panel-list").hide();
+            });
+            $('input#panel-list-variable').change(function () {
+                $(this).is(':checked') ? $("span.panel-list-variable").parent("div.panel-list").show() : $("span.panel-list-variable").parent("div.panel-list").hide();
+            });
+            $('input#panel-list-navigation').change(function () {
+                $(this).is(':checked') ? $("span.panel-list-navigation").parent("div.panel-list").show() : $("span.panel-list-navigation").parent("div.panel-list").hide();
+            });
+            $('div.panel-list').hover(function () {
+                $(this).children("i.fa").addClass("active");
+                var id = $(this).attr("id");
+                $("div#" + id + ".bms-panel").css({zIndex: "100", boxShadow: "0px 0px 15px #000"});
+            }, function () {
+                $(this).children("span").hasClass("active") ? $(this).children("i.fa").addClass("active") : $(this).children("i.fa").removeClass("active");
+                var id = $(this).attr("id");
+                var zi = $(this).children("span").attr("value");
+                $("div#" + id + ".bms-panel").css({zIndex: zi, boxShadow: ""});
+            });
+            $("div.panel-list span").click(function () {
+                $(this).toggleClass("active");
+                var id = $(this).parent().attr('id');
+                $("div#" + id + ".bms-panel").toggleClass("active");
+            });
+            //edycja kolejności w górę
+            $("div.panel-list i.fa-arrow-up").click(function () {
+                var id = $(this).parent().attr("id");
+                var panel = $("div#" + id + ".bms-panel");
+                var zIndex = $(this).parent().children("span").attr("value");
+                zIndex++;
+                $("div#" + id + ".bms-panel").css({zIndex: zIndex});
+                var data = {
+                    panel_id: id,
+                    topPosition: panel.css("top"),
+                    leftPosition: panel.css("left"),
+                    width: panel.css("width"),
+                    height: panel.css("height"),
+                    zIndex: panel.css("zIndex")
+                };
+                ajaxEditPanel(data);
+            });
+            //edycja kolejności w dół
+            $("div.panel-list i.fa-arrow-down").click(function () {
+                var id = $(this).parent().attr("id");
+                var panel = $("div#" + id + ".bms-panel");
+                var zIndex = $(this).parent().children("span").attr("value");
+                zIndex--;
+                if (zIndex < 0) {
+                    zIndex = 0;
+                }
+                $("div#" + id + ".bms-panel").css({zIndex: zIndex});
+                var data = {
+                    panel_id: id,
+                    topPosition: panel.css("top"),
+                    leftPosition: panel.css("left"),
+                    width: panel.css("width"),
+                    height: panel.css("height"),
+                    zIndex: panel.css("zIndex")
+                };
+                ajaxEditPanel(data);
+            });
+            //kopiowanie
+            $("div.panel-list i.fa-clone").click(function () {
+                var id = $(this).parent().attr("id");
+                var data = {
+                    panel_id: id
+                };
+                ajaxCopyPanel(data);
+            });
+            //ustawienia
+            $("div.panel-list i.fa-cogs").click(function () {
+                var id = $(this).parent().attr("id");
+                if ($("div#" + id + ".bms-panel").hasClass("area-panel")) {
+                    ajaxLoadSettingsPanel(id, "edit", "area");
+                } else if ($("div#" + id + ".bms-panel").hasClass("text-panel")) {
+                    ajaxLoadSettingsPanel(id, "edit", "text");
+                } else if ($("div#" + id + ".bms-panel").hasClass("image-panel")) {
+                    ajaxLoadSettingsPanel(id, "edit", "image");
+                } else if ($("div#" + id + ".bms-panel").hasClass("variable-panel")) {
+                    ajaxLoadSettingsPanel(id, "edit", "variable");
+                } else if ($("div#" + id + ".bms-panel").hasClass("navigation-panel")) {
+                    ajaxLoadSettingsPanel(id, "edit", "navigation");
+                }
+            });
+            //usuwanie
+            $("div.panel-list i.fa-remove").click(function () {
+                var id = $(this).parent().attr("id");
+                if (confirm("Na pewno chcesz to usunąć?")) {
+                    $("div#" + id + ".bms-panel").remove();
+                    var data = {
+                        panel_id: id
+                    };
+                    ajaxDeletePanel(data);
+                }
+            });
+        }
+    }
+
+}
+//dodanie obsługi zdarzeń na każdym panelu na stronie
+
 function rgb2hex(orig) {
     var rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+)/i);
     return (rgb && rgb.length === 4) ? "#" +
@@ -1822,7 +1757,6 @@ function rgb2hex(orig) {
             ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
             ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : orig;
 }
-
 function hex2rgba(hex, opacity) {
     hex = hex.replace('#', '');
     r = parseInt(hex.substring(0, 2), 16);
@@ -1831,7 +1765,6 @@ function hex2rgba(hex, opacity) {
     result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
     return result;
 }
-
 function getColorValues(color) {
     var values = {red: null, green: null, blue: null, alpha: null};
     if (typeof color === 'string') {

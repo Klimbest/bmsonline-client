@@ -221,7 +221,8 @@ div.panel-list i.active{
     display: block;
 }
 
-i.fa-plus-circle:hover{
+i.fa-plus-circle:hover,
+.btn-add-condition:hover{
     cursor: pointer;
 }
 

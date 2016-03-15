@@ -20,7 +20,9 @@ class AppKernel extends Kernel
             new BmsVisualizationBundle\BmsVisualizationBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
             new FOS\UserBundle\FOSUserBundle(),
-            new FOS\JsRoutingBundle\FOSJsRoutingBundle()
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new Ob\HighchartsBundle\ObHighchartsBundle(),
+            new BmsDataAnalyzeBundle\BmsDataAnalyzeBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

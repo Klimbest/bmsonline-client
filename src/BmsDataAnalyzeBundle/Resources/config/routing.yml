@@ -1,0 +1,3 @@
+bms_data_analyze_index:
+    path:     /
+    defaults: { _controller: BmsDataAnalyzeBundle:DataAnalyze:index }

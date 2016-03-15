@@ -99,4 +99,15 @@
             <textarea></textarea>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-2">
+            <span class="label label-success btn-add-condition">Zaawansowane</span>
+            <span class="label label-success">Zdefiniowane zależności</span>
+            {% for term in terms %}
+                <div class="row">
+                    <div class="col-md-12">{{term.id}} -  {{ term.name }}</div>
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>

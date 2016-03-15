@@ -11,7 +11,6 @@ use BmsVisualizationBundle\Entity\Panel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Finder\Finder;
-use Doctrine\ORM\Query;
 
 class AjaxController extends Controller {
 
@@ -107,17 +106,6 @@ class AjaxController extends Controller {
                 $register = $registerCDRepo->find($vpanel->getContent());
                 $registers[$register->getRegister()->getId()] = $register->getFixedValue();
             }
-            $terms = $termRepo->findAll();
-            $t = null;
-//            foreach ($terms as $term) {
-//                $id = $term->getId();
-//                $t[$id]["register_id"] = $term->getRegister()->getId();
-//                $t[$id]["condition"] = $term->getEffectCondition();
-//                $t[$id]["effect_type"] = $term->getEffectType();
-//                $t[$id]["effect_content"] = $term->getEffectContent();
-//                $t[$id]["effect_panel_id"] = $term->getEffectPanel()->getId();
-//            }
-//            $t ? $ret["terms"] = $t : null;
 
             $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id]);
             $ret['registers'] = $registers;
@@ -126,7 +114,7 @@ class AjaxController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
-
+    //Panel adding
     public function addPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $type = $request->get("type");
@@ -162,7 +150,7 @@ class AjaxController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
-
+    //Panel editing
     public function editPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
@@ -439,86 +427,94 @@ class AjaxController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
-
-    public function loadVariableSettingsPanelAction(Request $request) {
+    //Dialog loading
+    public function loadSettingsPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
-            $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-            $registers = $registerRepo->findAll();
-
-            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogVariablePanelSettings.html.twig', ['registers' => $registers]);
-            return new JsonResponse($ret);
-        } else {
-            throw new AccessDeniedHttpException();
-        }
-    }
-
-    public function loadNavigationSettingsPanelAction(Request $request) {
-        if ($request->isXmlHttpRequest()) {
-            $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
-            $pages = $pageRepo->findAll();
-
-            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogNavigationPanelSettings.html.twig', ['pages' => $pages]);
-            return new JsonResponse($ret);
-        } else {
-            throw new AccessDeniedHttpException();
-        }
-    }
-
-    public function loadImageSettingsPanelAction(Request $request) {
-        if ($request->isXmlHttpRequest()) {
-            $finder = new Finder();
-
-            $finder->directories()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
-            $images = array();
-            $sizeOfImage = array();
-            foreach ($finder as $dir) {
-                $finder2 = new Finder();
-                $dirDet = explode("/", $dir->getRelativePathname());
-                switch (sizeof($dirDet)) {
-                    case 1 :
-                        !isset($images[$dirDet[0]]) ? $images[$dirDet[0]] = array() : null;
-                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
-                        foreach ($finder2 as $file) {
-                            $fn = $file->getFilename();
-                            $images[$dirDet[0]][$fn] = $fn;
-                            $sizeOfImage[$fn] = round($file->getSize() / 1024);
-                        }
-                        break;
-                    case 2 :
-                        !isset($images[$dirDet[0]][$dirDet[1]]) ? $images[$dirDet[0]][$dirDet[1]] = array() : null;
-                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
-                        foreach ($finder2 as $file) {
-                            $fn = $file->getFilename();
-                            $images[$dirDet[0]][$dirDet[1]][$fn] = $fn;
-                            $sizeOfImage[$fn] = round($file->getSize() / 1024);
-                        }
-                        break;
-                    case 3 :
-                        !isset($images[$dirDet[0]][$dirDet[1]][$dirDet[2]]) ? $images[$dirDet[0]][$dirDet[1]][$dirDet[2]] = array() : null;
-                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
-                        foreach ($finder2 as $file) {
-                            $fn = $file->getFilename();
-                            $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$fn] = $fn;
-                            $sizeOfImage[$fn] = round($file->getSize() / 1024);
-                        }
-                        break;
-                    case 4 :
-                        !isset($images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]]) ? $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]] = array() : null;
-                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
-                        foreach ($finder2 as $file) {
-                            $fn = $file->getFilename();
-                            $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]][$fn] = $fn;
-                            $sizeOfImage[$fn] = round($file->getSize() / 1024);
-                        }
-                        break;
-                }
+            $panel_id = $request->get("panel_id");
+            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
+            $panel = $panelRepo->find($panel_id);
+            $panelType = $panel->getType();
+            $terms = $termRepo->findAllForPanel($panel_id);
+            switch($panelType){
+                case "area" :
+                    $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogAreaPanelSettings.html.twig');
+                    break;
+                case "text" :
+                    $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogTextPanelSettings.html.twig', ['terms' => $terms]);
+                    break;
+                case "image" :
+                    $ret['template'] = $this->getImageSettings();
+                    break;
+                case "variable" :
+                    $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+                    $registers = $registerRepo->findAll();
+                    $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogVariablePanelSettings.html.twig', ['registers' => $registers]);
+                    break;
+                case "navigation" :
+                    $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
+                    $pages = $pageRepo->findAll();
+                    $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogNavigationPanelSettings.html.twig', ['pages' => $pages]);
+                    break;
             }
-
-            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogImagePanelSettings.html.twig', ['images' => $images, 'sizeOfImage' => $sizeOfImage]);
+            
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
         }
+    }
+    
+    //Other
+    public function getImageSettings() {
+        
+        $finder = new Finder();
+
+        $finder->directories()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
+        $images = array();
+        $sizeOfImage = array();
+        foreach ($finder as $dir) {
+            $finder2 = new Finder();
+            $dirDet = explode("/", $dir->getRelativePathname());
+            switch (sizeof($dirDet)) {
+                case 1 :
+                    !isset($images[$dirDet[0]]) ? $images[$dirDet[0]] = array() : null;
+                    $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                    foreach ($finder2 as $file) {
+                        $fn = $file->getFilename();
+                        $images[$dirDet[0]][$fn] = $fn;
+                        $sizeOfImage[$fn] = round($file->getSize() / 1024);
+                    }
+                    break;
+                case 2 :
+                    !isset($images[$dirDet[0]][$dirDet[1]]) ? $images[$dirDet[0]][$dirDet[1]] = array() : null;
+                    $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                    foreach ($finder2 as $file) {
+                        $fn = $file->getFilename();
+                        $images[$dirDet[0]][$dirDet[1]][$fn] = $fn;
+                        $sizeOfImage[$fn] = round($file->getSize() / 1024);
+                    }
+                    break;
+                case 3 :
+                    !isset($images[$dirDet[0]][$dirDet[1]][$dirDet[2]]) ? $images[$dirDet[0]][$dirDet[1]][$dirDet[2]] = array() : null;
+                    $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                    foreach ($finder2 as $file) {
+                        $fn = $file->getFilename();
+                        $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$fn] = $fn;
+                        $sizeOfImage[$fn] = round($file->getSize() / 1024);
+                    }
+                    break;
+                case 4 :
+                    !isset($images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]]) ? $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]] = array() : null;
+                    $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                    foreach ($finder2 as $file) {
+                        $fn = $file->getFilename();
+                        $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]][$fn] = $fn;
+                        $sizeOfImage[$fn] = round($file->getSize() / 1024);
+                    }
+                    break;
+            }
+        }
+        return $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogImagePanelSettings.html.twig', ['images' => $images, 'sizeOfImage' => $sizeOfImage]);          
     }
 
     public function deleteImageFromServerAction(Request $request) {
@@ -604,6 +600,7 @@ class AjaxController extends Controller {
         }
     }
 
+    //Value setting
     private function setAreaValue(Panel $p, Page $page, $type) {
 
         $em = $this->getDoctrine()->getManager();

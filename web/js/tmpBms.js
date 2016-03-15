@@ -72,7 +72,7 @@ function ajaxRefreshPage() {
         success: function (ret) {
             $(".content-container").children(".fa-spinner").remove();
             $("span.timer").removeClass("label-danger").addClass("label-primary");
-            var x = 5;
+            var x = 7;
             i = setInterval(function () {
                 $("span.timer").empty().append(x--);
             }, 1000);
@@ -80,8 +80,7 @@ function ajaxRefreshPage() {
             now = Date.parse(now);
             var readDelay = now/1000 - ret['time_of_update'];
             if(readDelay >= 300){
-                $("div.variable-panel span").empty();                
-                readDelay /= 1000;
+                $("div.variable-panel span").empty();         
                 if(readDelay/60 < 60){
                     $(".error-message span").empty().append("Od " + Math.round(readDelay/60) + " minut nie ma nowych danych!").show();    
                 }else if(readDelay/60/60 < 24){
@@ -91,6 +90,7 @@ function ajaxRefreshPage() {
                 }
                 
             }else{
+                $(".error-message span").empty();
                 setVariables(ret['registers'], ret["terms"]);
             }
             
@@ -101,12 +101,6 @@ function ajaxRefreshPage() {
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 
     function setVariables(registers, terms) {
-
-        //Tymczasowe
-        var difference = registers[37] - registers[31];
-        $("div#91.bms-panel.area-panel").empty().append("<span>" + Math.round(difference * 100) / 100 + "</span>");
-        //Tymczasowe
-
         if (terms) {
             $.each(terms, function (key, term) {
                 var eContent = term.effect_content;
