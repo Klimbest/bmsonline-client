@@ -115,6 +115,14 @@ class Register
      * @ORM\OneToOne(targetEntity="RegisterCurrentData", mappedBy="register")
      */ 
     private $registerCurrentData;
+    
+    /**
+     *
+     * @var type \BmsConfigurationBundle\Entity\RegisterArchiveData
+     * 
+     * @ORM\OneToMany(targetEntity="RegisterArchiveData", mappedBy="register")
+     */ 
+    private $registerArchiveData;
 
     /**
      * Set registerAddress
@@ -402,5 +410,70 @@ class Register
     public function getFunction()
     {
         return $this->function;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->registerArchiveData = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set register
+     *
+     * @param string $register
+     *
+     * @return Register
+     */
+    public function setRegister($register)
+    {
+        $this->register = $register;
+
+        return $this;
+    }
+
+    /**
+     * Get register
+     *
+     * @return string
+     */
+    public function getRegister()
+    {
+        return $this->register;
+    }
+
+    /**
+     * Add registerArchiveDatum
+     *
+     * @param \BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum
+     *
+     * @return Register
+     */
+    public function addRegisterArchiveDatum(\BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum)
+    {
+        $this->registerArchiveData[] = $registerArchiveDatum;
+
+        return $this;
+    }
+
+    /**
+     * Remove registerArchiveDatum
+     *
+     * @param \BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum
+     */
+    public function removeRegisterArchiveDatum(\BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum)
+    {
+        $this->registerArchiveData->removeElement($registerArchiveDatum);
+    }
+
+    /**
+     * Get registerArchiveData
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRegisterArchiveData()
+    {
+        return $this->registerArchiveData;
     }
 }

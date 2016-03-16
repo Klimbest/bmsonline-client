@@ -3,6 +3,9 @@
 namespace BmsDataAnalyzeBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 
 class DataAnalyzeController extends Controller {
@@ -10,24 +13,24 @@ class DataAnalyzeController extends Controller {
     public function indexAction() {
         $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
         $registers = $registerRepo->findAll();
+        $detailChart = new Highchart();
+        $masterChart = new Highchart();
         
-        return $this->render('BmsDataAnalyzeBundle::index.html.twig', ['registers' => $registers, 
-                                                                       'detailChart' => $this->generateDetailChart(), 
-                                                                       'masterChart' => $this->generateMasterChart()]);
+        return $this->render('BmsDataAnalyzeBundle::index.html.twig', ['registers' => $registers,
+                    'detailChart' => $this->generateDetailChart($detailChart),
+                    'masterChart' => $this->generateMasterChart($masterChart)]);
     }
 
-    public function generateDetailChart(){
+    public function generateDetailChart($detailChart) {
         $detailChart = new Highchart();
         $detailChart->global->useUTC(false);
         $detailChart->chart->renderTo('detailContainer')
-                           ->reflow(true)
-                           ->alignTicks(false);
+                ->reflow(true);
         $detailChart->credits->enabled(false);
         $detailChart->title->text('Pomiar danych, wykres odświeża się automatycznie');
         $detailChart->xAxis->type('datetime');
         $yAxis = array(
             array(
-                'floor' => 0,
                 'lineWidth' => 1,
                 'tickWidth' => 1,
                 'title' => array(
@@ -38,11 +41,10 @@ class DataAnalyzeController extends Controller {
                     'y' => -10
                 ),
                 'opposite' => true,
-                'min' => 0,
-                'max' => 100
+//                'min' => 0,
+//                'max' => 100
             ),
             array(
-                'floor' => 0,
                 'lineWidth' => 1,
                 'tickWidth' => 1,
                 'title' => array(
@@ -52,11 +54,10 @@ class DataAnalyzeController extends Controller {
                     'align' => 'high',
                     'y' => -10
                 ),
-                'min' => 0,
-                'max' => 40
+//                'min' => 0,
+//                'max' => 40
             ),
             array(
-                'floor' => 0,
                 'lineWidth' => 1,
                 'tickWidth' => 1,
                 'title' => array(
@@ -70,49 +71,49 @@ class DataAnalyzeController extends Controller {
         );
         $detailChart->yAxis($yAxis);
         $detailChart->tooltip->pointFormat('<span style="color:{point.color}">O</span> {series.name}: <b>{point.y}</b><br/>')
-                             ->crosshairs(true)
-                             ->shared(true)
-                             ->backgroundColor('#FFF')
-                             ->borderColor('#000')
-                             ->style(['width' => '250px']);
+                ->crosshairs(true)
+                ->shared(true)
+                ->backgroundColor('#FFF')
+                ->borderColor('#000')
+                ->style(['width' => '250px']);
         $detailChart->legend->align('right')
-                            ->y(25)
-                            ->x(-50)
-                            ->width(150)
-                            ->verticalAlign('top')
-                            ->useHTML(true)
-                            ->layout('vertical')
-                            ->padding(3)
-                            ->itemMarginTop(3)
-                            ->itemMarginBottom(0)
-                            ->itemHoverStyle(['color' => '#5BC0DE']);
+                ->y(25)
+                ->x(-50)
+                ->width(150)
+                ->verticalAlign('top')
+                ->useHTML(true)
+                ->layout('vertical')
+                ->padding(3)
+                ->itemMarginTop(3)
+                ->itemMarginBottom(0)
+                ->itemHoverStyle(['color' => '#5BC0DE']);
         $detailChart->plotOptions->series(array(
-                                            'marker' => array(
-                                                            'fillColor' => '#FFF',                                                
-                                                            'lineWidth' => 1,
-                                                            'lineColor' => null
-                                                        )
-                                        ));
-        $detailChart->series($this->addSeries());
+            'marker' => array(
+                'fillColor' => '#FFF',
+                'lineWidth' => 1,
+                'lineColor' => null
+            )
+        ));
+        $detailChart->series();
         $detailChart->exporting->enabled(true);
         return $detailChart;
     }
-    
-    public function generateMasterChart(){
-        $masterChart = new Highchart();
+
+    public function generateMasterChart($masterChart) {
+
         $masterChart->global->useUTC(false);
         $masterChart->chart->renderTo('masterContainer')
-                           ->reflow(true)
-                           ->borderWidth(0)
-                           ->backgroundColor(null)
-                           ->marginLeft(65)
-                           ->marginRight(50)
-                           ->zoomType('x')
-                           ->events(null);
+                ->reflow(true)
+                ->borderWidth(0)
+                ->backgroundColor(null)
+                ->marginLeft(65)
+                ->marginRight(50)
+                ->zoomType('x')
+                ->events(null);
         $masterChart->title->text(null);
         $masterChart->xAxis->type('datetime')
-                           ->showLastTickLabel(true)
-                           ->title(array('text' => null));
+                ->showLastTickLabel(true)
+                ->title(array('text' => null));
         $yAxis = array(
             array(
                 'floor' => 0,
@@ -126,7 +127,7 @@ class DataAnalyzeController extends Controller {
                 'opposite' => true,
                 'showFirstLabel' => false
             ),
-           array(
+            array(
                 'floor' => 0,
                 'gridlineWidth' => 0,
                 'labels' => array(
@@ -155,66 +156,58 @@ class DataAnalyzeController extends Controller {
         $masterChart->tooltip->pointFormat('{series.name}: <b>{point.y}</b><br/>');
         $masterChart->legend->enabled(false);
         $masterChart->plotOptions->series(array(
-                                            'marker' => array(
-                                                'enabled' => false
-                                            ),
-                                            'lineWidth' => 1,
-                                            'fillColor' => array(
-                                                'linearGradient' => [0, 0, 0, 70],
-                                                'stops' => [
-                                                    [1, '#FFF']
-                                                ]
-                                            ),
-                                            'shadow' => false,
-                                            'states' => array(
-                                                'hover' => array(
-                                                    'lineWidth' => 1
-                                                )
-                                            ),
-                                            'enableMouseTracking' => false
-                                        ));
+            'marker' => array(
+                'enabled' => false
+            ),
+            'lineWidth' => 1,
+            'fillColor' => array(
+                'linearGradient' => [0, 0, 0, 70],
+                'stops' => [
+                    [1, '#FFF']
+                ]
+            ),
+            'shadow' => false,
+            'states' => array(
+                'hover' => array(
+                    'lineWidth' => 1
+                )
+            ),
+            'enableMouseTracking' => false
+        ));
         $masterChart->credits->enabled(true);
-        $masterChart->series($this->addSeries());
+        $masterChart->series();
         $masterChart->exporting->enabled(false);
         return $masterChart;
     }
-    
-    public function addSeries(){
-        $registerArchiveDataRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:RegisterArchiveData');
-        $registerArchiveData = $registerArchiveDataRepo->getArchiveData('\'2016-03-15 08:26\'', '\'000A\'');
-        $arrayToChart1= array();
-        foreach($registerArchiveData as $rad){
-            $time = $rad["timeOfInsert"]->getTimestamp() * 1000;
-            array_push($arrayToChart1, [$time, $rad["fixedValue"]] );
-        }
-        $registerArchiveData = $registerArchiveDataRepo->getArchiveData('\'2016-03-15 08:26\'', '\'000C\'');
-        $arrayToChart2= array();
-        foreach($registerArchiveData as $rad){
-            $time = $rad["timeOfInsert"]->getTimestamp() * 1000;
-            array_push($arrayToChart2, [$time, $rad["fixedValue"]] );
-        }
-        $series = array(
-            array(
-                'id' => '000A',
-                'name' => 'Temperatura 000A',
-                'data' => $arrayToChart1,
+
+    public function addSeriesAction(Request $request) {
+        if ($request->isXmlHttpRequest()) {
+            $from = $request->get('from');
+            $to = $request->get('to');
+            $registerId = $request->get('registerId');
+
+            $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+            $register = $registerRepo->find($registerId);
+
+            $registerArchiveDataRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:RegisterArchiveData');
+            $registerArchiveData = $registerArchiveDataRepo->getArchiveData($from, $to, $registerId);
+            $arrayToChart = array();
+            foreach ($registerArchiveData as $rad) {
+                $time = $rad["timeOfInsert"]->getTimestamp() * 1000;
+                array_push($arrayToChart, [$time, $rad["fixedValue"]]);
+            }
+            $series = array(
+                'id' => $register->getId(),
+                'name' => $register->getDescription(),
+                'data' => $arrayToChart,
                 'yAxis' => 1,
-                'tooltip' => array(
-                    'valueSuffix' => '°C'
-                ),
-                'type' => 'spline'
-            ),
-            array(
-                'id' => '000C',
-                'name' => 'Temperatura 000C',
-                'data' => $arrayToChart2,
-                'yAxis' => 1,
-                'tooltip' => array(
-                    'valueSuffix' => '°C'
-                ),
-                'type' => 'spline'
-            )
-        );
-        return $series;
+                'suffix' => '°C'
+                
+            );
+
+            return new JsonResponse($series);
+        } else {
+            throw new AccessDeniedHttpException();
+        }
     }
 }

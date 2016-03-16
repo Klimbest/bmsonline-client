@@ -13,11 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
 class RegisterArchiveData
 {
     /**
-     * @var string
+     * @var \BmsConfigurationBundle\Entity\Register
      *
-     * @ORM\Column(name="register_address", type="string", length=4, nullable=false)
+     * @ORM\ManyToOne(targetEntity="BmsConfigurationBundle\Entity\Register", inversedBy="registerArchiveData")
+     * @ORM\JoinColumn(name="register_id", referencedColumnName="id")
+     * 
      */
-    private $registerAddress;
+    private $register;
 
     /**
      * @var string
@@ -47,7 +49,7 @@ class RegisterArchiveData
      */
     private $timeOfInsert;
 
-    /**
+   /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -57,29 +59,6 @@ class RegisterArchiveData
     private $id;
 
 
-
-    /**
-     * Set registerAddress
-     *
-     * @param string $registerAddress
-     * @return RegisterArchiveData
-     */
-    public function setRegisterAddress($registerAddress)
-    {
-        $this->registerAddress = $registerAddress;
-
-        return $this;
-    }
-
-    /**
-     * Get registerAddress
-     *
-     * @return string 
-     */
-    public function getRegisterAddress()
-    {
-        return $this->registerAddress;
-    }
 
     /**
      * Set realValueHex
@@ -181,5 +160,29 @@ class RegisterArchiveData
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set register
+     *
+     * @param \BmsConfigurationBundle\Entity\Register $register
+     *
+     * @return RegisterArchiveData
+     */
+    public function setRegister(\BmsConfigurationBundle\Entity\Register $register = null)
+    {
+        $this->register = $register;
+
+        return $this;
+    }
+
+    /**
+     * Get register
+     *
+     * @return \BmsConfigurationBundle\Entity\Register
+     */
+    public function getRegister()
+    {
+        return $this->register;
     }
 }

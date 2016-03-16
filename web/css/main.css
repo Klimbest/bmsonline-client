@@ -16,7 +16,8 @@ and open the template in the editor.
 .fa-yellow{color: #FFFF00;}
 .fa-orange{color: #f26522;}
 .hidden{display: none;}
-.fa-spinner{
+.fa-spinner,
+div#loading{
     color: #337AB7;
     position: absolute;
     top: 35%;

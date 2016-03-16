@@ -12,13 +12,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class RegisterArchiveDataRepository extends EntityRepository {
 
-    public function getArchiveData($dateFrom, $registerAddres) {
+    public function getArchiveData($from, $to, $registerId) {
         return $this->getEntityManager()
                         ->createQuery(
                                 'SELECT rad.timeOfInsert, rad.fixedValue '
                                 . 'FROM BmsConfigurationBundle:RegisterArchiveData AS rad '
-                                . 'WHERE rad.registerAddress = ' . $registerAddres
-                                . ' AND rad.timeOfInsert > ' . $dateFrom
+                                . 'WHERE rad.register = ' . $registerId
+                                . ' AND rad.timeOfInsert >= ' . $from
+                                . ' AND rad.timeOfInsert <= ' . $to
                         )
                         ->getResult();
     }
