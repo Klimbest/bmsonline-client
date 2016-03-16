@@ -1,17 +1,37 @@
+var registersToChart = [4, 5, 6];
 $(document).ready(function () {
-    var registerId = 8;
+
     var mchart = $('#masterContainer').highcharts();
     var dchart = $('#detailContainer').highcharts();
-    setDatepicker();
+    setDialogButtons();
     var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
     var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
-    loadData(registerId, dtpStart, dtpEnd);
+
+    $.each(registersToChart, function (key, value) {
+        loadData(value, dtpStart, dtpEnd);
+    });
+
+    mchart.xAxis[0].addPlotBand({
+        id: 'mask-before',
+        from: mchart.xAxis[0].min,
+        to: Math.floor(Date.now()) - (3600000 * 3),
+        color: 'rgba(0, 0, 0, 0.2)'
+    });
+
+    mchart.xAxis[0].addPlotBand({
+        id: 'mask-after',
+        from: mchart.xAxis[0].dataMax,
+        to: mchart.xAxis[0].max,
+        color: 'rgba(0, 0, 0, 0.2)'
+    });
 });
 
 //ustawienie zakresu danych
-function setDatepicker() {
+function setDialogButtons() {
     var now = new Date();
     var yesterday = new Date();
+    var mchart = $('#masterContainer').highcharts();
+    var dchart = $('#detailContainer').highcharts();
     yesterday.setHours(now.getHours() - 3);
     $("input#dtpStart").datetimepicker({
         lang: 'pl',
@@ -73,8 +93,26 @@ function setDatepicker() {
         $("input#dtpStart").datetimepicker({value: ago});
         $("input#dtpEnd").datetimepicker({value: now});
     });
+    //zmiana zakresu
     $("#changeScope").click(function () {
-        
+        while (dchart.series.length > 0)
+            dchart.series[0].remove(true);
+        while (mchart.series.length > 0)
+            mchart.series[0].remove(true);
+
+        var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
+        var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
+        $.each(registersToChart, function (key, value) {
+            loadData(value, dtpStart, dtpEnd);
+        });
+
+    });
+    //przycisk dodania serii
+    $("#addSeries").click(function () {
+        var regId = $("select#avRegs").val();
+        var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
+        var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
+        loadData(parseInt(regId), dtpStart, dtpEnd);
     });
 }
 //załadowanie danych
@@ -106,24 +144,11 @@ function loadData(registerId, dtpStart, dtpEnd) {
             setSeries(dchart, mchart, series);
         }
     });
-    
 
     function setSeries(dchart, mchart, series) {
-        dchart.addSeries(series, true);
-        mchart.addSeries(series, true);
-
-        mchart.xAxis[0].addPlotBand({
-            id: 'mask-before',
-            from: mchart.xAxis[0].min,
-            to: Math.floor(Date.now()) - (3600000 * 3),
-            color: 'rgba(0, 0, 0, 0.2)'
-        });
-
-        mchart.xAxis[0].addPlotBand({
-            id: 'mask-after',
-            from: mchart.xAxis[0].dataMax,
-            to: mchart.xAxis[0].max,
-            color: 'rgba(0, 0, 0, 0.2)'
-        });
+        dchart.addSeries(series, false);
+        mchart.addSeries(series, false);
+        dchart.redraw();
+        mchart.redraw();
     }
 }
