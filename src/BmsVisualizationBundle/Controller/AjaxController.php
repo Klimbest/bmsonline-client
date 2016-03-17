@@ -161,13 +161,11 @@ class AjaxController extends Controller {
             $width = $request->get("width");
             $topPosition = $request->get("topPosition");
             $leftPosition = $request->get("leftPosition");
-            $zIndex = $request->get("zIndex");
 
             $panel->setHeight($height)
                     ->setWidth($width)
                     ->setLeftPosition($leftPosition)
-                    ->setTopPosition($topPosition)
-                    ->setZIndex($zIndex);
+                    ->setTopPosition($topPosition);
 
             $em->flush();
 

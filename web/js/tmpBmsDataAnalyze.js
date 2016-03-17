@@ -8,7 +8,7 @@ $(document).ready(function () {
     var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
 
     $.each(registersToChart, function (key, value) {
-        loadData(value, dtpStart, dtpEnd, null);
+        loadData(value, dtpStart, dtpEnd, 1);
     });
 
     mchart.xAxis[0].addPlotBand({
