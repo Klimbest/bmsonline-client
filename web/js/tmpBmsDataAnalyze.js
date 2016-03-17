@@ -1,6 +1,5 @@
 var registersToChart = [[4, 1], [5, 1], [6, 1]];
 $(document).ready(function () {
-
     var mchart = $('#masterContainer').highcharts();
     var dchart = $('#detailContainer').highcharts();
     setDialogButtons();
@@ -10,6 +9,8 @@ $(document).ready(function () {
     $.each(registersToChart, function (key, value) {
         loadData(value[0], dtpStart, dtpEnd, value[1]);
     });
+
+
 
     mchart.xAxis[0].addPlotBand({
         id: 'mask-before',
@@ -105,7 +106,6 @@ function setDialogButtons() {
         $.each(registersToChart, function (key, value) {
             loadData(value[0], dtpStart, dtpEnd, value[1]);
         });
-
     });
     //przycisk dodania serii
     $("#addSeries").click(function () {
@@ -113,7 +113,6 @@ function setDialogButtons() {
         var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
         var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
         var yAxis = $('input[name=axType]:checked').val();
-        console.log(yAxis);
         registersToChart.push(parseInt(regId));
         loadData(parseInt(regId), dtpStart, dtpEnd, parseInt(yAxis));
     });
@@ -126,6 +125,7 @@ function loadData(registerId, dtpStart, dtpEnd, yAxis) {
         to: dtpEnd,
         yAxis: yAxis
     };
+    console.log(registerId);
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i><div id='loading' class='row text-center'><div class='col-md-12'></br></br></br>Ładowanie...</div></div>").show();
     return $.ajax({
         type: "POST",
@@ -140,12 +140,14 @@ function loadData(registerId, dtpStart, dtpEnd, yAxis) {
             var series = {
                 id: ret['id'],
                 data: ret['data'],
-                name: ret['name'],
+                name: ret['name'] + " <i id='" + ret['id'] + "' class='fa fa-remove fa-lg' style='display: none; color: #B00'></i>",
                 yAxis: yAxis,
                 type: "spline",
                 lineWidth: 1
             };
+            console.log(ret['id']);
             setSeries(dchart, mchart, series);
+            setClickable(dchart, mchart);
         }
     });
 
@@ -155,4 +157,21 @@ function loadData(registerId, dtpStart, dtpEnd, yAxis) {
         dchart.redraw();
         mchart.redraw();
     }
+
+    function setClickable() {
+        $(".highcharts-legend-item").hover(function () {
+            $(this).find("i").click(function () {
+                var mchart = $('#masterContainer').highcharts();
+                var dchart = $('#detailContainer').highcharts();
+                var id = parseInt($(this).attr("id"));
+                mchart.get(id).remove();
+                dchart.get(id).remove();
+            }).show();
+
+        }, function () {
+            $(this).find("i").unbind("click").hide();
+        });
+    }
 }
+
+
