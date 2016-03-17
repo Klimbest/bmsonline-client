@@ -39,8 +39,7 @@ class RegisterType extends AbstractType{
                     ))
                 ->add('register_size', IntegerType::class, array(
                     'attr' => array('disabled' => 'disabled'),
-                    'label' => 'Rozmiar rejestru(8, 16, 32)',
-                    'data' => 32
+                    'label' => 'Rozmiar rejestru(8, 16, 32)'
                     ))
                 ->add('name', TextType::class, array(
                     'attr' => array('disabled' => 'disabled', 'maxlength' => 16),
