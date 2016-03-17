@@ -41,8 +41,8 @@ class DataAnalyzeController extends Controller {
                     'y' => -10
                 ),
                 'opposite' => true,
-//                'min' => 0,
-//                'max' => 100
+                'min' => 0,
+                'max' => 100
             ),
             array(
                 'lineWidth' => 1,
@@ -54,8 +54,8 @@ class DataAnalyzeController extends Controller {
                     'align' => 'high',
                     'y' => -10
                 ),
-//                'min' => 0,
-//                'max' => 40
+                'min' => -5,
+                'max' => 40
             ),
             array(
                 'lineWidth' => 1,

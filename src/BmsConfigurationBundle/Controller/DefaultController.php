@@ -169,6 +169,7 @@ class DefaultController extends Controller {
             $register_address = $form['register_address']->getData();
             $function = $form ['function']->getData();
             $scan_queue = $form['scan_queue']->getData();
+            $register_size = $form['register_size']->getData();
             $display_suffix = $form['display_suffix']->getData();
             $modificator_read = $form['modificator_read']->getData();
             $modificator_write = $form['modificator_write']->getData();
@@ -180,6 +181,7 @@ class DefaultController extends Controller {
                     ->setDescription($description)
                     ->setRegisterAddress($register_address)
                     ->setScanQueue($scan_queue)
+                    ->setRegisterSize($register_size)
                     ->setDisplaySuffix($display_suffix)
                     ->setModificatorRead($modificator_read)
                     ->setModificatorWrite($modificator_write)
@@ -287,6 +289,7 @@ class DefaultController extends Controller {
             $registerAddress = $form['register_address']->getData();
             $function = $form['function']->getData();
             $scanQueue = $form['scan_queue']->getData();
+            $register_size = $form['register_size']->getData();
             $name = $form['name']->getData();
             $description = $form['description']->getData();
             $displaySuffix = $form['display_suffix']->getData();
@@ -299,6 +302,7 @@ class DefaultController extends Controller {
             $register->setRegisterAddress($registerAddress)
                     ->setFunction($function)
                     ->setScanQueue($scanQueue)
+                    ->setRegisterSize($register_size)
                     ->setName($name)
                     ->setDescription($description)
                     ->setDisplaySuffix($displaySuffix)
@@ -307,6 +311,7 @@ class DefaultController extends Controller {
                     ->setArchive($archive)
                     ->setActive($active)
                     ->setDevice($device);
+            
             $em->persist($register);
             $em->flush();
             $registerCD->setRegister($register);

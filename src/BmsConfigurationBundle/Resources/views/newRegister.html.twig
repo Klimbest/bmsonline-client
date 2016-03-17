@@ -60,8 +60,11 @@
         <div class="row enabled">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         {{form_label(form.modificator_read)}}
+                    </div>
+                    <div class="col-md-6">
+                        {{form_label(form.register_size)}}
                     </div>
                 </div>
                 <div class="form-group">
@@ -77,6 +80,9 @@
                         </div>
                         <div class="col-md-2">
                             {{form_widget(form.modificator_read)}}
+                        </div>
+                        <div class="col-md-3">
+                            {{form_widget(form.register_size)}}
                         </div>
                     </div>
                 </div>

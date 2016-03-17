@@ -36,6 +36,13 @@ class Register
     /**
      * @var integer
      *
+     * @ORM\Column(name="register_size", type="integer", nullable=false)
+     */
+    private $registerSize;
+    
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="scan_queue", type="integer", nullable=false)
      */
     private $scanQueue;
@@ -475,5 +482,29 @@ class Register
     public function getRegisterArchiveData()
     {
         return $this->registerArchiveData;
+    }
+
+    /**
+     * Set registerSize
+     *
+     * @param integer $registerSize
+     *
+     * @return Register
+     */
+    public function setRegisterSize($registerSize)
+    {
+        $this->registerSize = $registerSize;
+
+        return $this;
+    }
+
+    /**
+     * Get registerSize
+     *
+     * @return integer
+     */
+    public function getRegisterSize()
+    {
+        return $this->registerSize;
     }
 }

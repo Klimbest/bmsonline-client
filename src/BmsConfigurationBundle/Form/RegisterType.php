@@ -37,6 +37,11 @@ class RegisterType extends AbstractType{
                     'label' => 'Kolejka odczytu danych(od 1 do 5)',
                     'data' => 1
                     ))
+                ->add('register_size', IntegerType::class, array(
+                    'attr' => array('disabled' => 'disabled'),
+                    'label' => 'Rozmiar rejestru(8, 16, 32)',
+                    'data' => 32
+                    ))
                 ->add('name', TextType::class, array(
                     'attr' => array('disabled' => 'disabled', 'maxlength' => 16),
                     'label' => 'Nazwa skrócona (max 16 znaków)'

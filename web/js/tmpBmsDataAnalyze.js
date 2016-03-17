@@ -8,7 +8,7 @@ $(document).ready(function () {
     var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
 
     $.each(registersToChart, function (key, value) {
-        loadData(value, dtpStart, dtpEnd);
+        loadData(value, dtpStart, dtpEnd, null);
     });
 
     mchart.xAxis[0].addPlotBand({
@@ -112,11 +112,14 @@ function setDialogButtons() {
         var regId = $("select#avRegs").val();
         var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
         var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
-        loadData(parseInt(regId), dtpStart, dtpEnd);
+        var yAxis = $('input[name=axType]:checked').val();
+        console.log(yAxis);
+        registersToChart.push(parseInt(regId));
+        loadData(parseInt(regId), dtpStart, dtpEnd, yAxis);
     });
 }
 //załadowanie danych
-function loadData(registerId, dtpStart, dtpEnd) {
+function loadData(registerId, dtpStart, dtpEnd, yAxis) {
     var data = {
         registerId: registerId,
         from: dtpStart,
@@ -137,7 +140,7 @@ function loadData(registerId, dtpStart, dtpEnd) {
                 id: ret['id'],
                 data: ret['data'],
                 name: ret['name'],
-                yAxis: ret['yAxis'],
+                yAxis: yAxis,
                 type: "spline",
                 lineWidth: 1
             };
