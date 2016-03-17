@@ -22,7 +22,6 @@ class DataAnalyzeController extends Controller {
     }
 
     public function generateDetailChart($detailChart) {
-        $detailChart = new Highchart();
         $detailChart->global->useUTC(false);
         $detailChart->chart->renderTo('detailContainer')
                 ->reflow(true);
@@ -41,8 +40,8 @@ class DataAnalyzeController extends Controller {
                     'y' => -10
                 ),
                 'opposite' => true,
-                'min' => 0,
-                'max' => 100
+//                'min' => 0,
+//                'max' => 100
             ),
             array(
                 'lineWidth' => 1,
@@ -54,8 +53,8 @@ class DataAnalyzeController extends Controller {
                     'align' => 'high',
                     'y' => -10
                 ),
-                'min' => -5,
-                'max' => 40
+//                'min' => -5,
+//                'max' => 40
             ),
             array(
                 'lineWidth' => 1,
@@ -70,12 +69,12 @@ class DataAnalyzeController extends Controller {
             )
         );
         $detailChart->yAxis($yAxis);
-        $detailChart->tooltip->pointFormat('<span style="color:{point.color}">O</span> {series.name}: <b>{point.y}</b><br/>')
-                ->crosshairs(true)
-                ->shared(true)
-                ->backgroundColor('#FFF')
-                ->borderColor('#000')
-                ->style(['width' => '250px']);
+        //$detailChart->tooltip->pointFormat('<span style="color:{point.color}">O</span> {series.name}: <b>{point.y}</b><br/>')
+        $detailChart->tooltip->crosshairs([true, true])->pointFormat(null);
+//                ->shared(true)
+//                ->backgroundColor('#FFF')
+//                ->borderColor('#000')
+//                ->style(['width' => '250px']);
         $detailChart->legend->align('right')
                 ->y(25)
                 ->x(-50)
@@ -87,13 +86,13 @@ class DataAnalyzeController extends Controller {
                 ->itemMarginTop(3)
                 ->itemMarginBottom(0)
                 ->itemHoverStyle(['color' => '#5BC0DE']);
-        $detailChart->plotOptions->series(array(
-            'marker' => array(
-                'fillColor' => '#FFF',
-                'lineWidth' => 1,
-                'lineColor' => null
-            )
-        ));
+//        $detailChart->plotOptions->series(array(
+//            'marker' => array(
+//                'fillColor' => '#FFF',
+//                'lineWidth' => 1,
+//                'lineColor' => null
+//            )
+//        ));
         $detailChart->series();
         $detailChart->exporting->enabled(true);
         return $detailChart;
@@ -185,6 +184,7 @@ class DataAnalyzeController extends Controller {
             $from = $request->get('from');
             $to = $request->get('to');
             $registerId = $request->get('registerId');
+            $yAxis = $request->get('yAxis');
 
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $register = $registerRepo->find($registerId);
@@ -194,13 +194,17 @@ class DataAnalyzeController extends Controller {
             $arrayToChart = array();
             foreach ($registerArchiveData as $rad) {
                 $time = $rad["timeOfInsert"]->getTimestamp() * 1000;
-                array_push($arrayToChart, [$time, $rad["fixedValue"]]);
+                if(isset($rad["fixedValue"])){
+                    array_push($arrayToChart, [$time, $rad["fixedValue"]]);
+                }else{
+                    array_push($arrayToChart, [$time, null]);
+                }
             }
             $series = array(
                 'id' => $register->getId(),
                 'name' => $register->getDescription(),
                 'data' => $arrayToChart,
-                'yAxis' => 1,
+                'yAxis' => $yAxis,
                 'suffix' => '°C'
                 
             );

@@ -1,4 +1,4 @@
-var registersToChart = [4, 5, 6];
+var registersToChart = [[4, 1], [5, 1], [6, 1]];
 $(document).ready(function () {
 
     var mchart = $('#masterContainer').highcharts();
@@ -8,7 +8,7 @@ $(document).ready(function () {
     var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
 
     $.each(registersToChart, function (key, value) {
-        loadData(value, dtpStart, dtpEnd, 1);
+        loadData(value[0], dtpStart, dtpEnd, value[1]);
     });
 
     mchart.xAxis[0].addPlotBand({
@@ -103,7 +103,7 @@ function setDialogButtons() {
         var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
         var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
         $.each(registersToChart, function (key, value) {
-            loadData(value, dtpStart, dtpEnd);
+            loadData(value[0], dtpStart, dtpEnd, value[1]);
         });
 
     });
@@ -115,7 +115,7 @@ function setDialogButtons() {
         var yAxis = $('input[name=axType]:checked').val();
         console.log(yAxis);
         registersToChart.push(parseInt(regId));
-        loadData(parseInt(regId), dtpStart, dtpEnd, yAxis);
+        loadData(parseInt(regId), dtpStart, dtpEnd, parseInt(yAxis));
     });
 }
 //załadowanie danych
@@ -123,7 +123,8 @@ function loadData(registerId, dtpStart, dtpEnd, yAxis) {
     var data = {
         registerId: registerId,
         from: dtpStart,
-        to: dtpEnd
+        to: dtpEnd,
+        yAxis: yAxis
     };
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i><div id='loading' class='row text-center'><div class='col-md-12'></br></br></br>Ładowanie...</div></div>").show();
     return $.ajax({
