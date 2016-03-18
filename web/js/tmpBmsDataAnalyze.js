@@ -32,15 +32,17 @@ function setDialogButtons() {
     var mchart = $('#masterContainer').highcharts();
     var dchart = $('#detailContainer').highcharts();
     yesterday.setHours(now.getHours() - 3);
-    $.datetimepicker.setLocale('pl');
+    //$.datetimepicker.setLocale('pl');
     $("input#dtpStart").datetimepicker({
+        lang: 'pl',
         format: 'Y-m-d H:i',
-        mask:true,
+        mask: true,
         value: yesterday
     });
     $("input#dtpEnd").datetimepicker({
-        format: 'Y-m-d H:i',   
-        mask:true,     
+        lang: 'pl',
+        format: 'Y-m-d H:i',
+        mask: true,
         value: now
     });
     //obsługa przycisku ustawienia zakresu na ostatnią godzinę 
