@@ -1,4 +1,4 @@
-var registersToChart = [[4, 1]];
+registersToChart = [[4, 1]];
 $(document).ready(function () {
     var mchart = $('#masterContainer').highcharts();
     var dchart = $('#detailContainer').highcharts();
@@ -32,16 +32,15 @@ function setDialogButtons() {
     var mchart = $('#masterContainer').highcharts();
     var dchart = $('#detailContainer').highcharts();
     yesterday.setHours(now.getHours() - 3);
+    $.datetimepicker.setLocale('pl');
     $("input#dtpStart").datetimepicker({
-        lang: 'pl',
         format: 'Y-m-d H:i',
-        maxDate: 0,
+        mask:true,
         value: yesterday
     });
     $("input#dtpEnd").datetimepicker({
-        lang: 'pl',
-        format: 'Y-m-d H:i',
-        maxDate: 0,
+        format: 'Y-m-d H:i',   
+        mask:true,     
         value: now
     });
     //obsługa przycisku ustawienia zakresu na ostatnią godzinę 
