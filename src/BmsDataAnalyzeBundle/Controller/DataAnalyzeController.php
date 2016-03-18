@@ -30,6 +30,7 @@ class DataAnalyzeController extends Controller {
         $detailChart->xAxis->type('datetime');
         $yAxis = array(
             array(
+                'ceiling' => 100,
                 'lineWidth' => 1,
                 'tickWidth' => 1,
                 'title' => array(
@@ -39,13 +40,16 @@ class DataAnalyzeController extends Controller {
                     'align' => 'high',
                     'y' => -10
                 ),
+                'showEmpty' => false,
                 'opposite' => true,
 //                'min' => 0,
 //                'max' => 100
             ),
             array(
-                'lineWidth' => 1,
-                'tickWidth' => 1,
+//                'lineWidth' => 1,
+//                'tickWidth' => 0.2,
+                'tickInterval' => 0.5,
+                'ceiling' => 40,
                 'title' => array(
                     'offset' => 0,
                     'text' => '°C',
@@ -53,6 +57,12 @@ class DataAnalyzeController extends Controller {
                     'align' => 'high',
                     'y' => -10
                 ),
+                'label' => array(
+                    'style' => array(
+                        "fontSize" => "70%"
+                    )
+                ),
+                'showEmpty' => false
 //                'min' => -5,
 //                'max' => 40
             ),
@@ -65,12 +75,20 @@ class DataAnalyzeController extends Controller {
                     'rotation' => 0,
                     'align' => 'high',
                     'y' => -10
-                )
+                ),
+                'showEmpty' => false
             )
         );
         $detailChart->yAxis($yAxis);
         //$detailChart->tooltip->pointFormat('<span style="color:{point.color}">O</span> {series.name}: <b>{point.y}</b><br/>')
-        $detailChart->tooltip->crosshairs([true, true])->pointFormat(null);
+        $detailChart->tooltip->crosshairs([true, true])
+                             ->pointFormat("")
+                             ->formatter("")
+                             ->backgroundColor("rgba(255,255,255,0)")
+                             ->borderColor("rgba(255,255,255,0)")
+                             ->borderWidth(0)
+                             ->shadow(false)
+                             ->xDateFormat(" ");
 //                ->shared(true)
 //                ->backgroundColor('#FFF')
 //                ->borderColor('#000')
@@ -86,13 +104,6 @@ class DataAnalyzeController extends Controller {
                 ->itemMarginTop(3)
                 ->itemMarginBottom(0)
                 ->itemHoverStyle(['color' => '#5BC0DE']);
-//        $detailChart->plotOptions->series(array(
-//            'marker' => array(
-//                'fillColor' => '#FFF',
-//                'lineWidth' => 1,
-//                'lineColor' => null
-//            )
-//        ));
         $detailChart->series();
         $detailChart->exporting->enabled(true);
         return $detailChart;
@@ -194,11 +205,8 @@ class DataAnalyzeController extends Controller {
             $arrayToChart = array();
             foreach ($registerArchiveData as $rad) {
                 $time = $rad["timeOfInsert"]->getTimestamp() * 1000;
-                if(isset($rad["fixedValue"])){
-                    array_push($arrayToChart, [$time, $rad["fixedValue"]]);
-                }else{
-                    array_push($arrayToChart, [$time, null]);
-                }
+                array_push($arrayToChart, [$time, $rad["fixedValue"]]);
+                
             }
             $series = array(
                 'id' => $register->getId(),
@@ -208,7 +216,7 @@ class DataAnalyzeController extends Controller {
                 'suffix' => '°C'
                 
             );
-
+            
             return new JsonResponse($series);
         } else {
             throw new AccessDeniedHttpException();
