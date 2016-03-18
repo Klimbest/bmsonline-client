@@ -12,7 +12,7 @@ class DataAnalyzeController extends Controller {
 
     public function indexAction() {
         $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-        $registers = $registerRepo->findAll();
+        $registers = $registerRepo->getArchivatedRegisters();
         $detailChart = new Highchart();
         $masterChart = new Highchart();
         
@@ -30,9 +30,9 @@ class DataAnalyzeController extends Controller {
         $detailChart->xAxis->type('datetime');
         $yAxis = array(
             array(
+                'tickInterval' => 1,
+                'floor' => 0,
                 'ceiling' => 100,
-                'lineWidth' => 1,
-                'tickWidth' => 1,
                 'title' => array(
                     'offset' => 0,
                     'text' => '%',
@@ -40,14 +40,15 @@ class DataAnalyzeController extends Controller {
                     'align' => 'high',
                     'y' => -10
                 ),
+                'label' => array(
+                    'style' => array(
+                        "fontSize" => "70%"
+                    )
+                ),
                 'showEmpty' => false,
                 'opposite' => true,
-//                'min' => 0,
-//                'max' => 100
             ),
             array(
-//                'lineWidth' => 1,
-//                'tickWidth' => 0.2,
                 'tickInterval' => 0.5,
                 'ceiling' => 40,
                 'title' => array(
@@ -63,18 +64,21 @@ class DataAnalyzeController extends Controller {
                     )
                 ),
                 'showEmpty' => false
-//                'min' => -5,
-//                'max' => 40
             ),
             array(
-                'lineWidth' => 1,
-                'tickWidth' => 1,
+                'tickInterval' => 1,
+                'floor' => 0,
                 'title' => array(
                     'offset' => 0,
                     'text' => 'num',
                     'rotation' => 0,
                     'align' => 'high',
                     'y' => -10
+                ),
+                'label' => array(
+                    'style' => array(
+                        "fontSize" => "70%"
+                    )
                 ),
                 'showEmpty' => false
             )

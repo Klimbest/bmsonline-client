@@ -11,7 +11,6 @@ $(document).ready(function () {
     $.each(registersToChart, function (key, value) {
         loadData(value[0], dtpStart, dtpEnd, value[1]);
     });
-
     mchart.xAxis[0].addPlotBand({
         id: 'mask-before',
         from: mchart.xAxis[0].min,
@@ -101,17 +100,18 @@ function setDialogButtons() {
             dchart.series[0].remove(true);
         while (mchart.series.length > 0)
             mchart.series[0].remove(true);
-        
+
         dchart.colorCounter = 0;
         mchart.colorCounter = 0;
         dchart.symbolCounter = 0;
         mchart.symbolCounter = 0;
-        
+
         var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
         var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
         $.each(registersToChart, function (key, value) {
             loadData(value[0], dtpStart, dtpEnd, value[1]);
         });
+
     });
     //przycisk dodania serii
     $("#addSeries").click(function () {
@@ -119,8 +119,10 @@ function setDialogButtons() {
         var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
         var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
         var yAxis = $('input[name=axType]:checked').val();
-        registersToChart.push([parseInt(regId), parseInt(yAxis)]);
-        loadData(parseInt(regId), dtpStart, dtpEnd, parseInt(yAxis));
+        registersToChart.push([regId, parseInt(yAxis)]);
+        loadData(regId, dtpStart, dtpEnd, parseInt(yAxis));
+        $("option#" + parseInt(regId)).hide();
+
     });
 }
 //załadowanie danych
@@ -140,8 +142,6 @@ function loadData(registerId, dtpStart, dtpEnd, yAxis) {
         url: Routing.generate('bms_data_analyze_add_series'),
         success: function (ret) {
             $(".main-row").children(".fa-spinner, div#loading").remove();
-            var mchart = $('#masterContainer').highcharts();
-            var dchart = $('#detailContainer').highcharts();
             var series = {
                 id: ret['id'],
                 data: ret['data'],
@@ -150,34 +150,44 @@ function loadData(registerId, dtpStart, dtpEnd, yAxis) {
                 type: "spline",
                 lineWidth: 1
             };
-            setSeries(dchart, mchart, series);
-            setClickable(dchart, mchart);
+            setSeries(series);
         }
     });
 
-    function setSeries(dchart, mchart, series) {
-        
+    function setSeries(series) {
+        var mchart = $('#masterContainer').highcharts();
+        var dchart = $('#detailContainer').highcharts();
+
         dchart.addSeries(series, false);
         mchart.addSeries(series, false);
 
         dchart.redraw();
         mchart.redraw();
-    }
 
-    function setClickable() {
-        $(".highcharts-legend-item").hover(function () {
-            $(this).find("i").click(function () {
-                var mchart = $('#masterContainer').highcharts();
-                var dchart = $('#detailContainer').highcharts();
-                var id = parseInt($(this).attr("id"));
-                mchart.get(id).remove();
-                dchart.get(id).remove();
-            }).show();
-
-        }, function () {
-            $(this).find("i").unbind("click").hide();
-        });
+        setClickable();
+        $("select#avRegs").val(null);
+        $("." + parseInt(series.id)).hide();
     }
 }
 
+function setClickable() {
+    $(".highcharts-legend-item").find("i").each(function () {
+        $(this).unbind("click").click(function () {
+            var mchart = $('#masterContainer').highcharts();
+            var dchart = $('#detailContainer').highcharts();
+            var id = parseInt($(this).attr("id"));
+            mchart.get(id).remove();
+            dchart.get(id).remove();
+            registersToChart.splice($.inArray([id, 1], registersToChart), 1);
+            setClickable();
+            $("." + parseInt(id)).show();
+        });
+    });
+    $(".highcharts-legend-item").hover(function () {
+        $(this).find("i").show();
+
+    }, function () {
+        $(this).find("i").hide();
+    });
+}
 

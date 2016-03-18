@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *                             indexes={@ORM\Index(name="device", columns={"device_id"}),
  *                                      @ORM\Index(name="name", columns={"name"})
  * })
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BmsConfigurationBundle\Entity\RegisterRepository")
  * @UniqueEntity(fields="name", message="Nazwa rejestru musi być unikalna w obrębie całego systemu.")
  */
 class Register

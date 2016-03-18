@@ -30,7 +30,7 @@
             <div class="col-sm-12">
                 <select id="avRegs">
                     {% for register in registers %}
-                        <option id="{{register.id}}" value="{{register.id}}">{{register.id}} - ({{register.name}}) {{register.description}}</option>
+                        <option class="{{register.id}}" value="{{register.id}}">{{register.id}} - ({{register.name}}) {{register.description}}</option>
                     {% endfor %}
                 </select>
                 <button id="addSeries" type="button" class="btn btn-primary">Dodaj serie</button>
