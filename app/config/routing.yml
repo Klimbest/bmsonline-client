@@ -5,7 +5,7 @@ bms:
     
 bms_data_analyze:
     resource: "@BmsDataAnalyzeBundle/Resources/config/routing.yml"
-    prefix:   /bms_admin/analiza_danych
+    prefix:   /analiza_danych
     
 bms_visualization:
     resource: "@BmsVisualizationBundle/Resources/config/routing.yml"
