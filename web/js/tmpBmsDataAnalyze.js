@@ -1,3 +1,5 @@
+/* global registersToChart */
+
 registersToChart = [[4, 1]];
 $(document).ready(function () {
     var mchart = $('#masterContainer').highcharts();
@@ -99,7 +101,12 @@ function setDialogButtons() {
             dchart.series[0].remove(true);
         while (mchart.series.length > 0)
             mchart.series[0].remove(true);
-
+        
+        dchart.colorCounter = 0;
+        mchart.colorCounter = 0;
+        dchart.symbolCounter = 0;
+        mchart.symbolCounter = 0;
+        
         var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
         var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
         $.each(registersToChart, function (key, value) {
@@ -149,8 +156,10 @@ function loadData(registerId, dtpStart, dtpEnd, yAxis) {
     });
 
     function setSeries(dchart, mchart, series) {
+        
         dchart.addSeries(series, false);
         mchart.addSeries(series, false);
+
         dchart.redraw();
         mchart.redraw();
     }
