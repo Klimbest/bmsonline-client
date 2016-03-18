@@ -158,11 +158,11 @@ function loadData(registerId, dtpStart, dtpEnd, yAxis) {
         var mchart = $('#masterContainer').highcharts();
         var dchart = $('#detailContainer').highcharts();
 
-        dchart.addSeries(series, false);
-        mchart.addSeries(series, false);
-
-        dchart.redraw();
-        mchart.redraw();
+        dchart.addSeries(series);
+        mchart.addSeries(series);
+//
+//        dchart.redraw();
+//        mchart.redraw();
 
         setClickable();
         $("select#avRegs").val(null);
@@ -180,7 +180,7 @@ function setClickable() {
             dchart.get(id).remove();
             registersToChart.splice($.inArray([id, 1], registersToChart), 1);
             setClickable();
-            $("." + parseInt(id)).show();
+            $("." + id).show();
         });
     });
     $(".highcharts-legend-item").hover(function () {
