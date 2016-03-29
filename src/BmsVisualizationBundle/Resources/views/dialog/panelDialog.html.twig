@@ -1,0 +1,51 @@
+<div class="dialog-panel-settings " title="Kreator paneli">
+    <form id="panel" class="form-inline" role="form">
+        <div class="row dialog-panel-general">
+            <div class="col-md-3 col-md-offset-2 text-center">
+                <div class="form-group">
+                    <label for="panel-name">Nazwa panelu:</label>
+                    <input id="panel-name" type="text" class="form-control" />
+                </div>
+            </div>        
+            <div class="col-md-3 col-md-offset-2 text-center">
+                <div class="form-group">
+                    <label for="panel-type">Typ:</label>
+                    <select id="panel-type" class="form-control">
+                        <option value="label">Etykieta</option>
+                        <option value="image">Grafika</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row nav-row">
+        <div class="col-md-12">
+            <div class="alert alert-primary" role="alert">Format:</div>
+        </div>
+    </div>
+    <div class="row dialog-panel-format">
+        <div class="col-md-12">
+            {% include 'BmsVisualizationBundle:dialog:panelDialogFormat.html.twig' %}
+        </div>
+    </div>
+    <div class="row nav-row">
+        <div class="col-md-12">
+            <div class="alert alert-primary" role="alert">Dane:</div>
+        </div>
+    </div>
+    <div class="row dialog-panel-data">
+        <div class="col-md-12">
+            {% include 'BmsVisualizationBundle:dialog:panelDialogData.html.twig' %}
+        </div>
+    </div>
+    <div class="row nav-row">
+        <div class="col-md-12">
+            <div class="alert alert-primary" role="alert">Zdarzenia:</div>
+        </div>
+    </div>
+    <div class="row dialog-panel-event">
+        <div class="col-md-12">
+            {% include 'BmsVisualizationBundle:dialog:panelDialogEvent.html.twig' %}
+        </div>
+    </div>
+</div>
