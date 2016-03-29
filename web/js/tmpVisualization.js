@@ -893,7 +893,7 @@ function ajaxEditPanel(panel_id) {
                 text: "Zapisz",
                 click: function () {
                     var data = new FormData();
-                    data.append("page_id", $("div.label-page.active").attr("id"));
+                    data.append("panel_id", panel_id);
                     data.append("name", $("form#panel input#panel-name").val());
                     data.append("topPosition", $("form#panel input#topPosition").val());
                     data.append("leftPosition", $("form#panel input#leftPosition").val());
@@ -947,8 +947,10 @@ function ajaxEditPanel(panel_id) {
             $("form#panel input#backgroundColor").val(rgb2hex("rgba(" + bc.red + ", " + bc.green + ", " + bc.blue + ", " + bc.alpha + ")"));
             $("form#panel input#opacity").val(bc.alpha);
         }
-
-        //console.log(panel.css("backgroundColor"));
+        $("form#panel input#borderWidth").val(parseInt(panel.css("borderTopWidth")));
+        $("form#panel input#borderColor").val(rgb2hex(panel.css("borderTopColor")));
+        $("form#panel select#borderStyle").val(panel.css("borderTopStyle"));
+        console.log(panel.css("borderTopStyle"));
 
         var br = $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px";
 
@@ -1083,6 +1085,7 @@ function ajaxEditPanel(panel_id) {
             processData: false,
             success: function (ret) {
                 $(".main-row").children(".fa-spinner").remove();
+                console.log($("div#" + ret["panel_id"] + ".bms-panel").remove());
                 $("div.main-row div.well").append(ret['template']);
                 setPanelEvents();
             }

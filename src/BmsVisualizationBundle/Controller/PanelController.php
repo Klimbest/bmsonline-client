@@ -79,13 +79,74 @@ class PanelController extends Controller {
             $em->flush();
 
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
-            $ret["resp"] = "Zrobione!";
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
         }
     }
 
+    public function editPanelAction(Request $request){
+        if ($request->isXmlHttpRequest()) {
+            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            //get data
+            $panel_id = $request->request->get("panel_id");
+            $name = $request->request->get("name");
+            $topPosition = $request->request->get("topPosition");
+            $leftPosition = $request->request->get("leftPosition");
+            $width = $request->request->get("width");
+            $height = $request->request->get("height");
+            $border = $request->request->get("border");
+            $backgroundColor = $request->request->get("backgroundColor");
+            $textAlign = $request->request->get("textAlign");
+            $fontWeight = $request->request->get("fontWeight");
+            $textDecoration = $request->request->get("textDecoration");
+            $fontStyle = $request->request->get("fontStyle");
+            $fontFamily = $request->request->get("fontFamily");
+            $fontSize = $request->request->get("fontSize");
+            $content_source = $request->request->get("content_source");
+            $fontColor = $request->request->get("fontColor");
+            $borderRadius = $request->request->get("borderRadius");
+            $zIndex = $request->request->get("zIndex");
+
+
+            if ($request->request->get("visibility") == "true") {
+                $visibility = 1;
+            } else {
+                $visibility = 0;
+            }
+
+            $em = $this->getDoctrine()->getManager();
+
+            $panel = $panelRepo->find($panel_id);
+            $panel->setName($name)
+                    ->setTopPosition($topPosition)
+                    ->setLeftPosition($leftPosition)
+                    ->setWidth($width)
+                    ->setHeight($height)
+                    ->setBorder($border)
+                    ->setBackgroundColor($backgroundColor)
+                    ->setTextAlign($textAlign)
+                    ->setFontWeight($fontWeight)
+                    ->setTextDecoration($textDecoration)
+                    ->setFontStyle($fontStyle)
+                    ->setFontFamily($fontFamily)
+                    ->setFontSize($fontSize)
+                    ->setContentSource($content_source)
+                    ->setFontColor($fontColor)
+                    ->setBorderRadius($borderRadius)
+                    ->setZIndex($zIndex)
+                    ->setVisibility($visibility);
+
+            
+            $em->flush();
+            $ret["panel_id"] = $panel_id;
+            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
+            return new JsonResponse($ret);
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
+    
     public function movePanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
