@@ -1,0 +1,250 @@
+<div class="well well-lg">
+    <form id="panel" class="form-horizontal" role="form">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-offset-6">
+                        <div class="checkbox">
+                            <label><input id="visibility" type="checkbox" checked><span class="label label-dialog-panel">Widoczny?</span></label>
+                        </div>
+                    </div>  
+                </div>
+                <div class="row">
+                    <div class="col-md-9 col-md-offset-3 text-center">
+                        <span>Podgląd:</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-9 col-md-offset-3 text-center">
+                        <small><span>(pozycja i rozmiar nie uwzględniane)</span></small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 col-md-offset-1">
+                <div class="row text-center">
+                    <div class="col-md-6 col-md-offset-6">
+                        <span class="label label-dialog-panel">Pozycja:</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-6" for="topPosition">Od góry:</label>
+                    <div class="col-md-6 input-group-sm">
+                        <input id="topPosition" type="number" class="form-control" value="50"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-6" for="leftPosition">Od lewej:</label>
+                    <div class="col-md-6 input-group-sm">
+                        <input id="leftPosition" type="number" class="form-control" value="50"/>
+                    </div>
+                </div>  
+            </div>  
+            <div class="col-md-2">
+                <div class="row text-center">
+                    <div class="col-md-6 col-md-offset-6">
+                        <span class="label label-dialog-panel">Rozmiar:</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-6" for="width">Szerokość:</label>
+                    <div class="col-md-6 input-group-sm">
+                        <input id="width" type="number" class="form-control" value="500"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-6" for="height">Wysokość:</label>
+                    <div class="col-md-6 input-group-sm">
+                        <input id="height" type="number" class="form-control" value="100"/>
+                    </div>
+                </div>  
+            </div>  
+            <div class="col-md-3">
+                <div class="row text-center">
+                    <div class="col-md-5 col-md-offset-4">
+                        <span class="label label-dialog-panel">Tło:</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4" for="backgroundColor">Kolor:</label>
+                    <div class="col-md-5 input-group-sm">
+                        <input id="backgroundColor" type="color" class="form-control" value="#008800" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4" for="opacity">Przezroczystość:</label>
+                    <div class="col-md-5 input-group-sm">
+                        <input id="opacity" class="form-control" type="range" name="range_opacity" min="0" max="1" step="0.1" value="1" oninput="this.form.txt_opacity.value=this.value"/>
+                    </div>
+                    <div class="col-md-3 input-group-sm">
+                        <input id="opacity" class="form-control" type="number" name="txt_opacity" min="0" max="1" step="0.1" value="1" oninput="this.form.range_opacity.value=this.value"></label>
+                    </div>
+                </div>  
+            </div>  
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-md-offset-1 panel-preview">
+                <span>Przykładowy tekst</span>
+            </div>
+            <div class="col-md-2 col-md-offset-1">
+                <div class="row text-center">
+                    <div class="col-md-6 col-md-offset-6">
+                        <span class="label label-dialog-panel">Ramka:</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-6" for="borderWidth">Grubość:</label>
+                    <div class="col-md-6 input-group-sm">
+                        <input id="borderWidth" type="number" class="form-control" value="2"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-6" for="borderStyle">Styl:</label>
+                    <div class="col-md-6 input-group-sm">
+                        <select id="borderStyle" class="form-control">
+                            <option value="solid">Ciągła</option>
+                            <option value="dotted">Wykropkowana</option>
+                            <option value="dashed">Wykreskowana</option>
+                        </select> 
+                    </div>
+                </div>  
+                <div class="form-group">
+                    <label class="control-label col-md-6" for="borderColor">Kolor:</label>
+                    <div class="col-md-6 input-group-sm">
+                        <input id="borderColor" type="color" class="form-control" value="#990000" />
+                    </div>
+                </div>  
+            </div>  
+            <div class="col-md-4">
+                <div class="row text-center">
+                    <div class="col-md-12">
+                        <span class="label label-dialog-panel">Czcionka:</span>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-default btn-xs btn-bold"><i class="fa fa-bold fa-fw"></i></button>
+                        <button type="button" class="btn btn-default btn-xs btn-underline"><i class="fa fa-underline fa-fw"></i></button>
+                        <button type="button" class="btn btn-default btn-xs btn-italic"><i class="fa fa-italic fa-fw"></i></button>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default btn-xs btn-align-left active"><i class="fa fa-align-left fa-fw"></i></button>
+                            <button type="button" class="btn btn-default btn-xs btn-align-center"><i class="fa fa-align-center fa-fw"></i></button>
+                            <button type="button" class="btn btn-default btn-xs btn-align-right"><i class="fa fa-align-right fa-fw"></i></button>
+                        </div>
+                        <button type="button" class="btn btn-default btn-xs disabled"><i class="fa fa-question fa-fw"></i></button>
+                        <button type="button" class="btn btn-default btn-xs disabled"><i class="fa fa-question fa-fw"></i></button>
+                        <button type="button" class="btn btn-default btn-xs disabled"><i class="fa fa-question fa-fw"></i></button>
+                        <button type="button" class="btn btn-default btn-xs disabled"><i class="fa fa-question fa-fw"></i></button>
+                        <button type="button" class="btn btn-default btn-xs disabled"><i class="fa fa-question fa-fw"></i></button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4" for="fontFamily">Styl:</label>
+                    <div class="col-md-5 input-group-sm">
+                        <select id="fontFamily" class="form-control font-family">
+                            {% set fonts = ["Arial",
+                            "Black",
+                            "Century Gothic",
+                            "Cochin",
+                            "Comic Sans MS",
+                            "Courier",
+                            "Courier New",
+                            "Garamond",
+                            "Geneva",
+                            "Georgia",
+                            "Helvetica",
+                            "Lucida",
+                            "Lucida Grande",
+                            "Lucida Sans",
+                            "Lucida Sans Unicode",
+                            "Monotype Corsiva",
+                            "MS Serif",
+                            "Tahoma",
+                            "Times",
+                            "Times New Roman", 
+                            "Trebuchet MS",                                       
+                            "Verdana"
+                            ]%}
+                            {% for font in fonts %}
+                                <option value="{{font}}">{{font}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>  
+                <div class="form-group"> 
+                    <label class="control-label col-md-4" for="fontSize">Rozmiar:</label>
+                    <div class="col-md-3 input-group-sm">
+                        <select id="fontSize" class="form-control font-size">
+                            {% for i in 6..96 %}
+                                {% if i == 14 %}
+                                    <option value="{{i}}" selected>{{i}}</option>
+                                {% else %}
+                                    <option value="{{i}}">{{i}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group"> 
+                    <label class="control-label col-md-4" for="fontColor">Kolor:</label>
+                    <div class="col-md-3 input-group-sm">
+                        <input id="fontColor" type="color" class="form-control" value="#ffffff" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7 col-md-offset-5">
+                <div class="row text-center">
+                    <div class="col-md-12">
+                        <span class="label label-dialog-panel">Zaokrąglenie narożników:</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4" for="borderRadiusTL">Lewy górny:</label>
+                            <div class="col-md-5 input-group-sm">
+                                <input id="borderRadiusTL" class="form-control" type="range" name="range_BR_TL" min="0" max="200" step="1" value="10" oninput="this.form.txt_BR_TL.value=this.value"/> 
+                            </div>
+                            <div class="col-md-3 input-group-sm">
+                                <input id="borderRadiusTL" class="form-control" type="number" name="txt_BR_TL" min="0" max="200" step="1" value="10" oninput="this.form.range_BR_TL.value=this.value"></label>
+                            </div>
+                        </div>  
+                        <div class="form-group">
+                            <label class="control-label col-md-4" for="borderRadiusBL">Lewy dolny:</label>
+                            <div class="col-md-5 input-group-sm">
+                                <input id="borderRadiusBL" class="form-control" type="range" name="range_BR_BL" min="0" max="200" step="1" value="10" oninput="this.form.txt_BR_BL.value=this.value"/> 
+                            </div>
+                            <div class="col-md-3 input-group-sm">
+                                <input id="borderRadiusBL" class="form-control" type="number" name="txt_BR_BL" min="0" max="200" step="1" value="10" oninput="this.form.range_BR_BL.value=this.value"></label>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4" for="borderRadiusTR">Prawy górny:</label>
+                            <div class="col-md-5 input-group-sm">
+                                <input id="borderRadiusTR" class="form-control" type="range" name="range_BR_TR" min="0" max="200" step="1" value="10" oninput="this.form.txt_BR_TR.value=this.value"/> 
+                            </div>
+                            <div class="col-md-3 input-group-sm">
+                                <input id="borderRadiusTR" class="form-control" type="number" name="txt_BR_TR" min="0" max="200" step="1" value="10" oninput="this.form.range_BR_TR.value=this.value"></label>
+                            </div>
+                        </div>  
+                        <div class="form-group">
+                            <label class="control-label col-md-4" for="opacity">Prawy dolny:</label>
+                            <div class="col-md-5 input-group-sm">
+                                <input id="borderRadiusBR" class="form-control" type="range" name="range_BR_BR" min="0" max="200" step="1" value="10" oninput="this.form.txt_BR_BR.value=this.value"/> 
+                            </div>
+                            <div class="col-md-3 input-group-sm">
+                                <input id="borderRadiusBR" class="form-control" type="number" name="txt_BR_BR" min="0" max="200" step="1" value="10" oninput="this.form.range_BR_BR.value=this.value"></label>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
