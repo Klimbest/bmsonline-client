@@ -32,7 +32,7 @@ class DefaultController extends Controller {
 
     public function ajaxRefreshPageAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
-            $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+            
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
@@ -41,9 +41,26 @@ class DefaultController extends Controller {
             $page_id = $request->get("page_id");
             isset($page_id) ? $page = $pageRepo->find($page_id) : null;
 
-           
+            $panels = $panelRepo->findPanelsForPage($page_id);
+            $registersToPage = array();
+            foreach($panels as $p){
+                $sources = explode(";", $p->getContentSource());
+                foreach($sources as $s){
+                    $source = explode(".", $s);
+                    if($source[0] == "v"){
+                        array_push($registersToPage, (int)$source[1]);
+                    }
+                }
+            }
+            
+            $registers = array();
+            foreach ($registersToPage as $rid) {
+                $register = $registerRepo->find($rid);
+                $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
+            }
+            
             $terms = $termRepo->findAll();
-
+            $t = null;
             foreach ($terms as $term) {
                 $pid = $term->getPanel()->getId();
                 $panel = $panelRepo->findOneById($pid);
@@ -53,6 +70,7 @@ class DefaultController extends Controller {
                     $t = array_merge($t, $this->makeCondition($condition_type, $term));
                 }
             }
+            
             $regsForTime = $registerRepo->findAll();
             $time = 0;
             foreach ($regsForTime as $rft) {
@@ -64,8 +82,8 @@ class DefaultController extends Controller {
             }
             
             $ret["time_of_update"] = $time;
-            //$ret["terms"] = $t;
-            //$ret['registers'] = $registers;
+            $ret["terms"] = $t;
+            $ret['registers'] = $registers;
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();

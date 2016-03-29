@@ -43,7 +43,13 @@ class PanelController extends Controller {
             $fontColor = $request->request->get("fontColor");
             $borderRadius = $request->request->get("borderRadius");
             $zIndex = $request->request->get("zIndex");
-            $visibility = $request->request->get("visibility");
+
+
+            if ($request->request->get("visibility") == "true") {
+                $visibility = 1;
+            } else {
+                $visibility = 0;
+            }
 
             $em = $this->getDoctrine()->getManager();
 
@@ -71,7 +77,7 @@ class PanelController extends Controller {
 
             $em->persist($panel);
             $em->flush();
-            
+
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
             $ret["resp"] = "Zrobione!";
             return new JsonResponse($ret);
@@ -80,7 +86,7 @@ class PanelController extends Controller {
         }
     }
 
-    public function editPanelAction(Request $request) {
+    public function movePanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
@@ -103,7 +109,7 @@ class PanelController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
-    
+
     public function copyPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $panel_id = $request->get("panel_id");
@@ -118,8 +124,8 @@ class PanelController extends Controller {
             $em->persist($newPanel);
             $em->flush();
 
-            $ret["panel_id"] = $newPanel->getId();
-            $ret["type"] = $newPanel->getType();
+//            $ret["panel_id"] = $newPanel->getId();
+//            $ret["type"] = $newPanel->getType();
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $newPanel]);
             return new JsonResponse($ret);
         } else {

@@ -12,7 +12,7 @@ class PanelRepository extends \Doctrine\ORM\EntityRepository
 {
     public function findPanelsForPage($page_id){
         return $this->getEntityManager()
-                ->createQuery('SELECT p FROM BmsVisualizationBundle:Panel AS p WHERE p.page = '.page_id)
+                ->createQuery('SELECT p FROM BmsVisualizationBundle:Panel AS p WHERE p.page = '.$page_id)
                 ->getResult();
     }
 }

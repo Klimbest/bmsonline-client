@@ -126,7 +126,7 @@ function ajaxRefreshPage() {
         }
 
         $.each(registers, function (key, value) {
-            $("div.variable-panel").children("span#" + key).empty().append(value);
+            $("div.bms-panel").children("span#" + key).empty().append(value);            
         });
     }
 }

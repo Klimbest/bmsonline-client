@@ -1,4 +1,4 @@
-<div title="{{panel.name}}" id="{{panel.id}}" class="bms-panel {{panel.textAlign}}" 
+<div title="{{panel.name}}" id="{{panel.id}}" class="bms-panel text-{{panel.textAlign}}" 
      style="
      top: {{panel.topPosition}}px; 
      left: {{panel.leftPosition}}px; 
@@ -15,7 +15,20 @@
      font-size: {{panel.fontSize}}px;
      line-height: {{panel.height}}px;
      z-index: {{panel.zIndex}};
+     {% if panel.visibility == 0 %}
+         display: none;
+     {% endif %}
      ">
-    <div id="bms-panel-content"></div>
+    {% set sources = panel.contentSource|split(';') %}
+    {% for s in sources %}
+        {% set content = s|split('.') %}
+        {% if content[0] == 't' %}
+            <span class="bms-panel-content">{{content[1]}}</span>
+        {% elseif content[0] == 'v' %}
+            <span id="{{content[1]}}" class="bms-panel-content"></span>
+        {% elseif content[0] == 'f' %}
+            <img class="img-responsive" src="{{content[1]}}.{{content[2]}}"/>
+        {% endif %}
+    {% endfor %}
 </div>
 

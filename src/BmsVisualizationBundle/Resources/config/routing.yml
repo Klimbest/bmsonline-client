@@ -40,11 +40,18 @@ bms_visualization_add_panel:
     options:
         expose: true
 
+bms_visualization_move_panel:
+    path:     /move_panel
+    defaults: { _controller: BmsVisualizationBundle:Panel:movePanel }
+    options:
+        expose: true
+
 bms_visualization_edit_panel:
     path:     /edit_panel
     defaults: { _controller: BmsVisualizationBundle:Panel:editPanel }
     options:
         expose: true
+
 
 bms_visualization_copy_panel:
     path:     /copy_panel
