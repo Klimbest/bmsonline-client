@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Panel
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="BmsVisualizationBundle\Entity\PanelRepository")
+ * @ORM\Entity
  */
 class Panel {
 
@@ -24,65 +24,65 @@ class Panel {
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=50, nullable=false)
+     * @ORM\Column(name="type", type="string", length=50)
      */
-    private $name;
+    private $type;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="visibility", type="boolean", nullable=false)
-     */
-    private $visibility;
-            
     /**
      * @var integer
      *
-     * @ORM\Column(name="topPosition", type="integer", nullable=false)
+     * @ORM\Column(name="topPosition", type="integer")
      */
     private $topPosition;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="leftPosition", type="integer", nullable=false)
+     * @ORM\Column(name="leftPosition", type="integer")
      */
     private $leftPosition;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="width", type="integer", nullable=false)
+     * @ORM\Column(name="width", type="integer")
      */
     private $width;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="height", type="integer", nullable=false)
+     * @ORM\Column(name="height", type="integer")
      */
     private $height;
 
     /**
      * @var integer
      * 
-     * @ORM\Column(name="zIndex", type="integer", nullable=false)
+     * @ORM\Column(name="zIndex", type="integer")
      */
     private $zIndex;
     
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="backgroundColor", type="string", length=30, nullable=false)
+     * @ORM\Column(name="borderWidth", type="integer", nullable=true)
      */
-    private $backgroundColor;
-    
+    private $borderWidth;
+
     /**
      * @var string
      *
-     * @ORM\Column(name="border", type="string", length=20, nullable=true)
+     * @ORM\Column(name="borderStyle", type="string", length=20, nullable=true)
      */
-    private $border;
+    private $borderStyle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="borderColor", type="string", length=30, nullable=true)
+     */
+    private $borderColor;
 
     /**
      * @var string
@@ -90,7 +90,21 @@ class Panel {
      * @ORM\Column(name="borderRadius", type="string", length=30, nullable=true)
      */
     private $borderRadius;
-    
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="backgroundColor", type="string", length=30, nullable=true)
+     */
+    private $backgroundColor;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="opacity", type="float", nullable=true)
+     */
+    private $opacity;
+
     /**
      * @var string
      *
@@ -139,13 +153,15 @@ class Panel {
      * @ORM\Column(name="fontSize", type="integer", nullable=true)
      */
     private $fontSize;
+
+    
     
     /**
      * @var string
      *
-     * @ORM\Column(name="content_source", type="text", nullable=true)
+     * @ORM\Column(name="content", type="text", nullable=true)
      */
-    private $contentSource;
+    private $content;
 
     /**
      * @var Page
@@ -618,100 +634,4 @@ class Panel {
     }
 
     
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Panel
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set visibility
-     *
-     * @param boolean $visibility
-     *
-     * @return Panel
-     */
-    public function setVisibility($visibility)
-    {
-        $this->visibility = $visibility;
-
-        return $this;
-    }
-
-    /**
-     * Get visibility
-     *
-     * @return boolean
-     */
-    public function getVisibility()
-    {
-        return $this->visibility;
-    }
-
-    /**
-     * Set contentSource
-     *
-     * @param string $contentSource
-     *
-     * @return Panel
-     */
-    public function setContentSource($contentSource)
-    {
-        $this->contentSource = $contentSource;
-
-        return $this;
-    }
-
-    /**
-     * Get contentSource
-     *
-     * @return string
-     */
-    public function getContentSource()
-    {
-        return $this->contentSource;
-    }
-
-    /**
-     * Set border
-     *
-     * @param string $border
-     *
-     * @return Panel
-     */
-    public function setBorder($border)
-    {
-        $this->border = $border;
-
-        return $this;
-    }
-
-    /**
-     * Get border
-     *
-     * @return string
-     */
-    public function getBorder()
-    {
-        return $this->border;
-    }
 }

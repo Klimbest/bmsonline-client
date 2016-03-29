@@ -25,6 +25,7 @@ class DefaultController extends Controller {
         $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
         $communicationTypes = $communicationRepo->createQueryBuilder('ct')
                         ->join('ct.hardware_id', 'h')
+                        ->where('h.active = 1')
                         ->getQuery()->getResult();
         $comm_id = $session->get('comm_id');
         $device_id = $session->get('device_id');

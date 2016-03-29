@@ -1,10 +1,26 @@
 <div class="navbar-default sidebar text-left" role="navigation">
     <div class="btn-group">
-        <button type="button" class="btn btn-default btn-add-page">Dodaj stronę</button>
+        <button type="button" class="btn btn-default">Dodaj stronę</button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li><button type="button" class="btn btn-default btn-sm btn-add-page"><i class="fa fa-file-o fa-2x fa-fw"></i></button></li>
+        </ul>
     </div>
 
     <div class="btn-group">
         <button type="button" class="btn btn-default btn-add-panel">Dodaj panel</button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li><button type="button" class="btn btn-default btn-sm btn-add-area-panel"><i class="fa fa-square-o fa-2x fa-fw"></i></button></li>
+            <li><button type="button" class="btn btn-default btn-sm btn-add-text-panel"><i class="fa fa-font fa-2x fa-fw"></i></button></li>
+            <li><button type="button" class="btn btn-default btn-sm btn-add-image-panel"><i class="fa fa-picture-o fa-2x fa-fw"></i></button></li>
+            <li><button type="button" class="btn btn-default btn-sm btn-add-variable-panel"><i class="fa fa-hdd-o fa-2x fa-fw"></i></button></li>
+            <li><button type="button" class="btn btn-default btn-sm btn-add-navigation-panel"><i class="fa fa-link fa-2x fa-fw"></i></button></li>
+        </ul>
     </div>
     
     <div class="row">
@@ -25,7 +41,7 @@
             <button type="button" class="btn btn-default btn-pattern-net"><span class="toggler">&nbsp;</span></button>
         </div>
     </div>
-   {# <div class="row">
+    <div class="row">
         <div class="col-md-12">
             <label for="pattern-net-size">Lista paneli:</label>
         </div>
@@ -61,8 +77,8 @@
     </div>
     <div class="panel-list-container">
         
-    </div>#}
+    </div>
 </div>
-{#
+
 {% include 'BmsVisualizationBundle:dialog:dialogPageAddSettings.html.twig' %}
-{% include 'BmsVisualizationBundle:dialog:dialogPageEditSettings.html.twig' %}#}
+{% include 'BmsVisualizationBundle:dialog:dialogPageEditSettings.html.twig' %}

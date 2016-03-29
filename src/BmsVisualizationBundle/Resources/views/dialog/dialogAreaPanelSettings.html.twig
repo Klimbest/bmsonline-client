@@ -1,0 +1,112 @@
+<div class="dialog-area-panel-settings" title="Właściwości panelu obszaru:">
+    <div class="form-group-sm">
+        <div class="row">
+            <div class="col-md-4">
+                <span class="label label-primary">Pozycja:</span>
+                <div class="row">
+                    <div class="col-md-5">
+                        <label for="topPosition">Od góry:</label>
+                        <input id="topPosition" type="number" class="form-control" value="50"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="leftPosition">Od lewej:</label>
+                        <input id="leftPosition" type="number" class="form-control" value="50"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <span class="label label-primary">Rozmiar:</span>
+                <div class="row">
+                    <div class="col-md-5">
+                        <label for="width">Szerokość:</label>
+                        <input id="width" type="number" class="form-control" value="100"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="height">Wysokość:</label>
+                        <input id="height" type="number" class="form-control" value="100"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <span class="label label-primary">Właściwości tła:</span>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="backgroundColor">Kolor tła:</label>
+                        <input id="backgroundColor" type="color" class="form-control"/>
+                    </div>
+                    <div class="col-md-8">
+                        <label for="opacity">Przezroczystość tła:</label>
+                        <input id="opacity" type="number" class="form-control" value="100" min="0" max="1" step="0.1"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="label label-primary">Właściwości ramki:</span>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="borderWidth">Grubość:</label>
+                        <input id="borderWidth" type="number" class="form-control" value="2"/>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="borderStyle">Styl:</label>
+                        <select id="borderStyle" class="form-control">
+                            <option value="solid">Ciągła</option>
+                            <option value="dotted">Wykropkowana</option>
+                            <option value="dashed">Wykreskowana</option>
+                        </select> 
+                    </div>
+                    <div class="col-md-3">
+                        <label for="borderColor">Kolor:</label>
+                        <input id="borderColor" type="color" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <span class="label label-primary">Ustawienie zaokrąglenia narożników:</span>
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-1">
+                        <form>
+                            <input id="borderRadiusTL" type="number" name="txt_BR_TL" min="0" max="200" step="1" oninput="this.form.range_BR_TL.value=this.value"></label>
+                            <input id="borderRadiusTL" type="range" name="range_BR_TL" min="0" max="200" step="1" oninput="this.form.txt_BR_TL.value=this.value"/> 
+                        </form>
+                    </div>
+                    <div class="col-md-2 col-md-offset-6 text-right">
+                        <form>
+                            <input id="borderRadiusTR" type="number" name="txt_BR_TR" min="0" max="200" step="1" oninput="this.form.range_BR_TR.value=this.value"></label>
+                            <input id="borderRadiusTR" type="range" name="range_BR_TR" min="0" max="200" step="1" oninput="this.form.txt_BR_TR.value=this.value"/> 
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <div class="dialog-panel"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-1">
+                        <form>
+                            <input id="borderRadiusBL" type="number" name="txt_BR_BL" min="0" max="200" step="1" oninput="this.form.range_BR_BL.value=this.value"></label>
+                            <input id="borderRadiusBL" type="range" name="range_BR_BL" min="0" max="200" step="1" oninput="this.form.txt_BR_BL.value=this.value"/> 
+                        </form>
+                    </div>
+                    <div class="col-md-2 col-md-offset-6 text-right">
+                        <form>
+                            <input id="borderRadiusBR" type="number" name="txt_BR_BR" min="0" max="200" step="1" oninput="this.form.range_BR_BR.value=this.value"></label>
+                            <input id="borderRadiusBR" type="range" name="range_BR_BR" min="0" max="200" step="1" oninput="this.form.txt_BR_BR.value=this.value"/> 
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <span class="label label-success btn-add-condition">Zaawansowane</label>
+            </div>
+        </div>
+    </div>
+</div>

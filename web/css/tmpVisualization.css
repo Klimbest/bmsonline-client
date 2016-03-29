@@ -32,6 +32,11 @@ span.toggler.off {
     border-right-width: 2px;
     border-left-width: 15px;
 }
+.anchored{
+    opacity: 0.4;
+    cursor: auto;
+    border-radius: 0px;
+}
 .btn-preview-off{
     position: absolute;
     z-index: 999;
@@ -112,6 +117,11 @@ div.label-page:hover{
     cursor: pointer;
 }
 
+.text-panel{
+    border: 1px solid rgba(255,255,255,0);
+    min-height: 50px;
+}
+
 .bms-panel:hover,
 .bms-panel.hover,
 .bms-panel.active{
@@ -124,6 +134,19 @@ div.label-page:hover{
     background-color: #868686;
     z-index: 50;
 }
+/*okna ustawień paneli*/
+.dialog-page-add-settings,
+.dialog-page-edit-settings,
+.dialog-area-panel-settings,
+.dialog-text-panel-settings,
+.dialog-image-panel-settings,
+.dialog-variable-panel-settings, 
+.dialog-navigation-panel-settings,
+div.panel-list i:not(.icon-type),
+div.panel-list-container{
+    display: none;
+}
+
 
 div.panel-list i:hover{
     font-size: 120%;
@@ -131,6 +154,51 @@ div.panel-list i:hover{
 
 div.panel-list i.active{
     display: inline;
+}
+
+.dialog-page-add-settings .row,
+.dialog-page-edit-settings .row,
+.dialog-area-panel-settings .row,
+.dialog-text-panel-settings .row,
+.dialog-image-panel-settings .row,
+.dialog-variable-panel-settings .row,
+.dialog-navigation-panel-settings .row{
+    margin-top: 6px;
+}
+
+.all-panels-properties{
+    border-bottom: 2px solid #000;
+    padding-bottom: 15px;
+}
+
+.edit-controls{
+    margin-bottom: 5px;
+}
+
+.dialog-panel{
+    height: 200px;
+}
+.dialog-variable-panel-settings .dialog-panel{
+    margin-top: 150px;
+    height: 200px;
+}
+
+.dialog-text-panel-settings textarea{
+    overflow: hidden;
+    resize: none;
+    margin-top: 150px;
+}
+
+.dialog-image-panel-settings div.image-list{
+    border-right: 1px solid #000;
+    overflow: auto;
+    height: 450px;
+}
+
+.dialog-image-panel-settings div.image-list span.label:hover,
+.dialog-image-panel-settings div.image-list i.fa-remove:hover,
+.dialog-image-panel-settings div.image-list-bottom span.thumbnail:hover{
+    cursor: pointer;
 }
 
 .btn-file {
@@ -157,40 +225,13 @@ i.fa-plus-circle:hover,
 .btn-add-condition:hover{
     cursor: pointer;
 }
-div.dialog-panel-settings div.dialog-panel-general,
-div.dialog-panel-settings div.dialog-panel-format,
-div.dialog-panel-settings div.dialog-panel-data,
-div.dialog-panel-settings div.dialog-panel-event{
-    margin-bottom: 15px;
-}
 
-div.dialog-panel-settings .well{
-    padding-top: 15px;
-}
 
-div.dialog-panel-settings .well .row{
-    margin-bottom: 5px;
-}
-
-div.dialog-panel-settings div.dialog-panel-data .well,
-div.dialog-panel-settings div.dialog-panel-event .well{
-    display: none;
-}
-
-.alert-primary{
-    color: rgb(255, 255, 255);
-    background-color: rgb(51, 122, 183);
+/*
+.new-panel:hover{
     cursor: pointer;
-    margin-top: 3px;
-    margin-bottom: 0px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-}
-.label-dialog-panel{
-    background-color: #f6a828;
-    border: 1px solid #e78f08;
-} 
-.panel-preview{
-    height: 100px;    
-    line-height: 100px;
-}
+    border: 2px dashed #FFF;
+    background: linear-gradient(to right, rgba(0, 58, 147, 0.9), rgba(0,0,0,0.9));
+    color: #FFF;
+}*/
+

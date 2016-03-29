@@ -41,7 +41,14 @@ class DefaultController extends Controller {
             $page_id = $request->get("page_id");
             isset($page_id) ? $page = $pageRepo->find($page_id) : null;
 
-           
+            $vid = $qb->select('p.content')->from('BmsVisualizationBundle:Panel', 'p')->where("p.type = 'variable'")->getQuery()->getResult();
+
+            $registers = array();
+            $t = array();
+            foreach ($vid as $id) {
+                $register = $registerRepo->find((int) $id['content']);
+                $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
+            }
             $terms = $termRepo->findAll();
 
             foreach ($terms as $term) {
@@ -64,8 +71,8 @@ class DefaultController extends Controller {
             }
             
             $ret["time_of_update"] = $time;
-            //$ret["terms"] = $t;
-            //$ret['registers'] = $registers;
+            $ret["terms"] = $t;
+            $ret['registers'] = $registers;
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
