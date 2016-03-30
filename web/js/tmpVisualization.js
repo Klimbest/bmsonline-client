@@ -142,9 +142,9 @@ function createPanelDialog() {
             color: $("form#panel input#fontColor").val(),
             textAlign: "left"
         };
-        panel.css(css);    
+        panel.css(css);
     }
-    
+
     function setDialogButtons() {
         var panel = $("div.panel-preview");
         $("div.dialog-panel-settings div.nav-row").click(function () {
@@ -841,7 +841,17 @@ function ajaxCopyPanel(data) {
 //            };
 //            ajaxLoadPanelList(d);
             setPanelEvents();
-            ajaxEditPanel(ret["panel_id"]);
+            $.ajax({
+                type: "POST",
+                datatype: "application/json",
+                url: Routing.generate('bms_visualization_load_panel_dialog'),
+                success: function (ret) {
+                    $(".main-row").children(".fa-spinner").remove();
+                    $(".main-row").append(ret["template"]);
+                    ajaxEditPanel(id).dialog("open");
+                }
+            });
+            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
