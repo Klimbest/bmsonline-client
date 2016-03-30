@@ -841,17 +841,7 @@ function ajaxCopyPanel(data) {
 //            };
 //            ajaxLoadPanelList(d);
             setPanelEvents();
-            $.ajax({
-                type: "POST",
-                datatype: "application/json",
-                url: Routing.generate('bms_visualization_load_panel_dialog'),
-                success: function (ret) {
-                    $(".main-row").children(".fa-spinner").remove();
-                    $(".main-row").append(ret["template"]);
-                    ajaxEditPanel(id).dialog("open");
-                }
-            });
-            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+            ajaxEditPanel(ret["panel_id"]).dialog("open");            
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
