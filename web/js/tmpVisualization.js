@@ -142,8 +142,9 @@ function createPanelDialog() {
             color: $("form#panel input#fontColor").val(),
             textAlign: "left"
         };
-        panel.css(css);
+        panel.css(css);    
     }
+    
     function setDialogButtons() {
         var panel = $("div.panel-preview");
         $("div.dialog-panel-settings div.nav-row").click(function () {
@@ -284,7 +285,6 @@ function createPanelDialog() {
             });
             $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
         });
-
     }
 
     function saveData(data) {
@@ -335,7 +335,6 @@ function createVariableManager() {
         }
     });
 }
-
 
 function createDialogImagePanelSettings(id) {
     var input;
@@ -582,6 +581,7 @@ function ajaxEditPanel(panel_id) {
                     var data = new FormData();
                     data.append("panel_id", panel_id);
                     data.append("name", $("form#panel input#panel-name").val());
+                    data.append("type", $("select#panel-type").val());
                     data.append("topPosition", $("form#panel input#topPosition").val());
                     data.append("leftPosition", $("form#panel input#leftPosition").val());
                     data.append("width", $("form#panel input#width").val());
@@ -770,6 +770,44 @@ function ajaxEditPanel(panel_id) {
                     break;
             }
         }
+        //panel type
+        $("select#panel-type").change(function () {
+            var value = $(this).val();
+            switch (value) {
+                case "variable":
+                    $("input#panel-source-content").val("").prop("disabled", true);
+                    $(".input-group-btn button#image").addClass("disabled");
+                    $(".input-group-btn button#variable").removeClass("disabled");
+                    break;
+                case "image":
+                    $("input#panel-source-content").val("").prop("disabled", true);
+                    $(".input-group-btn button#variable").addClass("disabled");
+                    $(".input-group-btn button#image").removeClass("disabled");
+                    break;
+                case "text":
+                    $(".input-group-btn button#image, .input-group-btn button#variable").addClass("disabled");
+                    $("input#panel-source-content").val("").removeAttr("disabled", false);
+                    break;
+            }
+        });
+        //zmiana zawartości źródła powoduje wyświetlenie na podglądzie aktualną zawartość
+        $("input#panel-source-content").change(function () {
+            $("div.panel-preview span").empty().append($(this).val());
+        });
+
+        $(".input-group-btn button#variable").click(function () {
+            $.ajax({
+                type: "POST",
+                datatype: "application/json",
+                url: Routing.generate('bms_visualization_load_variable_manager'),
+                success: function (ret) {
+                    $(".main-row").children(".fa-spinner").remove();
+                    $(".main-row").append(ret["template"]);
+                    createVariableManager().dialog("open");
+                }
+            });
+            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+        });
     }
 
     function saveData(data) {
