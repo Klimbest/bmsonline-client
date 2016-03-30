@@ -336,7 +336,7 @@ function createVariableManager() {
     });
 }
 
-function createDialogImagePanelSettings(id) {
+function createImageManager() {
     var input;
     return $("div.dialog-image-panel-settings").dialog({
         autoOpen: false,
@@ -551,6 +551,7 @@ function createDialogImagePanelSettings(id) {
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     }
 }
+
 function ajaxMovePanel(data) {
     $.ajax({
         type: "POST",
@@ -645,8 +646,6 @@ function ajaxEditPanel(panel_id) {
         $("form#panel select#fontFamily").val(panel.css("fontFamily"));
         $("form#panel select#fontSize").val(parseInt(panel.css("fontSize")));
         $("form#panel input#fontColor").val(rgb2hex(panel.css("color")));
-
-        console.log(panel.css("fontColor"));
 
         var br = $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px";
 
@@ -842,26 +841,7 @@ function ajaxCopyPanel(data) {
 //            };
 //            ajaxLoadPanelList(d);
             setPanelEvents();
-//            var type = ret["type"];
-//            var id = ret["panel_id"];
-//            switch (type) {
-//                case "area" :
-//                    ajaxLoadAreaSettingsPanel(id, "add");
-//                    break;
-//                case "text" :
-//                    ajaxLoadTextSettingsPanel(id, "add");
-//                    break;
-//                case "image" :
-//                    ajaxLoadImageSettingsPanel(id, "add");
-//                    break;
-//                case "variable" :
-//                    ajaxLoadVariableSettingsPanel(id, "add");
-//                    break;
-//                case "navigation" :
-//                    ajaxLoadNavigationSettingsPanel(id, "add");
-//                    break;
-//            }
-
+            ajaxEditPanel(ret["panel_id"]);
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();

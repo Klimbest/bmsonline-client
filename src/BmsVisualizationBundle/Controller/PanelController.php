@@ -203,8 +203,7 @@ class PanelController extends Controller {
             $em->persist($newPanel);
             $em->flush();
 
-//            $ret["panel_id"] = $newPanel->getId();
-//            $ret["type"] = $newPanel->getType();
+            $ret["panel_id"] = $newPanel->getId();
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $newPanel]);
             return new JsonResponse($ret);
         } else {
