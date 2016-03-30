@@ -835,13 +835,14 @@ function ajaxCopyPanel(data) {
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
             $("div.main-row div.well").append(ret["template"]);
+            $(".main-row").append(ret["dialog"]);
 //            $("div.panel-list-container").hide().empty();
 //            var d = {
 //                page_id: $("div.label-page.active").attr("id")
 //            };
 //            ajaxLoadPanelList(d);
             setPanelEvents();
-            ajaxEditPanel(ret["panel_id"]).dialog("open");            
+            ajaxEditPanel(ret["panel_id"]).dialog("open");
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
