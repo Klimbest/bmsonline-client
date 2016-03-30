@@ -64,7 +64,13 @@ bms_visualization_delete_panel:
     defaults: { _controller: BmsVisualizationBundle:Panel:deletePanel }
     options:
         expose: true
-#PANEL END        
+#PANEL END
+bms_visualization_load_variable_manager:
+    path:     /load_variable_manager
+    defaults: { _controller: BmsVisualizationBundle:Ajax:loadVariableManager }
+    options:
+        expose: true
+        
 bms_visualization_load_settings_panel:
     path:   /load_settings_panel
     defaults: { _controller: BmsVisualizationBundle:Ajax:loadSettingsPanel }

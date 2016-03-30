@@ -29,6 +29,13 @@ class Panel {
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=10, nullable=false)
+     */
+    private $type;
+    
+    /**
      * @var boolean
      *
      * @ORM\Column(name="visibility", type="boolean", nullable=false)

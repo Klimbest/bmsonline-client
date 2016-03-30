@@ -24,8 +24,10 @@ class PanelController extends Controller {
     public function addPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
-            //get data
+            $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+            
             $page_id = $request->request->get("page_id");
+            $type = $request->request->get("type");
             $name = $request->request->get("name");
             $topPosition = $request->request->get("topPosition");
             $leftPosition = $request->request->get("leftPosition");
@@ -43,7 +45,13 @@ class PanelController extends Controller {
             $fontColor = $request->request->get("fontColor");
             $borderRadius = $request->request->get("borderRadius");
             $zIndex = $request->request->get("zIndex");
-
+            if($type == "variable"){
+                $registerName = $request->request->get("contentSource");    
+                $register = $registerRepo->findOneBy(array('name' => $registerName));
+                $contentSource = $register->getId();
+            }else{
+                $contentSource =$request->request->get("contentSource");    
+            }
 
             if ($request->request->get("visibility") == "true") {
                 $visibility = 1;
@@ -57,6 +65,7 @@ class PanelController extends Controller {
             $page = $pageRepo->find($page_id);
             $panel->setPage($page)
                     ->setName($name)
+                    ->setType($type)
                     ->setTopPosition($topPosition)
                     ->setLeftPosition($leftPosition)
                     ->setWidth($width)
@@ -73,7 +82,8 @@ class PanelController extends Controller {
                     ->setFontColor($fontColor)
                     ->setBorderRadius($borderRadius)
                     ->setZIndex($zIndex)
-                    ->setVisibility($visibility);
+                    ->setVisibility($visibility)
+                    ->setContentSource($contentSource);
 
             $em->persist($panel);
             $em->flush();
@@ -85,11 +95,13 @@ class PanelController extends Controller {
         }
     }
 
-    public function editPanelAction(Request $request){
+    public function editPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             //get data
             $panel_id = $request->request->get("panel_id");
+            $type = $request->request->get("type");
             $name = $request->request->get("name");
             $topPosition = $request->request->get("topPosition");
             $leftPosition = $request->request->get("leftPosition");
@@ -103,12 +115,17 @@ class PanelController extends Controller {
             $fontStyle = $request->request->get("fontStyle");
             $fontFamily = $request->request->get("fontFamily");
             $fontSize = $request->request->get("fontSize");
-            $content_source = $request->request->get("content_source");
             $fontColor = $request->request->get("fontColor");
             $borderRadius = $request->request->get("borderRadius");
             $zIndex = $request->request->get("zIndex");
-
-
+            if($type == "variable"){
+                $registerName = $request->request->get("contentSource");    
+                $register = $registerRepo->findOneBy(array('name' => $registerName));
+                $contentSource = $register->getId();
+            }else{
+                $contentSource =$request->request->get("contentSource");    
+            }
+            
             if ($request->request->get("visibility") == "true") {
                 $visibility = 1;
             } else {
@@ -119,6 +136,7 @@ class PanelController extends Controller {
 
             $panel = $panelRepo->find($panel_id);
             $panel->setName($name)
+                    ->setType($type)
                     ->setTopPosition($topPosition)
                     ->setLeftPosition($leftPosition)
                     ->setWidth($width)
@@ -131,13 +149,13 @@ class PanelController extends Controller {
                     ->setFontStyle($fontStyle)
                     ->setFontFamily($fontFamily)
                     ->setFontSize($fontSize)
-                    ->setContentSource($content_source)
                     ->setFontColor($fontColor)
                     ->setBorderRadius($borderRadius)
                     ->setZIndex($zIndex)
-                    ->setVisibility($visibility);
+                    ->setVisibility($visibility)
+                    ->setContentSource($contentSource);
 
-            
+
             $em->flush();
             $ret["panel_id"] = $panel_id;
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
@@ -146,7 +164,7 @@ class PanelController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
-    
+
     public function movePanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
@@ -210,6 +228,10 @@ class PanelController extends Controller {
         } else {
             throw new AccessDeniedHttpException();
         }
+    }
+
+    public function getAjaxData(Request $request) {
+        
     }
 
 }

@@ -44,19 +44,15 @@ class DefaultController extends Controller {
             $panels = $panelRepo->findPanelsForPage($page_id);
             $registersToPage = array();
             foreach($panels as $p){
-                $sources = explode(";", $p->getContentSource());
-                foreach($sources as $s){
-                    $source = explode(".", $s);
-                    if($source[0] == "v"){
-                        array_push($registersToPage, (int)$source[1]);
-                    }
+                if($p->getType() === "variable"){
+                    array_push($registersToPage, (int)$p->getContentSource());
                 }
             }
             
             $registers = array();
             foreach ($registersToPage as $rid) {
                 $register = $registerRepo->find($rid);
-                $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
+                $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
             }
             
             $terms = $termRepo->findAll();

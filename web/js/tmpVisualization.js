@@ -85,6 +85,7 @@ function createPanelDialog() {
                 click: function () {
                     var data = new FormData();
                     data.append("page_id", $("div.label-page.active").attr("id"));
+                    data.append("type", $("select#panel-type").val());
                     data.append("name", $("form#panel input#panel-name").val());
                     data.append("topPosition", $("form#panel input#topPosition").val());
                     data.append("leftPosition", $("form#panel input#leftPosition").val());
@@ -98,11 +99,11 @@ function createPanelDialog() {
                     data.append("fontStyle", $("form#panel div.panel-preview").css("fontStyle"));
                     data.append("fontFamily", $("form#panel select#fontFamily").val());
                     data.append("fontSize", $("form#panel select#fontSize").val());
-                    data.append("content_source", "t.Temperatura");
                     data.append("fontColor", $("form#panel input#fontColor").val());
                     data.append("borderRadius", $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px");
                     data.append("zIndex", 5);
                     data.append("visibility", $("form#panel input#visibility").is(':checked'));
+                    data.append("contentSource", $("input#panel-source-content").val());
                     saveData(data);
                     $(this).dialog('destroy').remove();
                 }
@@ -245,6 +246,45 @@ function createPanelDialog() {
                     break;
             }
         }
+        //panel type
+        $("select#panel-type").change(function () {
+            var value = $(this).val();
+            switch (value) {
+                case "variable":
+                    $("input#panel-source-content").val("").prop("disabled", true);
+                    $(".input-group-btn button#image").addClass("disabled");
+                    $(".input-group-btn button#variable").removeClass("disabled");
+                    break;
+                case "image":
+                    $("input#panel-source-content").val("").prop("disabled", true);
+                    $(".input-group-btn button#variable").addClass("disabled");
+                    $(".input-group-btn button#image").removeClass("disabled");
+                    break;
+                case "text":
+                    $(".input-group-btn button#image, .input-group-btn button#variable").addClass("disabled");
+                    $("input#panel-source-content").val("").removeAttr("disabled", false);
+                    break;
+            }
+        });
+        //zmiana zawartości źródła powoduje wyświetlenie na podglądzie aktualną zawartość
+        $("input#panel-source-content").change(function () {
+            $("div.panel-preview span").empty().append($(this).val());
+        });
+
+        $(".input-group-btn button#variable").click(function () {
+            $.ajax({
+                type: "POST",
+                datatype: "application/json",
+                url: Routing.generate('bms_visualization_load_variable_manager'),
+                success: function (ret) {
+                    $(".main-row").children(".fa-spinner").remove();
+                    $(".main-row").append(ret["template"]);
+                    createVariableManager().dialog("open");
+                }
+            });
+            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+        });
+
     }
 
     function saveData(data) {
@@ -264,607 +304,254 @@ function createPanelDialog() {
     }
 }
 
+function createVariableManager() {
+    return $("div.variable-manager").dialog({
+        autoOpen: false,
+        width: 700,
+        height: 500,
+        modal: true,
+        buttons: [
+            {
+                text: "Zapisz",
+                click: function () {
+                    var value = $("div.variable-manager select.registers").val();
+                    var res = value.split("&");
+                    $("div.dialog-panel-settings input#panel-source-content").val(res[0]);
+                    $("div.dialog-panel-settings div.panel-preview span").empty().append(res[1]);
+                    $(this).dialog('destroy').remove();
+                }
+            },
+            {
+                text: "Anuluj",
+                click: function () {
+                    $(this).dialog('destroy').remove();
+                }
+            }],
+        open: function () {
 
-/*
- //function createDialogImagePanelSettings(id, mode) {
- //    var input;
- //    return $("div.dialog-image-panel-settings").dialog({
- //        autoOpen: false,
- //        width: $(window).width(),
- //        height: $(window).height(),
- //        modal: true,
- //        buttons: [
- //            {
- //                text: "Zapisz",
- //                click: function () {
- //                    var data = new FormData();
- //                    if (input) {
- //                        data.append('file', input.files[0]);
- //                    } else {
- //                        data.append('file', null);
- //                    }
- //                    data.append("fileName", $("div.dialog-image-panel-settings input#imageName").val());
- //                    data.append("panel_id", id);
- //                    data.append("resolutionX", $("div.dialog-image-panel-settings input#resolutionX").val());
- //                    data.append("resolutionY", $("div.dialog-image-panel-settings input#resolutionY").val());
- //                    data.append("width", $("div.dialog-image-panel-settings input#width").val());
- //                    data.append("height", $("div.dialog-image-panel-settings input#height").val());
- //                    data.append("topPosition", $("div.dialog-image-panel-settings input#topPosition").val());
- //                    data.append("leftPosition", $("div.dialog-image-panel-settings input#leftPosition").val());
- //                    saveData(data);
- //                    $(this).dialog('destroy').remove();
- //                }
- //            },
- //            {
- //                text: "Anuluj",
- //                click: function () {
- //                    $(this).dialog('destroy').remove();
- //                    if (mode === "add") {
- //                        $("div#" + id + ".bms-panel").remove();
- //                        var data = {
- //                            panel_id: id
- //                        };
- //                        ajaxDeletePanel(data);
- //                    }
- //                }
- //            }],
- //        open: function () {
- //            setDialog(id);
- //        },
- //        close: function () {
- //            $(this).dialog('destroy').remove();
- //            if (mode === "add") {
- //                $("div#" + id + ".bms-panel").remove();
- //                var data = {
- //                    panel_id: id
- //                };
- //                ajaxDeletePanel(data);
- //            }
- //        }
- //    });
- //    function setDialog(id) {
- //        var panel = $("div#" + id + ".image-panel");
- //        var dialog_panel = $(".dialog-image-panel-settings div.dialog-panel");
- //
- //        if (mode === "edit") {
- //            var url = panel.children("img").attr("src");
- //            dialog_panel.css({
- //                width: panel.css("width"),
- //                height: panel.css("height")
- //            }).children("img").attr("src", url);
- //
- //            var imgName = url.substring(url.lastIndexOf('/') + 1);
- //            $("div.dialog-image-panel-settings input#imageName").val(imgName);
- //        }
- //
- //        dialog_panel.css({
- //            width: parseInt(panel.css("width")),
- //            height: parseInt(panel.css("height"))
- //        });
- //        $("div.dialog-image-panel-settings input#width").val(parseInt(panel.css("width")));
- //        $("div.dialog-image-panel-settings input#height").val(parseInt(panel.css("height")));
- //        $("div.dialog-image-panel-settings input#topPosition").val(parseInt(panel.css("top")));
- //        $("div.dialog-image-panel-settings input#leftPosition").val(parseInt(panel.css("left")));
- //        setDialogButtons(dialog_panel);
- //
- //    }
- //    function setDialogButtons(dp) {
- //        $(".btn-add-condition").click(function () {
- //            ajaxCreateConditionDialog();
- //        });
- //        //loading image from disk
- //        $("div.dialog-image-panel-settings input#image").change(function (event) {
- //            input = event.target;
- //            if (this.files && this.files[0]) {
- //                var reader = new FileReader();
- //                reader.onload = function (e) {
- //                    var img = new Image();
- //                    img.onload = function () {
- //                        dp.css({
- //                            width: this.width,
- //                            height: this.height
- //                        }).children("img").attr("src", e.target.result);
- //                        $("div.dialog-image-panel-settings input#width").val(parseInt(dp.css("width")));
- //                        $("div.dialog-image-panel-settings input#height").val(parseInt(dp.css("height")));
- //                        $("div.dialog-image-panel-settings input#resolutionX").val(parseInt(dp.css("width")));
- //                        $("div.dialog-image-panel-settings input#resolutionY").val(parseInt(dp.css("height")));
- //                    };
- //                    img.src = e.target.result;
- //
- //                };
- //                reader.readAsDataURL(input.files[0]);
- //            }
- //            var imgName = input.files[0].name;
- //            $("div.dialog-image-panel-settings input#imageName").val(imgName);
- //
- //        });
- //        //load image from server
- //        $("div.dialog-image-panel-settings div.image-list span.label").click(function () {
- //            var name = $(this).text();
- //            //var dir = [];
- //            var url = name;
- //            $(this).parents(".images").each(function () {
- //                //dir.push($(this).attr("id"));
- //                url = $(this).attr("id") + "/" + url;
- //            });
- //            url = "/images/" + url;
- //
- //            var img = new Image();
- //            img.onload = function () {
- //                dp.css({
- //                    width: this.width,
- //                    height: this.height
- //                }).children("img").attr("src", url);
- //                $("div.dialog-image-panel-settings input#width").val(parseInt(dp.css("width")));
- //                $("div.dialog-image-panel-settings input#height").val(parseInt(dp.css("height")));
- //                $("div.dialog-image-panel-settings input#resolutionX").val(parseInt(dp.css("width")));
- //                $("div.dialog-image-panel-settings input#resolutionY").val(parseInt(dp.css("height")));
- //            };
- //            img.src = url;
- //            dp.children("img").attr("src", url);
- //            $("div.dialog-image-panel-settings input#imageName").val(name);
- //
- //        });
- //        //removing image from server
- //        $("div.dialog-image-panel-settings div.image-list i.fa-remove").click(function () {
- //            var name = $(this).parent().children("span.label").text();
- //            var data = {
- //                image_name: name.replace(" ", "")
- //            };
- //            ajaxDeleteImage(data);
- //            $(this).parent().remove();
- //        });
- //        //change size of panel
- //        $("div.dialog-image-panel-settings input#width").change(function () {
- //            if ($(this).parent().parent().find("i#aspectRatio").hasClass("fa-chain")) {
- //                var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
- //                var h = $(this).val() / ar;
- //                $("div.dialog-image-panel-settings input#height").val(Math.round(h));
- //                var w = $(this).val();
- //                dp.css({width: w + "px", height: h + "px"});
- //            } else {
- //                var w = $(this).val();
- //                dp.css({width: w + "px"});
- //            }
- //
- //        });
- //        $("div.dialog-image-panel-settings input#height").change(function () {
- //            if ($(this).parent().parent().find("i#aspectRatio").hasClass("fa-chain")) {
- //                var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
- //                var w = $(this).val() * ar;
- //                $("div.dialog-image-panel-settings input#width").val(Math.round(w));
- //                var h = $(this).val();
- //                dp.css({width: w + "px", height: h + "px"});
- //            } else {
- //                var h = $(this).val();
- //                dp.css({height: h + "px"});
- //            }
- //        });
- //        //click chain
- //        $("i#aspectRatio").click(function () {
- //            $(this).toggleClass("fa-chain fa-chain-broken");
- //        });
- //        //change sier of image
- //        $("div.dialog-image-panel-settings input#resolutionX").change(function () {
- //            var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
- //            var h = $(this).val() / ar;
- //            $("div.dialog-image-panel-settings input#resolutionY").val(Math.round(h));
- //
- //        });
- //        $("div.dialog-image-panel-settings input#resolutionY").change(function () {
- //            var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
- //            var w = $(this).val() * ar;
- //            $("div.dialog-image-panel-settings input#resolutionX").val(Math.round(w));
- //        });
- //        //sidebar
- //        var imageListItems = $("div.dialog-image-panel-settings div.row.image-container i.fa-plus-circle");
- //        imageListItems.each(function () {
- //            $(this).click(function () {
- //                $(this).parent().children('.images').toggleClass('hidden');
- //                $(this).toggleClass("fa-minus-circle");
- //            });
- //        });
- //
- //    }
- //    function saveData(data) {
- //        $.ajax({
- //            type: "POST",
- //            url: Routing.generate('bms_visualization_edit_image_panel'),
- //            data: data,
- //            contentType: false,
- //            processData: false,
- //            success: function (ret) {
- //                $(".main-row").children(".fa-spinner").remove();
- //                $("div#" + ret['panel_id'] + ".image-panel").css(ret['css']).children("img").attr("src", ret["content"]);
- //            }
- //        });
- //        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
- //    }
- //}
- //function createDialogVariablePanelSettings(id, mode) {
- //    return $("div.dialog-variable-panel-settings").dialog({
- //        autoOpen: false,
- //        width: $(window).width(),
- //        height: $(window).height(),
- //        modal: true,
- //        buttons: [
- //            {
- //                text: "Zapisz",
- //                click: function () {
- //                    var dialog_panel = $(".dialog-variable-panel-settings div.dialog-panel");
- //                    var data = {
- //                        panel_id: id,
- //                        content: $("select.registers").val(),
- //                        topPosition: $("div.dialog-variable-panel-settings input#topPosition").val(),
- //                        leftPosition: $("div.dialog-variable-panel-settings input#leftPosition").val(),
- //                        width: dialog_panel.css("width"),
- //                        height: dialog_panel.css("height"),
- //                        textAlign: dialog_panel.css("textAlign"),
- //                        fontWeight: dialog_panel.css("fontWeight"),
- //                        textDecoration: dialog_panel.css("textDecoration"),
- //                        fontStyle: dialog_panel.css("fontStyle"),
- //                        fontFamily: dialog_panel.css("fontFamily"),
- //                        fontSize: dialog_panel.css("fontSize"),
- //                        fontColor: dialog_panel.css("color")
- //                    };
- //                    saveData(data);
- //                    $(this).dialog('destroy').remove();
- //                }
- //            },
- //            {
- //                text: "Anuluj",
- //                click: function () {
- //                    $(this).dialog('destroy').remove();
- //                    if (mode === "add") {
- //                        $("div#" + id + ".bms-panel").remove();
- //                        var data = {
- //                            panel_id: id
- //                        };
- //                        ajaxDeletePanel(data);
- //                    }
- //                }
- //            }],
- //        open: function () {
- //            setDialog(id);
- //        },
- //        close: function () {
- //            $(this).dialog('destroy').remove();
- //            if (mode === "add") {
- //                $("div#" + id + ".bms-panel").remove();
- //                var data = {
- //                    panel_id: id
- //                };
- //                ajaxDeletePanel(data);
- //            }
- //        }
- //    });
- //
- //    function setDialog(id) {
- //        var panel = $("div#" + id + ".variable-panel");
- //        var text = panel.children("span").clone().children().remove().end().text();
- //        var dialog_panel = $(".dialog-variable-panel-settings div.dialog-panel");
- //
- //        dialog_panel.text(text).css({
- //            width: panel.css("width"),
- //            height: panel.css("height"),
- //            textAlign: panel.css("textAlign"),
- //            fontWeight: panel.css("fontWeight"),
- //            textDecoration: panel.css("textDecoration"),
- //            fontStyle: panel.css("fontStyle"),
- //            fontFamily: panel.css("fontFamily"),
- //            fontSize: panel.css("fontSize"),
- //            color: panel.css("color"),
- //            lineHeight: panel.css("lineHeight"),
- //            boxShadow: "0px 0px 10px #000",
- //            backgroundColor: "#FFF",
- //            display: "inline-block"
- //        });
- //        //Rejestr
- //        $("select.registers").val(parseInt(panel.children("span").attr("id")));
- //        //Pozycja
- //        $("input#topPosition").val(parseInt(panel.css("top")));
- //        $("input#leftPosition").val(parseInt(panel.css("left")));
- //        //Rozmiar
- //        $("input#width").val(parseInt(panel.css("width")));
- //        $("input#height").val(parseInt(panel.css("height")));
- //        //Kolor
- //        $("input#fontColor").val(rgb2hex(panel.css("color")));
- //        //Czcionka styl
- //        $("select.font-family").val(dialog_panel.css("fontFamily"));
- //        //Czcionka rozmiar
- //        $("select.font-size").val(parseInt(dialog_panel.css("fontSize")));
- //        //Czcionka pogrubienie 
- //        dialog_panel.css("fontWeight") === "700" ? $(".btn-bold").addClass("active") : $(".btn-bold").removeClass("active");
- //        //Czcionka podkreślenie
- //        dialog_panel.css("textDecoration") === "underline" ? $(".btn-underline").addClass("active") : $(".btn-underline").removeClass("active");
- //        //Czcionka pochylenie
- //        dialog_panel.css("fontStyle") === "italic" ? $(".btn-italic").addClass("active") : $(".btn-italic").removeClass("active");
- //        //Wyrównanie
- //        setAlign(dialog_panel.css("text-align"));
- //
- //        setDialogButtons();
- //    }
- //    function setDialogButtons() {
- //        $("div.dialog-variable-panel-settings div.edit-controls div").children().unbind("click");
- //        var dialog_panel = $(".dialog-variable-panel-settings div.dialog-panel");
- //        $(".btn-add-condition").click(function () {
- //            ajaxCreateConditionDialog();
- //        });
- //        //pogrubienie
- //        $(".btn-bold").click(function () {
- //            $(this).hasClass("active") ? dialog_panel.css({fontWeight: "initial"}) : dialog_panel.css({fontWeight: "bold"});
- //            $(this).toggleClass("active");
- //        });
- //        //podkreślenie
- //        $(".btn-underline").click(function () {
- //            $(this).hasClass("active") ? dialog_panel.css({textDecoration: "initial"}) : dialog_panel.css({textDecoration: "underline"});
- //            $(this).toggleClass("active");
- //        });
- //        //pochylenie
- //        $(".btn-italic").click(function () {
- //            $(this).hasClass("active") ? dialog_panel.css({fontStyle: "initial"}) : dialog_panel.css({fontStyle: "italic"});
- //            $(this).toggleClass("active");
- //        });
- //        //wyrównanie do lewej
- //        $(".btn-align-left").click(function () {
- //            $(this).hasClass("active") ? dialog_panel.css({textAlign: "auto"}) : dialog_panel.css({textAlign: "left"});
- //            setAlign("left");
- //        });
- //        //wyrównanie do środka
- //        $(".btn-align-center").click(function () {
- //            $(this).hasClass("active") ? dialog_panel.css({textAlign: "auto"}) : dialog_panel.css({textAlign: "center"});
- //            setAlign("center");
- //        });
- //        //wyrównanie do prawej
- //        $(".btn-align-right").click(function () {
- //            $(this).hasClass("active") ? dialog_panel.css({textAlign: "auto"}) : dialog_panel.css({textAlign: "right"});
- //            setAlign("right");
- //        });
- //        //styl czcionki
- //        $("select.font-family").change(function () {
- //
- //            dialog_panel.css({fontFamily: $(this).val()});
- //        });
- //        //rozmiar czcionki
- //        $("select.font-size").change(function () {
- //            dialog_panel.css({fontSize: $(this).val() + "px"});
- //        });
- //        //size
- //        $("input#width").change(function () {
- //            dialog_panel.css({width: $(this).val() + "px"});
- //        });
- //        $("input#height").change(function () {
- //            dialog_panel.css({height: $(this).val() + "px"});
- //            dialog_panel.css({lineHeight: $(this).val() + "px"});
- //        });
- //        //Kolor
- //        $("input#fontColor").on('input', function () {
- //            dialog_panel.css({color: hex2rgba($(this).val(), 1)});
- //        });
- //
- //    }
- //    function setAlign(align) {
- //        switch (align) {
- //            case "left":
- //                $(".btn-align-center, .btn-align-right").removeClass("active");
- //                $(".btn-align-left").addClass("active");
- //                break;
- //            case "center":
- //                $(".btn-align-left, .btn-align-right").removeClass("active");
- //                $(".btn-align-center").addClass("active");
- //                break;
- //            case "right":
- //                $(".btn-align-center, .btn-align-left").removeClass("active");
- //                $(".btn-align-right").addClass("active");
- //                break;
- //        }
- //    }
- //    function saveData(data) {
- //        $.ajax({
- //            type: "POST",
- //            datatype: "application/json",
- //            url: Routing.generate('bms_visualization_edit_variable_panel'),
- //            data: data,
- //            success: function (ret) {
- //                $(".main-row").children(".fa-spinner").remove();
- //                var panel = $("div#" + data["panel_id"] + ".variable-panel");
- //                panel.removeClass("text-left text-center text-right").addClass(ret["textAlign"]).css(ret["css"]).children("span").attr("id", ret['content']).empty().append(ret['fixedValue']);
- //            }
- //        });
- //        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
- //    }
- //}
- //function createDialogNavigationPanelSettings(id, mode) {
- //    return $("div.dialog-navigation-panel-settings").dialog({
- //        autoOpen: false,
- //        width: $(window).width(),
- //        height: $(window).height(),
- //        modal: true,
- //        buttons: [
- //            {
- //                text: "Zapisz",
- //                click: function () {
- //                    var dialog_panel = $(".dialog-navigation-panel-settings div.dialog-panel");
- //                    var br = dialog_panel.css("border-top-left-radius") + " " + dialog_panel.css("border-top-right-radius") + " " + dialog_panel.css("border-bottom-right-radius") + " " + dialog_panel.css("border-bottom-left-radius");
- //                    var data = {
- //                        panel_id: id,
- //                        content: $("select.pages").val(),
- //                        topPosition: $("div.dialog-navigation-panel-settings input#topPosition").val(),
- //                        leftPosition: $("div.dialog-navigation-panel-settings input#leftPosition").val(),
- //                        width: dialog_panel.css("width"),
- //                        height: dialog_panel.css("height"),
- //                        borderWidth: $("div.dialog-navigation-panel-settings input#borderWidth").val(),
- //                        borderStyle: $("div.dialog-navigation-panel-settings select#borderStyle option:selected").val(),
- //                        borderColor: hex2rgba($("div.dialog-navigation-panel-settings input#borderColor").val(), 1),
- //                        borderRadius: br,
- //                        backgroundColor: hex2rgba($("div.dialog-navigation-panel-settings input#backgroundColor").val(), parseFloat($("div.dialog-navigation-panel-settings input#opacity").val()))
- //                    };
- //                    saveData(data);
- //                    $(this).dialog('destroy').remove();
- //                }
- //            },
- //            {
- //                text: "Anuluj",
- //                click: function () {
- //                    $(this).dialog('destroy').remove();
- //                    if (mode === "add") {
- //                        $("div#" + id + ".bms-panel").remove();
- //                        var data = {
- //                            panel_id: id
- //                        };
- //                        ajaxDeletePanel(data);
- //                    }
- //
- //                }
- //            }],
- //        open: function () {
- //            setDialog(id);
- //        },
- //        close: function () {
- //            $(this).dialog('destroy').remove();
- //            if (mode === "add") {
- //                $("div#" + id + ".bms-panel").remove();
- //                var data = {
- //                    panel_id: id
- //                };
- //                ajaxDeletePanel(data);
- //            }
- //        }
- //    });
- //
- //    function setDialog(id) {
- //        var panel = $("div#" + id + ".navigation-panel");
- //        var dialog_panel = $(".dialog-navigation-panel-settings div.dialog-panel");
- //        //Strona
- //        $("select.pages").val(parseInt(panel.children("div").attr("id")));
- //        dialog_panel.text($("select.pages option:selected").text()).css({
- //            width: panel.css("width"),
- //            height: panel.css("height"),
- //            textAlign: panel.css("textAlign"),
- //            fontWeight: panel.css("fontWeight"),
- //            borderWidth: panel.css("border-top-width"),
- //            borderColor: panel.css("border-top-color"),
- //            borderStyle: panel.css("border-top-style"),
- //            borderTopLeftRadius: panel.css("border-top-left-radius"),
- //            borderTopRightRadius: panel.css("border-top-right-radius"),
- //            borderBottomRightRadius: panel.css("border-bottom-right-radius"),
- //            borderBottomLeftRadius: panel.css("border-bottom-left-radius"),
- //            backgroundColor: panel.css("background-color"),
- //            display: "inline-block"
- //        });
- //
- //        //var text = panel.children("span").clone().children().remove().end().text();
- //        //Pozycja
- //        $("input#topPosition").val(parseInt(panel.css("top")));
- //        $("input#leftPosition").val(parseInt(panel.css("left")));
- //        //Rozmiar
- //        $("input#width").val(parseInt(panel.css("width")));
- //        $("input#height").val(parseInt(panel.css("height")));
- //        //Border
- //        $("input#borderWidth").val(parseInt(panel.css("border-top-width")));
- //        $("input#borderColor").val(rgb2hex(panel.css("border-top-color")));
- //        $("select#borderStyle").val(panel.css("border-top-style"));
- //        //Border Radius
- //        //TL
- //        $("input#borderRadiusTL").val(parseInt(panel.css("border-top-left-radius")));
- //        $("label#borderRadiusTL").empty().append($("input#borderRadiusTL").val());
- //        //TR
- //        $("input#borderRadiusTR").val(parseInt(panel.css("border-top-right-radius")));
- //        $("label#borderRadiusTR").empty().append($("input#borderRadiusTR").val());
- //        //BR
- //        $("input#borderRadiusBR").val(parseInt(panel.css("border-bottom-right-radius")));
- //        $("label#borderRadiusBR").empty().append($("input#borderRadiusBR").val());
- //        //BL
- //        $("input#borderRadiusBL").val(parseInt(panel.css("border-bottom-left-radius")));
- //        $("label#borderRadiusBL").empty().append($("input#borderRadiusBL").val());
- //        //Size
- //        $("input#width").val(parseInt(panel.css("width")));
- //        $("input#height").val(parseInt(panel.css("height")));
- //        //Background
- //        var bC = panel.css("background-color");
- //        if (bC === 'transparent') {
- //            bC = 'rgba(0,0,0,0)';
- //        }
- //        $("input#backgroundColor").val(rgb2hex(bC));
- //        $("input#opacity").val(parseFloat(getColorValues(bC)["alpha"]));
- //        setDialogButtons();
- //    }
- //    function setDialogButtons() {
- //        var dialog_panel = $(".dialog-navigation-panel-settings div.dialog-panel");
- //        $(".btn-add-condition").click(function () {
- //            ajaxCreateConditionDialog();
- //        });
- //        //size
- //        $(".dialog-navigation-panel-settings input#width").change(function () {
- //            dialog_panel.css({width: $(this).val() + "px"});
- //        });
- //        $(".dialog-navigation-panel-settings input#height").change(function () {
- //            dialog_panel.css({height: $(this).val() + "px"});
- //            dialog_panel.css({lineHeight: $(this).val() + "px"});
- //        });
- //        //kolor
- //        var backgroundColor;
- //        $(".dialog-navigation-panel-settings input#backgroundColor").on('input', function () {
- //            backgroundColor = hex2rgba($(this).val(), parseFloat($(".dialog-navigation-panel-settings input#opacity").val()));
- //            dialog_panel.css({backgroundColor: backgroundColor});
- //        });
- //
- //        $(".dialog-navigation-panel-settings input#opacity").change(function () {
- //            backgroundColor = hex2rgba($(".dialog-navigation-panel-settings input#backgroundColor").val(), parseFloat($(this).val()));
- //            dialog_panel.css({backgroundColor: backgroundColor});
- //        });
- //
- //        $(".dialog-navigation-panel-settings input#opacity").mousemove(function () {
- //            backgroundColor = hex2rgba($(".dialog-navigation-panel-settings input#backgroundColor").val(), parseFloat($(this).val()));
- //            dialog_panel.css({backgroundColor: backgroundColor});
- //        });
- //
- //        $(".dialog-navigation-panel-settings input#borderWidth").change(function () {
- //            dialog_panel.css({borderWidth: $(this).val()});
- //        });
- //        $(".dialog-navigation-panel-settings select#borderStyle").change(function () {
- //
- //            dialog_panel.css({borderStyle: $(this).val()});
- //        });
- //        $(".dialog-navigation-panel-settings input#borderColor").on('input', function () {
- //            dialog_panel.css({borderColor: hex2rgba($(this).val(), 1)});
- //        });
- //        //narożniki
- //        $(".dialog-navigation-panel-settings input#borderRadiusTL").change(changeTL).mousemove(changeTL);
- //        $(".dialog-navigation-panel-settings input#borderRadiusTR").change(changeTR).mousemove(changeTR);
- //        $(".dialog-navigation-panel-settings input#borderRadiusBL").change(changeBL).mousemove(changeBL);
- //        $(".dialog-navigation-panel-settings input#borderRadiusBR").change(changeBR).mousemove(changeBR);
- //        function changeTL() {
- //            dialog_panel.css({borderTopLeftRadius: $(this).val() + "px"});
- //        }
- //        function changeTR() {
- //            dialog_panel.css({borderTopRightRadius: $(this).val() + "px"});
- //        }
- //        function changeBL() {
- //            dialog_panel.css({borderBottomLeftRadius: $(this).val() + "px"});
- //        }
- //        function changeBR() {
- //            dialog_panel.css({borderBottomRightRadius: $(this).val() + "px"});
- //        }
- //
- //    }
- //    function saveData(data) {
- //        $.ajax({
- //            type: "POST",
- //            datatype: "application/json",
- //            url: Routing.generate('bms_visualization_edit_navigation_panel'),
- //            data: data,
- //            success: function (ret) {
- //                $(".main-row").children(".fa-spinner").remove();
- //                var panel = $("div#" + data["panel_id"] + ".navigation-panel");
- //                panel.css(ret["css"]).children("div").attr("id", ret['content']);
- //            }
- //        });
- //        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
- //    }
- //}
- */
+        },
+        close: function () {
+            $(this).dialog('destroy').remove();
+        }
+    });
+}
 
+
+function createDialogImagePanelSettings(id) {
+    var input;
+    return $("div.dialog-image-panel-settings").dialog({
+        autoOpen: false,
+        width: $(window).width(),
+        height: $(window).height(),
+        modal: true,
+        buttons: [
+            {
+                text: "Zapisz",
+                click: function () {
+                    var data = new FormData();
+                    if (input) {
+                        data.append('file', input.files[0]);
+                    } else {
+                        data.append('file', null);
+                    }
+                    data.append("fileName", $("div.dialog-image-panel-settings input#imageName").val());
+                    data.append("panel_id", id);
+                    data.append("resolutionX", $("div.dialog-image-panel-settings input#resolutionX").val());
+                    data.append("resolutionY", $("div.dialog-image-panel-settings input#resolutionY").val());
+                    data.append("width", $("div.dialog-image-panel-settings input#width").val());
+                    data.append("height", $("div.dialog-image-panel-settings input#height").val());
+                    data.append("topPosition", $("div.dialog-image-panel-settings input#topPosition").val());
+                    data.append("leftPosition", $("div.dialog-image-panel-settings input#leftPosition").val());
+                    saveData(data);
+                    $(this).dialog('destroy').remove();
+                }
+            },
+            {
+                text: "Anuluj",
+                click: function () {
+                    $(this).dialog('destroy').remove();
+                    if (mode === "add") {
+                        $("div#" + id + ".bms-panel").remove();
+                        var data = {
+                            panel_id: id
+                        };
+                        ajaxDeletePanel(data);
+                    }
+                }
+            }],
+        open: function () {
+            setDialog(id);
+        },
+        close: function () {
+            $(this).dialog('destroy').remove();
+            if (mode === "add") {
+                $("div#" + id + ".bms-panel").remove();
+                var data = {
+                    panel_id: id
+                };
+                ajaxDeletePanel(data);
+            }
+        }
+    });
+    function setDialog(id) {
+        var panel = $("div#" + id + ".image-panel");
+        var dialog_panel = $(".dialog-image-panel-settings div.dialog-panel");
+
+        if (mode === "edit") {
+            var url = panel.children("img").attr("src");
+            dialog_panel.css({
+                width: panel.css("width"),
+                height: panel.css("height")
+            }).children("img").attr("src", url);
+
+            var imgName = url.substring(url.lastIndexOf('/') + 1);
+            $("div.dialog-image-panel-settings input#imageName").val(imgName);
+        }
+
+        dialog_panel.css({
+            width: parseInt(panel.css("width")),
+            height: parseInt(panel.css("height"))
+        });
+        $("div.dialog-image-panel-settings input#width").val(parseInt(panel.css("width")));
+        $("div.dialog-image-panel-settings input#height").val(parseInt(panel.css("height")));
+        $("div.dialog-image-panel-settings input#topPosition").val(parseInt(panel.css("top")));
+        $("div.dialog-image-panel-settings input#leftPosition").val(parseInt(panel.css("left")));
+        setDialogButtons(dialog_panel);
+
+    }
+    function setDialogButtons(dp) {
+        $(".btn-add-condition").click(function () {
+            ajaxCreateConditionDialog();
+        });
+        //loading image from disk
+        $("div.dialog-image-panel-settings input#image").change(function (event) {
+            input = event.target;
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = new Image();
+                    img.onload = function () {
+                        dp.css({
+                            width: this.width,
+                            height: this.height
+                        }).children("img").attr("src", e.target.result);
+                        $("div.dialog-image-panel-settings input#width").val(parseInt(dp.css("width")));
+                        $("div.dialog-image-panel-settings input#height").val(parseInt(dp.css("height")));
+                        $("div.dialog-image-panel-settings input#resolutionX").val(parseInt(dp.css("width")));
+                        $("div.dialog-image-panel-settings input#resolutionY").val(parseInt(dp.css("height")));
+                    };
+                    img.src = e.target.result;
+
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+            var imgName = input.files[0].name;
+            $("div.dialog-image-panel-settings input#imageName").val(imgName);
+
+        });
+        //load image from server
+        $("div.dialog-image-panel-settings div.image-list span.label").click(function () {
+            var name = $(this).text();
+            //var dir = [];
+            var url = name;
+            $(this).parents(".images").each(function () {
+                //dir.push($(this).attr("id"));
+                url = $(this).attr("id") + "/" + url;
+            });
+            url = "/images/" + url;
+
+            var img = new Image();
+            img.onload = function () {
+                dp.css({
+                    width: this.width,
+                    height: this.height
+                }).children("img").attr("src", url);
+                $("div.dialog-image-panel-settings input#width").val(parseInt(dp.css("width")));
+                $("div.dialog-image-panel-settings input#height").val(parseInt(dp.css("height")));
+                $("div.dialog-image-panel-settings input#resolutionX").val(parseInt(dp.css("width")));
+                $("div.dialog-image-panel-settings input#resolutionY").val(parseInt(dp.css("height")));
+            };
+            img.src = url;
+            dp.children("img").attr("src", url);
+            $("div.dialog-image-panel-settings input#imageName").val(name);
+
+        });
+        //removing image from server
+        $("div.dialog-image-panel-settings div.image-list i.fa-remove").click(function () {
+            var name = $(this).parent().children("span.label").text();
+            var data = {
+                image_name: name.replace(" ", "")
+            };
+            ajaxDeleteImage(data);
+            $(this).parent().remove();
+        });
+        //change size of panel
+        $("div.dialog-image-panel-settings input#width").change(function () {
+            if ($(this).parent().parent().find("i#aspectRatio").hasClass("fa-chain")) {
+                var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
+                var h = $(this).val() / ar;
+                $("div.dialog-image-panel-settings input#height").val(Math.round(h));
+                var w = $(this).val();
+                dp.css({width: w + "px", height: h + "px"});
+            } else {
+                var w = $(this).val();
+                dp.css({width: w + "px"});
+            }
+
+        });
+        $("div.dialog-image-panel-settings input#height").change(function () {
+            if ($(this).parent().parent().find("i#aspectRatio").hasClass("fa-chain")) {
+                var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
+                var w = $(this).val() * ar;
+                $("div.dialog-image-panel-settings input#width").val(Math.round(w));
+                var h = $(this).val();
+                dp.css({width: w + "px", height: h + "px"});
+            } else {
+                var h = $(this).val();
+                dp.css({height: h + "px"});
+            }
+        });
+        //click chain
+        $("i#aspectRatio").click(function () {
+            $(this).toggleClass("fa-chain fa-chain-broken");
+        });
+        //change sier of image
+        $("div.dialog-image-panel-settings input#resolutionX").change(function () {
+            var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
+            var h = $(this).val() / ar;
+            $("div.dialog-image-panel-settings input#resolutionY").val(Math.round(h));
+
+        });
+        $("div.dialog-image-panel-settings input#resolutionY").change(function () {
+            var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
+            var w = $(this).val() * ar;
+            $("div.dialog-image-panel-settings input#resolutionX").val(Math.round(w));
+        });
+        //sidebar
+        var imageListItems = $("div.dialog-image-panel-settings div.row.image-container i.fa-plus-circle");
+        imageListItems.each(function () {
+            $(this).click(function () {
+                $(this).parent().children('.images').toggleClass('hidden');
+                $(this).toggleClass("fa-minus-circle");
+            });
+        });
+
+    }
+    function saveData(data) {
+        $.ajax({
+            type: "POST",
+            url: Routing.generate('bms_visualization_edit_image_panel'),
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $("div#" + ret['panel_id'] + ".image-panel").css(ret['css']).children("img").attr("src", ret["content"]);
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    }
+}
 function ajaxMovePanel(data) {
     $.ajax({
         type: "POST",
@@ -907,11 +594,11 @@ function ajaxEditPanel(panel_id) {
                     data.append("fontStyle", $("form#panel div.panel-preview").css("fontStyle"));
                     data.append("fontFamily", $("form#panel select#fontFamily").val());
                     data.append("fontSize", $("form#panel select#fontSize").val());
-                    data.append("content_source", "t.Temperatura");
                     data.append("fontColor", $("form#panel input#fontColor").val());
                     data.append("borderRadius", $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px");
                     data.append("zIndex", 5);
                     data.append("visibility", $("form#panel input#visibility").is(':checked'));
+                    data.append("contentSource", $("input#panel-source-content").val());
                     saveData(data);
                     $(this).dialog('destroy').remove();
                 }
@@ -935,6 +622,7 @@ function ajaxEditPanel(panel_id) {
         var panel = $("div#" + panel_id + ".bms-panel");
         var prewievPanel = $("div.panel-preview");
 
+        $("form#panel input#panel-name").val(panel.attr("title"));
         $("form#panel input#topPosition").val(parseInt(panel.css("top")));
         $("form#panel input#leftPosition").val(parseInt(panel.css("left")));
         $("form#panel input#width").val(parseInt(panel.css("width")));
@@ -950,7 +638,15 @@ function ajaxEditPanel(panel_id) {
         $("form#panel input#borderWidth").val(parseInt(panel.css("borderTopWidth")));
         $("form#panel input#borderColor").val(rgb2hex(panel.css("borderTopColor")));
         $("form#panel select#borderStyle").val(panel.css("borderTopStyle"));
-        console.log(panel.css("borderTopStyle"));
+        $("form#panel input#borderRadiusTL").val(parseInt(panel.css("borderTopLeftRadius")));
+        $("form#panel input#borderRadiusTR").val(parseInt(panel.css("borderTopRightRadius")));
+        $("form#panel input#borderRadiusBL").val(parseInt(panel.css("borderBottomLeftRadius")));
+        $("form#panel input#borderRadiusBR").val(parseInt(panel.css("borderBottomRightRadius")));
+        $("form#panel select#fontFamily").val(panel.css("fontFamily"));
+        $("form#panel select#fontSize").val(parseInt(panel.css("fontSize")));
+        $("form#panel input#fontColor").val(rgb2hex(panel.css("color")));
+
+        console.log(panel.css("fontColor"));
 
         var br = $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px";
 
@@ -1085,7 +781,7 @@ function ajaxEditPanel(panel_id) {
             processData: false,
             success: function (ret) {
                 $(".main-row").children(".fa-spinner").remove();
-                console.log($("div#" + ret["panel_id"] + ".bms-panel").remove());
+                $("div#" + ret["panel_id"] + ".bms-panel").remove();
                 $("div.main-row div.well").append(ret['template']);
                 setPanelEvents();
             }
@@ -1484,7 +1180,6 @@ function ajaxChangePage(data) {
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
             createPage(ret["template"]);
-            //setVariables(ret["registers"], ret["terms"]);
             //ajaxLoadPanelList(data);
         }
     });
@@ -1536,12 +1231,7 @@ function ajaxChangePage(data) {
 
 
     }
-    //wypełnienie zmiennych
-    function setVariables(registers, terms) {
-        $.each(registers, function (key, value) {
-            $("div.variable-panel").children("span#" + key).append(value);
-        });
-    }
+
 }
 //*****PAGE END*****
 

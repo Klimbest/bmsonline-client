@@ -172,7 +172,7 @@ div.dialog-panel-settings .well .row{
     margin-bottom: 5px;
 }
 
-div.dialog-panel-settings div.dialog-panel-data .well,
+div.dialog-panel-settings div.dialog-panel-format .well,
 div.dialog-panel-settings div.dialog-panel-event .well{
     display: none;
 }
@@ -193,4 +193,16 @@ div.dialog-panel-settings div.dialog-panel-event .well{
 .panel-preview{
     height: 100px;    
     line-height: 100px;
+}
+
+.input-group-btn button{
+    font-size: 14px;
+    
+}
+
+
+select#panel-type{
+    margin-right: -5px;
+    border-radius: 4px 0px 0px 4px;
+
 }
