@@ -49,6 +49,10 @@ class RegisterType extends AbstractType{
                     'attr' => array('disabled' => 'disabled', 'maxlength' => 255),
                     'label' => 'Pełna nazwa (max 255 znaków)'
                     ))
+                ->add('description2', TextareaType::class, array(
+                    'attr' => array('disabled' => 'disabled'),
+                    'label' => 'Dodatkowy opis'
+                    ))
                 ->add('display_suffix', TextType::class, array(
                     'attr' => array('disabled' => 'disabled'),
                     'label' => 'Grupa danych',

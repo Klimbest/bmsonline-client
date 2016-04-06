@@ -46,7 +46,7 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/{comm_id}", name="bms_configuration_communication_type", options={"expose"=true})
+     * @Route("/{comm_id}", name="bms_configuration_communication_type", requirements={"comm_id" = "\d+"}, options={"expose"=true})
      */
     public function configureCommunicationTypeAction($comm_id, Request $request) {
 
@@ -100,7 +100,7 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/{comm_id}/{device_id}", name="bms_configuration_device", options={"expose"=true})
+     * @Route("/{comm_id}/{device_id}", name="bms_configuration_device" ,requirements={"comm_id" = "\d+", "device_id" = "\d+"}, options={"expose"=true})
      */
     public function configureDeviceAction($comm_id, $device_id, Request $request) {
         //ustawienie połączenia na bazę danego obiektu
@@ -150,7 +150,7 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/{comm_id}/{device_id}/{register_id}", name="bms_configuration_register", options={"expose"=true})
+     * @Route("/{comm_id}/{device_id}/{register_id}", name="bms_configuration_register", requirements={"comm_id" = "\d+", "device_id" = "\d+", "register_id" = "\d+"}, options={"expose"=true})
      */
     public function configureRegisterAction($comm_id, $device_id, $register_id, Request $request) {
         //ustawienie połączenia na bazę danego obiektu
@@ -223,7 +223,7 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/{comm_id}/add_device", name="bms_configuration_add_device", options={"expose"=true})
+     * @Route("/{comm_id}/add_device", name="bms_configuration_add_device", requirements={"comm_id" = "\d+"}, options={"expose"=true})
      */
     public function addDeviceAction($comm_id, Request $request) {
         //ustawienie połączenia na bazę danego obiektu
@@ -276,7 +276,7 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/{comm_id}/{device_id}/add_register", name="bms_configuration_add_register", options={"expose"=true})
+     * @Route("/{comm_id}/{device_id}/add_register", name="bms_configuration_add_register", requirements={"comm_id" = "\d+", "device_id" = "\d+"}, options={"expose"=true})
      */
     public function addRegisterAction($comm_id, $device_id, Request $request) {
 
@@ -355,7 +355,7 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/{comm_id}/{device_id}/delete", name="bms_configuration_del_device", options={"expose"=true})
+     * @Route("/{comm_id}/{device_id}/delete", name="bms_configuration_del_device", requirements={"comm_id" = "\d+", "device_id" = "\d+"}, options={"expose"=true})
      */
     public function delDeviceAction($comm_id, $device_id, Request $request) {
 
@@ -382,7 +382,7 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/{comm_id}/{device_id}/{register_id}/delete", name="bms_configuration_del_register", options={"expose"=true})
+     * @Route("/{comm_id}/{device_id}/{register_id}/delete", name="bms_configuration_del_register", requirements={"comm_id" = "\d+", "device_id" = "\d+", "register_id" = "\d+"}, options={"expose"=true})
      */
     public function delRegisterAction($comm_id, $device_id, $register_id, Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -405,7 +405,7 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/{comm_id}/{device_id}/registers-delete", name="bms_configuration_del_many_registers", options={"expose"=true})
+     * @Route("/{comm_id}/{device_id}/registers-delete", name="bms_configuration_del_many_registers", requirements={"comm_id" = "\d+", "device_id" = "\d+"}, options={"expose"=true})
      */
     public function delManyRegistersAction($comm_id, $device_id, Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -437,7 +437,7 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/{comm_id}/registers-delete", name="bms_configuration_del_many_devices", options={"expose"=true})
+     * @Route("/{comm_id}/registers-delete", name="bms_configuration_del_many_devices", requirements={"comm_id" = "\d+"}, options={"expose"=true})
      */
     public function delManyDevicesAction($comm_id, Request $request) {
 
@@ -445,7 +445,7 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/{comm_id}/{device_id}/{register_id}/refresh", name="bms_configuration_refresh_page", options={"expose"=true})
+     * @Route("/{comm_id}/{device_id}/{register_id}/refresh", name="bms_configuration_refresh_page", requirements={"comm_id" = "\d+", "device_id" = "\d+", "register_id" = "\d+"}, options={"expose"=true})
      */
     public function refreshPageAction($comm_id, $device_id, $register_id, Request $request) {
         if ($request->isXmlHttpRequest()) {

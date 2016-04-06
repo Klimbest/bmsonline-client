@@ -64,6 +64,13 @@ class Register
     /**
      * @var string
      *
+     * @ORM\Column(name="description2", type="string", length=255, nullable=true)
+     */
+    private $description2;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="display_suffix", type="string", length=5, nullable=true)
      */
     private $displaySuffix;
@@ -506,5 +513,29 @@ class Register
     public function getRegisterSize()
     {
         return $this->registerSize;
+    }
+
+    /**
+     * Set description2
+     *
+     * @param string $description2
+     *
+     * @return Register
+     */
+    public function setDescription2($description2)
+    {
+        $this->description2 = $description2;
+
+        return $this;
+    }
+
+    /**
+     * Get description2
+     *
+     * @return string
+     */
+    public function getDescription2()
+    {
+        return $this->description2;
     }
 }

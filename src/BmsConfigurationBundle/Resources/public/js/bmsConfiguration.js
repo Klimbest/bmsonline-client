@@ -13,8 +13,7 @@ Number.prototype.pad = function (size) {
     return s;
 };
 
-$(document).ready(function () {
-    
+$(document).ready(function () {    
     
     
     setInterval(function () {
