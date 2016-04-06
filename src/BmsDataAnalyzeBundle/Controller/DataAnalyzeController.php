@@ -7,15 +7,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Ob\HighchartsBundle\Highcharts\Highchart;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class DataAnalyzeController extends Controller {
 
+    /**
+     * @Route("/", name="bms_data_analyze_index")
+     */
     public function indexAction() {
         $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
         $registers = $registerRepo->getArchivatedRegisters();
         $detailChart = new Highchart();
         $masterChart = new Highchart();
-        
+
         return $this->render('BmsDataAnalyzeBundle::index.html.twig', ['registers' => $registers,
                     'detailChart' => $this->generateDetailChart($detailChart),
                     'masterChart' => $this->generateMasterChart($masterChart)]);
@@ -86,13 +90,13 @@ class DataAnalyzeController extends Controller {
         $detailChart->yAxis($yAxis);
         //$detailChart->tooltip->pointFormat('<span style="color:{point.color}">O</span> {series.name}: <b>{point.y}</b><br/>')
         $detailChart->tooltip->crosshairs([true, true])
-                             ->pointFormat("")
-                             ->formatter("")
-                             ->backgroundColor("rgba(255,255,255,0)")
-                             ->borderColor("rgba(255,255,255,0)")
-                             ->borderWidth(0)
-                             ->shadow(false)
-                             ->xDateFormat(" ");
+                ->pointFormat("")
+                ->formatter("")
+                ->backgroundColor("rgba(255,255,255,0)")
+                ->borderColor("rgba(255,255,255,0)")
+                ->borderWidth(0)
+                ->shadow(false)
+                ->xDateFormat(" ");
 //                ->shared(true)
 //                ->backgroundColor('#FFF')
 //                ->borderColor('#000')
@@ -194,6 +198,9 @@ class DataAnalyzeController extends Controller {
         return $masterChart;
     }
 
+    /**
+     * @Route("/add_series", name="bms_data_analyze_add_series", options={"expose"=true})
+     */
     public function addSeriesAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $from = $request->get('from');
@@ -210,7 +217,6 @@ class DataAnalyzeController extends Controller {
             foreach ($registerArchiveData as $rad) {
                 $time = $rad["timeOfInsert"]->getTimestamp() * 1000;
                 array_push($arrayToChart, [$time, $rad["fixedValue"]]);
-                
             }
             $series = array(
                 'id' => $register->getId(),
@@ -218,12 +224,12 @@ class DataAnalyzeController extends Controller {
                 'data' => $arrayToChart,
                 'yAxis' => $yAxis,
                 'suffix' => '°C'
-                
             );
-            
+
             return new JsonResponse($series);
         } else {
             throw new AccessDeniedHttpException();
         }
     }
+
 }

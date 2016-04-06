@@ -14,14 +14,18 @@ use BmsConfigurationBundle\Form\RegisterType;
 use BmsConfigurationBundle\Entity\Device;
 use BmsConfigurationBundle\Entity\Register;
 use BmsConfigurationBundle\Entity\RegisterCurrentData;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class DefaultController extends Controller {
 
+    /**
+     * @Route("/", name="bms_configuration_index")
+     */
     public function bmsConfigurationIndexAction(Request $request) {
 
         $session = $request->getSession();
         $target = $session->get('target');
-        
+
         $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
         $communicationTypes = $communicationRepo->createQueryBuilder('ct')
                         ->join('ct.hardware_id', 'h')
@@ -41,6 +45,9 @@ class DefaultController extends Controller {
         }
     }
 
+    /**
+     * @Route("/{comm_id}", name="bms_configuration_communication_type", options={"expose"=true})
+     */
     public function configureCommunicationTypeAction($comm_id, Request $request) {
 
         //ustawienie połączenia na bazę danego obiektu
@@ -92,6 +99,9 @@ class DefaultController extends Controller {
         }
     }
 
+    /**
+     * @Route("/{comm_id}/{device_id}", name="bms_configuration_device", options={"expose"=true})
+     */
     public function configureDeviceAction($comm_id, $device_id, Request $request) {
         //ustawienie połączenia na bazę danego obiektu
         $em = $this->getDoctrine()->getManager();
@@ -139,6 +149,9 @@ class DefaultController extends Controller {
         }
     }
 
+    /**
+     * @Route("/{comm_id}/{device_id}/{register_id}", name="bms_configuration_register", options={"expose"=true})
+     */
     public function configureRegisterAction($comm_id, $device_id, $register_id, Request $request) {
         //ustawienie połączenia na bazę danego obiektu
         $em = $this->getDoctrine()->getManager();
@@ -155,7 +168,7 @@ class DefaultController extends Controller {
         $register = $registerRepo->find($register_id);
 
         $form = $this->createForm(RegisterType::class, $register, array(
-            'action' => $this->generateUrl('bms_configuration_register', array( 'comm_id' => $comm_id, 'device_id' => $device_id, 'register_id' => $register_id)),
+            'action' => $this->generateUrl('bms_configuration_register', array('comm_id' => $comm_id, 'device_id' => $device_id, 'register_id' => $register_id)),
             'method' => 'POST'
         ));
 
@@ -194,7 +207,7 @@ class DefaultController extends Controller {
             $session->set('comm_id', $comm_id);
             $session->set('device_id', $device_id);
 
-            
+
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
 
@@ -209,6 +222,9 @@ class DefaultController extends Controller {
         }
     }
 
+    /**
+     * @Route("/{comm_id}/add_device", name="bms_configuration_add_device", options={"expose"=true})
+     */
     public function addDeviceAction($comm_id, Request $request) {
         //ustawienie połączenia na bazę danego obiektu
         $em = $this->getDoctrine()->getManager();
@@ -259,8 +275,11 @@ class DefaultController extends Controller {
         }
     }
 
+    /**
+     * @Route("/{comm_id}/{device_id}/add_register", name="bms_configuration_add_register", options={"expose"=true})
+     */
     public function addRegisterAction($comm_id, $device_id, Request $request) {
-        
+
 
         //ustawienie połączenia na bazę danego obiektu
         $em = $this->getDoctrine()->getManager();
@@ -310,7 +329,7 @@ class DefaultController extends Controller {
                     ->setArchive($archive)
                     ->setActive($active)
                     ->setDevice($device);
-            
+
             $em->persist($register);
             $em->flush();
             $registerCD->setRegister($register);
@@ -322,8 +341,8 @@ class DefaultController extends Controller {
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
             $session->set('device_id', $device_id);
-            
-            
+
+
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
             $template = $this->container
@@ -335,6 +354,9 @@ class DefaultController extends Controller {
         }
     }
 
+    /**
+     * @Route("/{comm_id}/{device_id}/delete", name="bms_configuration_del_device", options={"expose"=true})
+     */
     public function delDeviceAction($comm_id, $device_id, Request $request) {
 
         $em = $this->getDoctrine()->getManager();
@@ -359,7 +381,10 @@ class DefaultController extends Controller {
         return $this->redirectToRoute('bms_configuration_index');
     }
 
-    public function delRegisterAction( $comm_id, $device_id, $register_id, Request $request) {
+    /**
+     * @Route("/{comm_id}/{device_id}/{register_id}/delete", name="bms_configuration_del_register", options={"expose"=true})
+     */
+    public function delRegisterAction($comm_id, $device_id, $register_id, Request $request) {
         $em = $this->getDoctrine()->getManager();
         $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
         $register = $registerRepo->find($register_id);
@@ -379,7 +404,10 @@ class DefaultController extends Controller {
         return $this->redirectToRoute('bms_configuration_index');
     }
 
-    public function delManyRegistersAction( $comm_id, $device_id, Request $request) {
+    /**
+     * @Route("/{comm_id}/{device_id}/registers-delete", name="bms_configuration_del_many_registers", options={"expose"=true})
+     */
+    public function delManyRegistersAction($comm_id, $device_id, Request $request) {
         $em = $this->getDoctrine()->getManager();
         $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
 
@@ -408,11 +436,58 @@ class DefaultController extends Controller {
         return $this->redirectToRoute('bms_configuration_index');
     }
 
-    public function delManyDevicesAction( $comm_id, Request $request) {
+    /**
+     * @Route("/{comm_id}/registers-delete", name="bms_configuration_del_many_devices", options={"expose"=true})
+     */
+    public function delManyDevicesAction($comm_id, Request $request) {
 
         return new Response();
     }
-            
-   
+
+    /**
+     * @Route("/{comm_id}/{device_id}/{register_id}/refresh", name="bms_configuration_refresh_page", options={"expose"=true})
+     */
+    public function refreshPageAction($comm_id, $device_id, $register_id, Request $request) {
+        if ($request->isXmlHttpRequest()) {
+
+            $em = $this->getDoctrine()->getManager();
+            $registerDevice = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
+            $devices = $registerDevice->findAll();
+            $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+            $registers = $registerRepo->findAll();
+            $ret = array();
+            $times = array();
+            $time = 0;
+            foreach ($devices as $device) {
+                $did = $device->getId();
+                $active = $device->getActive();
+                $registers = $device->getRegisters();
+                $time = 0;
+                foreach ($registers as $register) {
+                    $lastRead = date_timestamp_get($register->getRegisterCurrentData()->getTimeOfUpdate());
+
+                    if ($lastRead > $time) {
+                        $time = $lastRead;
+                    }
+                    $id = $register->getId();
+                    $val = $register->getRegisterCurrentData()->getFixedValue();
+                    $ret[$id] = $val;
+                }
+                if ($active) {
+                    $times[$did] = $time;
+                } else {
+                    $times[$did] = 0;
+                }
+            }
+
+            $ret["times_of_update"] = $times;
+
+            $ret["time_of_update"] = $time;
+
+            return new JsonResponse($ret);
+        } else {
+            throw new\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
+        }
+    }
 
 }

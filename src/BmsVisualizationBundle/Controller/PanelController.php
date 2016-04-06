@@ -7,13 +7,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use BmsVisualizationBundle\Entity\Panel;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class PanelController extends Controller {
 
+    /**
+     * @Route("/load_panel_dialog", name="bms_visualization_load_panel_dialog", options={"expose"=true})
+     */
     public function loadPanelDialogAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
-
-
+            $reg_id = $request->get("reg_id");
+            if(isset($reg_id)){
+                $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+                $register = $registerRepo->findOneById($reg_id);
+                $r["name"] = $register->getName();
+                $r["value"] = $register->getRegisterCurrentData()->getFixedValue();
+                $ret["register"] =$r;
+            }
+            
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelDialog.html.twig');
             return new JsonResponse($ret);
         } else {
@@ -21,11 +32,14 @@ class PanelController extends Controller {
         }
     }
 
+    /**
+     * @Route("/add_panel", name="bms_visualization_add_panel", options={"expose"=true})
+     */
     public function addPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-            
+
             $page_id = $request->request->get("page_id");
             $type = $request->request->get("type");
             $name = $request->request->get("name");
@@ -45,12 +59,12 @@ class PanelController extends Controller {
             $fontColor = $request->request->get("fontColor");
             $borderRadius = $request->request->get("borderRadius");
             $zIndex = $request->request->get("zIndex");
-            if($type == "variable"){
-                $registerName = $request->request->get("contentSource");    
+            if ($type == "variable") {
+                $registerName = $request->request->get("contentSource");
                 $register = $registerRepo->findOneBy(array('name' => $registerName));
                 $contentSource = $register->getId();
-            }else{
-                $contentSource =$request->request->get("contentSource");    
+            } else {
+                $contentSource = $request->request->get("contentSource");
             }
 
             if ($request->request->get("visibility") == "true") {
@@ -95,6 +109,9 @@ class PanelController extends Controller {
         }
     }
 
+    /**
+     * @Route("/edit_panel", name="bms_visualization_edit_panel", options={"expose"=true})
+     */
     public function editPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
@@ -118,14 +135,14 @@ class PanelController extends Controller {
             $fontColor = $request->request->get("fontColor");
             $borderRadius = $request->request->get("borderRadius");
             $zIndex = $request->request->get("zIndex");
-            if($type == "variable"){
-                $registerName = $request->request->get("contentSource");    
+            if ($type == "variable") {
+                $registerName = $request->request->get("contentSource");
                 $register = $registerRepo->findOneBy(array('name' => $registerName));
                 $contentSource = $register->getId();
-            }else{
-                $contentSource =$request->request->get("contentSource");    
+            } else {
+                $contentSource = $request->request->get("contentSource");
             }
-            
+
             if ($request->request->get("visibility") == "true") {
                 $visibility = 1;
             } else {
@@ -165,6 +182,9 @@ class PanelController extends Controller {
         }
     }
 
+    /**
+     * @Route("/move_panel", name="bms_visualization_move_panel", options={"expose"=true})
+     */
     public function movePanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
@@ -189,6 +209,9 @@ class PanelController extends Controller {
         }
     }
 
+    /**
+     * @Route("/copy_panel", name="bms_visualization_copy_panel", options={"expose"=true})
+     */
     public function copyPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $panel_id = $request->get("panel_id");
@@ -212,6 +235,9 @@ class PanelController extends Controller {
         }
     }
 
+    /**
+     * @Route("/delete_panel", name="bms_visualization_delete_panel", options={"expose"=true})
+     */
     public function deletePanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $panel_id = $request->get("panel_id");
@@ -229,9 +255,4 @@ class PanelController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
-
-    public function getAjaxData(Request $request) {
-        
-    }
-
 }

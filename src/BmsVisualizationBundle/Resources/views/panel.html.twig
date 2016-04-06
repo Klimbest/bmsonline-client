@@ -22,7 +22,7 @@
     {% if panel.type == 'text' %}
         <span class="bms-panel-content">{{panel.contentSource}}</span>
     {% elseif panel.type == 'variable' %}
-        <span id="{{panel.contentSource}}" class="bms-panel-content"></span>
+        <span id="{{panel.contentSource}}" class="bms-panel-content" value="{{panel.displayPrecision}}"></span>
     {% elseif panel.type == 'image' %}
         <img class="img-responsive" src="{{panel.contentSource}}"/>
     {% endif %}

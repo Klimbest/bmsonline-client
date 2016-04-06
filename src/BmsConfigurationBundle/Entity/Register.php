@@ -71,7 +71,7 @@ class Register
     /**
      * @var decimal
      *
-     * @ORM\Column(name="modificator_read", type="decimal", precision=9, scale=6, nullable=true)
+     * @ORM\Column(name="modificator_read", type="decimal", precision=15, scale=8, nullable=true)
      */
     private $modificatorRead;
 
