@@ -78,13 +78,6 @@ class Panel {
     private $zIndex;
     
     /**
-     * @var integer
-     * 
-     * @ORM\Column(name="displayPrecision", type="integer", nullable=false)
-     */
-    private $displayPrecision;
-    
-    /**
      * @var string
      *
      * @ORM\Column(name="backgroundColor", type="string", length=30, nullable=false)
@@ -727,29 +720,5 @@ class Panel {
     public function getBorder()
     {
         return $this->border;
-    }
-
-    /**
-     * Set displayPrecision
-     *
-     * @param integer $displayPrecision
-     *
-     * @return Panel
-     */
-    public function setDisplayPrecision($displayPrecision)
-    {
-        $this->displayPrecision = $displayPrecision;
-
-        return $this;
-    }
-
-    /**
-     * Get displayPrecision
-     *
-     * @return integer
-     */
-    public function getDisplayPrecision()
-    {
-        return $this->displayPrecision;
     }
 }

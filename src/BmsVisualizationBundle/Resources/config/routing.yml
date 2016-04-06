@@ -1,0 +1,102 @@
+bms_visualization_index:
+    path:     /
+    defaults: { _controller: BmsVisualizationBundle:Default:bmsVisualizationIndex }
+    options:
+        expose: true
+#PAGE START    
+bms_visualization_add_page:
+    path:   /add_page
+    defaults: { _controller: BmsVisualizationBundle:Page:addPage }
+    options:
+        expose: true
+        
+bms_visualization_delete_page:
+    path:   /delete_page
+    defaults: { _controller: BmsVisualizationBundle:Page:deletePage }
+    options:
+        expose: true
+        
+bms_visualization_edit_page:
+    path:   /edit_page
+    defaults: { _controller: BmsVisualizationBundle:Page:editPage }
+    options:
+        expose: true
+        
+bms_visualization_change_page:
+    path:   /change_page
+    defaults: { _controller: BmsVisualizationBundle:Page:changePage }
+    options:
+        expose: true
+#PANEL START
+bms_visualization_load_panel_dialog:
+    path:     /load_panel_dialog
+    defaults: { _controller: BmsVisualizationBundle:Panel:loadPanelDialog }
+    options:
+        expose: true
+
+bms_visualization_add_panel:
+    path:     /add_panel
+    defaults: { _controller: BmsVisualizationBundle:Panel:addPanel }
+    options:
+        expose: true
+
+bms_visualization_move_panel:
+    path:     /move_panel
+    defaults: { _controller: BmsVisualizationBundle:Panel:movePanel }
+    options:
+        expose: true
+
+bms_visualization_edit_panel:
+    path:     /edit_panel
+    defaults: { _controller: BmsVisualizationBundle:Panel:editPanel }
+    options:
+        expose: true
+
+
+bms_visualization_copy_panel:
+    path:     /copy_panel
+    defaults: { _controller: BmsVisualizationBundle:Panel:copyPanel }
+    options:
+        expose: true
+        
+bms_visualization_delete_panel:
+    path:     /delete_panel
+    defaults: { _controller: BmsVisualizationBundle:Panel:deletePanel }
+    options:
+        expose: true
+#PANEL END
+bms_visualization_load_variable_manager:
+    path:     /load_variable_manager
+    defaults: { _controller: BmsVisualizationBundle:Ajax:loadVariableManager }
+    options:
+        expose: true
+        
+bms_visualization_load_settings_panel:
+    path:   /load_settings_panel
+    defaults: { _controller: BmsVisualizationBundle:Ajax:loadSettingsPanel }
+    options:
+        expose: true
+        
+bms_visualization_load_panel_list:
+    path:   /load_panel_list
+    defaults: { _controller: BmsVisualizationBundle:Ajax:loadPanelList }
+    options:
+        expose: true
+
+bms_visualization_delete_image:
+    path: /delete_image
+    defaults: { _controller: BmsVisualizationBundle:Ajax:deleteImageFromServer }
+    options:
+        expose: true
+#CONDITION
+bms_visualization_create_condition_dialog:
+    path:   /create_condition_dialog
+    defaults: { _controller: BmsVisualizationBundle:Condition:createDialog }
+    options:
+        expose: true
+        
+bms_visualization_create_condition:
+    path:   /create_condition
+    defaults: { _controller: BmsVisualizationBundle:Condition:create }
+    options:
+        expose: true

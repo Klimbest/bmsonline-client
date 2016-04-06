@@ -1,0 +1,10 @@
+bms_data_analyze_index:
+    path:     /
+    defaults: { _controller: BmsDataAnalyzeBundle:DataAnalyze:index }
+
+bms_data_analyze_add_series:
+    path:   /add_series
+    defaults: { _controller: BmsDataAnalyzeBundle:DataAnalyze:addSeries }
+    options:
+        expose: true
+                    

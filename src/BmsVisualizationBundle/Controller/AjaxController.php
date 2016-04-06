@@ -10,9 +10,9 @@ use BmsConfigurationBundle\Entity\Register;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Finder\Finder;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class AjaxController extends Controller {
+    
     /*    public function editImagePanelAction(Request $request) {
       //        if ($request->isXmlHttpRequest()) {
       //
@@ -87,6 +87,54 @@ class AjaxController extends Controller {
       //        }
       //    }
       //
+      //    public function editVariablePanelAction(Request $request) {
+      //        if ($request->isXmlHttpRequest()) {
+      //            $panel_id = $request->get("panel_id");
+      //            $em = $this->getDoctrine()->getManager();
+      //            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+      //            $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+      //            $panel = $panelRepo->find($panel_id);
+      //
+      //            $ret["content"] = $content = $request->get("content");
+      //            $css["width"] = $width = $request->get("width");
+      //            $css["height"] = $css["lineHeight"] = $height = $request->get("height");
+      //            $ret["textAlign"] = $textAlign = "text-" . $request->get("textAlign");
+      //            $css["fontWeight"] = $fontWeight = $request->get("fontWeight");
+      //            $css["textDecoration"] = $textDecoration = $request->get("textDecoration");
+      //            $css["fontStyle"] = $fontStyle = $request->get("fontStyle");
+      //            $css["fontFamily"] = $fontFamily = $request->get("fontFamily");
+      //            $css["fontSize"] = $fontSize = $request->get("fontSize");
+      //            $css["color"] = $fontColor = $request->get("fontColor");
+      //            $css["top"] = $topPosition = $request->get("topPosition");
+      //            $css["left"] = $leftPosition = $request->get("leftPosition");
+      //
+      //            $panel->setContent($content)
+      //                    ->setWidth($width)
+      //                    ->setHeight($height)
+      //                    ->setTextAlign($textAlign)
+      //                    ->setFontWeight($fontWeight)
+      //                    ->setTextDecoration($textDecoration)
+      //                    ->setFontStyle($fontStyle)
+      //                    ->setFontFamily($fontFamily)
+      //                    ->setFontSize($fontSize)
+      //                    ->setFontColor($fontColor)
+      //                    ->setLeftPosition($leftPosition)
+      //                    ->setTopPosition($topPosition);
+      //
+      //            $em->flush();
+      //
+      //            $css["left"] .= "px";
+      //            $css["top"] .= "px";
+      //            $ret["css"] = $css;
+      //
+      //            $register = $registerRepo->find($content);
+      //            $ret["fixedValue"] = $register->getRegisterCurrentData()->getFixedValue();
+      //
+      //            return new JsonResponse($ret);
+      //        } else {
+      //            throw new AccessDeniedHttpException();
+      //        }
+      //    }
       //
       //    public function editNavigationPanelAction(Request $request) {
       //        if ($request->isXmlHttpRequest()) {
@@ -131,14 +179,11 @@ class AjaxController extends Controller {
       //    }
      */
 
-    /**
-     * @Route("/load_variable_manager", name="bms_visualization_load_variable_manager", options={"expose"=true})
-     */
     public function loadVariableManagerAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $registers = $registerRepo->findAll();
-
+            
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:variableManager.html.twig', ['registers' => $registers]);
             return new JsonResponse($ret);
         } else {
@@ -146,70 +191,58 @@ class AjaxController extends Controller {
         }
     }
 
-    /**
-     * @Route("/load_image_manager", name="bms_visualization_load_image_manager", options={"expose"=true})
-     */
-    public function loadImageManagerAction(Request $request) {
-        if ($request->isXmlHttpRequest()) {
-            $finder = new Finder();
+    public function getImageSettings() {
 
-            $finder->directories()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
-            $images = array();
-            $sizeOfImage = array();
-            foreach ($finder as $dir) {
-                $finder2 = new Finder();
-                $dirDet = explode("/", $dir->getRelativePathname());
-                switch (sizeof($dirDet)) {
-                    case 1 :
-                        !isset($images[$dirDet[0]]) ? $images[$dirDet[0]] = array() : null;
-                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
-                        foreach ($finder2 as $file) {
-                            $fn = $file->getFilename();
-                            $images[$dirDet[0]][$fn] = $fn;
-                            $sizeOfImage[$fn] = round($file->getSize() / 1024);
-                        }
-                        break;
-                    case 2 :
-                        !isset($images[$dirDet[0]][$dirDet[1]]) ? $images[$dirDet[0]][$dirDet[1]] = array() : null;
-                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
-                        foreach ($finder2 as $file) {
-                            $fn = $file->getFilename();
-                            $images[$dirDet[0]][$dirDet[1]][$fn] = $fn;
-                            $sizeOfImage[$fn] = round($file->getSize() / 1024);
-                        }
-                        break;
-                    case 3 :
-                        !isset($images[$dirDet[0]][$dirDet[1]][$dirDet[2]]) ? $images[$dirDet[0]][$dirDet[1]][$dirDet[2]] = array() : null;
-                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
-                        foreach ($finder2 as $file) {
-                            $fn = $file->getFilename();
-                            $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$fn] = $fn;
-                            $sizeOfImage[$fn] = round($file->getSize() / 1024);
-                        }
-                        break;
-                    case 4 :
-                        !isset($images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]]) ? $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]] = array() : null;
-                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
-                        foreach ($finder2 as $file) {
-                            $fn = $file->getFilename();
-                            $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]][$fn] = $fn;
-                            $sizeOfImage[$fn] = round($file->getSize() / 1024);
-                        }
-                        break;
-                }
+        $finder = new Finder();
+
+        $finder->directories()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
+        $images = array();
+        $sizeOfImage = array();
+        foreach ($finder as $dir) {
+            $finder2 = new Finder();
+            $dirDet = explode("/", $dir->getRelativePathname());
+            switch (sizeof($dirDet)) {
+                case 1 :
+                    !isset($images[$dirDet[0]]) ? $images[$dirDet[0]] = array() : null;
+                    $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                    foreach ($finder2 as $file) {
+                        $fn = $file->getFilename();
+                        $images[$dirDet[0]][$fn] = $fn;
+                        $sizeOfImage[$fn] = round($file->getSize() / 1024);
+                    }
+                    break;
+                case 2 :
+                    !isset($images[$dirDet[0]][$dirDet[1]]) ? $images[$dirDet[0]][$dirDet[1]] = array() : null;
+                    $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                    foreach ($finder2 as $file) {
+                        $fn = $file->getFilename();
+                        $images[$dirDet[0]][$dirDet[1]][$fn] = $fn;
+                        $sizeOfImage[$fn] = round($file->getSize() / 1024);
+                    }
+                    break;
+                case 3 :
+                    !isset($images[$dirDet[0]][$dirDet[1]][$dirDet[2]]) ? $images[$dirDet[0]][$dirDet[1]][$dirDet[2]] = array() : null;
+                    $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                    foreach ($finder2 as $file) {
+                        $fn = $file->getFilename();
+                        $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$fn] = $fn;
+                        $sizeOfImage[$fn] = round($file->getSize() / 1024);
+                    }
+                    break;
+                case 4 :
+                    !isset($images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]]) ? $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]] = array() : null;
+                    $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                    foreach ($finder2 as $file) {
+                        $fn = $file->getFilename();
+                        $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]][$fn] = $fn;
+                        $sizeOfImage[$fn] = round($file->getSize() / 1024);
+                    }
+                    break;
             }
-
-            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:imageManager.html.twig', ['images' => $images, 'sizeOfImage' => $sizeOfImage]);
-
-            return new JsonResponse($ret);
-        } else {
-            throw new AccessDeniedHttpException();
         }
+        return $this->container->get('templating')->render('BmsVisualizationBundle:dialog:dialogImagePanelSettings.html.twig', ['images' => $images, 'sizeOfImage' => $sizeOfImage]);
     }
 
-    /**
-     * @Route("/delete_image", name="bms_visualization_delete_image", options={"expose"=true})
-     */
     public function deleteImageFromServerAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
 
@@ -234,13 +267,16 @@ class AjaxController extends Controller {
         }
     }
 
-    /**
-     * @Route("/load_panel_list", name="bms_visualization_load_panel_list", options={"expose"=true})
-     */
     public function loadPanelListAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
-            $panels = $panelRepo->findPanelsForPage($request->get("page_id"));
+            $em = $this->getDoctrine()->getManager();
+            $panels = $em->createQueryBuilder()
+                            ->select('p')
+                            ->from('BmsVisualizationBundle:Panel', 'p')
+                            ->where("p.page = " . $request->get("page_id"))
+//                            ->addOrderBy('p.zIndex', 'DESC')
+//                            ->addOrderBy('p.id', 'DESC')
+                            ->getQuery()->getResult();
 
             $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
             return new JsonResponse($ret);

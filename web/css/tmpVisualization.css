@@ -154,9 +154,7 @@ div.panel-list i.active{
 }
 
 i.fa-plus-circle:hover,
-.btn-add-condition:hover,
-div.image-container i.fa-remove:hover
-div.image-container span.label:hover{
+.btn-add-condition:hover{
     cursor: pointer;
 }
 div.dialog-panel-settings div.dialog-panel-general,
@@ -202,11 +200,9 @@ div.dialog-panel-settings div.dialog-panel-event .well{
     
 }
 
-form#data-source div#panel-type{
-    margin-right: -16px;
-}
 
 select#panel-type{
-    
+    margin-right: -5px;
     border-radius: 4px 0px 0px 4px;
+
 }

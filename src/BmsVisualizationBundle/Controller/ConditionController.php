@@ -10,13 +10,9 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Finder\Finder;
 use BmsVisualizationBundle\Entity\Term;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class ConditionController extends Controller {
 
-    /**
-     * @Route("/create_condidtion_dialog", name="bms_visualization_create_condition_dialog", options={"expose"=true})
-     */
     public function createDialogAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
@@ -25,13 +21,13 @@ class ConditionController extends Controller {
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $effectRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Effect');
             $myConditionRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:MyCondition');
-
+            
             $registers = $registerRepo->findAll();
             $devices = $deviceRepo->findAll();
             $pages = $pageRepo->findAll();
             $panels = $panelRepo->findAll();
             $effects = $effectRepo->findAll();
-
+            
             $images = $this->getImages();
             $options = [
                 'registers' => $registers,
@@ -48,9 +44,6 @@ class ConditionController extends Controller {
         }
     }
 
-    /**
-     * @Route("/create_condition", name="bms_visualization_create_condition", options={"expose"=true})
-     */
     public function createAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
@@ -62,7 +55,7 @@ class ConditionController extends Controller {
             $effect_type = $request->get('effect_type');
             $effect_content = $request->get('effect_content');
             $effect_panel_id = $request->get('effect_panel_id');
-
+           
 //            $register = $registerRepo->findOneById($register_id);
 //            $panel = $panelRepo->findOneById($effect_panel_id);
 //            
@@ -81,8 +74,8 @@ class ConditionController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
-
-    public function getImages() {
+    
+    public function getImages(){
         $finder = new Finder();
 
         $finder->directories()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
@@ -98,7 +91,7 @@ class ConditionController extends Controller {
                     foreach ($finder2 as $file) {
                         $fn = $file->getFilename();
                         $images[$dirDet[0]][$fn] = $fn;
-                        $sizeOfImage[$fn] = round($file->getSize() / 1024);
+                        $sizeOfImage[$fn] = round($file->getSize()/1024);
                     }
                     break;
                 case 2 :
@@ -107,7 +100,7 @@ class ConditionController extends Controller {
                     foreach ($finder2 as $file) {
                         $fn = $file->getFilename();
                         $images[$dirDet[0]][$dirDet[1]][$fn] = $fn;
-                        $sizeOfImage[$fn] = round($file->getSize() / 1024);
+                        $sizeOfImage[$fn] = round($file->getSize()/1024);
                     }
                     break;
                 case 3 :
@@ -116,7 +109,7 @@ class ConditionController extends Controller {
                     foreach ($finder2 as $file) {
                         $fn = $file->getFilename();
                         $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$fn] = $fn;
-                        $sizeOfImage[$fn] = round($file->getSize() / 1024);
+                        $sizeOfImage[$fn] = round($file->getSize()/1024);
                     }
                     break;
                 case 4 :
@@ -125,7 +118,7 @@ class ConditionController extends Controller {
                     foreach ($finder2 as $file) {
                         $fn = $file->getFilename();
                         $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]][$fn] = $fn;
-                        $sizeOfImage[$fn] = round($file->getSize() / 1024);
+                        $sizeOfImage[$fn] = round($file->getSize()/1024);
                     }
                     break;
             }
@@ -133,5 +126,5 @@ class ConditionController extends Controller {
         $options = ['images' => $images, 'sizeOfImage' => $sizeOfImage];
         return $options;
     }
-
+    
 }
