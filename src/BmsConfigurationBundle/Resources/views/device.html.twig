@@ -106,15 +106,17 @@
                 <div class="col-md-8 hide-button-container hidden-item">
                     <input id="register_address_hex" type="button" class="btn btn-default btn-xs hidding" value="Adres rejestru(HEX)"></input>
                     <input id="register_address_dec" type="button" class="btn btn-default btn-xs hidding" value="Adres rejestru(DEC)"></input>
+                    <input id="function" type="button" class="btn btn-default btn-xs hidding " value="Funkcja"></input>
                     <input id="name" type="button" class="btn btn-default btn-xs hidding clicked" value="Nazwa skrócona"></input>
                     <input id="description" type="button" class="btn btn-default btn-xs hidding " value="Pełna nazwa"></input>
                     <input id="active_read" type="button" class="btn btn-default btn-xs hidding" value="Aktywny odczyt"></input>
-                    <input id="scan_queue" type="button" class="btn btn-default btn-xs hidding" value="Częstotliwość odczytu danych"></input>
-                    <input id="archive" type="button" class="btn btn-default btn-xs hidding" value="Archiwizacja"></input>
+                    <input id="scan_queue" type="button" class="btn btn-default btn-xs hidding clicked" value="Częstotliwość odczytu danych"></input>
+                    <input id="archive" type="button" class="btn btn-default btn-xs hidding clicked" value="Archiwizacja"></input>
                     <input id="modificator_read" type="button" class="btn btn-default btn-xs hidding clicked" value="Sposób przeliczania danych przy odczycie"></input>
-                    <input id="modificator_write" type="button" class="btn btn-default btn-xs hidding clicked" value="Sposób przeliczania danych przy zapisie"></input>
-                    <input id="fixed_value" type="button" class="btn btn-default btn-xs hidding" value="Aktualna wartość odczytana"></input>
-                    <input id="data_group" type="button" class="btn btn-default btn-xs hidding" value="Grupa danych"></input>
+{#                    <input id="modificator_write" type="button" class="btn btn-default btn-xs hidding clicked" value="Sposób przeliczania danych przy zapisie"></input>#}
+                    <input id="fixed_value" type="button" class="btn btn-default btn-xs hidding" value="Aktualna wartość"></input>
+                    <input id="description2" type="button" class="btn btn-default btn-xs hidding " value="Dodatkowy opis"></input>
+{#                    <input id="data_group" type="button" class="btn btn-default btn-xs hidding" value="Grupa danych"></input>#}
                     <input id="manage" type="button" class="btn btn-default btn-xs hidding" value="Zarządzaj"></input>
                 </div>
             </div>
@@ -140,6 +142,7 @@
                             <th class="modificator_read">Sposób przeliczania danych przy odczycie</th>
                             <th class="modificator_write">Sposób przeliczania danych przy zapisie</th>
                             <th class="fixed_value">Aktualna wartość</th>
+                            <th class="description2">Dodatkowy opis</th>
                             <th class="manage">Zarządzaj</th>
                         </tr>
                     </thead>
@@ -170,6 +173,7 @@
                                     <td class="modificator_read">{{ register.modificatorRead }}</td>
                                     <td class="modificator_write">{{ register.modificatorWrite }}</td>
                                     <td class="fixed_value">{{ register.registerCurrentData.fixedValue }}</td>
+                                    <td class="description2">{{ register.description2}}</td>
                                     <td class="manage text-center">
                                         <i id="{{register.id}}" class="fa fa-refresh fa-fw fa-blue"></i>
                                         <i id="{{register.id}}" class="fa fa-edit fa-fw fa-green fa-register"></i>
