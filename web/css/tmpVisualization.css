@@ -155,7 +155,7 @@ div.panel-list i.active{
 
 i.fa-plus-circle:hover,
 .btn-add-condition:hover,
-div.image-container i.fa-remove:hover
+div.image-container i.fa-remove:hover,
 div.image-container span.label:hover{
     cursor: pointer;
 }
@@ -206,7 +206,17 @@ form#data-source div#panel-type{
     margin-right: -16px;
 }
 
+input#panel-source-content{
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+}
+
 select#panel-type{
     
     border-radius: 4px 0px 0px 4px;
+}
+.panel-preview,
+.panel-preview img{
+    max-width: 500px;
+    max-height: 300px;
 }

@@ -59,6 +59,7 @@ class PanelController extends Controller {
             $fontColor = $request->request->get("fontColor");
             $borderRadius = $request->request->get("borderRadius");
             $zIndex = $request->request->get("zIndex");
+            $displayPrecision = $request->request->get("displayPrecision");
             if ($type == "variable") {
                 $registerName = $request->request->get("contentSource");
                 $register = $registerRepo->findOneBy(array('name' => $registerName));
@@ -97,7 +98,8 @@ class PanelController extends Controller {
                     ->setBorderRadius($borderRadius)
                     ->setZIndex($zIndex)
                     ->setVisibility($visibility)
-                    ->setContentSource($contentSource);
+                    ->setContentSource($contentSource)
+                    ->setDisplayPrecision($displayPrecision);
 
             $em->persist($panel);
             $em->flush();
@@ -135,6 +137,7 @@ class PanelController extends Controller {
             $fontColor = $request->request->get("fontColor");
             $borderRadius = $request->request->get("borderRadius");
             $zIndex = $request->request->get("zIndex");
+            $displayPrecision = $request->request->get("displayPrecision");
             if ($type == "variable") {
                 $registerName = $request->request->get("contentSource");
                 $register = $registerRepo->findOneBy(array('name' => $registerName));
@@ -170,8 +173,8 @@ class PanelController extends Controller {
                     ->setBorderRadius($borderRadius)
                     ->setZIndex($zIndex)
                     ->setVisibility($visibility)
-                    ->setContentSource($contentSource);
-
+                    ->setContentSource($contentSource)
+                    ->setDisplayPrecision($displayPrecision);
 
             $em->flush();
             $ret["panel_id"] = $panel_id;

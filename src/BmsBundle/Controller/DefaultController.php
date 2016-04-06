@@ -64,7 +64,7 @@ class DefaultController extends Controller {
             }
 
             $terms = $termRepo->findAll();
-            $t = null;
+            $t = array();
             foreach ($terms as $term) {
                 $pid = $term->getPanel()->getId();
                 $panel = $panelRepo->findOneById($pid);

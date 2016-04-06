@@ -29,7 +29,6 @@ function ajaxChangePage(page_id) {
             $(window).resize(function () {
                 minBrowserSizeGuard();
             });
-            setNavigation();
         }
     });
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -50,14 +49,6 @@ function ajaxChangePage(page_id) {
 
     }
 
-    function setNavigation() {
-        $("div.bms-panel.navigation-panel").each(function () {
-            var link_id = $(this).children("div").attr("id");
-            $(this).click(function () {
-                ajaxChangePage(link_id);
-            });
-        });
-    }
 }
 
 function ajaxRefreshPage() {
@@ -78,22 +69,22 @@ function ajaxRefreshPage() {
             }, 1000);
             var now = new Date;
             now = Date.parse(now);
-            var readDelay = now/1000 - ret['time_of_update'];
-            if(readDelay >= 300){
-                $("div.variable-panel span").empty();         
-                if(readDelay/60 < 60){
-                    $(".error-message span").empty().append("Od " + Math.round(readDelay/60) + " minut nie ma nowych danych!").show();    
-                }else if(readDelay/60/60 < 24){
-                    $(".error-message span").empty().append("Od " + Math.round(readDelay/60/60) + " godzin nie ma nowych danych!").show();
-                }else{
-                    $(".error-message span").empty().append("Od " + Math.round(readDelay/60/60/24) + " dni nie ma nowych danych!").show();
+            var readDelay = now / 1000 - ret['time_of_update'];
+            if (readDelay >= 300) {
+                $("div.variable-panel span").empty();
+                if (readDelay / 60 < 60) {
+                    $(".error-message span").empty().append("Od " + Math.round(readDelay / 60) + " minut nie ma nowych danych!").show();
+                } else if (readDelay / 60 / 60 < 24) {
+                    $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60) + " godzin nie ma nowych danych!").show();
+                } else {
+                    $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60 / 24) + " dni nie ma nowych danych!").show();
                 }
-                
-            }else{
+
+            } else {
                 $(".error-message span").empty();
-                setVariables(ret['registers'], ret["terms"]);
+
             }
-            
+            setVariables(ret['registers'], ret["terms"]);
         }
     });
     clearInterval(i);
@@ -121,18 +112,23 @@ function ajaxRefreshPage() {
                     case "text" :
                         $("div#" + panelId + ".bms-panel span.content").text(eContent);
                         break;
+                    case "url" :
+                        $("div#" + panelId + ".bms-panel").css({cursor: "pointer"}).click(function () {
+                            ajaxChangePage(eContent);
+                        });
+                        break;
                 }
             });
         }
 
         $.each(registers, function (key, value) {
             var displayPrecision = $("div.bms-panel").children("span#" + key).val();
-            
-            if(displayPrecision>0){
+
+            if (displayPrecision > 0) {
                 value = value.toFixed(displayPrecision);
             }
-            
-            $("div.bms-panel").children("span#" + key).empty().append(value);            
+
+            $("div.bms-panel").children("span#" + key).empty().append(value);
         });
     }
 }

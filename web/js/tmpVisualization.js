@@ -104,6 +104,7 @@ function createPanel() {
                     data.append("zIndex", 5);
                     data.append("visibility", $("form#panel input#visibility").is(':checked'));
                     data.append("contentSource", $("input#panel-source-content").val());
+                    data.append("displayPrecision", $("form#panel select#displayPrecision").val());
                     saveData(data);
                     $(this).dialog('destroy').remove();
                 }
@@ -191,6 +192,7 @@ function editPanel(panel_id) {
                     data.append("zIndex", 5);
                     data.append("visibility", $("form#panel input#visibility").is(':checked'));
                     data.append("contentSource", $("input#panel-source-content").val());
+                    data.append("displayPrecision", $("form#panel select#displayPrecision").val());
                     saveData(data);
                     $(this).dialog('destroy').remove();
                 }
@@ -220,11 +222,25 @@ function editPanel(panel_id) {
         if (panel.hasClass("bms-panel-text")) {
             var c = panel.children("span.bms-panel-content").text();
             $("div.dialog-panel-data select#panel-type").val("text");
-            $("div.dialog-panel-data input#panel-source-content").val(c).removeAttr("disabled", false);
-            $(".input-group-btn button#image, .input-group-btn button#variable").addClass("disabled");
             $("div.panel-preview span").empty().append(c);
+
+            $(".input-group-btn button#image, .input-group-btn button#variable").addClass("disabled");
+            $("div.dialog-panel-data input#panel-source-content").val(c).removeAttr("disabled", false);
             $(".precision-group").hide();
+            $(".font-group").show();
             $(".input-group-btn button#variable").unbind("click");
+            $(".input-group-btn button#image").unbind("click");
+        } else if (panel.hasClass("bms-panel-image")) {
+            var imgSource = panel.children("img").attr("src");
+            $("div.dialog-panel-data select#panel-type").val("image");
+            $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + imgSource + "\" class=\"img-responsive\">");
+
+            $(".input-group-btn button#variable").addClass("disabled");
+            $(".input-group-btn button#image").removeClass("disabled");
+            $("div.dialog-panel-settings input#panel-source-content").val(imgSource);
+            $(".precision-group, .font-group").hide();
+            $(".input-group-btn button#variable").unbind("click");
+            setOpenImageManager();
         }
     }
     function setGeneral() {
@@ -322,6 +338,10 @@ function editPanel(panel_id) {
     }
 }
 function setDialogButtonsData() {
+    //zwijanie i rozwijanie sekcji
+    $("div.dialog-panel-settings div.nav-row").click(function () {
+        $(this).next().find(".well").toggle();
+    });
     //panel type
     $("select#panel-type").change(function () {
         var value = $(this).val();
@@ -330,21 +350,25 @@ function setDialogButtonsData() {
                 $("input#panel-source-content").val("").prop("disabled", true);
                 $(".input-group-btn button#image").addClass("disabled");
                 $(".input-group-btn button#variable").removeClass("disabled");
-                $(".precision-group").show();
+                $(".precision-group, .font-group").show();
+                $(".input-group-btn button#image").unbind("click");
                 setOpenVariableManager();
                 break;
             case "image":
                 $("input#panel-source-content").val("").prop("disabled", true);
                 $(".input-group-btn button#variable").addClass("disabled");
                 $(".input-group-btn button#image").removeClass("disabled");
-                $(".precision-group").hide();
+                $(".precision-group, .font-group").hide();
                 $(".input-group-btn button#variable").unbind("click");
+                setOpenImageManager();
                 break;
             case "text":
                 $(".input-group-btn button#image, .input-group-btn button#variable").addClass("disabled");
                 $("input#panel-source-content").val("").removeAttr("disabled", false);
                 $(".precision-group").hide();
+                $(".font-group").show();
                 $(".input-group-btn button#variable").unbind("click");
+                $(".input-group-btn button#image").unbind("click");
                 break;
         }
     });
@@ -352,41 +376,7 @@ function setDialogButtonsData() {
     $("input#panel-source-content").change(function () {
         $("div.panel-preview span").empty().append($(this).val());
     });
-    //otworzenie menagera zmiennych
     setOpenVariableManager();
-    function setOpenVariableManager() {
-        $(".input-group-btn button#variable").click(function () {
-            $.ajax({
-                type: "POST",
-                datatype: "application/json",
-                url: Routing.generate('bms_visualization_load_variable_manager'),
-                success: function (ret) {
-                    $(".main-row").children(".fa-spinner").remove();
-                    $(".main-row").append(ret["template"]);
-                    createVariableManager().dialog("open");
-                }
-            });
-            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-        });
-    }
-    //otworzenie menagera obrazów
-    $(".input-group-btn button#image").click(function () {
-        $.ajax({
-            type: "POST",
-            datatype: "application/json",
-            url: Routing.generate('bms_visualization_load_image_manager'),
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $(".main-row").append(ret["template"]);
-                createImageManager().dialog("open");
-            }
-        });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    });
-    //zwijanie i rozwijanie sekcji
-    $("div.dialog-panel-settings div.nav-row").click(function () {
-        $(this).next().find(".well").toggle();
-    });
 }
 function setDialogButtonsFormat() {
     var panel = $("div.panel-preview");
@@ -497,6 +487,37 @@ function setDialogButtonsFormat() {
     });
 
 }
+function setOpenVariableManager() {
+    $(".input-group-btn button#variable").click(function () {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_load_variable_manager'),
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $(".main-row").append(ret["template"]);
+                createVariableManager().dialog("open");
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    });
+}
+function setOpenImageManager() {
+    $(".input-group-btn button#image").click(function () {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_load_image_manager'),
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $(".main-row").append(ret["template"]);
+                createImageManager().dialog("open");
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    });
+}
+
 function createVariableManager() {
     return $("div.variable-manager").dialog({
         autoOpen: false,
@@ -540,16 +561,32 @@ function createImageManager() {
             {
                 text: "Zapisz",
                 click: function () {
-                    var data = new FormData();
-                    if (input) {
+                    var w = $("div.image-manager input#resolutionX").val();
+                    var h = $("div.image-manager input#resolutionY").val();
+                    $("div.dialog-panel-settings div.panel-preview").css({
+                        width: w + "px", 
+                        height: h + "px", 
+                        backgroundColor: "rgba(0,0,0,0)", 
+                        borderWidth: "0px"
+                    });
+                    $("form#panel input#width").val(w);
+                    $("form#panel input#height").val(h);
+                    $("form#panel input#opacity").val(0);
+                    $("form#panel input#borderWidth").val(0);
+                    var imgSource = $("div.image-manager div.dialog-panel img").attr("src");
+                    if (imgSource.length > 200) {
+                        var data = new FormData();
                         data.append('file', input.files[0]);
+                        data.append("fileName", $("div.image-manager input#imageName").val());
+                        data.append("resolutionX", $("div.image-manager input#resolutionX").val());
+                        data.append("resolutionY", $("div.image-manager input#resolutionY").val());
+                        saveData(data);
                     } else {
-                        data.append('file', null);
+                        $("div.dialog-panel-settings input#panel-source-content").val(imgSource);
+                        $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + imgSource + "\" class=\"img-responsive\">");
+
                     }
-                    data.append("fileName", $("div.image-manager input#imageName").val());
-                    data.append("resolutionX", $("div.image-manager input#resolutionX").val());
-                    data.append("resolutionY", $("div.image-manager input#resolutionY").val());
-                    saveData(data);
+
                     $(this).dialog('destroy').remove();
                 }
             },
@@ -634,8 +671,8 @@ function createImageManager() {
             var h = $(this).val() / ar;
             $("div.image-manager input#resolutionY").val(Math.round(h));
             dp.css({
-                width: $(this).val()+"px",
-                height: Math.round(h)+"px"
+                width: $(this).val() + "px",
+                height: Math.round(h) + "px"
             });
 
         });
@@ -644,8 +681,8 @@ function createImageManager() {
             var w = $(this).val() * ar;
             $("div.image-manager input#resolutionX").val(Math.round(w));
             dp.css({
-                width: Math.round(w)+"px",
-                height: $(this).val()+"px"
+                width: Math.round(w) + "px",
+                height: $(this).val() + "px"
             });
         });
         //sidebar
@@ -661,13 +698,15 @@ function createImageManager() {
     function saveData(data) {
         $.ajax({
             type: "POST",
-            url: Routing.generate('bms_visualization_edit_image_panel'),
+            url: Routing.generate('bms_visualization_add_image'),
             data: data,
             contentType: false,
             processData: false,
             success: function (ret) {
                 $(".main-row").children(".fa-spinner").remove();
-                $("div#" + ret['panel_id'] + ".image-panel").css(ret['css']).children("img").attr("src", ret["content"]);
+
+                $("div.dialog-panel-settings input#panel-source-content").val(ret["content"]);
+                $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + ret["content"] + "\" class=\"img-responsive\">");
             }
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
