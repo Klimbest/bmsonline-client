@@ -27,7 +27,7 @@ function setSidebarEvents() {
             success: function (ret) {
                 $(".main-row").children(".fa-spinner").remove();
                 $(".main-row").append(ret["template"]);
-                createPanelDialog().dialog("open");
+                createPanel().dialog("open");
             }
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -73,7 +73,7 @@ function setSidebarEvents() {
 }
 
 //*****PANEL START*****
-function createPanelDialog() {
+function createPanel() {
     return $("div.dialog-panel-settings").dialog({
         autoOpen: false,
         width: $(window).width(),
@@ -116,7 +116,8 @@ function createPanelDialog() {
             }],
         open: function () {
             setDialog();
-            setDialogButtons();
+            setDialogButtonsData();
+            setDialogButtonsFormat();
         },
         close: function () {
             $(this).dialog('destroy').remove();
@@ -144,149 +145,6 @@ function createPanelDialog() {
         };
         panel.css(css);
     }
-
-    function setDialogButtons() {
-        var panel = $("div.panel-preview");
-        $("div.dialog-panel-settings div.nav-row").click(function () {
-            $(this).next().find(".well").toggle();
-        });
-        $("form#panel input#borderWidth").change(function () {
-            var value = $(this).val();
-            panel.css({borderWidth: value + "px", lineHeight: (100 - value * 2) + "px"});
-        });
-        $("form#panel select#borderStyle").change(function () {
-            var value = $(this).val();
-            panel.css({borderStyle: value});
-        });
-        $("form#panel input#borderColor").on('input', function () {
-            var value = $(this).val();
-            panel.css({borderColor: value});
-        });
-        $("form#panel input#backgroundColor").on('input', function () {
-            var backgroundColor = hex2rgba($(this).val(), parseFloat($("form#panel input#opacity").val()));
-            panel.css({backgroundColor: backgroundColor});
-        });
-        $("form#panel input#opacity").change(changeOpacity).mousemove(changeOpacity);
-        function changeOpacity() {
-            var backgroundColor = hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($(this).val()));
-            panel.css({backgroundColor: backgroundColor});
-        }
-        $("form#panel input#borderRadiusTL").change(changeTL).mousemove(changeTL);
-        $("form#panel input#borderRadiusTR").change(changeTR).mousemove(changeTR);
-        $("form#panel input#borderRadiusBL").change(changeBL).mousemove(changeBL);
-        $("form#panel input#borderRadiusBR").change(changeBR).mousemove(changeBR);
-        function changeTL() {
-            panel.css({borderTopLeftRadius: $(this).val() + "px"});
-        }
-        function changeTR() {
-            panel.css({borderTopRightRadius: $(this).val() + "px"});
-        }
-        function changeBL() {
-            panel.css({borderBottomLeftRadius: $(this).val() + "px"});
-        }
-        function changeBR() {
-            panel.css({borderBottomRightRadius: $(this).val() + "px"});
-        }
-
-        //pogrubienie
-        $("form#panel .btn-bold").click(function () {
-            $(this).hasClass("active") ? panel.css({fontWeight: "initial"}) : panel.css({fontWeight: "bold"});
-            $(this).toggleClass("active");
-        });
-        //podkreślenie
-        $("form#panel .btn-underline").click(function () {
-            $(this).hasClass("active") ? panel.css({textDecoration: "initial"}) : panel.css({textDecoration: "underline"});
-            $(this).toggleClass("active");
-        });
-        //pochylenie
-        $("form#panel .btn-italic").click(function () {
-            $(this).hasClass("active") ? panel.css({fontStyle: "initial"}) : panel.css({fontStyle: "italic"});
-            $(this).toggleClass("active");
-        });
-        //wyrównanie do lewej
-        $("form#panel .btn-align-left").click(function () {
-            $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "left"});
-            setAlign("left");
-        });
-        //wyrównanie do środka
-        $("form#panel .btn-align-center").click(function () {
-            $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "center"});
-            setAlign("center");
-        });
-        //wyrównanie do prawej
-        $("form#panel .btn-align-right").click(function () {
-            $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "right"});
-            setAlign("right");
-        });
-        //styl czcionki
-        $("form#panel select.font-family").change(function () {
-
-            panel.css({fontFamily: $(this).val()});
-        });
-        //rozmiar czcionki
-        $("form#panel select.font-size").change(function () {
-            panel.css({fontSize: $(this).val() + "px"});
-        });
-        //Kolor
-        $("form#panel input#fontColor").on('input', function () {
-            panel.css({color: hex2rgba($(this).val(), 1)});
-        });
-        function setAlign(align) {
-            switch (align) {
-                case "left":
-                    $(".btn-align-center, .btn-align-right").removeClass("active");
-                    $(".btn-align-left").addClass("active");
-                    break;
-                case "center":
-                    $(".btn-align-left, .btn-align-right").removeClass("active");
-                    $(".btn-align-center").addClass("active");
-                    break;
-                case "right":
-                    $(".btn-align-center, .btn-align-left").removeClass("active");
-                    $(".btn-align-right").addClass("active");
-                    break;
-            }
-        }
-        //panel type
-        $("select#panel-type").change(function () {
-            var value = $(this).val();
-            switch (value) {
-                case "variable":
-                    $("input#panel-source-content").val("").prop("disabled", true);
-                    $(".input-group-btn button#image").addClass("disabled");
-                    $(".input-group-btn button#variable").removeClass("disabled");
-                    break;
-                case "image":
-                    $("input#panel-source-content").val("").prop("disabled", true);
-                    $(".input-group-btn button#variable").addClass("disabled");
-                    $(".input-group-btn button#image").removeClass("disabled");
-                    break;
-                case "text":
-                    $(".input-group-btn button#image, .input-group-btn button#variable").addClass("disabled");
-                    $("input#panel-source-content").val("").removeAttr("disabled", false);
-                    break;
-            }
-        });
-        //zmiana zawartości źródła powoduje wyświetlenie na podglądzie aktualną zawartość
-        $("input#panel-source-content").change(function () {
-            $("div.panel-preview span").empty().append($(this).val());
-        });
-
-        $(".input-group-btn button#variable").click(function () {
-            $.ajax({
-                type: "POST",
-                datatype: "application/json",
-                url: Routing.generate('bms_visualization_load_variable_manager'),
-                success: function (ret) {
-                    $(".main-row").children(".fa-spinner").remove();
-                    $(".main-row").append(ret["template"]);
-                    createVariableManager().dialog("open");
-                }
-            });
-            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-        });
-    }
-
     function saveData(data) {
         $.ajax({
             type: "POST",
@@ -303,7 +161,342 @@ function createPanelDialog() {
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     }
 }
+function editPanel(panel_id) {
+    return $("div.dialog-panel-settings").dialog({
+        autoOpen: false,
+        width: $(window).width(),
+        height: $(window).height(),
+        modal: true,
+        buttons: [{
+                text: "Zapisz",
+                click: function () {
+                    var data = new FormData();
+                    data.append("panel_id", panel_id);
+                    data.append("name", $("form#panel input#panel-name").val());
+                    data.append("type", $("select#panel-type").val());
+                    data.append("topPosition", $("form#panel input#topPosition").val());
+                    data.append("leftPosition", $("form#panel input#leftPosition").val());
+                    data.append("width", $("form#panel input#width").val());
+                    data.append("height", $("form#panel input#height").val());
+                    data.append("border", $("form#panel input#borderWidth").val() + "px " + $("form#panel select#borderStyle").val() + " " + $("form#panel input#borderColor").val());
+                    data.append("backgroundColor", hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($("form#panel input#opacity").val())));
+                    data.append("textAlign", $("form#panel div.panel-preview").css("textAlign"));
+                    data.append("fontWeight", $("form#panel div.panel-preview").css("fontWeight"));
+                    data.append("textDecoration", $("form#panel div.panel-preview").css("textDecoration"));
+                    data.append("fontStyle", $("form#panel div.panel-preview").css("fontStyle"));
+                    data.append("fontFamily", $("form#panel select#fontFamily").val());
+                    data.append("fontSize", $("form#panel select#fontSize").val());
+                    data.append("fontColor", $("form#panel input#fontColor").val());
+                    data.append("borderRadius", $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px");
+                    data.append("zIndex", 5);
+                    data.append("visibility", $("form#panel input#visibility").is(':checked'));
+                    data.append("contentSource", $("input#panel-source-content").val());
+                    saveData(data);
+                    $(this).dialog('destroy').remove();
+                }
+            }, {
+                text: "Anuluj",
+                click: function () {
+                    $(this).dialog('destroy').remove();
+                }
+            }],
+        open: function () {
 
+            setGeneral();
+            setBorder();
+            setFont();
+            setPreview();
+            setDialogButtonsData();
+            setDialogButtonsFormat();
+            setSource();
+        },
+        close: function () {
+            $(this).dialog('destroy').remove();
+        }
+    });
+
+    function setSource() {
+        var panel = $("div#" + panel_id + ".bms-panel");
+        if (panel.hasClass("bms-panel-text")) {
+            var c = panel.children("span.bms-panel-content").text();
+            $("div.dialog-panel-data select#panel-type").val("text");
+            $("div.dialog-panel-data input#panel-source-content").val(c).removeAttr("disabled", false);
+            $(".input-group-btn button#image, .input-group-btn button#variable").addClass("disabled");
+            $("div.panel-preview span").empty().append(c);
+            $(".precision-group").hide();
+            $(".input-group-btn button#variable").unbind("click");
+        }
+    }
+    function setGeneral() {
+        var panel = $("div#" + panel_id + ".bms-panel");
+        $("form#panel input#panel-name").val(panel.attr("title"));
+        $("form#panel input#topPosition").val(parseInt(panel.css("top")));
+        $("form#panel input#leftPosition").val(parseInt(panel.css("left")));
+        $("form#panel input#width").val(parseInt(panel.css("width")));
+        $("form#panel input#height").val(parseInt(panel.css("height")));
+        if (panel.css("backgroundColor") === "transparent") {
+            $("form#panel input#backgroundColor").val("#ffffff");
+            $("form#panel input#opacity").val(0);
+        } else {
+            var bc = getColorValues(panel.css("backgroundColor"));
+            $("form#panel input#backgroundColor").val(rgb2hex("rgba(" + bc.red + ", " + bc.green + ", " + bc.blue + ", " + bc.alpha + ")"));
+            $("form#panel input#opacity").val(bc.alpha);
+        }
+    }
+    function setBorder() {
+        var panel = $("div#" + panel_id + ".bms-panel");
+        $("form#panel input#borderWidth").val(parseInt(panel.css("borderTopWidth")));
+        $("form#panel input#borderColor").val(rgb2hex(panel.css("borderTopColor")));
+        $("form#panel select#borderStyle").val(panel.css("borderTopStyle"));
+        $("form#panel input#borderRadiusTL").val(parseInt(panel.css("borderTopLeftRadius")));
+        $("form#panel input#borderRadiusTR").val(parseInt(panel.css("borderTopRightRadius")));
+        $("form#panel input#borderRadiusBL").val(parseInt(panel.css("borderBottomLeftRadius")));
+        $("form#panel input#borderRadiusBR").val(parseInt(panel.css("borderBottomRightRadius")));
+    }
+    function setFont() {
+        var panel = $("div#" + panel_id + ".bms-panel");
+        $("form#panel select#fontFamily").val(panel.css("fontFamily"));
+        $("form#panel select#fontSize").val(parseInt(panel.css("fontSize")));
+        $("form#panel input#fontColor").val(rgb2hex(panel.css("color")));
+        if (panel.hasClass("text-left")) {
+            $(".btn-align-center, .btn-align-right").removeClass("active");
+            $(".btn-align-left").addClass("active");
+        } else if (panel.hasClass("text-center")) {
+            $(".btn-align-left, .btn-align-right").removeClass("active");
+            $(".btn-align-center").addClass("active");
+        } else if (panel.hasClass("text-right")) {
+            $(".btn-align-center, .btn-align-left").removeClass("active");
+            $(".btn-align-right").addClass("active");
+        }
+        panel.css("fontWeight") === "700" ? $(".btn-bold").addClass("active") : $(".btn-bold").removeClass("active");
+        panel.css("textDecoration") === "underline" ? $(".btn-underline").addClass("active") : $(".btn-underline").removeClass("active");
+        panel.css("fontStyle") === "italic" ? $(".btn-italic").addClass("active") : $(".btn-italic").removeClass("active");
+
+    }
+    function setPreview() {
+        var br = $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px";
+        var panel = $("div#" + panel_id + ".bms-panel");
+        if ($("button.btn-align-left").hasClass("active")) {
+            var ta = "left";
+        } else if ($("button.btn-align-center").hasClass("active")) {
+            var ta = "center";
+        } else if ($("button.btn-align-right").hasClass("active")) {
+            var ta = "right";
+        }
+        var css = {
+            //ramka
+            borderWidth: $("form#panel input#borderWidth").val() + "px",
+            borderColor: $("form#panel input#borderColor").val(),
+            borderStyle: $("form#panel select#borderStyle").val(),
+            //narożniki
+            borderRadius: br,
+            //tło
+            backgroundColor: hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($("form#panel input#opacity").val())),
+            //czcionka
+            fontFamily: $("form#panel select#fontFamily").val(),
+            fontSize: $("form#panel select#fontSize").val() + "px",
+            color: $("form#panel input#fontColor").val(),
+            textAlign: ta,
+            fontWeight: panel.css("fontWeight"),
+            textDecoration: panel.css("textDecoration"),
+            fontStyle: panel.css("fontStyle")
+        };
+
+        $("div.panel-preview").css(css);
+    }
+    function saveData(data) {
+        $.ajax({
+            type: "POST",
+            url: Routing.generate('bms_visualization_edit_panel'),
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $("div#" + ret["panel_id"] + ".bms-panel").remove();
+                $("div.main-row div.well").append(ret['template']);
+                setPanelEvents();
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    }
+}
+function setDialogButtonsData() {
+    //panel type
+    $("select#panel-type").change(function () {
+        var value = $(this).val();
+        switch (value) {
+            case "variable":
+                $("input#panel-source-content").val("").prop("disabled", true);
+                $(".input-group-btn button#image").addClass("disabled");
+                $(".input-group-btn button#variable").removeClass("disabled");
+                $(".precision-group").show();
+                setOpenVariableManager();
+                break;
+            case "image":
+                $("input#panel-source-content").val("").prop("disabled", true);
+                $(".input-group-btn button#variable").addClass("disabled");
+                $(".input-group-btn button#image").removeClass("disabled");
+                $(".precision-group").hide();
+                $(".input-group-btn button#variable").unbind("click");
+                break;
+            case "text":
+                $(".input-group-btn button#image, .input-group-btn button#variable").addClass("disabled");
+                $("input#panel-source-content").val("").removeAttr("disabled", false);
+                $(".precision-group").hide();
+                $(".input-group-btn button#variable").unbind("click");
+                break;
+        }
+    });
+    //zmiana zawartości źródła powoduje wyświetlenie na podglądzie aktualną zawartość
+    $("input#panel-source-content").change(function () {
+        $("div.panel-preview span").empty().append($(this).val());
+    });
+    //otworzenie menagera zmiennych
+    setOpenVariableManager();
+    function setOpenVariableManager() {
+        $(".input-group-btn button#variable").click(function () {
+            $.ajax({
+                type: "POST",
+                datatype: "application/json",
+                url: Routing.generate('bms_visualization_load_variable_manager'),
+                success: function (ret) {
+                    $(".main-row").children(".fa-spinner").remove();
+                    $(".main-row").append(ret["template"]);
+                    createVariableManager().dialog("open");
+                }
+            });
+            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+        });
+    }
+    //otworzenie menagera obrazów
+    $(".input-group-btn button#image").click(function () {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_load_image_manager'),
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $(".main-row").append(ret["template"]);
+                createImageManager().dialog("open");
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    });
+    //zwijanie i rozwijanie sekcji
+    $("div.dialog-panel-settings div.nav-row").click(function () {
+        $(this).next().find(".well").toggle();
+    });
+}
+function setDialogButtonsFormat() {
+    var panel = $("div.panel-preview");
+    //tło
+    $("form#panel input#backgroundColor").on('input', function () {
+        var backgroundColor = hex2rgba($(this).val(), parseFloat($("form#panel input#opacity").val()));
+        panel.css({backgroundColor: backgroundColor});
+    });
+    $("form#panel input#opacity").change(changeOpacity).mousemove(changeOpacity);
+    function changeOpacity() {
+        var backgroundColor = hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($(this).val()));
+        panel.css({backgroundColor: backgroundColor});
+    }
+    //ramka
+    $("form#panel input#borderWidth").change(function () {
+        var value = $(this).val();
+        panel.css({borderWidth: value + "px", lineHeight: (100 - value * 2) + "px"});
+    });
+    $("form#panel select#borderStyle").change(function () {
+        var value = $(this).val();
+        panel.css({borderStyle: value});
+    });
+    $("form#panel input#borderColor").on('input', function () {
+        var value = $(this).val();
+        panel.css({borderColor: value});
+    });
+    $("form#panel input#borderRadiusTL").change(changeTL).mousemove(changeTL);
+    $("form#panel input#borderRadiusTR").change(changeTR).mousemove(changeTR);
+    $("form#panel input#borderRadiusBL").change(changeBL).mousemove(changeBL);
+    $("form#panel input#borderRadiusBR").change(changeBR).mousemove(changeBR);
+    function changeTL() {
+        panel.css({borderTopLeftRadius: $(this).val() + "px"});
+    }
+    function changeTR() {
+        panel.css({borderTopRightRadius: $(this).val() + "px"});
+    }
+    function changeBL() {
+        panel.css({borderBottomLeftRadius: $(this).val() + "px"});
+    }
+    function changeBR() {
+        panel.css({borderBottomRightRadius: $(this).val() + "px"});
+    }
+    //pogrubienie
+    $("form#panel .btn-bold").click(function () {
+        $(this).hasClass("active") ? panel.css({fontWeight: "initial"}) : panel.css({fontWeight: "bold"});
+        $(this).toggleClass("active");
+    });
+    //podkreślenie
+    $("form#panel .btn-underline").click(function () {
+        $(this).hasClass("active") ? panel.css({textDecoration: "initial"}) : panel.css({textDecoration: "underline"});
+        $(this).toggleClass("active");
+    });
+    //pochylenie
+    $("form#panel .btn-italic").click(function () {
+        $(this).hasClass("active") ? panel.css({fontStyle: "initial"}) : panel.css({fontStyle: "italic"});
+        $(this).toggleClass("active");
+    });
+    //wyrównanie
+    $("form#panel .btn-align-left").click(function () {
+        $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "left"});
+        setAlign("left");
+    });
+    $("form#panel .btn-align-center").click(function () {
+        $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "center"});
+        setAlign("center");
+    });
+    $("form#panel .btn-align-right").click(function () {
+        $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "right"});
+        setAlign("right");
+    });
+    function setAlign(align) {
+        switch (align) {
+            case "left":
+                $(".btn-align-center, .btn-align-right").removeClass("active");
+                $(".btn-align-left").addClass("active");
+                break;
+            case "center":
+                $(".btn-align-left, .btn-align-right").removeClass("active");
+                $(".btn-align-center").addClass("active");
+                break;
+            case "right":
+                $(".btn-align-center, .btn-align-left").removeClass("active");
+                $(".btn-align-right").addClass("active");
+                break;
+        }
+    }
+    //styl czcionki
+    $("form#panel select.font-family").change(function () {
+
+        panel.css({fontFamily: $(this).val()});
+    });
+    //rozmiar czcionki
+    $("form#panel select.font-size").change(function () {
+        panel.css({fontSize: $(this).val() + "px"});
+    });
+    //Kolor
+    $("form#panel input#fontColor").on('input', function () {
+        panel.css({color: hex2rgba($(this).val(), 1)});
+    });
+    //precyzja wyświetlania
+    $("form#panel select#displayPrecision").change(function () {
+        if ($("select#panel-type").val() === "variable") {
+            var displayPrecision = $(this).val();
+            var value = parseFloat($("div.dialog-panel-settings input#panel-source-value").val());
+            value = value.toFixed(displayPrecision);
+            panel.children("span").empty().append(value);
+        }
+    });
+
+}
 function createVariableManager() {
     return $("div.variable-manager").dialog({
         autoOpen: false,
@@ -318,6 +511,7 @@ function createVariableManager() {
                     var res = value.split("&");
                     $("div.dialog-panel-settings input#panel-source-content").val(res[0]);
                     $("div.dialog-panel-settings div.panel-preview span").empty().append(res[1]);
+                    $("div.dialog-panel-settings input#panel-source-value").val(res[1]);
                     $(this).dialog('destroy').remove();
                 }
             },
@@ -335,10 +529,9 @@ function createVariableManager() {
         }
     });
 }
-
 function createImageManager() {
     var input;
-    return $("div.dialog-image-panel-settings").dialog({
+    return $("div.image-manager").dialog({
         autoOpen: false,
         width: $(window).width(),
         height: $(window).height(),
@@ -353,14 +546,9 @@ function createImageManager() {
                     } else {
                         data.append('file', null);
                     }
-                    data.append("fileName", $("div.dialog-image-panel-settings input#imageName").val());
-                    data.append("panel_id", id);
-                    data.append("resolutionX", $("div.dialog-image-panel-settings input#resolutionX").val());
-                    data.append("resolutionY", $("div.dialog-image-panel-settings input#resolutionY").val());
-                    data.append("width", $("div.dialog-image-panel-settings input#width").val());
-                    data.append("height", $("div.dialog-image-panel-settings input#height").val());
-                    data.append("topPosition", $("div.dialog-image-panel-settings input#topPosition").val());
-                    data.append("leftPosition", $("div.dialog-image-panel-settings input#leftPosition").val());
+                    data.append("fileName", $("div.image-manager input#imageName").val());
+                    data.append("resolutionX", $("div.image-manager input#resolutionX").val());
+                    data.append("resolutionY", $("div.image-manager input#resolutionY").val());
                     saveData(data);
                     $(this).dialog('destroy').remove();
                 }
@@ -369,61 +557,20 @@ function createImageManager() {
                 text: "Anuluj",
                 click: function () {
                     $(this).dialog('destroy').remove();
-                    if (mode === "add") {
-                        $("div#" + id + ".bms-panel").remove();
-                        var data = {
-                            panel_id: id
-                        };
-                        ajaxDeletePanel(data);
-                    }
                 }
             }],
         open: function () {
-            setDialog(id);
+            setDialogButtons();
         },
         close: function () {
             $(this).dialog('destroy').remove();
-            if (mode === "add") {
-                $("div#" + id + ".bms-panel").remove();
-                var data = {
-                    panel_id: id
-                };
-                ajaxDeletePanel(data);
-            }
         }
     });
-    function setDialog(id) {
-        var panel = $("div#" + id + ".image-panel");
-        var dialog_panel = $(".dialog-image-panel-settings div.dialog-panel");
 
-        if (mode === "edit") {
-            var url = panel.children("img").attr("src");
-            dialog_panel.css({
-                width: panel.css("width"),
-                height: panel.css("height")
-            }).children("img").attr("src", url);
-
-            var imgName = url.substring(url.lastIndexOf('/') + 1);
-            $("div.dialog-image-panel-settings input#imageName").val(imgName);
-        }
-
-        dialog_panel.css({
-            width: parseInt(panel.css("width")),
-            height: parseInt(panel.css("height"))
-        });
-        $("div.dialog-image-panel-settings input#width").val(parseInt(panel.css("width")));
-        $("div.dialog-image-panel-settings input#height").val(parseInt(panel.css("height")));
-        $("div.dialog-image-panel-settings input#topPosition").val(parseInt(panel.css("top")));
-        $("div.dialog-image-panel-settings input#leftPosition").val(parseInt(panel.css("left")));
-        setDialogButtons(dialog_panel);
-
-    }
-    function setDialogButtons(dp) {
-        $(".btn-add-condition").click(function () {
-            ajaxCreateConditionDialog();
-        });
+    function setDialogButtons() {
+        var dp = $("div.image-manager div.dialog-panel");
         //loading image from disk
-        $("div.dialog-image-panel-settings input#image").change(function (event) {
+        $("div.image-manager input#image").change(function (event) {
             input = event.target;
             if (this.files && this.files[0]) {
                 var reader = new FileReader();
@@ -434,10 +581,8 @@ function createImageManager() {
                             width: this.width,
                             height: this.height
                         }).children("img").attr("src", e.target.result);
-                        $("div.dialog-image-panel-settings input#width").val(parseInt(dp.css("width")));
-                        $("div.dialog-image-panel-settings input#height").val(parseInt(dp.css("height")));
-                        $("div.dialog-image-panel-settings input#resolutionX").val(parseInt(dp.css("width")));
-                        $("div.dialog-image-panel-settings input#resolutionY").val(parseInt(dp.css("height")));
+                        $("div.image-manager input#resolutionX").val(parseInt(dp.css("width")));
+                        $("div.image-manager input#resolutionY").val(parseInt(dp.css("height")));
                     };
                     img.src = e.target.result;
 
@@ -445,11 +590,11 @@ function createImageManager() {
                 reader.readAsDataURL(input.files[0]);
             }
             var imgName = input.files[0].name;
-            $("div.dialog-image-panel-settings input#imageName").val(imgName);
+            $("div.image-manager input#imageName").val(imgName);
 
         });
         //load image from server
-        $("div.dialog-image-panel-settings div.image-list span.label").click(function () {
+        $("div.image-manager div.image-list span.label").click(function () {
             var name = $(this).text();
             //var dir = [];
             var url = name;
@@ -465,18 +610,16 @@ function createImageManager() {
                     width: this.width,
                     height: this.height
                 }).children("img").attr("src", url);
-                $("div.dialog-image-panel-settings input#width").val(parseInt(dp.css("width")));
-                $("div.dialog-image-panel-settings input#height").val(parseInt(dp.css("height")));
-                $("div.dialog-image-panel-settings input#resolutionX").val(parseInt(dp.css("width")));
-                $("div.dialog-image-panel-settings input#resolutionY").val(parseInt(dp.css("height")));
+                $("div.image-manager input#resolutionX").val(parseInt(dp.css("width")));
+                $("div.image-manager input#resolutionY").val(parseInt(dp.css("height")));
             };
             img.src = url;
             dp.children("img").attr("src", url);
-            $("div.dialog-image-panel-settings input#imageName").val(name);
+            $("div.image-manager input#imageName").val(name);
 
         });
         //removing image from server
-        $("div.dialog-image-panel-settings div.image-list i.fa-remove").click(function () {
+        $("div.image-manager div.image-list i.fa-remove").click(function () {
             var name = $(this).parent().children("span.label").text();
             var data = {
                 image_name: name.replace(" ", "")
@@ -484,58 +627,37 @@ function createImageManager() {
             ajaxDeleteImage(data);
             $(this).parent().remove();
         });
-        //change size of panel
-        $("div.dialog-image-panel-settings input#width").change(function () {
-            if ($(this).parent().parent().find("i#aspectRatio").hasClass("fa-chain")) {
-                var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
-                var h = $(this).val() / ar;
-                $("div.dialog-image-panel-settings input#height").val(Math.round(h));
-                var w = $(this).val();
-                dp.css({width: w + "px", height: h + "px"});
-            } else {
-                var w = $(this).val();
-                dp.css({width: w + "px"});
-            }
 
-        });
-        $("div.dialog-image-panel-settings input#height").change(function () {
-            if ($(this).parent().parent().find("i#aspectRatio").hasClass("fa-chain")) {
-                var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
-                var w = $(this).val() * ar;
-                $("div.dialog-image-panel-settings input#width").val(Math.round(w));
-                var h = $(this).val();
-                dp.css({width: w + "px", height: h + "px"});
-            } else {
-                var h = $(this).val();
-                dp.css({height: h + "px"});
-            }
-        });
-        //click chain
-        $("i#aspectRatio").click(function () {
-            $(this).toggleClass("fa-chain fa-chain-broken");
-        });
         //change sier of image
-        $("div.dialog-image-panel-settings input#resolutionX").change(function () {
+        $("div.image-manager input#resolutionX").change(function () {
             var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
             var h = $(this).val() / ar;
-            $("div.dialog-image-panel-settings input#resolutionY").val(Math.round(h));
+            $("div.image-manager input#resolutionY").val(Math.round(h));
+            dp.css({
+                width: $(this).val()+"px",
+                height: Math.round(h)+"px"
+            });
 
         });
-        $("div.dialog-image-panel-settings input#resolutionY").change(function () {
+        $("div.image-manager input#resolutionY").change(function () {
             var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
             var w = $(this).val() * ar;
-            $("div.dialog-image-panel-settings input#resolutionX").val(Math.round(w));
+            $("div.image-manager input#resolutionX").val(Math.round(w));
+            dp.css({
+                width: Math.round(w)+"px",
+                height: $(this).val()+"px"
+            });
         });
         //sidebar
-        var imageListItems = $("div.dialog-image-panel-settings div.row.image-container i.fa-plus-circle");
+        var imageListItems = $("div.image-manager div.row.image-container i.fa-plus-circle");
         imageListItems.each(function () {
             $(this).click(function () {
                 $(this).parent().children('.images').toggleClass('hidden');
                 $(this).toggleClass("fa-minus-circle");
             });
         });
-
     }
+
     function saveData(data) {
         $.ajax({
             type: "POST",
@@ -569,264 +691,8 @@ function ajaxMovePanel(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
-function ajaxEditPanel(panel_id) {
-    return $("div.dialog-panel-settings").dialog({
-        autoOpen: false,
-        width: $(window).width(),
-        height: $(window).height(),
-        modal: true,
-        buttons: [
-            {
-                text: "Zapisz",
-                click: function () {
-                    var data = new FormData();
-                    data.append("panel_id", panel_id);
-                    data.append("name", $("form#panel input#panel-name").val());
-                    data.append("type", $("select#panel-type").val());
-                    data.append("topPosition", $("form#panel input#topPosition").val());
-                    data.append("leftPosition", $("form#panel input#leftPosition").val());
-                    data.append("width", $("form#panel input#width").val());
-                    data.append("height", $("form#panel input#height").val());
-                    data.append("border", $("form#panel input#borderWidth").val() + "px " + $("form#panel select#borderStyle").val() + " " + $("form#panel input#borderColor").val());
-                    data.append("backgroundColor", hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($("form#panel input#opacity").val())));
-                    data.append("textAlign", $("form#panel div.panel-preview").css("textAlign"));
-                    data.append("fontWeight", $("form#panel div.panel-preview").css("fontWeight"));
-                    data.append("textDecoration", $("form#panel div.panel-preview").css("textDecoration"));
-                    data.append("fontStyle", $("form#panel div.panel-preview").css("fontStyle"));
-                    data.append("fontFamily", $("form#panel select#fontFamily").val());
-                    data.append("fontSize", $("form#panel select#fontSize").val());
-                    data.append("fontColor", $("form#panel input#fontColor").val());
-                    data.append("borderRadius", $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px");
-                    data.append("zIndex", 5);
-                    data.append("visibility", $("form#panel input#visibility").is(':checked'));
-                    data.append("contentSource", $("input#panel-source-content").val());
-                    saveData(data);
-                    $(this).dialog('destroy').remove();
-                }
-            },
-            {
-                text: "Anuluj",
-                click: function () {
-                    $(this).dialog('destroy').remove();
-                }
-            }],
-        open: function () {
-            setDialog();
-            setDialogButtons();
-        },
-        close: function () {
-            $(this).dialog('destroy').remove();
-        }
-    });
 
-    function setDialog() {
-        var panel = $("div#" + panel_id + ".bms-panel");
-        var prewievPanel = $("div.panel-preview");
-
-        $("form#panel input#panel-name").val(panel.attr("title"));
-        $("form#panel input#topPosition").val(parseInt(panel.css("top")));
-        $("form#panel input#leftPosition").val(parseInt(panel.css("left")));
-        $("form#panel input#width").val(parseInt(panel.css("width")));
-        $("form#panel input#height").val(parseInt(panel.css("height")));
-        if (panel.css("backgroundColor") === "transparent") {
-            $("form#panel input#backgroundColor").val("#ffffff");
-            $("form#panel input#opacity").val(0);
-        } else {
-            var bc = getColorValues(panel.css("backgroundColor"));
-            $("form#panel input#backgroundColor").val(rgb2hex("rgba(" + bc.red + ", " + bc.green + ", " + bc.blue + ", " + bc.alpha + ")"));
-            $("form#panel input#opacity").val(bc.alpha);
-        }
-        $("form#panel input#borderWidth").val(parseInt(panel.css("borderTopWidth")));
-        $("form#panel input#borderColor").val(rgb2hex(panel.css("borderTopColor")));
-        $("form#panel select#borderStyle").val(panel.css("borderTopStyle"));
-        $("form#panel input#borderRadiusTL").val(parseInt(panel.css("borderTopLeftRadius")));
-        $("form#panel input#borderRadiusTR").val(parseInt(panel.css("borderTopRightRadius")));
-        $("form#panel input#borderRadiusBL").val(parseInt(panel.css("borderBottomLeftRadius")));
-        $("form#panel input#borderRadiusBR").val(parseInt(panel.css("borderBottomRightRadius")));
-        $("form#panel select#fontFamily").val(panel.css("fontFamily"));
-        $("form#panel select#fontSize").val(parseInt(panel.css("fontSize")));
-        $("form#panel input#fontColor").val(rgb2hex(panel.css("color")));
-
-        var br = $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px";
-
-        var css = {
-            //ramka
-            borderWidth: $("form#panel input#borderWidth").val() + "px",
-            borderColor: $("form#panel input#borderColor").val(),
-            borderStyle: $("form#panel select#borderStyle").val(),
-            //narożniki
-            borderRadius: br,
-            //tło
-            backgroundColor: hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($("form#panel input#opacity").val())),
-            //czcionka
-            fontFamily: $("form#panel select#fontFamily").val(),
-            fontSize: $("form#panel select#fontSize").val() + "px",
-            color: $("form#panel input#fontColor").val(),
-            textAlign: "left"
-        };
-
-        prewievPanel.css(css);
-    }
-    function setDialogButtons() {
-        var panel = $("div.panel-preview");
-        $("div.dialog-panel-settings div.nav-row").click(function () {
-            $(this).next().find(".well").toggle();
-        });
-        $("form#panel input#borderWidth").change(function () {
-            var value = $(this).val();
-            panel.css({borderWidth: value + "px", lineHeight: (100 - value * 2) + "px"});
-        });
-        $("form#panel select#borderStyle").change(function () {
-            var value = $(this).val();
-            panel.css({borderStyle: value});
-        });
-        $("form#panel input#borderColor").on('input', function () {
-            var value = $(this).val();
-            panel.css({borderColor: value});
-        });
-        $("form#panel input#backgroundColor").on('input', function () {
-            var backgroundColor = hex2rgba($(this).val(), parseFloat($("form#panel input#opacity").val()));
-            panel.css({backgroundColor: backgroundColor});
-        });
-        $("form#panel input#opacity").change(changeOpacity).mousemove(changeOpacity);
-        function changeOpacity() {
-            var backgroundColor = hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($(this).val()));
-            panel.css({backgroundColor: backgroundColor});
-        }
-        $("form#panel input#borderRadiusTL").change(changeTL).mousemove(changeTL);
-        $("form#panel input#borderRadiusTR").change(changeTR).mousemove(changeTR);
-        $("form#panel input#borderRadiusBL").change(changeBL).mousemove(changeBL);
-        $("form#panel input#borderRadiusBR").change(changeBR).mousemove(changeBR);
-        function changeTL() {
-            panel.css({borderTopLeftRadius: $(this).val() + "px"});
-        }
-        function changeTR() {
-            panel.css({borderTopRightRadius: $(this).val() + "px"});
-        }
-        function changeBL() {
-            panel.css({borderBottomLeftRadius: $(this).val() + "px"});
-        }
-        function changeBR() {
-            panel.css({borderBottomRightRadius: $(this).val() + "px"});
-        }
-
-        //pogrubienie
-        $("form#panel .btn-bold").click(function () {
-            $(this).hasClass("active") ? panel.css({fontWeight: "initial"}) : panel.css({fontWeight: "bold"});
-            $(this).toggleClass("active");
-        });
-        //podkreślenie
-        $("form#panel .btn-underline").click(function () {
-            $(this).hasClass("active") ? panel.css({textDecoration: "initial"}) : panel.css({textDecoration: "underline"});
-            $(this).toggleClass("active");
-        });
-        //pochylenie
-        $("form#panel .btn-italic").click(function () {
-            $(this).hasClass("active") ? panel.css({fontStyle: "initial"}) : panel.css({fontStyle: "italic"});
-            $(this).toggleClass("active");
-        });
-        //wyrównanie do lewej
-        $("form#panel .btn-align-left").click(function () {
-            $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "left"});
-            setAlign("left");
-        });
-        //wyrównanie do środka
-        $("form#panel .btn-align-center").click(function () {
-            $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "center"});
-            setAlign("center");
-        });
-        //wyrównanie do prawej
-        $("form#panel .btn-align-right").click(function () {
-            $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "right"});
-            setAlign("right");
-        });
-        //styl czcionki
-        $("form#panel select.font-family").change(function () {
-
-            panel.css({fontFamily: $(this).val()});
-        });
-        //rozmiar czcionki
-        $("form#panel select.font-size").change(function () {
-            panel.css({fontSize: $(this).val() + "px"});
-        });
-        //Kolor
-        $("form#panel input#fontColor").on('input', function () {
-            panel.css({color: hex2rgba($(this).val(), 1)});
-        });
-        function setAlign(align) {
-            switch (align) {
-                case "left":
-                    $(".btn-align-center, .btn-align-right").removeClass("active");
-                    $(".btn-align-left").addClass("active");
-                    break;
-                case "center":
-                    $(".btn-align-left, .btn-align-right").removeClass("active");
-                    $(".btn-align-center").addClass("active");
-                    break;
-                case "right":
-                    $(".btn-align-center, .btn-align-left").removeClass("active");
-                    $(".btn-align-right").addClass("active");
-                    break;
-            }
-        }
-        //panel type
-        $("select#panel-type").change(function () {
-            var value = $(this).val();
-            switch (value) {
-                case "variable":
-                    $("input#panel-source-content").val("").prop("disabled", true);
-                    $(".input-group-btn button#image").addClass("disabled");
-                    $(".input-group-btn button#variable").removeClass("disabled");
-                    break;
-                case "image":
-                    $("input#panel-source-content").val("").prop("disabled", true);
-                    $(".input-group-btn button#variable").addClass("disabled");
-                    $(".input-group-btn button#image").removeClass("disabled");
-                    break;
-                case "text":
-                    $(".input-group-btn button#image, .input-group-btn button#variable").addClass("disabled");
-                    $("input#panel-source-content").val("").removeAttr("disabled", false);
-                    break;
-            }
-        });
-        //zmiana zawartości źródła powoduje wyświetlenie na podglądzie aktualną zawartość
-        $("input#panel-source-content").change(function () {
-            $("div.panel-preview span").empty().append($(this).val());
-        });
-
-        $(".input-group-btn button#variable").click(function () {
-            $.ajax({
-                type: "POST",
-                datatype: "application/json",
-                url: Routing.generate('bms_visualization_load_variable_manager'),
-                success: function (ret) {
-                    $(".main-row").children(".fa-spinner").remove();
-                    $(".main-row").append(ret["template"]);
-                    createVariableManager().dialog("open");
-                }
-            });
-            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-        });
-    }
-
-    function saveData(data) {
-        $.ajax({
-            type: "POST",
-            url: Routing.generate('bms_visualization_edit_panel'),
-            data: data,
-            contentType: false,
-            processData: false,
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $("div#" + ret["panel_id"] + ".bms-panel").remove();
-                $("div.main-row div.well").append(ret['template']);
-                setPanelEvents();
-            }
-        });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    }
-}
-function ajaxCopyPanel(data) {
+function copyPanel(data) {
     $.ajax({
         type: "POST",
         datatype: "application/json",
@@ -842,7 +708,7 @@ function ajaxCopyPanel(data) {
 //            };
 //            ajaxLoadPanelList(d);
             setPanelEvents();
-            ajaxEditPanel(ret["panel_id"]).dialog("open");
+            editPanel(ret["panel_id"]).dialog("open");
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -1026,18 +892,32 @@ function setPanelEvents() {
             var data = {
                 panel_id: id
             };
-            ajaxCopyPanel(data);
+            copyPanel(data);
         });
         //ustawienia
         $(label + " i.fa-cogs").click(function () {
+            var panel = $("div#" + id + ".bms-panel");
+            if (panel.hasClass("bms-panel-variable")) {
+                var rid = panel.children("span").attr("id");
+                var data = {
+                    reg_id: rid
+                };
+            }
             $.ajax({
                 type: "POST",
                 datatype: "application/json",
                 url: Routing.generate('bms_visualization_load_panel_dialog'),
+                data: data,
                 success: function (ret) {
                     $(".main-row").children(".fa-spinner").remove();
                     $(".main-row").append(ret["template"]);
-                    ajaxEditPanel(id).dialog("open");
+
+                    editPanel(id).dialog("open");
+                    if (panel.hasClass("bms-panel-variable")) {
+                        $("div.dialog-panel-settings input#panel-source-content").val(ret["register"].name);
+                        $("div.dialog-panel-settings div.panel-preview span").empty().append(ret["register"].value);
+                        $("div.dialog-panel-settings input#panel-source-value").val(ret["register"].value);
+                    }
                 }
             });
             $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -1387,7 +1267,7 @@ function ajaxLoadPanelList(data) {
                 var data = {
                     panel_id: id
                 };
-                ajaxCopyPanel(data);
+                copyPanel(data);
             });
             //ustawienia
             $("div.panel-list i.fa-cogs").click(function () {

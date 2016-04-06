@@ -6,9 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class PageController extends Controller {
 
+    /**
+     * @Route("/add_page", name="bms_visualization_add_page", options={"expose"=true})
+     */
     public function addPageAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
@@ -38,6 +42,9 @@ class PageController extends Controller {
         }
     }
 
+    /**
+     * @Route("/delete_page", name="bms_visualization_delete_page", options={"expose"=true})
+     */
     public function deletePageAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $page_id = $request->get("page_id");
@@ -64,6 +71,9 @@ class PageController extends Controller {
         }
     }
 
+    /**
+     * @Route("/edit_page", name="bms_visualization_edit_page", options={"expose"=true})
+     */
     public function editPageAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $page_id = $request->get("page_id");
@@ -86,6 +96,9 @@ class PageController extends Controller {
         }
     }
 
+    /**
+     * @Route("/change_page", name="bms_visualization_change_page", options={"expose"=true})
+     */
     public function changePageAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $page_id = $request->get("page_id");

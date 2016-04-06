@@ -131,6 +131,7 @@
                         <tr>
                             <th class="register_address_hex">Adres rejestru(HEX)</th>
                             <th class="register_address_dec">Adres rejestru(DEC)</th>
+                            <th class="function">Funkcja</th>
                             <th class="name">Nazwa skrócona</th>
                             <th class="description">Pełna nazwa</th>
                             <th class="active_read">Aktywny odczyt</th>
@@ -139,7 +140,6 @@
                             <th class="modificator_read">Sposób przeliczania danych przy odczycie</th>
                             <th class="modificator_write">Sposób przeliczania danych przy zapisie</th>
                             <th class="fixed_value">Aktualna wartość</th>
-                            <th class="data_group">Grupa danych</th>
                             <th class="manage">Zarządzaj</th>
                         </tr>
                     </thead>
@@ -149,6 +149,7 @@
                                 <tr>
                                     <td class="register_address_hex">{{ register.registerAddress }}</td>
                                     <td class="register_address_dec">{{ register.registerAddress }}</td>
+                                    <td class="function">{{ register.function }}</td>
                                     <td class="name">{{ register.name }}</td>
                                     <td class="description">{{ register.description}}</td>
                                     <td class="active_read text-center">
@@ -169,7 +170,6 @@
                                     <td class="modificator_read">{{ register.modificatorRead }}</td>
                                     <td class="modificator_write">{{ register.modificatorWrite }}</td>
                                     <td class="fixed_value">{{ register.registerCurrentData.fixedValue }}</td>
-                                    <td class="data_group">{{ register.displaySuffix }}</td>
                                     <td class="manage text-center">
                                         <i id="{{register.id}}" class="fa fa-refresh fa-fw fa-blue"></i>
                                         <i id="{{register.id}}" class="fa fa-edit fa-fw fa-green fa-register"></i>

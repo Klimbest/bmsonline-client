@@ -7,15 +7,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use BmsVisualizationBundle\Entity\Term;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class DefaultController extends Controller {
 
+    /**
+     * @Route("/", name="bms_index")
+     */
     public function bmsIndexAction() {
-
-
         return $this->render('BmsBundle::index.html.twig');
     }
 
+    /**
+     * @Route("/bms_change_page", name="bms_change_page", options={"expose"=true})
+     */
     public function ajaxChangePageAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
@@ -30,9 +35,12 @@ class DefaultController extends Controller {
         }
     }
 
+    /**
+     * @Route("/bms_refresh_page", name="bms_refresh_page", options={"expose"=true})
+     */
     public function ajaxRefreshPageAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
-            
+
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
@@ -43,18 +51,18 @@ class DefaultController extends Controller {
 
             $panels = $panelRepo->findPanelsForPage($page_id);
             $registersToPage = array();
-            foreach($panels as $p){
-                if($p->getType() === "variable"){
-                    array_push($registersToPage, (int)$p->getContentSource());
+            foreach ($panels as $p) {
+                if ($p->getType() === "variable") {
+                    array_push($registersToPage, (int) $p->getContentSource());
                 }
             }
-            
+
             $registers = array();
             foreach ($registersToPage as $rid) {
                 $register = $registerRepo->find($rid);
                 $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
             }
-            
+
             $terms = $termRepo->findAll();
             $t = null;
             foreach ($terms as $term) {
@@ -66,7 +74,7 @@ class DefaultController extends Controller {
                     $t = array_merge($t, $this->makeCondition($condition_type, $term));
                 }
             }
-            
+
             $regsForTime = $registerRepo->findAll();
             $time = 0;
             foreach ($regsForTime as $rft) {
@@ -76,7 +84,7 @@ class DefaultController extends Controller {
                     $time = $lastRead;
                 }
             }
-            
+
             $ret["time_of_update"] = $time;
             $ret["terms"] = $t;
             $ret['registers'] = $registers;
