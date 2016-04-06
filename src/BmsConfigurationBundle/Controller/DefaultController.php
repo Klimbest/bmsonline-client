@@ -178,6 +178,7 @@ class DefaultController extends Controller {
 
             $name = $form['name']->getData();
             $description = $form['description']->getData();
+            $description2 = $form['description2']->getData();
             $register_address = $form['register_address']->getData();
             $function = $form ['function']->getData();
             $scan_queue = $form['scan_queue']->getData();
@@ -191,6 +192,7 @@ class DefaultController extends Controller {
             $register->setName($name)
                     ->setFunction($function)
                     ->setDescription($description)
+                    ->setDescription2($description2)
                     ->setRegisterAddress($register_address)
                     ->setScanQueue($scan_queue)
                     ->setRegisterSize($register_size)
@@ -310,6 +312,7 @@ class DefaultController extends Controller {
             $register_size = $form['register_size']->getData();
             $name = $form['name']->getData();
             $description = $form['description']->getData();
+            $description2 = $form['description2']->getData();
             $displaySuffix = $form['display_suffix']->getData();
             $modificatorRead = $form['modificator_read']->getData();
             $modificatorWrite = $form['modificator_write']->getData();
@@ -323,6 +326,7 @@ class DefaultController extends Controller {
                     ->setRegisterSize($register_size)
                     ->setName($name)
                     ->setDescription($description)
+                    ->setDescription2($description2)
                     ->setDisplaySuffix($displaySuffix)
                     ->setModificatorRead($modificatorRead)
                     ->setModificatorWrite($modificatorWrite)
