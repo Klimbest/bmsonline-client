@@ -113,7 +113,7 @@ function ajaxRefreshPage() {
                         $("div#" + panelId + ".bms-panel span.content").text(eContent);
                         break;
                     case "url" :
-                        $("div#" + panelId + ".bms-panel").css({cursor: "pointer"}).click(function () {
+                        $("div#" + panelId + ".bms-panel").css({cursor: "pointer"}).unbind("click").click(function () {
                             ajaxChangePage(eContent);
                         });
                         break;

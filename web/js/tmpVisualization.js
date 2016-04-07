@@ -564,9 +564,9 @@ function createImageManager() {
                     var w = $("div.image-manager input#resolutionX").val();
                     var h = $("div.image-manager input#resolutionY").val();
                     $("div.dialog-panel-settings div.panel-preview").css({
-                        width: w + "px", 
-                        height: h + "px", 
-                        backgroundColor: "rgba(0,0,0,0)", 
+                        width: w + "px",
+                        height: h + "px",
+                        backgroundColor: "rgba(0,0,0,0)",
                         borderWidth: "0px"
                     });
                     $("form#panel input#width").val(w);
@@ -927,7 +927,6 @@ function setPanelEvents() {
         });
         //kopiowania
         $(label + " i.fa-clone").click(function () {
-            var panel = $("div#" + id + ".bms-panel");
             var data = {
                 panel_id: id
             };
@@ -939,7 +938,12 @@ function setPanelEvents() {
             if (panel.hasClass("bms-panel-variable")) {
                 var rid = panel.children("span").attr("id");
                 var data = {
-                    reg_id: rid
+                    reg_id: rid,
+                    panel_id: id
+                };
+            } else {
+                var data = {
+                    panel_id: id
                 };
             }
             $.ajax({

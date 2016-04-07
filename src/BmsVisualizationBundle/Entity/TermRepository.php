@@ -14,17 +14,7 @@ class TermRepository extends EntityRepository
 {
     public function findAllForPanel($panel_id){
         return $this->getEntityManager()
-                ->createQuery(
-//                    'SELECT t AS term, e AS effect, c AS myCondition, rcd.fixedValue, p.id, r.id '
-//                        . 'FROM BmsVisualizationBundle:Term AS t '
-//                        . 'JOIN BmsConfigurationBundle:Register AS r WITH r.id = t.register '
-//                        . 'JOIN BmsConfigurationBundle:RegisterCurrentData AS rcd WITH rcd.register = r.id '
-//                        . 'JOIN BmsVisualizationBundle:Panel AS p WITH p.id = t.panel '
-//                        . 'JOIN BmsVisualizationBundle:Effect AS e WITH e.id = t.effect '
-//                        . 'JOIN BmsVisualizationBundle:MyCondition AS c WITH c.id = t.condition '
-//                        . 'WHERE p.id = '.$panel_id
-                       'SELECT t FROM BmsVisualizationBundle:Term AS t WHERE t.panel = '.$panel_id
-                        )
-                ->getArrayResult();
+                ->createQuery('SELECT t FROM BmsVisualizationBundle:Term AS t WHERE t.panel = '.$panel_id)
+                ->getResult();
     }
 }
