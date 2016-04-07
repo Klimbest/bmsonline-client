@@ -1,7 +1,11 @@
 <div class="well well-lg">
-    {% if terms|length > 0 %}
+    {% if terms is defined %}
         {% for term in terms %}
-            { {{term.register.name}}({{term.register.registerCurrentData.fixedValue}}) }{ {{term.condition.type}} {{term.condition.value}} }{ {{term.effect.name}} }
+            <div class="row">
+                <div class="col-md-12">
+                    <i class="fa fa-dot-circle-o"></i> <span>< {{term.register.name}}({{term.register.registerCurrentData.fixedValue}}) > < {{term.condition.type}} {{term.condition.value}} > < {{term.effect.name}} ></span>
+                </div>
+            </div>
         {% endfor %}
     {% endif %}
 </div>

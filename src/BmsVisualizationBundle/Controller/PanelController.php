@@ -18,23 +18,23 @@ class PanelController extends Controller {
         if ($request->isXmlHttpRequest()) {
             $options = array();
             $reg_id = $request->get("reg_id");
-            if(isset($reg_id)){
+            if (isset($reg_id)) {
                 $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
                 $register = $registerRepo->findOneById($reg_id);
-                $options['register'] = $register;
+
+                $options = array('registers' => $registers);
                 $r["name"] = $register->getName();
                 $r["value"] = $register->getRegisterCurrentData()->getFixedValue();
-                $ret["register"] =$r;
-                
+                $ret["register"] = $r;
             }
             $panel_id = $request->get("panel_id");
-            if(isset($panel_id)){
+            if (isset($panel_id)) {
                 $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
-                $terms = $termRepo->findAllForPanel($panel_id);                        
-                $options['terms'] = $terms;
-            }            
-            
-            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelDialog.html.twig', ['terms' => $terms]);
+                $terms = $termRepo->findAllForPanel($panel_id);
+                $options = array('terms' => $terms);
+            }
+            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelDialog.html.twig', $options);
+
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -267,4 +267,5 @@ class PanelController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
+
 }
