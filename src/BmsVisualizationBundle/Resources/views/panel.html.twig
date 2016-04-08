@@ -1,27 +1,31 @@
-<div onclick="ajaxChangePage({{panel.href}})" title="{{panel.name}}" id="{{panel.id}}" class="bms-panel text-{{panel.textAlign}} bms-panel-{{panel.type}}" 
-     style="
-     top: {{panel.topPosition}}px; 
-     left: {{panel.leftPosition}}px; 
-     width: {{panel.width}}px; 
-     height: {{panel.height}}px;
-     border: {{panel.border}};
-     border-radius: {{panel.borderRadius}};
-     background-color: {{panel.backgroundColor}};
-     font-weight: {{panel.fontWeight}};
-     text-decoration: {{panel.textDecoration}};
-     font-style: {{panel.fontStyle}};
-     font-family: {{panel.fontFamily}};
-     color: {{panel.fontColor}};
-     font-size: {{panel.fontSize}}px;
-     line-height: {{panel.height}}px;
-     z-index: {{panel.zIndex}};
-     {% if panel.visibility == 0 %}
-         display: none;
-     {% endif %}
-     {% if panel.href is defined %}
-         cursor: pointer;
-     {% endif %}
-     ">
+<div 
+    {% if panel.href is not null %}
+        onclick="ajaxChangePage( {{panel.href}} );"
+    {% endif %}
+    title="{{panel.name}}" id="{{panel.id}}" class="bms-panel text-{{panel.textAlign}} bms-panel-{{panel.type}}" 
+    style="
+    top: {{panel.topPosition}}px; 
+    left: {{panel.leftPosition}}px; 
+    width: {{panel.width}}px; 
+    height: {{panel.height}}px;
+    border: {{panel.border}};
+    border-radius: {{panel.borderRadius}};
+    background-color: {{panel.backgroundColor}};
+    font-weight: {{panel.fontWeight}};
+    text-decoration: {{panel.textDecoration}};
+    font-style: {{panel.fontStyle}};
+    font-family: {{panel.fontFamily}};
+    color: {{panel.fontColor}};
+    font-size: {{panel.fontSize}}px;
+    line-height: {{panel.height}}px;
+    z-index: {{panel.zIndex}};
+    {% if panel.visibility == 0 %}
+        display: none;
+    {% endif %}
+    {% if panel.href is not null %}
+        cursor: pointer;
+    {% endif %}
+    ">
     {% if panel.type == 'text' %}
         <span class="bms-panel-content">{{panel.contentSource}}</span>
     {% elseif panel.type == 'variable' %}
