@@ -1,4 +1,4 @@
-<div title="{{panel.name}}" id="{{panel.id}}" class="bms-panel text-{{panel.textAlign}} bms-panel-{{panel.type}}" 
+<div onclick="ajaxChangePage({{panel.href}})" title="{{panel.name}}" id="{{panel.id}}" class="bms-panel text-{{panel.textAlign}} bms-panel-{{panel.type}}" 
      style="
      top: {{panel.topPosition}}px; 
      left: {{panel.leftPosition}}px; 
@@ -17,6 +17,9 @@
      z-index: {{panel.zIndex}};
      {% if panel.visibility == 0 %}
          display: none;
+     {% endif %}
+     {% if panel.href is defined %}
+         cursor: pointer;
      {% endif %}
      ">
     {% if panel.type == 'text' %}

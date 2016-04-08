@@ -162,6 +162,13 @@ class Panel {
     private $contentSource;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="href", type="text", nullable=true)
+     */
+    private $href;
+    
+    /**
      * @var Page
      * 
      * @ORM\ManyToOne(targetEntity="Page", inversedBy="panels")
@@ -751,5 +758,29 @@ class Panel {
     public function getDisplayPrecision()
     {
         return $this->displayPrecision;
+    }
+
+    /**
+     * Set href
+     *
+     * @param string $href
+     *
+     * @return Panel
+     */
+    public function setHref($href)
+    {
+        $this->href = $href;
+
+        return $this;
+    }
+
+    /**
+     * Get href
+     *
+     * @return string
+     */
+    public function getHref()
+    {
+        return $this->href;
     }
 }
