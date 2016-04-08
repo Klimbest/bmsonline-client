@@ -79,8 +79,7 @@ function createPanel() {
         width: $(window).width(),
         height: $(window).height(),
         modal: true,
-        buttons: [
-            {
+        buttons: [{
                 text: "Zapisz",
                 click: function () {
                     var data = new FormData();
@@ -105,6 +104,7 @@ function createPanel() {
                     data.append("visibility", $("form#panel input#visibility").is(':checked'));
                     data.append("contentSource", $("input#panel-source-content").val());
                     data.append("displayPrecision", $("form#panel select#displayPrecision").val());
+                    data.append("href", $("select#pages").val());
                     saveData(data);
                     $(this).dialog('destroy').remove();
                 }
@@ -119,6 +119,7 @@ function createPanel() {
             setDialog();
             setDialogButtonsData();
             setDialogButtonsFormat();
+            setDialogButtonsNavigation();
         },
         close: function () {
             $(this).dialog('destroy').remove();
@@ -193,6 +194,7 @@ function editPanel(panel_id) {
                     data.append("visibility", $("form#panel input#visibility").is(':checked'));
                     data.append("contentSource", $("input#panel-source-content").val());
                     data.append("displayPrecision", $("form#panel select#displayPrecision").val());
+                    data.append("href", $("select#pages").val());
                     saveData(data);
                     $(this).dialog('destroy').remove();
                 }
@@ -210,6 +212,7 @@ function editPanel(panel_id) {
             setPreview();
             setDialogButtonsData();
             setDialogButtonsFormat();
+            setDialogButtonsNavigation();
             setSource();
         },
         close: function () {
@@ -486,6 +489,17 @@ function setDialogButtonsFormat() {
         }
     });
 
+}
+function setDialogButtonsNavigation() {
+    $("input#href").change(function () {
+
+        if ($(this).is(':checked')) {
+            $("select.pages").prop("disabled", false);
+        } else {
+            $("select.pages").prop("disabled", true);
+            $("select.pages").val("");
+        }
+    });
 }
 function setOpenVariableManager() {
     $(".input-group-btn button#variable").click(function () {
@@ -776,6 +790,7 @@ function setPanelEvents() {
         }
 
         //usunięcie starych eventów
+        $(this).removeAttr("onclick");
         $(this).unbind("mouseenter mouseleave");
         //draggable and resizable
         $(this).draggable({

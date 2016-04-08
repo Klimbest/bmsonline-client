@@ -21,7 +21,7 @@ class AjaxController extends Controller {
         if ($request->isXmlHttpRequest()) {
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $registers = $registerRepo->findAll();
-
+            
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:variableManager.html.twig', ['registers' => $registers]);
             return new JsonResponse($ret);
         } else {

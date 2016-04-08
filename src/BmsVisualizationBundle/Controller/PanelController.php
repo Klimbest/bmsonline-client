@@ -22,17 +22,25 @@ class PanelController extends Controller {
                 $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
                 $register = $registerRepo->findOneById($reg_id);
 
-                $options = array('registers' => $registers);
+                $options['register'] = $register;
                 $r["name"] = $register->getName();
                 $r["value"] = $register->getRegisterCurrentData()->getFixedValue();
                 $ret["register"] = $r;
             }
             $panel_id = $request->get("panel_id");
             if (isset($panel_id)) {
+                $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+                $panel = $panelRepo->findOneById($panel_id);
+                $options['panel'] = $panel;                
+                
                 $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
                 $terms = $termRepo->findAllForPanel($panel_id);
-                $options = array('terms' => $terms);
+                $options['terms'] = $terms;
             }
+            $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
+            $pages = $pageRepo->findAll();
+            $options['pages'] = $pages;
+            
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelDialog.html.twig', $options);
 
             return new JsonResponse($ret);
@@ -69,6 +77,7 @@ class PanelController extends Controller {
             $borderRadius = $request->request->get("borderRadius");
             $zIndex = $request->request->get("zIndex");
             $displayPrecision = $request->request->get("displayPrecision");
+            $href = $request->request->get("href");
             if ($type == "variable") {
                 $registerName = $request->request->get("contentSource");
                 $register = $registerRepo->findOneBy(array('name' => $registerName));
@@ -108,7 +117,8 @@ class PanelController extends Controller {
                     ->setZIndex($zIndex)
                     ->setVisibility($visibility)
                     ->setContentSource($contentSource)
-                    ->setDisplayPrecision($displayPrecision);
+                    ->setDisplayPrecision($displayPrecision)
+                    ->setHref($href);
 
             $em->persist($panel);
             $em->flush();
@@ -146,7 +156,8 @@ class PanelController extends Controller {
             $fontColor = $request->request->get("fontColor");
             $borderRadius = $request->request->get("borderRadius");
             $zIndex = $request->request->get("zIndex");
-            $displayPrecision = $request->request->get("displayPrecision");
+            $displayPrecision = $request->request->get("displayPrecision");            
+            $href = $request->request->get("href");
             if ($type == "variable") {
                 $registerName = $request->request->get("contentSource");
                 $register = $registerRepo->findOneBy(array('name' => $registerName));
@@ -183,7 +194,8 @@ class PanelController extends Controller {
                     ->setZIndex($zIndex)
                     ->setVisibility($visibility)
                     ->setContentSource($contentSource)
-                    ->setDisplayPrecision($displayPrecision);
+                    ->setDisplayPrecision($displayPrecision)
+                    ->setHref($href);
 
             $em->flush();
             $ret["panel_id"] = $panel_id;

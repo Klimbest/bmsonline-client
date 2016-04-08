@@ -162,6 +162,7 @@ div.image-container span.label:hover{
 div.dialog-panel-settings div.dialog-panel-general,
 div.dialog-panel-settings div.dialog-panel-format,
 div.dialog-panel-settings div.dialog-panel-data,
+div.dialog-panel-settings div.dialog-panel-navigation,
 div.dialog-panel-settings div.dialog-panel-event{
     margin-bottom: 15px;
 }
@@ -175,6 +176,7 @@ div.dialog-panel-settings .well .row{
 }
 
 div.dialog-panel-settings div.dialog-panel-format .well,
+div.dialog-panel-settings div.dialog-panel-navigation .well,
 div.dialog-panel-settings div.dialog-panel-event .well{
     display: none;
 }
