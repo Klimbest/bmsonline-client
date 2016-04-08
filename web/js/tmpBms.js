@@ -123,10 +123,8 @@ function ajaxRefreshPage() {
 
         $.each(registers, function (key, value) {
             var displayPrecision = $("div.bms-panel").children("span#" + key).val();
-
             
-            value = value.toFixed(displayPrecision);
-            
+            value = parseFloat(value).toFixed(displayPrecision);
 
             $("div.bms-panel").children("span#" + key).empty().append(value);
         });
