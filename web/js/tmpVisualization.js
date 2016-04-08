@@ -584,7 +584,6 @@ function createImageManager() {
                     } else {
                         $("div.dialog-panel-settings input#panel-source-content").val(imgSource);
                         $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + imgSource + "\" class=\"img-responsive\">");
-
                     }
 
                     $(this).dialog('destroy').remove();
@@ -694,7 +693,6 @@ function createImageManager() {
             });
         });
     }
-
     function saveData(data) {
         $.ajax({
             type: "POST",
