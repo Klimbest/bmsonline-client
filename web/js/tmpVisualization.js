@@ -104,7 +104,7 @@ function createPanel() {
                     data.append("visibility", $("form#panel input#visibility").is(':checked'));
                     data.append("contentSource", $("input#panel-source-content").val());
                     data.append("displayPrecision", $("form#panel select#displayPrecision").val());
-                    data.append("href", $("select#pages").val());
+                    data.append("href", $("div.dialog-panel-navigation select.pages").val());
                     saveData(data);
                     $(this).dialog('destroy').remove();
                 }
@@ -194,7 +194,7 @@ function editPanel(panel_id) {
                     data.append("visibility", $("form#panel input#visibility").is(':checked'));
                     data.append("contentSource", $("input#panel-source-content").val());
                     data.append("displayPrecision", $("form#panel select#displayPrecision").val());
-                    data.append("href", $("select#pages").val());
+                    data.append("href", $("div.dialog-panel-navigation select.pages").val());
                     saveData(data);
                     $(this).dialog('destroy').remove();
                 }
