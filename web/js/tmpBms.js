@@ -124,9 +124,9 @@ function ajaxRefreshPage() {
         $.each(registers, function (key, value) {
             var displayPrecision = $("div.bms-panel").children("span#" + key).val();
 
-            if (displayPrecision > 0) {
-                value = value.toFixed(displayPrecision);
-            }
+            
+            value = value.toFixed(displayPrecision);
+            
 
             $("div.bms-panel").children("span#" + key).empty().append(value);
         });
