@@ -123,9 +123,9 @@ function ajaxRefreshPage() {
 
         $.each(registers, function (key, value) {
             var displayPrecision = $("div.bms-panel").children("span#" + key).val();
-            if(parseInt(displayPrecision) !== 2 ){
-                value = parseFloat(value).toFixed(parseInt(displayPrecision));
-            }
+//            if(parseInt(displayPrecision) !== 2 ){
+//                value = parseFloat(value).toFixed(parseInt(displayPrecision));
+//            }
 
             $("div.bms-panel").children("span#" + key).empty().append(value);
         });
