@@ -34,6 +34,13 @@ class Hardware
     private $active;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="connected", type="boolean", nullable=false)
+     */
+    private $connected;
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -42,7 +49,10 @@ class Hardware
      */
     private $id;
 
+    
+    
 
+    
 
     /**
      * Set raspiKey
