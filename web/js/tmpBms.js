@@ -112,20 +112,16 @@ function ajaxRefreshPage() {
                     case "text" :
                         $("div#" + panelId + ".bms-panel span.content").text(eContent);
                         break;
-                    case "url" :
-                        $("div#" + panelId + ".bms-panel").css({cursor: "pointer"}).unbind("click").click(function () {
-                            ajaxChangePage(eContent);
-                        });
-                        break;
                 }
             });
         }
 
         $.each(registers, function (key, value) {
-            var displayPrecision = $("div.bms-panel").children("span#" + key).val();
-//            if(parseInt(displayPrecision) !== 2 ){
-//                value = parseFloat(value).toFixed(parseInt(displayPrecision));
-//            }
+            var displayPrecision = $("div.bms-panel span#" + key).attr("value");
+            
+            if(parseInt(displayPrecision) !== 2 ){
+                value = parseFloat(value).toFixed(parseInt(displayPrecision));
+            }
 
             $("div.bms-panel").children("span#" + key).empty().append(value);
         });

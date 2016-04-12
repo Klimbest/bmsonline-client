@@ -89,7 +89,13 @@ class DefaultController extends Controller {
                     ->setUpdated(new \DateTime());
 
             $em->persist($comm);
+            $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
+            $ti = $technicalInformationRepo->findOneById(1);
+            $ti->setDataToSync(1);
+            $em->persist($ti);
+                        
             $em->flush();
+            
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
             $template = $this->container->get('templating')->render('BmsConfigurationBundle::communicationType.html.twig', ['comms' => $communicationTypes, 'comm' => $comm, 'form' => $form->createView()]);
