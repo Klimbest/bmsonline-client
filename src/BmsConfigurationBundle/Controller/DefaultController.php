@@ -89,11 +89,8 @@ class DefaultController extends Controller {
                     ->setUpdated(new \DateTime());
 
             $em->persist($comm);
-            $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
-            $ti = $technicalInformationRepo->findOneById(1);
-            $ti->setDataToSync(1);
-            $em->persist($ti);
-                        
+            
+            $this->setDataToSync();
             $em->flush();
             
             return $this->redirectToRoute('bms_configuration_index');
@@ -139,6 +136,7 @@ class DefaultController extends Controller {
                     ->setModbusAddress($modbus_address);
 
             $em->persist($device);
+            $this->setDataToSync();
             $em->flush();
 
             $session = $request->getSession();
@@ -209,6 +207,7 @@ class DefaultController extends Controller {
                     ->setActive($active);
 
             $em->persist($register);
+            $this->setDataToSync();
             $em->flush();
 
             $session = $request->getSession();
@@ -267,6 +266,7 @@ class DefaultController extends Controller {
                     ->setLocalization($localization);
 
             $em->persist($device);
+            $this->setDataToSync();
             $em->flush();
 
             $session = $request->getSession();
@@ -347,6 +347,7 @@ class DefaultController extends Controller {
             $em->flush();
             $register->setRegisterCurrentData($registerCD);
             $em->persist($register);
+            $this->setDataToSync();
             $em->flush();
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
@@ -381,6 +382,7 @@ class DefaultController extends Controller {
         }
         $em->flush();
         $em->remove($device);
+        $this->setDataToSync();
         $em->flush();
         $em->getConnection()->exec("ALTER TABLE device AUTO_INCREMENT = 1;");
         $em->getConnection()->exec("ALTER TABLE register AUTO_INCREMENT = 1;");
@@ -403,6 +405,7 @@ class DefaultController extends Controller {
 
         $em->remove($registerCD);
         $em->remove($register);
+        $this->setDataToSync();
         $em->flush();
         $em->getConnection()->exec("ALTER TABLE register AUTO_INCREMENT = 1;");
         $em->getConnection()->exec("ALTER TABLE register_current_data AUTO_INCREMENT = 1;");
@@ -433,6 +436,7 @@ class DefaultController extends Controller {
                 $em->remove($registerCD);
                 $em->remove($register);
             }
+            $this->setDataToSync();
             $em->flush();
         }
 
@@ -500,4 +504,10 @@ class DefaultController extends Controller {
         }
     }
 
+    public function setDataToSync(){
+        $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
+        $ti = $technicalInformationRepo->findOneById(1);
+        $ti->setDataToSync(1);
+        $em->persist($ti);        
+    }
 }
