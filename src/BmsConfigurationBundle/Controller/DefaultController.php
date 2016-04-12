@@ -505,6 +505,7 @@ class DefaultController extends Controller {
     }
 
     public function setDataToSync(){
+        $em = $this->getDoctrine()->getManager();
         $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
         $ti = $technicalInformationRepo->findOneById(1);
         $ti->setDataToSync(1);
