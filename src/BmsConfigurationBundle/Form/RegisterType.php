@@ -39,7 +39,8 @@ class RegisterType extends AbstractType{
                     ))
                 ->add('register_size', IntegerType::class, array(
                     'attr' => array('disabled' => 'disabled'),
-                    'label' => 'Rozmiar rejestru(8, 16, 32)'
+                    'label' => 'Rozmiar rejestru(8, 16, 32)',
+                    'required' => false
                     ))
                 ->add('name', TextType::class, array(
                     'attr' => array('disabled' => 'disabled', 'maxlength' => 16),
@@ -51,7 +52,8 @@ class RegisterType extends AbstractType{
                     ))
                 ->add('description2', TextareaType::class, array(
                     'attr' => array('disabled' => 'disabled'),
-                    'label' => 'Dodatkowy opis'
+                    'label' => 'Dodatkowy opis',
+                    'required' => false
                     ))
                 ->add('display_suffix', TextType::class, array(
                     'attr' => array('disabled' => 'disabled'),

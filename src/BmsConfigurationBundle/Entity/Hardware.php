@@ -49,11 +49,6 @@ class Hardware
      */
     private $id;
 
-    
-    
-
-    
-
     /**
      * Set raspiKey
      *
@@ -131,5 +126,29 @@ class Hardware
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set connected
+     *
+     * @param boolean $connected
+     *
+     * @return Hardware
+     */
+    public function setConnected($connected)
+    {
+        $this->connected = $connected;
+
+        return $this;
+    }
+
+    /**
+     * Get connected
+     *
+     * @return boolean
+     */
+    public function getConnected()
+    {
+        return $this->connected;
     }
 }

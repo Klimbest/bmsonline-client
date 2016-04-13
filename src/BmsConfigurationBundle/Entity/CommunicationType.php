@@ -14,6 +14,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 class CommunicationType
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=45, nullable=false)
@@ -69,21 +78,33 @@ class CommunicationType
      */
     private $port;
 
+   /**
+     * @var integer
+     *
+     * @ORM\Column(name="timeout_response", type="integer", nullable=false, options={"default"=300000})
+     */
+    private $timeoutResponse;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="timeout_between_send", type="integer", nullable=false, options={"default"=30000})
+     */
+    private $timeoutBetweenSend;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="timeout_before_scan", type="integer", nullable=false, options={"default"=10})
+     */
+    private $timeoutBeforeScan;
+    
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="updated", type="datetime", nullable=false)
      */
     private $updated;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
 
     /**
      * @var \BmsConfigurationBundle\Entity\Hardware
@@ -381,5 +402,77 @@ class CommunicationType
     public function getDevices()
     {
         return $this->devices;
+    }
+
+    /**
+     * Set timeoutResponse
+     *
+     * @param integer $timeoutResponse
+     *
+     * @return CommunicationType
+     */
+    public function setTimeoutResponse($timeoutResponse)
+    {
+        $this->timeoutResponse = $timeoutResponse;
+
+        return $this;
+    }
+
+    /**
+     * Get timeoutResponse
+     *
+     * @return integer
+     */
+    public function getTimeoutResponse()
+    {
+        return $this->timeoutResponse;
+    }
+
+    /**
+     * Set timeoutBetweenSend
+     *
+     * @param integer $timeoutBetweenSend
+     *
+     * @return CommunicationType
+     */
+    public function setTimeoutBetweenSend($timeoutBetweenSend)
+    {
+        $this->timeoutBetweenSend = $timeoutBetweenSend;
+
+        return $this;
+    }
+
+    /**
+     * Get timeoutBetweenSend
+     *
+     * @return integer
+     */
+    public function getTimeoutBetweenSend()
+    {
+        return $this->timeoutBetweenSend;
+    }
+
+    /**
+     * Set timeoutBeforeScan
+     *
+     * @param integer $timeoutBeforeScan
+     *
+     * @return CommunicationType
+     */
+    public function setTimeoutBeforeScan($timeoutBeforeScan)
+    {
+        $this->timeoutBeforeScan = $timeoutBeforeScan;
+
+        return $this;
+    }
+
+    /**
+     * Get timeoutBeforeScan
+     *
+     * @return integer
+     */
+    public function getTimeoutBeforeScan()
+    {
+        return $this->timeoutBeforeScan;
     }
 }
