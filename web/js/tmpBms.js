@@ -117,10 +117,10 @@ function ajaxRefreshPage() {
         }
 
         $.each(registers, function (key, value) {
-            var displayPrecision = $("div.bms-panel span#" + key).attr("value");
+            var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
             
-            if(parseInt(displayPrecision) !== 2 ){
-                value = parseFloat(value).toFixed(parseInt(displayPrecision));
+            if(displayPrecision !== 2 ){
+                value = parseFloat(value).toFixed(displayPrecision);
             }
 
             $("div.bms-panel").children("span#" + key).empty().append(value);

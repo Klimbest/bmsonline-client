@@ -1,5 +1,5 @@
 <div 
-    {% if panel.href is not null %}
+    {% if (panel.href is not null) and (panel.href != "") %}
         onclick="ajaxChangePage( {{panel.href}} );"
     {% endif %}
     title="{{panel.name}}" id="{{panel.id}}" class="bms-panel text-{{panel.textAlign}} bms-panel-{{panel.type}}" 
@@ -22,7 +22,7 @@
     {% if panel.visibility == 0 %}
         display: none;
     {% endif %}
-    {% if panel.href is not null %}
+    {% if (panel.href is not null) and (panel.href != "") %}
         cursor: pointer;
     {% endif %}
     ">
