@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class CommunicationTypeType extends AbstractType {
 
@@ -40,6 +41,15 @@ class CommunicationTypeType extends AbstractType {
                     'choices' => array(1 => 1, 2 => 2),
                     'label' => 'Bity Stopu',
                     'attr' => array('disabled' => 'disabled'),
+                ))->add('timeoutResponse', IntegerType::class, array(
+                    'attr' => array('disabled' => 'disabled', 'step' => 1, 'max' => 10000000, 'min' => 300000),
+                    'label' => 'Timeout oczekiwania na odpowiedź od urządzenia (us)'
+                ))->add('timeoutBetweenSend', IntegerType::class, array(
+                    'attr' => array('disabled' => 'disabled', 'step' => 1, 'max' => 10000000, 'min' => 25000),
+                    'label' => 'Timeout pomiędzy zapytaniami o rejestry (us)'
+                ))->add('timeoutBeforeScan', IntegerType::class, array(
+                    'attr' => array('disabled' => 'disabled', 'step' => 1, 'max' => 999, 'min' => 1),
+                    'label' => 'Timeout pomiędzy czytaniem z interfejsu (s)'
                 ))->add('ipAddress', TextType::class, array(
                     'attr' => array('disabled' => 'disabled'),
                     'required' => false
