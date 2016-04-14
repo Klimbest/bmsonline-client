@@ -203,6 +203,14 @@ function formEvents() {
     });
     //ustawienie pól formularza jako zablokowanych
     $(".enabled input, .enabled select, .enabled textarea").removeAttr('disabled');
+    //ustawienie wartości domyślnych
+    if($("div.new-item").hasClass("active")){    
+        $("select#bmsconfigurationbundle_register_register_size").val(16);
+        $("input#bmsconfigurationbundle_register_modificator_read").val(1);
+        $("textarea#bmsconfigurationbundle_register_description2").val("Dodatkowe informacje");
+        $("input#bmsconfigurationbundle_register_active").attr("checked", true);
+        $("select#bmsconfigurationbundle_register_function").val("03");
+    }
     //chowanie pokazywanie main-row
     $(".main-row span.hide-mainrow-label").click(function () {
         $(this).parent().parent().next("div.well").toggle();
@@ -215,11 +223,9 @@ function formEvents() {
         var oper = $("select#read_mod_operator").val();
         var mod = $("input#read_mod_val").val();
         if(oper === "*"){
-            console.log(mod);
             $("#bmsconfigurationbundle_register_modificator_read").val(mod);    
         }else if(oper === "/"){
             mod = 1/mod;
-            console.log(mod);
             $("input#bmsconfigurationbundle_register_modificator_read").val(mod);    
         }
     });

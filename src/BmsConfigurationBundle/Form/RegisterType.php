@@ -37,7 +37,8 @@ class RegisterType extends AbstractType{
                     'label' => 'Kolejka odczytu danych(od 1 do 5)',
                     'data' => 1
                     ))
-                ->add('register_size', IntegerType::class, array(
+                ->add('register_size', ChoiceType::class, array(
+                    'choices' => array('8' => 8, '16' => 16, '32' => 32),
                     'attr' => array('disabled' => 'disabled'),
                     'label' => 'Rozmiar rejestru(8, 16, 32)',
                     'required' => false
