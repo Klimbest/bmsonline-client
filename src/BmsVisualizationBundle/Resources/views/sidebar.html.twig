@@ -6,7 +6,7 @@
     <div class="btn-group">
         <button type="button" class="btn btn-default btn-add-panel">Dodaj panel</button>
     </div>
-    
+
     <div class="row">
         <div class="col-md-8">
             <label for="pattern-net-size">Rozmiar siatki (px):</label>
@@ -25,7 +25,7 @@
             <button type="button" class="btn btn-default btn-pattern-net"><span class="toggler">&nbsp;</span></button>
         </div>
     </div>
-   {# <div class="row">
+    <div class="row">
         <div class="col-md-12">
             <label for="pattern-net-size">Lista paneli:</label>
         </div>
@@ -33,13 +33,7 @@
             <div class="row">
                 <div class="col-md-5">
                     <button type="button" class="btn btn-default btn-panel-list"><i class="fa fa-list-ul fa-fw"></i><span class="toggler">&nbsp;</span></button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-1">
-                    <label><i class="fa fa-square-o fa-1x fa-fw"></i></label>
-                    <input type="checkbox" id="panel-list-area" checked/>
-                </div>
+                </div>                
                 <div class="col-md-1">
                     <label><i class="fa fa-font fa-1x fa-fw"></i></label>
                     <input type="checkbox" id="panel-list-text" checked/>
@@ -52,17 +46,13 @@
                     <label><i class="fa fa-hdd-o fa-1x fa-fw"></i></label>
                     <input type="checkbox" id="panel-list-variable" checked/>
                 </div>
-                <div class="col-md-1">
-                    <label><i class="fa fa-link fa-1x fa-fw"></i></label>
-                    <input type="checkbox" id="panel-list-navigation" checked/>
-                </div>
             </div>
         </div>
     </div>
     <div class="panel-list-container">
-        
-    </div>#}
+
+    </div>
 </div>
-{#
+
 {% include 'BmsVisualizationBundle:dialog:dialogPageAddSettings.html.twig' %}
-{% include 'BmsVisualizationBundle:dialog:dialogPageEditSettings.html.twig' %}#}
+{% include 'BmsVisualizationBundle:dialog:dialogPageEditSettings.html.twig' %}

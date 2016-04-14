@@ -272,48 +272,6 @@ class Panel {
     }
 
     /**
-     * Set borderStyle
-     *
-     * @param string $borderStyle
-     * @return Panel
-     */
-    public function setBorderStyle($borderStyle) {
-        $this->borderStyle = $borderStyle;
-
-        return $this;
-    }
-
-    /**
-     * Get borderStyle
-     *
-     * @return string 
-     */
-    public function getBorderStyle() {
-        return $this->borderStyle;
-    }
-
-    /**
-     * Set borderColor
-     *
-     * @param string $borderColor
-     * @return Panel
-     */
-    public function setBorderColor($borderColor) {
-        $this->borderColor = $borderColor;
-
-        return $this;
-    }
-
-    /**
-     * Get borderColor
-     *
-     * @return string 
-     */
-    public function getBorderColor() {
-        return $this->borderColor;
-    }
-
-    /**
      * Set backgroundColor
      *
      * @param string $backgroundColor
@@ -332,48 +290,6 @@ class Panel {
      */
     public function getBackgroundColor() {
         return $this->backgroundColor;
-    }
-
-    /**
-     * Set opacity
-     *
-     * @param float $opacity
-     * @return Panel
-     */
-    public function setOpacity($opacity) {
-        $this->opacity = $opacity;
-
-        return $this;
-    }
-
-    /**
-     * Get opacity
-     *
-     * @return float 
-     */
-    public function getOpacity() {
-        return $this->opacity;
-    }
-
-    /**
-     * Set borderWidth
-     *
-     * @param integer $borderWidth
-     * @return Panel
-     */
-    public function setBorderWidth($borderWidth) {
-        $this->borderWidth = $borderWidth;
-
-        return $this;
-    }
-
-    /**
-     * Get borderWidth
-     *
-     * @return integer 
-     */
-    public function getBorderWidth() {
-        return $this->borderWidth;
     }
 
     /**
@@ -416,27 +332,6 @@ class Panel {
      */
     public function getPage() {
         return $this->page;
-    }
-
-    /**
-     * Set content
-     *
-     * @param string $content
-     * @return Panel
-     */
-    public function setContent($content) {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    /**
-     * Get content
-     *
-     * @return string 
-     */
-    public function getContent() {
-        return $this->content;
     }
 
     /**
@@ -630,16 +525,7 @@ class Panel {
     {
         return $this->zIndex;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->terms = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
     
-
     /**
      * Set name
      *
@@ -782,5 +668,13 @@ class Panel {
     public function getHref()
     {
         return $this->href;
+    }
+        
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->terms = new \Doctrine\Common\Collections\ArrayCollection();
     }
 }

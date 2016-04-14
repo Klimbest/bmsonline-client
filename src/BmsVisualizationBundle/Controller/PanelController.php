@@ -56,7 +56,8 @@ class PanelController extends Controller {
         if ($request->isXmlHttpRequest()) {
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-
+            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            
             $page_id = $request->request->get("page_id");
             $type = $request->request->get("type");
             $name = $request->request->get("name");
@@ -124,6 +125,9 @@ class PanelController extends Controller {
             $em->flush();
 
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
+            $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
+            $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
+            
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -200,6 +204,10 @@ class PanelController extends Controller {
             $em->flush();
             $ret["panel_id"] = $panel_id;
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
+            $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
+            $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
+            
+            
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -219,15 +227,20 @@ class PanelController extends Controller {
             $width = $request->get("width");
             $topPosition = $request->get("topPosition");
             $leftPosition = $request->get("leftPosition");
+            $zIndex = $request->get("zIndex");
 
             $panel->setHeight($height)
                     ->setWidth($width)
                     ->setLeftPosition($leftPosition)
-                    ->setTopPosition($topPosition);
+                    ->setTopPosition($topPosition)
+                    ->setZIndex($zIndex);
 
             $em->flush();
 
-            return new JsonResponse();
+            $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
+            $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
+            
+            return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
         }
@@ -249,10 +262,19 @@ class PanelController extends Controller {
 
             $em->persist($newPanel);
             $em->flush();
-
+            
+            $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
+            $pages = $pageRepo->findAll();
+            $options['pages'] = $pages;
+            
+            $ret["dialog"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelDialog.html.twig', $options);
+            
             $ret["panel_id"] = $newPanel->getId();
-            $ret["dialog"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelDialog.html.twig');
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $newPanel]);
+            
+            $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
+            $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
+            
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -274,7 +296,11 @@ class PanelController extends Controller {
             $em->flush();
 
             $em->getConnection()->exec("ALTER TABLE panel AUTO_INCREMENT = 1;");
-            return new JsonResponse();
+            
+            $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
+            $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
+            
+            return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
         }

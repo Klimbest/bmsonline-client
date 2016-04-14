@@ -1,3 +1,7 @@
+.dialog-page-add-settings,
+.dialog-page-edit-settings{
+    display: none;
+}
 /*SIDEBAR*/
 .sidebar{
     background: linear-gradient(rgba(51, 122, 183, 0.88), #FFF);
@@ -36,17 +40,18 @@ span.toggler.off {
     position: absolute;
     z-index: 999;
 }
-div.panel-list:hover,
-div.panel-list i:hover{
+
+div.panel-list:hover{
     cursor: pointer;
 }
-div.panel-list span:hover,
+
 div.panel-list span.active{
     background-color: #FF0000;
 }
 
 div.panel-list i:hover{
     color: #FF0000;
+    font-size: 120%;
 }
 
 div.panel-list-container{
@@ -115,6 +120,7 @@ div.label-page:hover{
 .bms-panel:hover,
 .bms-panel.hover,
 .bms-panel.active{
+    z-index: 100;
     box-shadow: 0px 0px 20px #000;
 }
 
@@ -125,13 +131,6 @@ div.label-page:hover{
     z-index: 50;
 }
 
-div.panel-list i:hover{
-    font-size: 120%;
-}
-
-div.panel-list i.active{
-    display: inline;
-}
 
 .btn-file {
     position: relative;

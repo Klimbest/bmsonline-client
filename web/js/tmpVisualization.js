@@ -157,6 +157,7 @@ function createPanel() {
             success: function (ret) {
                 $(".main-row").children(".fa-spinner").remove();
                 $("div.main-row div.well").append(ret['template']);
+                loadPanelList(ret["panelList"]);
                 setPanelEvents();
             }
         });
@@ -334,6 +335,7 @@ function editPanel(panel_id) {
                 $(".main-row").children(".fa-spinner").remove();
                 $("div#" + ret["panel_id"] + ".bms-panel").remove();
                 $("div.main-row div.well").append(ret['template']);
+                loadPanelList(ret["panelList"]);
                 setPanelEvents();
             }
         });
@@ -731,13 +733,9 @@ function ajaxMovePanel(data) {
         datatype: "application/json",
         url: Routing.generate('bms_visualization_move_panel'),
         data: data,
-        success: function () {
-            $(".main-row").children(".fa-spinner").remove();
-            $("div.panel-list-container").hide().empty();
-            var d = {
-                page_id: $("div.label-page.active").attr("id")
-            };
-            //ajaxLoadPanelList(d);
+        success: function (ret) {
+            $(".main-row").children(".fa-spinner").remove();            
+            loadPanelList(ret["panelList"]);
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -753,11 +751,8 @@ function copyPanel(data) {
             $(".main-row").children(".fa-spinner").remove();
             $("div.main-row div.well").append(ret["template"]);
             $(".main-row").append(ret["dialog"]);
-//            $("div.panel-list-container").hide().empty();
-//            var d = {
-//                page_id: $("div.label-page.active").attr("id")
-//            };
-//            ajaxLoadPanelList(d);
+            loadPanelList(ret["panelList"]);
+            
             setPanelEvents();
             editPanel(ret["panel_id"]).dialog("open");
         }
@@ -767,15 +762,18 @@ function copyPanel(data) {
 function ajaxDeletePanel(data) {
     $.ajax({
         type: "POST",
+        datatype: "application/json",
         url: Routing.generate('bms_visualization_delete_panel'),
         data: data,
-        success: function () {
+        success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
+            loadPanelList(ret["panelList"]);
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
 
+//dodanie obsługi zdarzeń na każdym panelu na stronie
 function setPanelEvents() {
     var panels = $(".bms-panel");
 
@@ -857,9 +855,13 @@ function setPanelEvents() {
             }
         });
         $(this).hover(function () {
-            $(".panel-list-container div#" + id + " span.label").addClass("active");
+            $(".panel-list-container div#" + id + " span.label").css({backgroundColor: "#FF0000"});
         }, function () {
-            $(".panel-list-container div#" + id + " span.label").removeClass("active");
+            if($("div#" + id + ".panel-list").find("span").hasClass("active")){
+                
+            }else{
+                $(".panel-list-container div#" + id + " span.label").css({backgroundColor: ""});
+            }
         });
         $(this).click(function (e) {
             $(this).css({zIndex: 100});
@@ -904,40 +906,6 @@ function setPanelEvents() {
     function setPanelLabelEvents(id) {
         var label = "span#" + id + ".label-bms-panel";
         $(label).unbind("click");
-        //obsługa edycji kolejności
-        $(label + " i.fa-arrow-up").click(function () {
-            var panel = $("div#" + id + ".bms-panel");
-            var zIndex = $("div#" + id + ".bms-panel").css("zIndex");
-            zIndex++;
-            $("div#" + id + ".bms-panel").css({zIndex: zIndex});
-            var data = {
-                panel_id: id,
-                topPosition: panel.css("top"),
-                leftPosition: panel.css("left"),
-                width: panel.css("width"),
-                height: panel.css("height"),
-                zIndex: panel.css("zIndex")
-            };
-            ajaxMovePanel(data);
-        });
-        $(label + " i.fa-arrow-down").click(function () {
-            var panel = $("div#" + id + ".bms-panel");
-            var zIndex = $("div#" + id + ".bms-panel").css("zIndex");
-            zIndex--;
-            if (zIndex < 0) {
-                zIndex = 0;
-            }
-            $("div#" + id + ".bms-panel").css({zIndex: zIndex});
-            var data = {
-                panel_id: id,
-                topPosition: panel.css("top"),
-                leftPosition: panel.css("left"),
-                width: panel.css("width"),
-                height: panel.css("height"),
-                zIndex: panel.css("zIndex")
-            };
-            ajaxMovePanel(data);
-        });
         //kopiowania
         $(label + " i.fa-clone").click(function () {
             var data = {
@@ -1135,7 +1103,7 @@ function ajaxChangePage(data) {
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
             createPage(ret["template"]);
-            //ajaxLoadPanelList(data);
+            loadPanelList(ret["panelList"]);
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -1231,131 +1199,138 @@ function ajaxDeleteImage(data) {
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
 //załaduj listę paneli
-function ajaxLoadPanelList(data) {
+function loadPanelList(panelList) {
     $("input#panel-list-area, input#panel-list-text, input#panel-list-image, input#panel-list-variable, input#panel-list-navigation").prop("checked", true).unbind("click, change");
     if ($("button.btn-panel-list span.toggler").hasClass("off") === true) {
 
     } else {
-        $.ajax({
-            type: "POST",
-            datatype: "application/json",
-            url: Routing.generate('bms_visualization_load_panel_list'),
-            data: data,
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $("div.panel-list-container").empty().append(ret['template']).show();
-                setSidebarPanelListEvents();
-            }
+        //załaduj panele na listę
+        $("div.panel-list-container").empty().append(panelList).show();
+        //ukryj pokaż panele typu text na liście
+        $('input#panel-list-text').change(function () {
+            $(this).is(':checked') ? $("span.panel-list-text").parent().parent().parent("div.panel-list").show() : $("span.panel-list-text").parent().parent().parent("div.panel-list").hide();
         });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-        function setSidebarPanelListEvents() {
+        //ukryj pokaż panele typu image na liście
+        $('input#panel-list-image').change(function () {
+            $(this).is(':checked') ? $("span.panel-list-image").parent().parent().parent("div.panel-list").show() : $("span.panel-list-image").parent().parent().parent("div.panel-list").hide();
+        });
+        //ukryj pokaż panele typu variable na liście
+        $('input#panel-list-variable').change(function () {
+            $(this).is(':checked') ? $("span.panel-list-variable").parent().parent().parent("div.panel-list").show() : $("span.panel-list-variable").parent().parent().parent("div.panel-list").hide();
+        });
+        //obsługa najechania na panel na liscie
+        $('div.panel-list').hover(function () {
+            var id = $(this).attr("id");
+            $("div#" + id + ".bms-panel").addClass("active");
+            $(this).find("span").css({backgroundColor: "#FF0000"});
+        }, function () {
+            var id = $(this).attr("id");
+            $(this).find("span").css({backgroundColor: ""});
+            if($(this).find("span").hasClass("active")){
 
-            $('input#panel-list-area').change(function () {
-                $(this).is(':checked') ? $("span.panel-list-area").parent("div.panel-list").show() : $("span.panel-list-area").parent("div.panel-list").hide();
-            });
-            $('input#panel-list-text').change(function () {
-                $(this).is(':checked') ? $("span.panel-list-text").parent("div.panel-list").show() : $("span.panel-list-text").parent("div.panel-list").hide();
-            });
-            $('input#panel-list-image').change(function () {
-                $(this).is(':checked') ? $("span.panel-list-image").parent("div.panel-list").show() : $("span.panel-list-image").parent("div.panel-list").hide();
-            });
-            $('input#panel-list-variable').change(function () {
-                $(this).is(':checked') ? $("span.panel-list-variable").parent("div.panel-list").show() : $("span.panel-list-variable").parent("div.panel-list").hide();
-            });
-            $('input#panel-list-navigation').change(function () {
-                $(this).is(':checked') ? $("span.panel-list-navigation").parent("div.panel-list").show() : $("span.panel-list-navigation").parent("div.panel-list").hide();
-            });
-            $('div.panel-list').hover(function () {
-                $(this).children("i.fa").addClass("active");
-                var id = $(this).attr("id");
-                $("div#" + id + ".bms-panel").css({zIndex: "100", boxShadow: "0px 0px 15px #000"});
-            }, function () {
-                $(this).children("span").hasClass("active") ? $(this).children("i.fa").addClass("active") : $(this).children("i.fa").removeClass("active");
-                var id = $(this).attr("id");
-                var zi = $(this).children("span").attr("value");
-                $("div#" + id + ".bms-panel").css({zIndex: zi, boxShadow: ""});
-            });
-            $("div.panel-list span").click(function () {
-                $(this).toggleClass("active");
-                var id = $(this).parent().attr('id');
-                $("div#" + id + ".bms-panel").toggleClass("active");
-            });
-            //edycja kolejności w górę
-            $("div.panel-list i.fa-arrow-up").click(function () {
-                var id = $(this).parent().attr("id");
-                var panel = $("div#" + id + ".bms-panel");
-                var zIndex = $(this).parent().children("span").attr("value");
-                zIndex++;
-                $("div#" + id + ".bms-panel").css({zIndex: zIndex});
+            }else{
+                
+                $("div#" + id + ".bms-panel").removeClass("active");
+            }
+                        
+        });
+        //obsługa zaznaczania paneli na liście
+        $("div.panel-list span").click(function () {
+            $(this).toggleClass("active");
+        });
+        //edycja kolejności w górę
+        $("div.panel-list i.fa-arrow-up").click(function () {
+            var id = $(this).parent().parent().parent().attr("id");
+            var panel = $("div#" + id + ".bms-panel");
+            var zIndex = $(this).parent().parent().parent().find("span").attr("value");
+            zIndex++;
+            $("div#" + id + ".bms-panel").css({zIndex: zIndex});
+            $(this).parent().parent().parent().find("span").attr("value", zIndex);
+            var data = {
+                panel_id: id,
+                topPosition: panel.css("top"),
+                leftPosition: panel.css("left"),
+                width: panel.css("width"),
+                height: panel.css("height"),
+                zIndex: panel.css("zIndex")
+            };
+            ajaxMovePanel(data);
+        });
+        //edycja kolejności w dół
+        $("div.panel-list i.fa-arrow-down").click(function () {
+            var id = $(this).parent().parent().parent().attr("id");
+            var panel = $("div#" + id + ".bms-panel");
+            var zIndex = $(this).parent().parent().parent().find("span").attr("value");
+            zIndex--;
+            if (zIndex < 0) {
+                zIndex = 0;
+            }
+            $("div#" + id + ".bms-panel").css({zIndex: zIndex});
+            var data = {
+                panel_id: id,
+                topPosition: panel.css("top"),
+                leftPosition: panel.css("left"),
+                width: panel.css("width"),
+                height: panel.css("height"),
+                zIndex: panel.css("zIndex")
+            };
+            ajaxMovePanel(data);
+        });
+        //kopiowanie
+        $("div.panel-list i.fa-clone").click(function () {
+            var id = $(this).parent().parent().parent().attr("id");
+            var data = {
+                panel_id: id
+            };
+            copyPanel(data);
+        });
+        //ustawienia
+        $("div.panel-list i.fa-cogs").click(function () {
+            var id = $(this).parent().parent().parent().attr("id");
+            var panel = $("div#" + id + ".bms-panel");
+            if (panel.hasClass("bms-panel-variable")) {
+                var rid = panel.children("span").attr("id");
                 var data = {
-                    panel_id: id,
-                    topPosition: panel.css("top"),
-                    leftPosition: panel.css("left"),
-                    width: panel.css("width"),
-                    height: panel.css("height"),
-                    zIndex: panel.css("zIndex")
+                    reg_id: rid,
+                    panel_id: id
                 };
-                ajaxMovePanel(data);
-            });
-            //edycja kolejności w dół
-            $("div.panel-list i.fa-arrow-down").click(function () {
-                var id = $(this).parent().attr("id");
-                var panel = $("div#" + id + ".bms-panel");
-                var zIndex = $(this).parent().children("span").attr("value");
-                zIndex--;
-                if (zIndex < 0) {
-                    zIndex = 0;
-                }
-                $("div#" + id + ".bms-panel").css({zIndex: zIndex});
-                var data = {
-                    panel_id: id,
-                    topPosition: panel.css("top"),
-                    leftPosition: panel.css("left"),
-                    width: panel.css("width"),
-                    height: panel.css("height"),
-                    zIndex: panel.css("zIndex")
-                };
-                ajaxMovePanel(data);
-            });
-            //kopiowanie
-            $("div.panel-list i.fa-clone").click(function () {
-                var id = $(this).parent().attr("id");
+            } else {
                 var data = {
                     panel_id: id
                 };
-                copyPanel(data);
-            });
-            //ustawienia
-            $("div.panel-list i.fa-cogs").click(function () {
-                var id = $(this).parent().attr("id");
-                if ($("div#" + id + ".bms-panel").hasClass("area-panel")) {
-                    ajaxLoadSettingsPanel(id, "edit", "area");
-                } else if ($("div#" + id + ".bms-panel").hasClass("text-panel")) {
-                    ajaxLoadSettingsPanel(id, "edit", "text");
-                } else if ($("div#" + id + ".bms-panel").hasClass("image-panel")) {
-                    ajaxLoadSettingsPanel(id, "edit", "image");
-                } else if ($("div#" + id + ".bms-panel").hasClass("variable-panel")) {
-                    ajaxLoadSettingsPanel(id, "edit", "variable");
-                } else if ($("div#" + id + ".bms-panel").hasClass("navigation-panel")) {
-                    ajaxLoadSettingsPanel(id, "edit", "navigation");
-                }
-            });
-            //usuwanie
-            $("div.panel-list i.fa-remove").click(function () {
-                var id = $(this).parent().attr("id");
-                if (confirm("Na pewno chcesz to usunąć?")) {
-                    $("div#" + id + ".bms-panel").remove();
-                    var data = {
-                        panel_id: id
-                    };
-                    ajaxDeletePanel(data);
-                }
-            });
-        }
-    }
+            }
+            $.ajax({
+                type: "POST",
+                datatype: "application/json",
+                url: Routing.generate('bms_visualization_load_panel_dialog'),
+                data: data,
+                success: function (ret) {
+                    $(".main-row").children(".fa-spinner").remove();
+                    $(".main-row").append(ret["template"]);
 
+                    editPanel(id).dialog("open");
+                    if (panel.hasClass("bms-panel-variable")) {
+                        $("div.dialog-panel-settings input#panel-source-content").val(ret["register"].name);
+                        $("div.dialog-panel-settings div.panel-preview span").empty().append(ret["register"].value);
+                        $("div.dialog-panel-settings input#panel-source-value").val(ret["register"].value);
+                    }
+                }
+            });
+            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+        });
+        //usuwanie
+        $("div.panel-list i.fa-remove").click(function () {
+            var id = $(this).parent().parent().parent().attr("id");
+            if (confirm("Na pewno chcesz to usunąć?")) {
+                $("div#" + id + ".bms-panel").remove();
+                var data = {
+                    panel_id: id
+                };
+                ajaxDeletePanel(data);
+            }
+        });
+    }
 }
-//dodanie obsługi zdarzeń na każdym panelu na stronie
 
 function rgb2hex(orig) {
     var rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+)/i);

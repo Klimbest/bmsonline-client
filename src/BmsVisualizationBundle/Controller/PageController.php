@@ -103,11 +103,13 @@ class PageController extends Controller {
         if ($request->isXmlHttpRequest()) {
             $page_id = $request->get("page_id");
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
+            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
 
             $pages = $pageRepo->findAll();
-
+            $panels = $panelRepo->findPanelsForPage($request->get("page_id"));
+            
             $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id]);
-
+            $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
