@@ -62,7 +62,7 @@ function setSidebarEvents() {
         if (state === true) {
             $("div.panel-list-container").hide().empty();
         } else {
-            $("div.panel-list-container").show();            
+            $("div.panel-list-container").show();
         }
     });
 }
@@ -1222,12 +1222,14 @@ function loadPanelList(panelList) {
     }, function () {
         var id = $(this).attr("id");
         $(this).find("span").css({backgroundColor: "", width: ""});
-        $(this).find("i.icon-type").show();
-        $(this).find("div.panel-list-controls").hide();
-        $(this).find("div.panel-list-label").removeClass("col-md-5").addClass("col-md-12").css({overflow: ""});
+
+        $(this).find("div.panel-list-label").css({overflow: ""});
         if ($(this).hasClass("active")) {
 
         } else {
+            $(this).find("div.panel-list-label").removeClass("col-md-5").addClass("col-md-12");
+            $(this).find("i.icon-type").show();
+            $(this).find("div.panel-list-controls").hide();
             $("div#" + id + ".bms-panel").removeClass("active");
         }
 
@@ -1318,15 +1320,15 @@ function loadPanelList(panelList) {
     });
     //usuwanie
     $("div.panel-list i.fa-remove").click(function () {
-            var id = $(this).parent().parent().parent().attr("id");
-            if (confirm("Na pewno chcesz to usunąć?")) {
-                $("div#" + id + ".bms-panel").remove();
-                var data = {
-                    panel_id: id
-                };
-                ajaxDeletePanel(data);
-            }
-        });
+        var id = $(this).parent().parent().parent().attr("id");
+        if (confirm("Na pewno chcesz to usunąć?")) {
+            $("div#" + id + ".bms-panel").remove();
+            var data = {
+                panel_id: id
+            };
+            ajaxDeletePanel(data);
+        }
+    });
 }
 
 function rgb2hex(orig) {
