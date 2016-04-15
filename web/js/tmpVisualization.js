@@ -55,12 +55,12 @@ function setSidebarEvents() {
         var x = $(this).val();
         setPatternNet(x);
     });
-    /*ON/OFF lista paneli*/
+    //ON/OFF lista paneli
     $("button.btn-panel-list").click(function () {
         $(this).children("span").toggleClass('off');
         var state = $(this).children("span").hasClass("off");
         if (state === true) {
-            $("div.panel-list-container").hide().empty();
+            $("div.panel-list-container").hide();
         } else {
             $("div.panel-list-container").show();
         }
