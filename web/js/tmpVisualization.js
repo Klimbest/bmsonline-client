@@ -156,7 +156,7 @@ function createPanel() {
             fontFamily: $("form#panel select#fontFamily").val(),
             fontSize: $("form#panel select#fontSize").val() + "px",
             color: $("form#panel input#fontColor").val(),
-            textAlign: "left"
+            textAlign: "center"
         };
         panel.css(css);
     }

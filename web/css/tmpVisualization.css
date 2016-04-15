@@ -90,6 +90,10 @@ div.panel-list-container{
     overflow: hidden;
 }
 /*PAGE*/
+
+div.well{
+    background-color: #fff;
+}
 div.label-page{
     margin-right: 2px;
 }
