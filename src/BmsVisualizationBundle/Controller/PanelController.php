@@ -27,9 +27,9 @@ class PanelController extends Controller {
                 $r["value"] = $register->getRegisterCurrentData()->getFixedValue();
                 $ret["register"] = $r;
             }
+            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $panel_id = $request->get("panel_id");
-            if (isset($panel_id)) {
-                $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            if (isset($panel_id)) {                
                 $panel = $panelRepo->findOneById($panel_id);
                 $options['panel'] = $panel;                
                 
@@ -37,6 +37,10 @@ class PanelController extends Controller {
                 $terms = $termRepo->findAllForPanel($panel_id);
                 $options['terms'] = $terms;
             }
+            $lastPanel = $panelRepo->findLastPanel();
+            $newId = $lastPanel->getId();
+            $options['newId'] = (int)($newId + 1);
+            
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $pages = $pageRepo->findAll();
             $options['pages'] = $pages;

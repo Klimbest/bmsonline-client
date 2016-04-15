@@ -1,12 +1,23 @@
 <div class="dialog-panel-settings " title="Kreator paneli">
-    <form id="panel" class="form-inline" role="form">
+    <form id="panel" class="form-horizontal" role="form">
         <div class="row dialog-panel-general">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
-                    <label for="panel-name">Nazwa panelu:</label>
-                    <input id="panel-name" type="text" class="form-control" />
+                    <label class="control-label col-md-4" for="panel-name">Nazwa panelu:</label>
+                    <div class="col-md-8 input-group-sm">
+                        <input id="panel-name" type="text" name="Nazwa panelu" class="form-control" required value="panel{{newId}}"/>
+                    </div>
                 </div>
             </div>       
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <div class="checkbox">
+                            <label><input id="visibility" type="checkbox" checked><span class="label label-dialog-panel"> Widoczny?</span></label>
+                        </div>
+                    </div>  
+                </div>
+            </div>
         </div>
     </form>
     <div class="row nav-row">

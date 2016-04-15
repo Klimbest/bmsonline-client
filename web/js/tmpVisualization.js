@@ -100,8 +100,26 @@ function createPanel() {
                     data.append("contentSource", $("input#panel-source-content").val());
                     data.append("displayPrecision", $("form#panel select#displayPrecision").val());
                     data.append("href", $("div.dialog-panel-navigation select.pages").val());
-                    saveData(data);
-                    $(this).dialog('destroy').remove();
+                    var fail = false;
+                    var fail_log = '';
+                    $("input").each(function () {
+                        if (!$(this).prop('required')) {
+
+                        } else {
+                            if (!$(this).val()) {
+                                fail = true;
+                                var name = $(this).attr('name');
+                                $(this).parent(".form-group").addClass("has-error");
+                                fail_log += name + " jest wymagane \n";
+                            }
+                        }
+                    });
+                    if (!fail) {
+                        saveData(data);
+                        $(this).dialog('destroy').remove();
+                    } else {
+                        alert(fail_log);
+                    }
                 }
             },
             {
@@ -143,6 +161,7 @@ function createPanel() {
         panel.css(css);
     }
     function saveData(data) {
+
         $.ajax({
             type: "POST",
             url: Routing.generate('bms_visualization_add_panel'),
@@ -157,6 +176,7 @@ function createPanel() {
             }
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+
     }
 }
 function editPanel(panel_id) {
@@ -222,23 +242,18 @@ function editPanel(panel_id) {
             var c = panel.children("span.bms-panel-content").text();
             $("div.dialog-panel-data select#panel-type").val("text");
             $("div.panel-preview span").empty().append(c);
-
-            $(".input-group-btn button#image, .input-group-btn button#variable").addClass("disabled");
+            $(".input-group-btn button#manager").addClass("disabled");
             $("div.dialog-panel-data input#panel-source-content").val(c).removeAttr("disabled", false);
             $(".precision-group").hide();
             $(".font-group").show();
-            $(".input-group-btn button#variable").unbind("click");
-            $(".input-group-btn button#image").unbind("click");
+            $(".input-group-btn button#manager").unbind("click");
         } else if (panel.hasClass("bms-panel-image")) {
             var imgSource = panel.children("img").attr("src");
             $("div.dialog-panel-data select#panel-type").val("image");
             $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + imgSource + "\" class=\"img-responsive\">");
-
-            $(".input-group-btn button#variable").addClass("disabled");
-            $(".input-group-btn button#image").removeClass("disabled");
             $("div.dialog-panel-settings input#panel-source-content").val(imgSource);
             $(".precision-group, .font-group").hide();
-            $(".input-group-btn button#variable").unbind("click");
+            $(".input-group-btn button#manager").unbind("click");
             setOpenImageManager();
         }
     }
@@ -320,21 +335,39 @@ function editPanel(panel_id) {
         $("div.panel-preview").css(css);
     }
     function saveData(data) {
-        $.ajax({
-            type: "POST",
-            url: Routing.generate('bms_visualization_edit_panel'),
-            data: data,
-            contentType: false,
-            processData: false,
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $("div#" + ret["panel_id"] + ".bms-panel").remove();
-                $("div.main-row div.well").append(ret['template']);
-                loadPanelList(ret["panelList"]);
-                setPanelEvents();
+        var fail = false;
+        var fail_log = '';
+        $("input").each(function () {
+            if (!$(this).prop('required')) {
+
+            } else {
+                if (!$(this).val()) {
+                    fail = true;
+                    var name = $(this).attr('name');
+                    fail_log += name + " jest wymagane \n";
+                }
             }
         });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+        if (!fail) {
+            $.ajax({
+                type: "POST",
+                url: Routing.generate('bms_visualization_edit_panel'),
+                data: data,
+                contentType: false,
+                processData: false,
+                success: function (ret) {
+                    $(".main-row").children(".fa-spinner").remove();
+                    $("div#" + ret["panel_id"] + ".bms-panel").remove();
+                    $("div.main-row div.well").append(ret['template']);
+                    loadPanelList(ret["panelList"]);
+                    setPanelEvents();
+                }
+            });
+            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+        } else {
+            alert(fail_log);
+
+        }
     }
 }
 function setDialogButtonsData() {
@@ -347,28 +380,25 @@ function setDialogButtonsData() {
         var value = $(this).val();
         switch (value) {
             case "variable":
-                $("input#panel-source-content").val("").prop("disabled", true);
-                $(".input-group-btn button#image").addClass("disabled");
-                $(".input-group-btn button#variable").removeClass("disabled");
+                $("input#panel-source-content").val("").prop("disabled", true).prop("required", true);
+                $(".input-group-btn button#manager").removeClass("disabled");
                 $(".precision-group, .font-group").show();
                 $(".input-group-btn button#image").unbind("click");
                 setOpenVariableManager();
                 break;
             case "image":
-                $("input#panel-source-content").val("").prop("disabled", true);
-                $(".input-group-btn button#variable").addClass("disabled");
-                $(".input-group-btn button#image").removeClass("disabled");
+                $("input#panel-source-content").val("").prop("disabled", true).prop("required", false);
+                $(".input-group-btn button#manager").removeClass("disabled");
                 $(".precision-group, .font-group").hide();
-                $(".input-group-btn button#variable").unbind("click");
+                $(".input-group-btn button#manager").unbind("click");
                 setOpenImageManager();
                 break;
             case "text":
-                $(".input-group-btn button#image, .input-group-btn button#variable").addClass("disabled");
-                $("input#panel-source-content").val("").removeAttr("disabled", false);
+                $(".input-group-btn button#manager").addClass("disabled");
+                $("input#panel-source-content").val("").removeAttr("disabled required");
                 $(".precision-group").hide();
                 $(".font-group").show();
-                $(".input-group-btn button#variable").unbind("click");
-                $(".input-group-btn button#image").unbind("click");
+                $(".input-group-btn button#manager").unbind("click");
                 break;
         }
     });
@@ -499,7 +529,7 @@ function setDialogButtonsNavigation() {
     });
 }
 function setOpenVariableManager() {
-    $(".input-group-btn button#variable").click(function () {
+    $(".input-group-btn button#manager").click(function () {
         $.ajax({
             type: "POST",
             datatype: "application/json",
@@ -514,7 +544,7 @@ function setOpenVariableManager() {
     });
 }
 function setOpenImageManager() {
-    $(".input-group-btn button#image").click(function () {
+    $(".input-group-btn button#manager").click(function () {
         $.ajax({
             type: "POST",
             datatype: "application/json",
@@ -616,6 +646,13 @@ function createImageManager() {
 
     function setDialogButtons() {
         var dp = $("div.image-manager div.dialog-panel");
+        if ($("input#panel-source-content").val()) {
+            var src = $("input#panel-source-content").val();
+            $("div.image-manager input#imageName").val(src);
+            $("div.image-manager input#resolutionX").val(parseInt(dp.css("width")));
+            $("div.image-manager input#resolutionY").val(parseInt(dp.css("height")));
+            dp.children("img").attr("src", src);
+        }
         //loading image from disk
         $("div.image-manager input#image").change(function (event) {
             input = event.target;
@@ -675,7 +712,7 @@ function createImageManager() {
             $(this).parent().remove();
         });
 
-        //change sier of image
+        //change size of image
         $("div.image-manager input#resolutionX").change(function () {
             var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
             var h = $(this).val() / ar;

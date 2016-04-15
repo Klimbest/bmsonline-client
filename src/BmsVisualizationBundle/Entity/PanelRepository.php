@@ -15,4 +15,15 @@ class PanelRepository extends \Doctrine\ORM\EntityRepository
                 ->createQuery('SELECT p FROM BmsVisualizationBundle:Panel AS p WHERE p.page = '.$page_id)
                 ->getResult();
     }
+    
+    public function findLastPanel(){
+        return $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('p')
+                ->from('BmsVisualizationBundle:Panel', 'p')
+                ->orderBy('p.id', 'DESC')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+    }
 }
