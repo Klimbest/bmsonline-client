@@ -1,5 +1,6 @@
 .dialog-page-add-settings,
-.dialog-page-edit-settings{
+.dialog-page-edit-settings,
+div.panel-list-controls{
     display: none;
 }
 /*SIDEBAR*/
@@ -45,11 +46,11 @@ div.panel-list:hover{
     cursor: pointer;
 }
 
-div.panel-list span.active{
+div.panel-list.active span{
     background-color: #FF0000;
 }
 
-div.panel-list i:hover{
+div.panel-list i:not(.icon-type):hover{
     color: #FF0000;
     font-size: 120%;
 }

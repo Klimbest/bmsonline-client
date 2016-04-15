@@ -55,21 +55,16 @@ function setSidebarEvents() {
         var x = $(this).val();
         setPatternNet(x);
     });
-    /*ON/OFF lista paneli
-     $("button.btn-panel-list").click(function () {
-     $(this).children("span").toggleClass('off');
-     var state = $(this).children("span").hasClass("off");
-     if (state === true) {
-     
-     $("div.panel-list-container").hide().empty();
-     } else {
-     $("div.panel-list-container").show();
-     var d = {
-     page_id: $("div.label-page.active").attr("id")
-     };
-     ajaxLoadPanelList(d);
-     }
-     });*/
+    /*ON/OFF lista paneli*/
+    $("button.btn-panel-list").click(function () {
+        $(this).children("span").toggleClass('off');
+        var state = $(this).children("span").hasClass("off");
+        if (state === true) {
+            $("div.panel-list-container").hide().empty();
+        } else {
+            $("div.panel-list-container").show();            
+        }
+    });
 }
 
 //*****PANEL START*****
@@ -734,7 +729,7 @@ function ajaxMovePanel(data) {
         url: Routing.generate('bms_visualization_move_panel'),
         data: data,
         success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();            
+            $(".main-row").children(".fa-spinner").remove();
             loadPanelList(ret["panelList"]);
         }
     });
@@ -752,7 +747,7 @@ function copyPanel(data) {
             $("div.main-row div.well").append(ret["template"]);
             $(".main-row").append(ret["dialog"]);
             loadPanelList(ret["panelList"]);
-            
+
             setPanelEvents();
             editPanel(ret["panel_id"]).dialog("open");
         }
@@ -857,9 +852,9 @@ function setPanelEvents() {
         $(this).hover(function () {
             $(".panel-list-container div#" + id + " span.label").css({backgroundColor: "#FF0000"});
         }, function () {
-            if($("div#" + id + ".panel-list").find("span").hasClass("active")){
-                
-            }else{
+            if ($("div#" + id + ".panel-list").hasClass("active")) {
+
+            } else {
                 $(".panel-list-container div#" + id + " span.label").css({backgroundColor: ""});
             }
         });
@@ -948,7 +943,7 @@ function setPanelEvents() {
         });
         //usuwanie
         $(label + " i.fa-remove").click(function () {
-            if (confirm("Na pewno chcesz to usunąć?")) {
+            if (confirm("Na pewno chcesz usunąć ten panel? Zostaną usunięte również wszystkie zdarzenia przypisane do tego panelu.")) {
                 $("div#" + id + ".bms-panel").remove();
                 var data = {
                     panel_id: id
@@ -1200,126 +1195,129 @@ function ajaxDeleteImage(data) {
 }
 //załaduj listę paneli
 function loadPanelList(panelList) {
-    $("input#panel-list-area, input#panel-list-text, input#panel-list-image, input#panel-list-variable, input#panel-list-navigation").prop("checked", true).unbind("click, change");
-    if ($("button.btn-panel-list span.toggler").hasClass("off") === true) {
+    $("input#panel-list-text, input#panel-list-image, input#panel-list-variable").prop("checked", true).unbind("click, change");
+    $("div.bms-panel").removeClass("active");
+    //załaduj panele na listę
+    $("div.panel-list-container").empty().append(panelList).show();
+    //ukryj pokaż panele typu text na liście
+    $('input#panel-list-text').change(function () {
+        $(this).is(':checked') ? $("span.panel-list-text").parent().parent().parent("div.panel-list").show() : $("span.panel-list-text").parent().parent().parent("div.panel-list").hide();
+    });
+    //ukryj pokaż panele typu image na liście
+    $('input#panel-list-image').change(function () {
+        $(this).is(':checked') ? $("span.panel-list-image").parent().parent().parent("div.panel-list").show() : $("span.panel-list-image").parent().parent().parent("div.panel-list").hide();
+    });
+    //ukryj pokaż panele typu variable na liście
+    $('input#panel-list-variable').change(function () {
+        $(this).is(':checked') ? $("span.panel-list-variable").parent().parent().parent("div.panel-list").show() : $("span.panel-list-variable").parent().parent().parent("div.panel-list").hide();
+    });
+    //obsługa najechania na panel na liscie
+    $('div.panel-list').hover(function () {
+        var id = $(this).attr("id");
+        $("div#" + id + ".bms-panel").addClass("active");
+        $(this).find("span").css({backgroundColor: "#FF0000", width: "20px"});
+        $(this).find("i.icon-type").hide();
+        $(this).find("div.panel-list-controls").show();
+        $(this).find("div.panel-list-label").removeClass("col-md-12").addClass("col-md-5").css({overflow: "hidden"});
+    }, function () {
+        var id = $(this).attr("id");
+        $(this).find("span").css({backgroundColor: "", width: ""});
+        $(this).find("i.icon-type").show();
+        $(this).find("div.panel-list-controls").hide();
+        $(this).find("div.panel-list-label").removeClass("col-md-5").addClass("col-md-12").css({overflow: ""});
+        if ($(this).hasClass("active")) {
 
-    } else {
-        //załaduj panele na listę
-        $("div.panel-list-container").empty().append(panelList).show();
-        //ukryj pokaż panele typu text na liście
-        $('input#panel-list-text').change(function () {
-            $(this).is(':checked') ? $("span.panel-list-text").parent().parent().parent("div.panel-list").show() : $("span.panel-list-text").parent().parent().parent("div.panel-list").hide();
-        });
-        //ukryj pokaż panele typu image na liście
-        $('input#panel-list-image').change(function () {
-            $(this).is(':checked') ? $("span.panel-list-image").parent().parent().parent("div.panel-list").show() : $("span.panel-list-image").parent().parent().parent("div.panel-list").hide();
-        });
-        //ukryj pokaż panele typu variable na liście
-        $('input#panel-list-variable').change(function () {
-            $(this).is(':checked') ? $("span.panel-list-variable").parent().parent().parent("div.panel-list").show() : $("span.panel-list-variable").parent().parent().parent("div.panel-list").hide();
-        });
-        //obsługa najechania na panel na liscie
-        $('div.panel-list').hover(function () {
-            var id = $(this).attr("id");
-            $("div#" + id + ".bms-panel").addClass("active");
-            $(this).find("span").css({backgroundColor: "#FF0000"});
-        }, function () {
-            var id = $(this).attr("id");
-            $(this).find("span").css({backgroundColor: ""});
-            if($(this).find("span").hasClass("active")){
+        } else {
+            $("div#" + id + ".bms-panel").removeClass("active");
+        }
 
-            }else{
-                
-                $("div#" + id + ".bms-panel").removeClass("active");
-            }
-                        
-        });
-        //obsługa zaznaczania paneli na liście
-        $("div.panel-list span").click(function () {
-            $(this).toggleClass("active");
-        });
-        //edycja kolejności w górę
-        $("div.panel-list i.fa-arrow-up").click(function () {
-            var id = $(this).parent().parent().parent().attr("id");
-            var panel = $("div#" + id + ".bms-panel");
-            var zIndex = $(this).parent().parent().parent().find("span").attr("value");
-            zIndex++;
-            $("div#" + id + ".bms-panel").css({zIndex: zIndex});
-            $(this).parent().parent().parent().find("span").attr("value", zIndex);
+    });
+    //obsługa zaznaczania paneli na liście
+    $("div.panel-list").click(function () {
+        $(this).toggleClass("active");
+    });
+    //edycja kolejności w górę
+    $("div.panel-list i.fa-arrow-up").click(function () {
+        var id = $(this).parent().parent().parent().attr("id");
+        var panel = $("div#" + id + ".bms-panel");
+        var zIndex = $(this).parent().parent().parent().find("span").attr("value");
+        zIndex++;
+        $("div#" + id + ".bms-panel").css({zIndex: zIndex});
+        $(this).parent().parent().parent().find("span").attr("value", zIndex);
+        var data = {
+            panel_id: id,
+            topPosition: panel.css("top"),
+            leftPosition: panel.css("left"),
+            width: panel.css("width"),
+            height: panel.css("height"),
+            zIndex: panel.css("zIndex")
+        };
+        ajaxMovePanel(data);
+    });
+    //edycja kolejności w dół
+    $("div.panel-list i.fa-arrow-down").click(function () {
+        var id = $(this).parent().parent().parent().attr("id");
+        var panel = $("div#" + id + ".bms-panel");
+        var zIndex = $(this).parent().parent().parent().find("span").attr("value");
+        zIndex--;
+        if (zIndex < 0) {
+            zIndex = 0;
+        }
+        $("div#" + id + ".bms-panel").css({zIndex: zIndex});
+        var data = {
+            panel_id: id,
+            topPosition: panel.css("top"),
+            leftPosition: panel.css("left"),
+            width: panel.css("width"),
+            height: panel.css("height"),
+            zIndex: panel.css("zIndex")
+        };
+        ajaxMovePanel(data);
+    });
+    //kopiowanie
+    $("div.panel-list i.fa-clone").click(function () {
+        var id = $(this).parent().parent().parent().attr("id");
+        var data = {
+            panel_id: id
+        };
+        copyPanel(data);
+    });
+    //ustawienia
+    $("div.panel-list i.fa-cogs").click(function () {
+        var id = $(this).parent().parent().parent().attr("id");
+        var panel = $("div#" + id + ".bms-panel");
+        if (panel.hasClass("bms-panel-variable")) {
+            var rid = panel.children("span").attr("id");
             var data = {
-                panel_id: id,
-                topPosition: panel.css("top"),
-                leftPosition: panel.css("left"),
-                width: panel.css("width"),
-                height: panel.css("height"),
-                zIndex: panel.css("zIndex")
+                reg_id: rid,
+                panel_id: id
             };
-            ajaxMovePanel(data);
-        });
-        //edycja kolejności w dół
-        $("div.panel-list i.fa-arrow-down").click(function () {
-            var id = $(this).parent().parent().parent().attr("id");
-            var panel = $("div#" + id + ".bms-panel");
-            var zIndex = $(this).parent().parent().parent().find("span").attr("value");
-            zIndex--;
-            if (zIndex < 0) {
-                zIndex = 0;
-            }
-            $("div#" + id + ".bms-panel").css({zIndex: zIndex});
-            var data = {
-                panel_id: id,
-                topPosition: panel.css("top"),
-                leftPosition: panel.css("left"),
-                width: panel.css("width"),
-                height: panel.css("height"),
-                zIndex: panel.css("zIndex")
-            };
-            ajaxMovePanel(data);
-        });
-        //kopiowanie
-        $("div.panel-list i.fa-clone").click(function () {
-            var id = $(this).parent().parent().parent().attr("id");
+        } else {
             var data = {
                 panel_id: id
             };
-            copyPanel(data);
-        });
-        //ustawienia
-        $("div.panel-list i.fa-cogs").click(function () {
-            var id = $(this).parent().parent().parent().attr("id");
-            var panel = $("div#" + id + ".bms-panel");
-            if (panel.hasClass("bms-panel-variable")) {
-                var rid = panel.children("span").attr("id");
-                var data = {
-                    reg_id: rid,
-                    panel_id: id
-                };
-            } else {
-                var data = {
-                    panel_id: id
-                };
-            }
-            $.ajax({
-                type: "POST",
-                datatype: "application/json",
-                url: Routing.generate('bms_visualization_load_panel_dialog'),
-                data: data,
-                success: function (ret) {
-                    $(".main-row").children(".fa-spinner").remove();
-                    $(".main-row").append(ret["template"]);
+        }
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_load_panel_dialog'),
+            data: data,
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $(".main-row").append(ret["template"]);
 
-                    editPanel(id).dialog("open");
-                    if (panel.hasClass("bms-panel-variable")) {
-                        $("div.dialog-panel-settings input#panel-source-content").val(ret["register"].name);
-                        $("div.dialog-panel-settings div.panel-preview span").empty().append(ret["register"].value);
-                        $("div.dialog-panel-settings input#panel-source-value").val(ret["register"].value);
-                    }
+                editPanel(id).dialog("open");
+                if (panel.hasClass("bms-panel-variable")) {
+                    $("div.dialog-panel-settings input#panel-source-content").val(ret["register"].name);
+                    $("div.dialog-panel-settings div.panel-preview span").empty().append(ret["register"].value);
+                    $("div.dialog-panel-settings input#panel-source-value").val(ret["register"].value);
                 }
-            });
-            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+            }
         });
-        //usuwanie
-        $("div.panel-list i.fa-remove").click(function () {
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    });
+    //usuwanie
+    $("div.panel-list i.fa-remove").click(function () {
             var id = $(this).parent().parent().parent().attr("id");
             if (confirm("Na pewno chcesz to usunąć?")) {
                 $("div#" + id + ".bms-panel").remove();
@@ -1329,7 +1327,6 @@ function loadPanelList(panelList) {
                 ajaxDeletePanel(data);
             }
         });
-    }
 }
 
 function rgb2hex(orig) {

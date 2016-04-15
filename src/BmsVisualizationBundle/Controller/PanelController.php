@@ -290,12 +290,20 @@ class PanelController extends Controller {
 
             $em = $this->getDoctrine()->getManager();
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
+            
             $panel = $panelRepo->find($panel_id);
-
+            $terms = $termRepo->findAllForPanel($panel_id);
+            
+            foreach($terms as $term){
+                $em->remove($term);
+            }
+            
             $em->remove($panel);
             $em->flush();
 
             $em->getConnection()->exec("ALTER TABLE panel AUTO_INCREMENT = 1;");
+            $em->getConnection()->exec("ALTER TABLE term AUTO_INCREMENT = 1;");
             
             $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
             $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
@@ -307,3 +315,4 @@ class PanelController extends Controller {
     }
 
 }
+
