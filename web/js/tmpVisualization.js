@@ -227,7 +227,6 @@ function editPanel(panel_id) {
             setPreview();
             setDialogButtonsData();
             setDialogButtonsFormat();
-            setDialogButtonsNavigation();
             setSource();
         },
         close: function () {
