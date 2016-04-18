@@ -105,7 +105,6 @@ function ajaxRefreshPage(terms) {
     }
 
     function makeTerms(terms) {
-        
         if (terms) {
             $.each(terms, function (key, term) {
                 switch (term.condition_type) {
@@ -144,7 +143,6 @@ function ajaxRefreshPage(terms) {
                             applyTermEffect(term);
                         }
                         break;
-
                 }
             });
         }
