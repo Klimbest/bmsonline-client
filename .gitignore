@@ -16,5 +16,3 @@
 /web/bundles/
 /web/images/user/*
 /nbproject/*
-
-/app/config/security.yml
