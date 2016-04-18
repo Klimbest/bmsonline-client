@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-6">
             <label for="pages">Strona:</label>
-            <select class="form-control pages" {% if (panel is not defined) or (panel.href is null) %} disabled{%endif%}>
+            <select class="form-control pages">
                 <option value="" {% if (panel is defined) and (panel.href is null) %} selected {% endif %}>BRAK</option>
                 {% for page in pages %}
                     <option value="{{ page.id }}" {% if (panel is defined) and (panel.href == page.id) %} selected {%endif%}>{{ page.id }} - {{ page.name }}</option>
