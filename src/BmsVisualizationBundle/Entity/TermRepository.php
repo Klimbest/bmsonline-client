@@ -18,9 +18,10 @@ class TermRepository extends EntityRepository
                 ->getArrayResult();
     }
     
+    
     public function findAllAsArray(){
         return $this->getEntityManager()
-                ->createQuery('SELECT t.id, t.name, c.value AS condition_value, c.type AS condition_type, rcd.fixedValue, e.type AS effect_type, e.content AS effect_content, p.id AS panel_id
+                ->createQuery('SELECT t.id, t.name, c.value AS condition_value, c.type AS condition_type, rcd.fixedValue, e.type AS effect_type, e.content AS effect_content, p.id AS panel_id, r.id AS register_id
                                     FROM BmsVisualizationBundle:Term t
                                     JOIN t.register r 
                                     JOIN r.registerCurrentData rcd

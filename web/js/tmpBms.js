@@ -1,7 +1,7 @@
 /* global parseFloat */
 
 var i;
-var terms;
+var terms, registers;
 
 $(document).ready(function () {
     ajaxChangePage(1);
@@ -85,7 +85,8 @@ function ajaxRefreshPage(terms) {
                 $(".error-message span").empty();
 
             }
-            setVariables(ret['registers']);
+            registers = ret['registers'];
+            setVariables(registers);
             makeTerms(terms);
         }
     });
@@ -104,41 +105,42 @@ function ajaxRefreshPage(terms) {
     }
 
     function makeTerms(terms) {
+        
         if (terms) {
             $.each(terms, function (key, term) {
                 switch (term.condition_type) {
                     case "==" :
-                        if (term.condition_value == term.fixedValue) {
+                        if (registers[term.register_id] == term.condition_value) {
                             applyTermEffect(term);
                         }
                         break;
                     case "!=" :
-                        if (term.condition_value != term.fixedValue) {
+                        if (registers[term.register_id] != term.condition_value) {
                             applyTermEffect(term);
                         }
                         break;
                     case "<" :
-                        if (term.condition_value < term.fixedValue) {
+                        if (registers[term.register_id] < term.condition_value) {
                             applyTermEffect(term);
                         }
                         break;
                     case "<=" :
-                        if (term.condition_value <= term.fixedValue) {
+                        if (registers[term.register_id] <= term.condition_value) {
                             applyTermEffect(term);
                         }
                         break;
                     case ">" :
-                        if (term.condition_value > term.fixedValue) {
+                        if (registers[term.register_id] > term.condition_value) {
                             applyTermEffect(term);
                         }
                         break;
                     case ">=" :
-                        if (term.condition_value >= term.fixedValue) {
+                        if (registers[term.register_id] >= term.condition_value) {
                             applyTermEffect(term);
                         }
                         break;
                     case "null" :
-                        if (!isset(term.fixedValue)) {
+                        if (!isset(registers[term.register_id])) {
                             applyTermEffect(term);
                         }
                         break;

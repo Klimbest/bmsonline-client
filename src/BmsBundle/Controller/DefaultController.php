@@ -55,6 +55,7 @@ class DefaultController extends Controller {
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+            $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
 
             $page_id = $request->get("page_id");
             isset($page_id) ? $page = $pageRepo->find($page_id) : null;
@@ -64,8 +65,15 @@ class DefaultController extends Controller {
             foreach ($panels as $p) {
                 $rid = $p->getContentSource();
                 $register = $registerRepo->find($rid);
-                $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();                    
+                $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
             }
+            
+            $terms = $termRepo->findAll();
+            foreach ($terms as $t){
+                $register = $t->getRegister();
+                $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
+            }
+            
 
             $regsForTime = $registerRepo->findAll();
             $time = 0;
