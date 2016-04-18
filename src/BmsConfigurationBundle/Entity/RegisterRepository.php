@@ -14,10 +14,8 @@ class RegisterRepository extends \Doctrine\ORM\EntityRepository
 {
     public function getArchivatedRegisters() {
         return $this->getEntityManager()
-                        ->createQuery(
-                                'SELECT r.id, r.name, r.description FROM BmsConfigurationBundle:Register AS r '
-                                . 'WHERE r.archive = 1'
-                        )
+                        ->createQuery('SELECT r.id, r.name, r.description FROM BmsConfigurationBundle:Register AS r WHERE r.archive = 1')
                         ->getResult();
     }
+    
 }

@@ -64,8 +64,6 @@ class Term {
      */
     private $effect;
 
-    
-
     /**
      * Get id
      *

@@ -22,12 +22,18 @@ class TechnicalInformation
     private $id;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string")
+     */
+    private $name;
+    
+    /**
      * @var boolean
      *
-     * @ORM\Column(name="dataToSync", type="boolean")
+     * @ORM\Column(name="status", type="boolean")
      */
-    private $dataToSync;
-    
+    private $status;    
 
     /**
      * Get id
@@ -39,27 +45,52 @@ class TechnicalInformation
         return $this->id;
     }
 
+
     /**
-     * Set dataToSync
+     * Set status
      *
-     * @param boolean $dataToSync
+     * @param boolean $status
      *
      * @return TechnicalInformation
      */
-    public function setDataToSync($dataToSync)
+    public function setStatus($status)
     {
-        $this->dataToSync = $dataToSync;
+        $this->status = $status;
 
         return $this;
     }
 
     /**
-     * Get dataToSync
+     * Get status
      *
      * @return boolean
      */
-    public function getDataToSync()
+    public function getStatus()
     {
-        return $this->dataToSync;
+        return $this->status;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return TechnicalInformation
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

@@ -16,6 +16,12 @@ class PanelRepository extends \Doctrine\ORM\EntityRepository
                 ->getResult();
     }
     
+    public function findVariablePanelsForPage($page_id){
+        return $this->getEntityManager()
+                ->createQuery('SELECT p FROM BmsVisualizationBundle:Panel AS p WHERE p.type = \'variable\' AND p.page = '.$page_id)
+                ->getResult();
+    }    
+    
     public function findLastPanel(){
         return $this->getEntityManager()
                 ->createQueryBuilder()

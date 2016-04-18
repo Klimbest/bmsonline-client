@@ -1,11 +1,12 @@
 /* global parseFloat */
 
 var i;
+var terms;
 
 $(document).ready(function () {
     ajaxChangePage(1);
     setInterval(function () {
-        ajaxRefreshPage();
+        ajaxRefreshPage(terms);
     }, 10000);
     setInterval(clock, 1000);
 
@@ -25,7 +26,8 @@ function ajaxChangePage(page_id) {
             $(".content-container").children(".fa-spinner").remove();
             $(".content-container").children("div").remove();
             $(".content-container").append(ret["template"]).fadeIn("slow");
-            ajaxRefreshPage();
+            terms = ret['terms'];
+            ajaxRefreshPage(terms);
             $(window).resize(function () {
                 minBrowserSizeGuard();
             });
@@ -51,7 +53,7 @@ function ajaxChangePage(page_id) {
 
 }
 
-function ajaxRefreshPage() {
+function ajaxRefreshPage(terms) {
     var data = {
         page_id: $("div.well.page").attr("id")
     };
@@ -79,55 +81,92 @@ function ajaxRefreshPage() {
                 } else {
                     $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60 / 24) + " dni nie ma nowych danych!").show();
                 }
-
             } else {
                 $(".error-message span").empty();
 
             }
-            setVariables(ret['registers'], ret["terms"]);
+            setVariables(ret['registers']);
+            makeTerms(terms);
         }
     });
     clearInterval(i);
     $("span.timer").removeClass("label-primary").addClass("label-danger");
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 
-    function setVariables(registers, terms) {
+    function setVariables(registers) {
+        $.each(registers, function (key, value) {
+            var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
+            if (displayPrecision !== 2) {
+                value = parseFloat(value).toFixed(displayPrecision);
+            }
+            $("div.bms-panel").children("span#" + key).empty().append(value);
+        });
+    }
+
+    function makeTerms(terms) {
         if (terms) {
             $.each(terms, function (key, term) {
-                var eContent = term.effect_content;
-                var content = eContent.split(";");
-                var panelId = term.panel_id;
-                $("div#" + panelId + ".bms-panel").removeClass("shake-little shake-constant fa-spin");
+                switch (term.condition_type) {
+                    case "==" :
+                        if (term.condition_value == term.fixedValue) {
+                            applyTermEffect(term);
+                        }
+                        break;
+                    case "!=" :
+                        if (term.condition_value != term.fixedValue) {
+                            applyTermEffect(term);
+                        }
+                        break;
+                    case "<" :
+                        if (term.condition_value < term.fixedValue) {
+                            applyTermEffect(term);
+                        }
+                        break;
+                    case "<=" :
+                        if (term.condition_value <= term.fixedValue) {
+                            applyTermEffect(term);
+                        }
+                        break;
+                    case ">" :
+                        if (term.condition_value > term.fixedValue) {
+                            applyTermEffect(term);
+                        }
+                        break;
+                    case ">=" :
+                        if (term.condition_value >= term.fixedValue) {
+                            applyTermEffect(term);
+                        }
+                        break;
+                    case "null" :
+                        if (!isset(term.fixedValue)) {
+                            applyTermEffect(term);
+                        }
+                        break;
 
-                switch (term.effect_type) {
-                    case "css" :
-                        $("div#" + panelId + ".bms-panel").css(content[0], content[1]);
-                        break;
-                    case "src" :
-                        $("div#" + panelId + ".bms-panel img").attr("src", eContent);
-                        break;
-                    case "animation" :
-                        $("div#" + panelId + ".bms-panel").addClass(eContent);
-                        break;
-                    case "text" :
-                        $("div#" + panelId + ".bms-panel span.content").text(eContent);
-                        break;
                 }
             });
         }
 
-        $.each(registers, function (key, value) {
-            var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
-            
-            if(displayPrecision !== 2 ){
-                value = parseFloat(value).toFixed(displayPrecision);
+        function applyTermEffect(term) {
+            $("div#" + term.panel_id + ".bms-panel").removeClass("shake-little shake-constant fa-spin");
+            switch (term.effect_type) {
+                case "css" :
+                    var content = term.effect_content.split(";");
+                    $("div#" + term.panel_id + ".bms-panel").css(content[0], content[1]);
+                    break;
+                case "src" :
+                    $("div#" + term.panel_id + ".bms-panel img").attr("src", term.effect_content);
+                    break;
+                case "animation" :
+                    $("div#" + term.panel_id + ".bms-panel").addClass(term.effect_content);
+                    break;
+                case "text" :
+                    $("div#" + term.panel_id + ".bms-panel span.content").text(term.effect_content);
+                    break;
             }
-
-            $("div.bms-panel").children("span#" + key).empty().append(value);
-        });
+        }
     }
 }
-
 
 function clock() {
     var currentTime = new Date( );

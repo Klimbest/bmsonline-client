@@ -15,6 +15,17 @@ class TermRepository extends EntityRepository
     public function findAllForPanel($panel_id){
         return $this->getEntityManager()
                 ->createQuery('SELECT t FROM BmsVisualizationBundle:Term AS t WHERE t.panel = '.$panel_id)
-                ->getResult();
+                ->getArrayResult();
+    }
+    
+    public function findAllAsArray(){
+        return $this->getEntityManager()
+                ->createQuery('SELECT t.id, t.name, c.value AS condition_value, c.type AS condition_type, rcd.fixedValue, e.type AS effect_type, e.content AS effect_content, p.id AS panel_id
+                                    FROM BmsVisualizationBundle:Term t
+                                    JOIN t.register r 
+                                    JOIN r.registerCurrentData rcd
+                                    JOIN t.condition c
+                                    JOIN t.effect e
+                                    JOIN t.panel p')->getArrayResult();
     }
 }
