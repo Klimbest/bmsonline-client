@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use BmsVisualizationBundle\Entity\Page;
 
 class PageController extends Controller {
 
@@ -32,11 +33,14 @@ class PageController extends Controller {
             $page_id = $page->getId();
 
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
+            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $pages = $pageRepo->findAll();
 
-            $template = $this->container->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id]);
-
-            return new JsonResponse(array('ret' => $template));
+            $ret['page'] = $this->container->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id]);
+            
+            $panels = $panelRepo->findPanelsForPage($page_id);
+            $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
+            return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
         }
@@ -108,7 +112,7 @@ class PageController extends Controller {
             $pages = $pageRepo->findAll();
             $panels = $panelRepo->findPanelsForPage($request->get("page_id"));
             
-            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id]);
+            $ret['page'] = $this->container->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id]);
             $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
             return new JsonResponse($ret);
         } else {

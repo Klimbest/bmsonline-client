@@ -132,7 +132,6 @@ function createPanel() {
             setDialog();
             setDialogButtonsData();
             setDialogButtonsFormat();
-            setDialogButtonsNavigation();
         },
         close: function () {
             $(this).dialog('destroy').remove();
@@ -517,17 +516,7 @@ function setDialogButtonsFormat() {
     });
 
 }
-function setDialogButtonsNavigation() {
-    $("input#href").change(function () {
 
-        if ($(this).is(':checked')) {
-            $("select.pages").prop("disabled", false);
-        } else {
-            $("select.pages").prop("disabled", true);
-            $("select.pages").val("");
-        }
-    });
-}
 function setOpenVariableManager() {
     $(".input-group-btn button#manager").click(function () {
         $.ajax({
@@ -1020,22 +1009,12 @@ function createDialogPageAddSettings() {
                 }
             }],
         open: function () {
-            if (page_id !== null) {
-                setFormField();
-            }
+
         },
         close: function () {
             $(this).dialog("close");
         }
     });
-    function setFormField() {
-        var width = parseInt($('div.main-row div.well').css("width"));
-        var height = parseInt($('div.main-row div.well').css("height"));
-        var name = $('div.label-page.active span#name').text();
-        $("div.dialog-page-add-settings input#width").val(width);
-        $("div.dialog-page-add-settings input#height").val(height);
-        $("div.dialog-page-add-settings input#name").val(name);
-    }
 }
 function createDialogPageEditSettings(page_id) {
 
@@ -1091,7 +1070,7 @@ function ajaxAddPage(data) {
         data: data,
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
-            createPage(ret["ret"]);
+            createPage(ret['page'], ret['panelList']);
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -1134,21 +1113,20 @@ function ajaxChangePage(data) {
         data: data,
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
-            createPage(ret["template"]);
-            loadPanelList(ret["panelList"]);
+            createPage(ret['page'], ret['panelList']);
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-
-    function createPage(content) {
-        $(".main-row div.col-md-12").children().remove();
-        $(".main-row div.col-md-12").append(content).fadeIn("slow");
-        setPatternNet($("input#pattern-net-size").val());
-        setPageLabelsEvent();
-
-        setPanelEvents();
-    }
-    //przełączanie zakładek stron
+}
+//utworzenie nowej strony
+function createPage(page, panelList) {
+    $(".main-row div.col-md-12").children().remove();
+    $(".main-row div.col-md-12").append(page).fadeIn("slow");
+    setPatternNet($("input#pattern-net-size").val());
+    setPageLabelsEvent();
+    setPanelEvents();
+    loadPanelList(panelList);
+    
     function setPageLabelsEvent() {
         var pageLabels = $(".label-page");
         pageLabels.unbind("click");
@@ -1186,10 +1164,9 @@ function ajaxChangePage(data) {
 
 
     }
-
+    
 }
 //*****PAGE END*****
-
 //****TOOLS START*****
 //ustaw siatkę pomocniczą
 function setPatternNet(x) {
