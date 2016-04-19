@@ -28,15 +28,12 @@ function ajaxChangePage(page_id) {
             $(".content-container").append(ret["template"]).fadeIn("slow");
             terms = ret['terms'];
             ajaxRefreshPage(terms);
-            $(window).resize(function () {
-                minBrowserSizeGuard();
-            });
+            $(window).resize(minBrowserSizeGuard);
         }
     });
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 
     function minBrowserSizeGuard() {
-
         if ($(window).width() < parseInt($(".page").css("width")) + 30) {
             var label = "<div class='text-center error-label'><h3><span class='label label-primary'>Za mała szerokość przeglądarki</span></h3></div>";
 
@@ -48,9 +45,7 @@ function ajaxChangePage(page_id) {
             $("div.content-container").children("div:not('.footer-well')").show();
             $("div.error-label").remove();
         }
-
     }
-
 }
 
 function ajaxRefreshPage(terms) {
@@ -65,7 +60,7 @@ function ajaxRefreshPage(terms) {
         success: function (ret) {
             $(".content-container").children(".fa-spinner").remove();
             $("span.timer").removeClass("label-danger").addClass("label-primary");
-            var x = 7;
+            var x = 8;
             i = setInterval(function () {
                 $("span.timer").empty().append(x--);
             }, 1000);
@@ -83,7 +78,6 @@ function ajaxRefreshPage(terms) {
                 }
             } else {
                 $(".error-message span").empty();
-
             }
             registers = ret['registers'];
             setVariables(registers);
