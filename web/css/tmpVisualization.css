@@ -142,14 +142,11 @@ div.label-page:hover{
     box-shadow: 0px 0px 20px #000;
 }
 
-
 .label-bms-panel {
     position: absolute;
     background-color: #868686;
     z-index: 50;
 }
-
-
 .btn-file {
     position: relative;
     overflow: hidden;
@@ -176,16 +173,11 @@ div.image-container i.fa-remove:hover,
 div.image-container span.label:hover{
     cursor: pointer;
 }
-div.dialog-panel-settings div.dialog-panel-general,
-div.dialog-panel-settings div.dialog-panel-format,
-div.dialog-panel-settings div.dialog-panel-data,
-div.dialog-panel-settings div.dialog-panel-navigation,
-div.dialog-panel-settings div.dialog-panel-event{
-    margin-bottom: 15px;
-}
 
 div.dialog-panel-settings .well{
-    padding-top: 15px;
+    padding-top: 24px;
+    border-top: none;
+    box-shadow: unset;
 }
 
 div.dialog-panel-settings .well .row{
@@ -198,15 +190,7 @@ div.dialog-panel-settings div.dialog-panel-event{
     display: none;
 }
 
-.alert-primary{
-    color: rgb(255, 255, 255);
-    background-color: rgb(51, 122, 183);
-    cursor: pointer;
-    margin-top: 3px;
-    margin-bottom: 0px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-}
+
 .label-dialog-panel{
     background-color: #f6a828;
     border: 1px solid #e78f08;
@@ -218,9 +202,7 @@ div.dialog-panel-settings div.dialog-panel-event{
 
 .input-group-btn button{
     font-size: 14px;
-    
 }
-
 form#data-source div#panel-type{
     margin-right: -16px;
 }
@@ -230,12 +212,44 @@ input#panel-source-content{
     border-top-left-radius: 0;
 }
 
-select#panel-type{
-    
+select#panel-type{   
     border-radius: 4px 0px 0px 4px;
 }
 .panel-preview,
 .panel-preview img{
     max-width: 500px;
     max-height: 300px;
+}
+ul.nav-tabs li a{
+    border: 1px solid rgb(174, 174, 174);
+    border-radius: 5px 5px 0px 0px;
+}
+ul.nav-tabs li a:hover{
+    background-color: rgb(51, 122, 183);
+    color: rgb(255, 255, 255);
+    border-color: rgb(0,0,0);
+}
+
+/* DIALOG EVENT */
+.table, 
+.table-bordered tbody tr td,
+.table-bordered thead tr th{
+    border: 1px solid #337AB7;
+}
+
+.table-bordered thead tr th{
+    border-bottom-width: 2px;
+    border-top: 0px none;
+}
+input.clicked{
+    opacity: 0.30;
+}
+.label-title{
+    background-color: #005A78;
+    font-size: 88%;
+}
+
+.table tbody tr:hover{
+    font-weight: bold;
+    background-color: #adadad;
 }

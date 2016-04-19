@@ -34,7 +34,7 @@ class PanelController extends Controller {
                 $options['panel'] = $panel;                
                 
                 $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
-                $terms = $termRepo->findAllForPanel($panel_id);
+                $terms = $termRepo->findAllForPanelAsObject($panel_id);
                 $options['terms'] = $terms;
             }
             $lastPanel = $panelRepo->findLastPanel();

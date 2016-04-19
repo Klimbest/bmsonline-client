@@ -18,6 +18,11 @@ class TermRepository extends EntityRepository
                 ->getArrayResult();
     }
     
+    public function findAllForPanelAsObject($panel_id){
+        return $this->getEntityManager()
+                ->createQuery('SELECT t FROM BmsVisualizationBundle:Term AS t WHERE t.panel = '.$panel_id)
+                ->getResult();
+    }
     
     public function findAllAsArray(){
         return $this->getEntityManager()

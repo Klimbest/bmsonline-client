@@ -160,22 +160,38 @@ function createPanel() {
         panel.css(css);
     }
     function saveData(data) {
+        var fail = false;
+        var fail_log = '';
+        $("input").each(function () {
+            if (!$(this).prop('required')) {
 
-        $.ajax({
-            type: "POST",
-            url: Routing.generate('bms_visualization_add_panel'),
-            data: data,
-            contentType: false,
-            processData: false,
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $("div.main-row div.well").append(ret['template']);
-                loadPanelList(ret["panelList"]);
-                setPanelEvents();
+            } else {
+                if (!$(this).val()) {
+                    fail = true;
+                    var name = $(this).attr('name');
+                    fail_log += name + " jest wymagane \n";
+                }
             }
         });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+        if (!fail) {
+            $.ajax({
+                type: "POST",
+                url: Routing.generate('bms_visualization_add_panel'),
+                data: data,
+                contentType: false,
+                processData: false,
+                success: function (ret) {
+                    $(".main-row").children(".fa-spinner").remove();
+                    $("div.main-row div.well").append(ret['template']);
+                    loadPanelList(ret["panelList"]);
+                    setPanelEvents();
+                }
+            });
+            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+        } else {
+            alert(fail_log);
 
+        }
     }
 }
 function editPanel(panel_id) {
@@ -369,13 +385,13 @@ function editPanel(panel_id) {
     }
 }
 function setDialogButtonsData() {
-    //zwijanie i rozwijanie sekcji
+    //zmiana zakładek
     $("div.dialog-panel-settings li a").click(function () {
         $("div.dialog-panel-settings li").removeClass("active");
         $("div.row.dialog-panel-data, div.row.dialog-panel-format, div.row.dialog-panel-navigation, div.row.dialog-panel-event").hide();
         var id = $(this).parent().attr("id");
         $(this).parent().addClass("active");
-        $("div.row." + id).show();        
+        $("div.row." + id).show();
     });
     //panel type
     $("select#panel-type").change(function () {
@@ -1129,7 +1145,7 @@ function createPage(page, panelList) {
     setPageLabelsEvent();
     setPanelEvents();
     loadPanelList(panelList);
-    
+
     function setPageLabelsEvent() {
         var pageLabels = $(".label-page");
         pageLabels.unbind("click");
@@ -1167,7 +1183,7 @@ function createPage(page, panelList) {
 
 
     }
-    
+
 }
 //*****PAGE END*****
 //****TOOLS START*****
