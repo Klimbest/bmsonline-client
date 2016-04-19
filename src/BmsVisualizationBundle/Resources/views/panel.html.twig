@@ -19,6 +19,11 @@
     font-size: {{panel.fontSize}}px;
     line-height: {{panel.height}}px;
     z-index: {{panel.zIndex}};
+    {% for term in terms %}
+        {% if term.panel_id == panel.id %}
+            display: none;
+        {% endif %}
+    {% endfor %}
     {% if panel.visibility == 0 %}
         display: none;
     {% endif %}
