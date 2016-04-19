@@ -42,7 +42,8 @@ span.toggler.off {
     z-index: 999;
 }
 
-div.panel-list:hover{
+div.panel-list:hover,
+div.dialog-panel-settings ul.nav-tabs li:hover{
     cursor: pointer;
 }
 
@@ -191,9 +192,9 @@ div.dialog-panel-settings .well .row{
     margin-bottom: 5px;
 }
 
-div.dialog-panel-settings div.dialog-panel-format .well,
-div.dialog-panel-settings div.dialog-panel-navigation .well,
-div.dialog-panel-settings div.dialog-panel-event .well{
+div.dialog-panel-settings div.dialog-panel-format,
+div.dialog-panel-settings div.dialog-panel-navigation,
+div.dialog-panel-settings div.dialog-panel-event{
     display: none;
 }
 

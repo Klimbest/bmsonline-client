@@ -13,9 +13,9 @@ Number.prototype.pad = function (size) {
     return s;
 };
 
-$(document).ready(function () {    
-    
-    
+$(document).ready(function () {
+
+
     setInterval(function () {
         refreshPage();
     }, 1000 * 60);
@@ -31,7 +31,7 @@ $(document).ready(function () {
     });
 
     $(".communicationType-level li div:not(.device-level li div)").click(function () {
-        
+
         var cid = $(this).attr("id");
 
         $(".main-row").children().remove();
@@ -49,7 +49,7 @@ $(document).ready(function () {
 
     $(".device-level li div:not(.register-level li div):not(li.new-item div)").click(function () {
 
-        
+
         var cid = $(".communicationType-level div.active").attr("id");
         var did = $(this).attr("id");
 
@@ -65,7 +65,7 @@ $(document).ready(function () {
 
     $(".register-level li div div").click(function () {
 
-        
+
         var cid = $(".communicationType-level div.active").attr("id");
         var did = $(".device-level div.active").attr("id");
         var rid = $(this).attr("id");
@@ -79,7 +79,7 @@ $(document).ready(function () {
     });
 
     $(".device-level li.new-item div").click(function () {
-        
+
         var cid = $(".communicationType-level div.active").attr("id");
 
         $(".main-row").children().remove();
@@ -92,7 +92,7 @@ $(document).ready(function () {
     });
 
     $(".register-level li div.new-item").click(function () {
-        
+
         var cid = $(".communicationType-level div.active").attr("id");
         var did = $(".device-level div.active").attr("id");
 
@@ -135,11 +135,11 @@ function setActiveLevel(item) {
 }
 
 function ajaxAppend(url) {
-    
+
     $.ajax({
         type: "POST",
         dataType: "json",
-        url: url, 
+        url: url,
         cache: false,
         success: function (ret) {
             $(".main-row").children().remove();
@@ -154,7 +154,7 @@ function ajaxAppend(url) {
         }
     });
     $(".main-row").addClass("text-center").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    
+
 }
 
 function formEvents() {
@@ -204,7 +204,7 @@ function formEvents() {
     //ustawienie pól formularza jako zablokowanych
     $(".enabled input, .enabled select, .enabled textarea").removeAttr('disabled');
     //ustawienie wartości domyślnych
-    if($("div.new-item").hasClass("active")){    
+    if ($("div.new-item").hasClass("active")) {
         $("select#bmsconfigurationbundle_register_register_size").val(16);
         $("input#bmsconfigurationbundle_register_modificator_read").val(1);
         $("textarea#bmsconfigurationbundle_register_description2").val("Dodatkowe informacje");
@@ -216,20 +216,20 @@ function formEvents() {
         $(this).parent().parent().next("div.well").toggle();
         $(this).children("i.fa").toggleClass('fa-angle-down');
     });
-    
+
     $("input#read_mod_val").val($("input#bmsconfigurationbundle_register_modificator_read").val());
-    
-    $("select#read_mod_operator, input#read_mod_val").change(function(){
+
+    $("select#read_mod_operator, input#read_mod_val").change(function () {
         var oper = $("select#read_mod_operator").val();
         var mod = $("input#read_mod_val").val();
-        if(oper === "*"){
-            $("#bmsconfigurationbundle_register_modificator_read").val(mod);    
-        }else if(oper === "/"){
-            mod = 1/mod;
-            $("input#bmsconfigurationbundle_register_modificator_read").val(mod);    
+        if (oper === "*") {
+            $("#bmsconfigurationbundle_register_modificator_read").val(mod);
+        } else if (oper === "/") {
+            mod = 1 / mod;
+            $("input#bmsconfigurationbundle_register_modificator_read").val(mod);
         }
     });
-            
+
 }
 
 function tableEvents() {
@@ -259,7 +259,7 @@ function tableEvents() {
     });
     //przekierowanie do edycji urządzenia z tabeli
     $("tr td.manage i.fa-edit.fa-device").click(function () {
-        
+
         var cid = $(".communicationType-level div.active").attr("id");
         var did = $(this).attr("id");
 
@@ -271,14 +271,14 @@ function tableEvents() {
     });
     //przekierowanie do edycji rejestru z tabeli
     $("tr td.manage i.fa-edit.fa-register").click(function () {
-        
+
         var cid = $(".communicationType-level div.active").attr("id");
         var did = $(".device-level div.active").attr("id");
         var rid = $(this).attr("id");
 
         $(".main-row").children().remove();
         $(".register-level:visible li div.row div#" + rid + ".text-center").toggleClass("active");
-        var url = Routing.generate('bms_configuration_register', { comm_id: cid, device_id: did, register_id: rid});
+        var url = Routing.generate('bms_configuration_register', {comm_id: cid, device_id: did, register_id: rid});
         ajaxAppend(url);
     });
     //formatowanie komórek z wartością hex
@@ -516,8 +516,7 @@ function updateLastRead(lastRead, did) {
         }
 
         $("span#" + did + ".label-last-read").css("background-color", "#" + r + g + b);
-    }
-    else
+    } else
     {
         $("span#" + did + ".label-last-read").css("background-color", "#337AB7");
     }
@@ -533,7 +532,7 @@ function updateLastRead(lastRead, did) {
 
 function refreshPage() {
 
-    
+
     var cid = $(".communicationType-level div.active").attr("id");
     var did = $(".device-level div.active").attr("id");
     var rid = $(".register-level div div.active").attr("id");
@@ -546,7 +545,7 @@ function refreshPage() {
     if (rid === undefined) {
         rid = 0;
     }
-    var url = Routing.generate('bms_configuration_refresh_page', { comm_id: cid, device_id: did, register_id: rid});
+    var url = Routing.generate('bms_configuration_refresh_page', {comm_id: cid, device_id: did, register_id: rid});
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",

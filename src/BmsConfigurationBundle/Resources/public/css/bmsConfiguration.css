@@ -12,7 +12,7 @@ form div.row{
     padding-bottom: 5px;
 }
 .tcpip, .btn-save, .btn-cancel,
-.name, .modificator_write, .scan_queue, .archive,
+.name, .modificator_write, .scan_queue,
 .register-level, .device-level, .hidden-item{
     display: none;
 }

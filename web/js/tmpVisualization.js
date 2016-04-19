@@ -370,8 +370,12 @@ function editPanel(panel_id) {
 }
 function setDialogButtonsData() {
     //zwijanie i rozwijanie sekcji
-    $("div.dialog-panel-settings div.nav-row").click(function () {
-        $(this).next().find(".well").toggle();
+    $("div.dialog-panel-settings li a").click(function () {
+        $("div.dialog-panel-settings li").removeClass("active");
+        $("div.row.dialog-panel-data, div.row.dialog-panel-format, div.row.dialog-panel-navigation, div.row.dialog-panel-event").hide();
+        var id = $(this).parent().attr("id");
+        $(this).parent().addClass("active");
+        $("div.row." + id).show();        
     });
     //panel type
     $("select#panel-type").change(function () {
