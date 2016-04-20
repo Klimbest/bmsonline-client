@@ -3,216 +3,50 @@
 {% endblock %}
 
 <div class="dialog-condition" title="Nowy warunek:">
-    <div id="step1" class="row">
-        <div class="col-md-1">
-            <div class="row row-top">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-            <div class="row row-middle">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-            <div class="row row-bottom">
-                <div class="col-md-12">
-
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-lg-3 text-center">
+            <label for="registers">Rejestr</label>
+            <select class="form-control registers">
+                {% for register in registers %}
+                    <option value="{{ register.name }}&{{register.registerCurrentData.fixedValue}}">{{ register.name }} - {{ register.description }}</option>
+                {% endfor %}
+            </select>
         </div>
-        <div class="col-md-10 text-center">
-            {% include 'BmsVisualizationBundle:condition:step1.html.twig'%} 
+        <div class="col-md-2 text-center">
+            <label for="registers">Typ warunku</label>
+            <select id="condition_type" class="form-control" name="condition_type">
+                <option value="==">=</option>
+                <option value="!=">&ne;</option>
+                <option value=">">&gt;</option>
+                <option value=">=">&ge;</option>
+                <option value="<">&lt;</option>
+                <option value="<=">&le;</option>
+            </select>
         </div>
-        <div class="col-md-1">
-            <div class="row row-top">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-            <div class="row row-middle">
-                <div class="col-md-12">
-                    <button id="step2" class="btn btn-default btn-sm next">Krok 2 <i class="fa fa-angle-double-right"></i></button>
-                </div>
-            </div>
-            <div class="row row-bottom">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="step2" class="row">
-        <div class="col-md-1">
-            <div class="row row-top">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-            <div class="row row-middle">
-                <div class="col-md-12">
-                    <button id="step1" class="btn btn-default btn-sm prev"><i class="fa fa-angle-double-left"></i> Krok 1</button>
-                </div>
-            </div>
-            <div class="row row-bottom">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-        </div>
-        <div class="col-md-10 text-center">
-            {% include 'BmsVisualizationBundle:condition:step2.html.twig'%} 
-        </div>
-        <div class="col-md-1">
-            <div class="row row-top">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-            <div class="row row-middle">
-                <div class="col-md-1">
-                    <button id="step3" class="btn btn-default btn-sm next">Krok 3 <i class="fa fa-angle-double-right"></i></button>
-                </div>
-            </div>
-            <div class="row row-bottom">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="step3" class="row">
-        <div class="col-md-1">
-            <div class="row row-top">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-            <div class="row row-middle">
-                <div class="col-md-12">
-                    <button id="step2" class="btn btn-default btn-sm prev"><i class="fa fa-angle-double-left"></i> Krok 2</button>
-                </div>
-            </div>
-            <div class="row row-bottom">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-        </div>
-        <div class="col-md-10 text-center">
-            {% include 'BmsVisualizationBundle:condition:step3.html.twig'%} 
-        </div>
-        <div class="col-md-1">
-            <div class="row row-top">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-            <div class="row row-middle">
-                <div class="col-md-1">
-                    <button id="step4" class="btn btn-default btn-sm next">Krok 4 <i class="fa fa-angle-double-right"></i></button>
-                </div>
-            </div>
-            <div class="row row-bottom">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="step4" class="row">
-        <div class="col-md-1">
-            <div class="row row-top">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-            <div class="row row-middle">
-                <div class="col-md-12">
-                    <button id="step3" class="btn btn-default btn-sm prev"><i class="fa fa-angle-double-left"></i> Krok 3</button>
-                </div>
-            </div>
-            <div class="row row-bottom">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-        </div>
-        <div class="col-md-10">
-            {% include 'BmsVisualizationBundle:condition:step4.html.twig'%} 
-        </div>
-        <div class="col-md-1">
-            <div class="row row-top">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-            <div class="row row-middle">
-                <div class="col-md-1">
-                    <button id="step5" class="btn btn-default btn-sm next">Krok 5 <i class="fa fa-angle-double-right"></i></button>
-                </div>
-            </div>
-            <div class="row row-bottom">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="step5" class="row">         
-        <div class="col-md-1">
-            <div class="row row-top">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-            <div class="row row-middle">
-                <div class="col-md-12">
-                    <button id="step4" class="btn btn-default btn-sm prev"><i class="fa fa-angle-double-left"></i> Krok 4</button>
-                </div>
-            </div>
-            <div class="row row-bottom">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-        </div>
-        <div class="col-md-10 text-center">
-            {% include 'BmsVisualizationBundle:condition:step5_css.html.twig'%} 
-            {% include 'BmsVisualizationBundle:condition:step5_src.html.twig'%} 
-            {% include 'BmsVisualizationBundle:condition:step5_animation.html.twig'%} 
-        </div>
-        <div class="col-md-1">
-            <div class="row row-top">
-                <div class="col-md-12">
-
-                </div>
-            </div>
-            <div class="row row-middle">
-                <div class="col-md-1">
-                    <button id="save" class="btn btn-default btn-sm next">Zapisz <i class="fa fa-save"></i></button>
-                </div>
-            </div>
-            <div class="row row-bottom">
-                <div class="col-md-12">
-
-                </div>
-            </div>
+        <div class="col-md-2 text-center">
+            <label for="registers">Wartość</label>
+            <input id="condition_val" type="number" step="0.01" class="form-control" name="condition_val"/>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
-            <div id="description">
-                <span id="step1"></span><span id="step2"></span><span id="step4"></span><span id="step5"></span>
-            </div>
+        <div class="col-md-2 text-center">
+            <label for="registers">Typ efektu</label>
+            <select id="effect_type" class="form-control" name="effect_type">
+                <option value="css">Zmiana właściwości wyglądu (np.: kolor, czcionka, ramka)</option>
+                <option value="src">Wyświetlenie obrazka</option>
+                <option value="animation">Animacja</option>
+            </select>
+        </div>
+        <div class="col-md-3 text-center">
+            <label for="registers">Wartość efektu</label>
+            <select id="effect_value" class="form-control" name="effect_value">
+                <option value="">###</option>
+                <option value="">###</option>
+                <option value="">###</option>
+            </select>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div id="progressbar">
-            </div>
-        </div>
-    </div>
+    
     <form class="hidden">
         <input id="register_id" type="hidden" name="register_id" value="">
         <input id="effect_content" type="hidden" name="effect_content" value="">

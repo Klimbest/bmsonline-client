@@ -20,7 +20,7 @@ class AjaxController extends Controller {
     public function loadVariableManagerAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-            $registers = $registerRepo->findAll();
+            $registers = $registerRepo->getAllOrderByName();
             
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:variableManager.html.twig', ['registers' => $registers]);
             return new JsonResponse($ret);
@@ -90,6 +90,73 @@ class AjaxController extends Controller {
         }
     }
 
+    /**
+     * @Route("/load_event_manager", name="bms_visualization_load_event_manager", options={"expose"=true})
+     */
+    public function loadEventManagerAction(Request $request) {
+        if ($request->isXmlHttpRequest()) {
+            $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+            $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
+            $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
+            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $effectRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Effect');
+            $myConditionRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:MyCondition');
+
+            $registers = $registerRepo->getAllOrderByName();
+            $devices = $deviceRepo->findAll();
+            $pages = $pageRepo->findAll();
+            $panels = $panelRepo->findAll();
+            $effects = $effectRepo->findAll();
+            $condition = $myConditionRepo->findAll();
+            $options = [
+                'registers' => $registers,
+                'devices' => $devices,
+                'panels' => $panels,
+                'pages' => $pages,
+                'effects' => $effects
+            ];
+            
+            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:condition:index.html.twig', $options);
+            return new JsonResponse($ret);
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
+
+    /**
+     * @Route("/create_condition", name="bms_visualization_create_condition", options={"expose"=true})
+     */
+    public function createConditionAction(Request $request) {
+        if ($request->isXmlHttpRequest()) {
+            $em = $this->getDoctrine()->getManager();
+            $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $conditionRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:MyCondition');
+            $register_id = $request->get('register_id');
+            $condition = $request->get('condition');
+            $effect_type = $request->get('effect_type');
+            $effect_content = $request->get('effect_content');
+            $effect_panel_id = $request->get('effect_panel_id');
+
+//            $register = $registerRepo->findOneById($register_id);
+//            $panel = $panelRepo->findOneById($effect_panel_id);
+//            
+//            $term = new Term();
+//            $term->setRegister($register)
+//                    ->setCondition($condition)
+//                    ->setType($effect_type)
+//                    ->setEffectContent($effect_content)
+//                    ->setEffectPanel($panel);
+//            
+//            $em->persist($term);
+//            $em->flush();       
+            $ret = "Zrobione!";
+            return new JsonResponse($ret);
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
+    
     /**
      * @Route("/add_image", name="bms_visualization_add_image", options={"expose"=true})
      */

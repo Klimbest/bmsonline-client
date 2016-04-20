@@ -1,14 +1,52 @@
 <div class="variable-manager" title="Manager zmiennych:">
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-6">
-                <label for="registers">Rejestry:</label>
-                <select class="form-control registers">
-                    {% for register in registers %}
-                        <option value="{{ register.name }}&{{register.registerCurrentData.fixedValue}}">{{ register.name }} - {{ register.description }}</option>
-                    {% endfor %}
-                </select>
+   {# <div class="row header">
+        <div class="col-md-2">
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="device_filter">Urządzenie</label>
+                    <select id="device_filter" class="form-control small" name="device_filter">
+                        {% for device in devices %}
+                            <option value={{device.id}}>{{device.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
         </div>
+        <div class="col-md-1">
+            <label>Funkcja</label>
+        </div>
+        <div class="col-md-2">
+            <label>Adres rejestru(HEX)</label>
+        </div>
+        <div class="col-md-2 text-left">
+            <label>Nazwa skrócona</label>
+        </div>    
+        <div class="col-md-5 text-left">
+            <label>Pełna nazwa</label>
+        </div>
     </div>
+    <div class="row body">
+        <div class="col-md-12">
+            {% if registers|length > 0 %}
+                {% for register in registers|sort %}
+                    <div id="{{register.id}}" class="row register-choice {{register.device.id}} ">
+                        <div class="col-md-2">{{ register.device.name }}</div>
+                        <div class="col-md-1">{{ register.function }}</div>
+                        <div class="col-md-2">{{ register.registerAddress }}</div>
+                        <div class="col-md-2 text-left register_name">{{ register.name }}</div>
+                        <div class="col-md-5 text-left">{{ register.description}}</div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>#}
+   <div class="col-md-6">
+       <label for="registers">Rejestry:</label>
+       <select class="form-control registers">
+           {% for register in registers %}
+               <option value="{{ register.name }}&{{register.registerCurrentData.fixedValue}}">{{ register.name }} - {{ register.description }}</option>
+           {% endfor %}
+       </select>
+   </div>
 </div>
+

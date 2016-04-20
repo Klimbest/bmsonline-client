@@ -18,4 +18,10 @@ class RegisterRepository extends \Doctrine\ORM\EntityRepository
                         ->getResult();
     }
     
+    public function getAllOrderByName(){
+        return $this->getEntityManager()
+                        ->createQuery('SELECT r FROM BmsConfigurationBundle:Register AS r ORDER BY r.name')
+                        ->getResult();
+    }
+    
 }
