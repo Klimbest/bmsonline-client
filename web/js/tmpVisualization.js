@@ -1036,7 +1036,7 @@ function setPanelEvents() {
         } else {
             aR = false;
         }
-
+        $(this).show();
         //usunięcie starych eventów
         $(this).removeAttr("onclick");
         $(this).unbind("mouseenter mouseleave");

@@ -13,7 +13,14 @@
                 <div class="form-group">
                     <div class="col-sm-6">
                         <div class="checkbox">
-                            <label><input id="visibility" type="checkbox" checked><span class="label label-dialog-panel"> Widoczny?</span></label>
+                            <label><input id="visibility" type="checkbox" 
+                                          {% if terms is not empty %}
+                                              disabled 
+                                          {% else %} 
+                                              checked
+                                          {% endif %}
+                                          >
+                                <span class="label label-dialog-panel"> Aktywny?</span></label>
                         </div>
                     </div>  
                 </div>
@@ -26,7 +33,7 @@
         <li id="dialog-panel-navigation" class=""><a>Nawigacja</a></li>
         <li id="dialog-panel-event" class=""><a>Zdarzenia</a></li>
     </ul>
-    
+
     <div class="row dialog-panel-data">
         <div class="col-md-12">
             {% include 'BmsVisualizationBundle:dialog:panelDialogData.html.twig' %}
