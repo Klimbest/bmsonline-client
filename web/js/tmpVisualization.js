@@ -403,7 +403,7 @@ function setDialogButtonsData() {
                 $("input#panel-source-content").val("").prop("disabled", true).prop("required", true);
                 $(".input-group-btn button#manager").removeClass("disabled");
                 $(".precision-group, .font-group").show();
-                $(".input-group-btn button#image").unbind("click");
+                $(".input-group-btn button#manager").unbind("click");
                 setOpenVariableManager();
                 break;
             case "image":
