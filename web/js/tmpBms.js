@@ -132,11 +132,6 @@ function ajaxRefreshPage(terms) {
                             applyTermEffect(term);
                         }
                         break;
-                    case "null" :
-                        if (!isset(registers[term.register_id])) {
-                            applyTermEffect(term);
-                        }
-                        break;
                 }
             });
         }

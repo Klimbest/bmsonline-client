@@ -13,14 +13,16 @@
                 <div class="form-group">
                     <div class="col-sm-6">
                         <div class="checkbox">
-                            <label><input id="visibility" type="checkbox" 
-                                          {% if terms is not empty %}
+                            <label>
+                                <input id="visibility" type="checkbox"                                           
+                                          {% if (terms is defined) and (terms is not empty) %}
                                               disabled 
                                           {% else %} 
                                               checked
                                           {% endif %}
                                           >
-                                <span class="label label-dialog-panel"> Aktywny?</span></label>
+                                <span class="label label-dialog-panel"> Aktywny?</span>
+                            </label>
                         </div>
                     </div>  
                 </div>

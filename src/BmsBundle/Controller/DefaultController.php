@@ -6,9 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use BmsVisualizationBundle\Entity\Term;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -91,58 +89,4 @@ class DefaultController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
-
-//    public function makeCondition($condition_type, Term $term) {
-//        $reg_val = $term->getRegister()->getRegisterCurrentData()->getFixedValue();
-//        $condition_value = $term->getCondition()->getValue();
-//        $id = $term->getId();
-//        $t = array();
-//
-//        switch ($condition_type) {
-//            case "==":
-//                if ($reg_val == $condition_value) {
-//                    $t[$id]["effect_content"] = $term->getEffect()->getContent();
-//                    $t[$id]["panel_id"] = $term->getPanel()->getId();
-//                    $t[$id]["effect_type"] = $term->getEffect()->getType();
-//                }
-//                break;
-//            case "!=":
-//                if ($reg_val != $condition_value) {
-//                    $t[$id]["effect_content"] = $term->getEffect()->getContent();
-//                    $t[$id]["panel_id"] = $term->getPanel()->getId();
-//                    $t[$id]["effect_type"] = $term->getEffect()->getType();
-//                }
-//                break;
-//            case ">":
-//                if ($reg_val > $condition_value) {
-//                    $t[$id]["effect_content"] = $term->getEffect()->getContent();
-//                    $t[$id]["panel_id"] = $term->getPanel()->getId();
-//                    $t[$id]["effect_type"] = $term->getEffect()->getType();
-//                }
-//                break;
-//            case "<":
-//                if ($reg_val < $condition_value) {
-//                    $t[$id]["effect_content"] = $term->getEffect()->getContent();
-//                    $t[$id]["panel_id"] = $term->getPanel()->getId();
-//                    $t[$id]["effect_type"] = $term->getEffect()->getType();
-//                }
-//                break;
-//            case ">=":
-//                if ($reg_val >= $condition_value) {
-//                    $t[$id]["effect_content"] = $term->getEffect()->getContent();
-//                    $t[$id]["panel_id"] = $term->getPanel()->getId();
-//                    $t[$id]["effect_type"] = $term->getEffect()->getType();
-//                }
-//                break;
-//            case "<=":
-//                if ($reg_val <= $condition_value) {
-//                    $t[$id]["effect_content"] = $term->getEffect()->getContent();
-//                    $t[$id]["panel_id"] = $term->getPanel()->getId();
-//                    $t[$id]["effect_type"] = $term->getEffect()->getType();
-//                }
-//                break;
-//        }
-//        return $t;
-//    }
-
 }

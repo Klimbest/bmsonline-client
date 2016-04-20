@@ -1,56 +1,63 @@
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/condition.css')}}">
-{% endblock %}
-
 <div class="dialog-condition" title="Nowy warunek:">
-    <div class="row">
-        <div class="col-lg-3 text-center">
-            <label for="registers">Rejestr</label>
-            <select class="form-control registers">
-                {% for register in registers %}
-                    <option value="{{ register.name }}&{{register.registerCurrentData.fixedValue}}">{{ register.name }} - {{ register.description }}</option>
-                {% endfor %}
-            </select>
+    <form id="condition" role="form">
+        <div class="row">
+            <div class="col-lg-4 col-md-offset-1 text-center">
+                <label for="registers">Zmienna</label>
+                <div class="input-group col-md-12">
+                    <div class="form-group">
+                        <input id="panel-term-register" name="Zmienna warunku" type="text" class="form-control" disabled required/>
+                    </div>
+                    <span class="input-group-btn">                    
+                        <button id="variableManager" class="btn btn-default" type="button"><i class="fa fa-plus fa-fw"></i></button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-2 text-center">
+                <label for="registers">Wartość zmiennej</label>
+                <input id="panel-term-register-value" type="text" class="form-control" disabled />
+            </div>        
+            <div class="col-md-2 text-center">
+                <label for="registers">Typ warunku</label>
+                <select id="condition_type" class="form-control" name="condition_type">
+                    <option value="==">=</option>
+                    <option value="!=">&ne;</option>
+                    <option value=">">&gt;</option>
+                    <option value=">=">&ge;</option>
+                    <option value="<">&lt;</option>
+                    <option value="<=">&le;</option>
+                </select>
+            </div>
+            <div class="col-md-2 text-center">
+                <label for="registers">Wartość warunku</label>
+                <input id="condition_val" type="number" step="0.01" class="form-control" name="condition_val" required />
+            </div>
         </div>
-        <div class="col-md-2 text-center">
-            <label for="registers">Typ warunku</label>
-            <select id="condition_type" class="form-control" name="condition_type">
-                <option value="==">=</option>
-                <option value="!=">&ne;</option>
-                <option value=">">&gt;</option>
-                <option value=">=">&ge;</option>
-                <option value="<">&lt;</option>
-                <option value="<=">&le;</option>
-            </select>
+        <div class="row">
+            <div class="col-md-3 col-md-offset-2 text-center">
+                <label for="registers">Typ efektu</label>
+                <select id="effect_type" class="form-control" name="effect_type">
+                    <option value="css">Właściwość formatu</option>
+                    <option value="src">Wyświetl obrazek</option>
+                    <option value="animation">Animacja</option>
+                </select>
+            </div>
+            <div class="col-md-5 text-center">
+                <label for="registers">Parametr efektu</label>
+                <div class="input-group col-md-12">
+                    <div class="form-group">
+                        <input id="effect-value" name="Parametr efektu" type="text" class="form-control" required/>
+                    </div>
+                    <span class="input-group-btn">                    
+                        <button id="effectManager" class="btn btn-default" type="button" disabled><i class="fa fa-plus fa-fw"></i></button>
+                    </span>
+                </div>
+            </div>
+        </div>    
+        <div class="row">
+            <div class="col-md-12 text-center">
+                Podgląd efektu
+            </div>
         </div>
-        <div class="col-md-2 text-center">
-            <label for="registers">Wartość</label>
-            <input id="condition_val" type="number" step="0.01" class="form-control" name="condition_val"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-2 text-center">
-            <label for="registers">Typ efektu</label>
-            <select id="effect_type" class="form-control" name="effect_type">
-                <option value="css">Zmiana właściwości wyglądu (np.: kolor, czcionka, ramka)</option>
-                <option value="src">Wyświetlenie obrazka</option>
-                <option value="animation">Animacja</option>
-            </select>
-        </div>
-        <div class="col-md-3 text-center">
-            <label for="registers">Wartość efektu</label>
-            <select id="effect_value" class="form-control" name="effect_value">
-                <option value="">###</option>
-                <option value="">###</option>
-                <option value="">###</option>
-            </select>
-        </div>
-    </div>
-    
-    <form class="hidden">
-        <input id="register_id" type="hidden" name="register_id" value="">
-        <input id="effect_content" type="hidden" name="effect_content" value="">
-        <input id="effect_panel_id" type="hidden" name="effect_panel_id" value="">
     </form>
 </div>
 

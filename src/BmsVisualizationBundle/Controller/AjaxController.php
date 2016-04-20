@@ -6,11 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use BmsConfigurationBundle\Entity\Register;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Finder\Finder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use BmsVisualizationBundle\Entity\MyCondition;
+use BmsVisualizationBundle\Entity\Effect;
+use BmsVisualizationBundle\Entity\Term;
 
 class AjaxController extends Controller {
 
@@ -124,39 +126,83 @@ class AjaxController extends Controller {
     }
 
     /**
-     * @Route("/create_condition", name="bms_visualization_create_condition", options={"expose"=true})
+     * @Route("/create_term", name="bms_visualization_create_term", options={"expose"=true})
      */
-    public function createConditionAction(Request $request) {
+    public function createTermAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $conditionRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:MyCondition');
-            $register_id = $request->get('register_id');
-            $condition = $request->get('condition');
-            $effect_type = $request->get('effect_type');
-            $effect_content = $request->get('effect_content');
-            $effect_panel_id = $request->get('effect_panel_id');
-
-//            $register = $registerRepo->findOneById($register_id);
-//            $panel = $panelRepo->findOneById($effect_panel_id);
-//            
-//            $term = new Term();
-//            $term->setRegister($register)
-//                    ->setCondition($condition)
-//                    ->setType($effect_type)
-//                    ->setEffectContent($effect_content)
-//                    ->setEffectPanel($panel);
-//            
-//            $em->persist($term);
-//            $em->flush();       
-            $ret = "Zrobione!";
+            $effectRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Effect');
+            $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
+            //get REGISER data
+            $registerName = $request->request->get('register_name');
+            $register = $registerRepo->findOneBy(array('name' => $registerName));
+            //get PANEL data
+            $panel_id = $request->request->get('panel_id');
+            $panel = $panelRepo->findOneById($panel_id);
+            //get CONDITION data
+            $conditionType = $request->get('condition_type');
+            $conditionValue = $request->get('condition_value');            
+            //set CONDITION
+            $condition = $conditionRepo->findOneBy(array('type' => $conditionType, 'value' => $conditionValue));
+            if(!isset($condition)){
+                $condition = new MyCondition();
+                $condition->setType($conditionType)
+                            ->setValue($conditionValue)
+                            ->setName($conditionType." -> ".$conditionValue);
+                $em->persist($condition);
+            }
+            //get EFFECT data
+            $effectType = $request->get('effect_type');
+            $effectContent = $request->get('effect_content');
+            //set EFFECT
+            $effect = $effectRepo->findOneBy(array('type' => $effectType, 'content' => $effectContent));
+            if(!isset($effect)){
+                $effect = new Effect();
+                $effect->setType($effectType)
+                        ->setContent($effectContent)
+                        ->setName($effectType." -> ".$effectContent);
+                $em->persist($effect);
+            }
+            //set TERM
+            $term = new Term();
+            $term->setRegister($register)
+                    ->setPanel($panel)
+                    ->setCondition($condition)
+                    ->setEffect($effect)
+                    ->setName("asd");            
+            $em->persist($term);
+            
+            $em->flush();      
+            
+            $ret["term"] = $termRepo->findByIdAsArray($term->getId());
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
         }
     }
     
+    /**
+     * @Route("/delete_term", name="bms_visualization_delete_term", options={"expose"=true})
+     */
+    public function deleteTermAction(Request $request) {
+        if ($request->isXmlHttpRequest()) {
+            $em = $this->getDoctrine()->getManager();
+            $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
+            $term_id = $request->get("term_id");
+            $term = $termRepo->find($term_id);
+            
+            $em->remove($term);
+            $em->flush();
+            $em->getConnection()->exec("ALTER TABLE term AUTO_INCREMENT = 1;");
+            $ret['term_id'] = $term_id;
+            return new JsonResponse($ret);
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
     /**
      * @Route("/add_image", name="bms_visualization_add_image", options={"expose"=true})
      */

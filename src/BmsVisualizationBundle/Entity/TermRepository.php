@@ -34,4 +34,17 @@ class TermRepository extends EntityRepository
                                     JOIN t.effect e
                                     JOIN t.panel p')->getArrayResult();
     }
+    
+    public function findByIdAsArray($term_id){
+        return $this->getEntityManager()
+                ->createQuery('SELECT t.id, t.name, c.value AS condition_value, c.type AS condition_type, rcd.fixedValue, e.type AS effect_type, e.content AS effect_content, p.id AS panel_id, r.id AS register_id, r.name AS register_name
+                                    FROM BmsVisualizationBundle:Term t
+                                    JOIN t.register r 
+                                    JOIN r.registerCurrentData rcd
+                                    JOIN t.condition c
+                                    JOIN t.effect e
+                                    JOIN t.panel p 
+                                    WHERE t.id = '.$term_id)
+                ->getArrayResult();
+    }
 }

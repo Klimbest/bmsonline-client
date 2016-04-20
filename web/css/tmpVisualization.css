@@ -43,7 +43,8 @@ span.toggler.off {
 }
 
 div.panel-list:hover,
-div.dialog-panel-settings ul.nav-tabs li:hover{
+div.dialog-panel-settings ul.nav-tabs li:hover,
+.fa-remove:hover{
     cursor: pointer;
 }
 
@@ -184,6 +185,10 @@ div.dialog-condition-register .well{
     padding-top: 24px;
     border-top: none;
     box-shadow: unset;
+}
+
+div.dialog-condition .row{
+    padding: 5px 0px;
 }
 
 div.dialog-panel-settings .well .row{
