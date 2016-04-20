@@ -1005,8 +1005,8 @@ function createCondition(panel_id) {
             url: Routing.generate('bms_visualization_create_term'),
             success: function (ret) {
                 $(".main-row").children(".fa-spinner").remove();
-                var term = ret["term"];
-                switch(term['effect_type']){
+                var term = ret["term"][0];
+                switch(term.effect_type){
                     case "src":
                         var effectType = "Wyświetl obraz";
                         break;
@@ -1019,18 +1019,18 @@ function createCondition(panel_id) {
                 }
                 $("table tbody").append(
                         "<tr>\n\
-                            <td>"+term['register_name']+"</td>\n\
-                            <td class='text-center'>"+term['fixedValue']+"</td>\n\
-                            <td class='text-center'>"+term['condition_type']+"</td>\n\
-                            <td class='text-center'>"+term['condition_value']+"</td>\n\
+                            <td>"+term.register_name+"</td>\n\
+                            <td class='text-center'>"+term.fixedValue+"</td>\n\
+                            <td class='text-center'>"+term.condition_type+"</td>\n\
+                            <td class='text-center'>"+term.condition_value+"</td>\n\
                             <td>"+effectType+"</td>\n\
-                            <td class='text-center'>"+term['effect_content']+"</td>\n\
+                            <td class='text-center'>"+term.effect_content+"</td>\n\
                             <td class='manage text-center'>\n\
-                                <i id='"+term['register_id']+"' class='fa fa-edit fa-fw fa-green'></i>\n\
-                                <i id='"+term['register_id']+"' class='fa fa-remove fa-fw fa-red'></i>\n\
+                                <i id='"+term.register_id+"' class='fa fa-edit fa-fw fa-green'></i>\n\
+                                <i id='"+term.register_id+"' class='fa fa-remove fa-fw fa-red'></i>\n\
                             </td>\n\
                             <td>\n\
-                                <input name='checkedTermId[]' value='"+term['register_id']+"' type='checkbox'></input>\n\
+                                <input name='checkedTermId[]' value='"+term.register_id+"' type='checkbox'></input>\n\
                             </td>\n\
                         </tr>");
             }
