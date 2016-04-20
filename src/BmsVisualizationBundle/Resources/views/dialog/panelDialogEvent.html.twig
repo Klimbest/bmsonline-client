@@ -14,18 +14,20 @@
             <table class="table table-bordered table-condensed table-responsive small">
                 <thead>
                     <tr>
-                        <th class="">Nazwa rejestru (warość aktualna)</th>
-                        <th class="text-center">Warunek</th>
+                        <th class="">Nazwa zmiennej</th>
+                        <th class="">Wartość aktualna</th>
+                        <th class="text-center"></th>
                         <th class="">Wartość</th>
                         <th class="text-center">Typ efektu</th>
-                        <th class="">Wartość efektu</th>
+                        <th class="">Parametr efektu</th>
                         <th class="manage text-center">Zarządzaj</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for term in terms %}
                         <tr>
-                            <td class="">{{term.register.name}} ({{term.register.registerCurrentData.fixedValue}})</td>
+                            <td class="">{{term.register.name}}</td>
+                            <td class="">{{term.register.registerCurrentData.fixedValue}}</td>
                             <td class="text-center">{{term.condition.type}}</td>
                             <td class="">{{term.condition.value}}</td>
                             <td class="text-center">
