@@ -100,6 +100,10 @@ function ajaxRefreshPage(terms) {
 
     function makeTerms(terms, registers) {
         if (terms) {
+            $.each(terms, function (key, term){
+                var id = term.panel_id;
+                $("div#" + id + ".bms-panel").hide();
+            });
             $.each(terms, function (key, term) {
                 switch (term.condition_type) {
                     case "==" :
