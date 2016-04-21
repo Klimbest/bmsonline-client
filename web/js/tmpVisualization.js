@@ -1186,21 +1186,26 @@ function setPanelEvents() {
         });
         $(this).click(function (e) {
             $(this).css({zIndex: 100});
-            var relX = e.pageX - $(this).offset().left;
-            var relY = e.pageY - $(this).offset().top;
-            if ((parseInt($(this).css("left"))) + relX > parseInt($(this).parent().css("width")) / 2) {
-                relX = relX - 116;
-                console.log("R");
+            if ($("span.label-bms-panel").length > 0) {
+                var relX = parseInt($("span.label-bms-panel").css("left"));
+                var relY = parseInt($("span.label-bms-panel").css("top"));
             } else {
-                relX = relX - 4;
-                console.log("L");
-            }
-            if ((parseInt($(this).css("top"))) + relY > parseInt($(this).parent().css("height")) / 2) {
-                relY = relY - 21;
-                console.log("B");
-            }else{
-                relY = relY - 4;
-                console.log("T");
+                var relX = e.pageX - $(this).offset().left;
+                var relY = e.pageY - $(this).offset().top;
+                if ((parseInt($(this).css("left"))) + relX > parseInt($(this).parent().css("width")) / 2) {
+                    relX = relX - 116;
+                    console.log("R");
+                } else {
+                    relX = relX - 4;
+                    console.log("L");
+                }
+                if ((parseInt($(this).css("top"))) + relY > parseInt($(this).parent().css("height")) / 2) {
+                    relY = relY - 21;
+                    console.log("B");
+                } else {
+                    relY = relY - 4;
+                    console.log("T");
+                }
             }
             $("span.label-bms-panel").remove();
             var label = "<span id=" + id + " class='label label-bms-panel' \n\
