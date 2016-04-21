@@ -1194,17 +1194,13 @@ function setPanelEvents() {
                 var relY = e.pageY - $(this).offset().top;
                 if ((parseInt($(this).css("left"))) + relX > parseInt($(this).parent().css("width")) / 2) {
                     relX = relX - 116;
-                    console.log("R");
                 } else {
                     relX = relX - 4;
-                    console.log("L");
                 }
                 if ((parseInt($(this).css("top"))) + relY > parseInt($(this).parent().css("height")) / 2) {
                     relY = relY - 21;
-                    console.log("B");
                 } else {
                     relY = relY - 4;
-                    console.log("T");
                 }
             }
             $("span.label-bms-panel").remove();

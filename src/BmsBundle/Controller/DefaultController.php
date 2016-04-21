@@ -32,7 +32,7 @@ class DefaultController extends Controller {
             $terms = $termRepo->findAllAsArray();       
                         
             $ret["terms"] = $terms;
-            $ret['template'] = $this->container->get('templating')->render('BmsBundle::page.html.twig', ['pages' => $pages, 'page' => $page]);
+            $ret['template'] = $this->container->get('templating')->render('BmsBundle::page.html.twig', ['pages' => $pages, 'page' => $page, 'terms' => $terms]);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
