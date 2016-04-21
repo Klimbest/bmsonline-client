@@ -267,7 +267,7 @@ function editPanel(panel_id) {
             var imgSource = panel.children("img").attr("src");
             $("div.dialog-panel-data select#panel-type").val("image");
             $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + imgSource + "\" class=\"img-responsive\">");
-            $("div.dialog-panel-settings input#panel-source-content").val(imgSource);
+            $("div.dialog-panel-settings input#panel-source-content").val(imgSource).prop("disabled", true).prop("required", false);
             $(".precision-group, .font-group").hide();
             $(".input-group-btn button#manager").unbind("click");
             setOpenImageManager();
