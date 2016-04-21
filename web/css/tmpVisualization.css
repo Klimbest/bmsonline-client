@@ -147,6 +147,8 @@ div.label-page:hover{
     position: absolute;
     background-color: #868686;
     z-index: 50;
+    width: 120px;
+    height: 25px;
 }
 .btn-file {
     position: relative;
@@ -263,4 +265,19 @@ input.clicked{
 .table tbody tr:hover{
     font-weight: bold;
     background-color: #adadad;
+}
+/*condition*/
+div.row.body{
+    height: 85%;
+    overflow-y: auto;
+}
+
+div.row.header{
+    border-bottom: 1px solid rgba(0,0,0,1);
+}
+
+div.row.register-choice,
+div.row.panel-choice{
+    border-radius: 10px 10px 10px 10px;
+    cursor: pointer;
 }

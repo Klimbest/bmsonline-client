@@ -565,7 +565,7 @@ function setDialogButtonEvent(panel_id) {
             success: function (ret) {
                 $(".main-row").children(".fa-spinner").remove();
                 var id = parseInt(ret['term_id']);
-                $("table i#"+ id+".fa-remove").parent().parent().remove();
+                $("table i#" + id + ".fa-remove").parent().parent().remove();
             }
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -605,8 +605,8 @@ function setOpenImageManager() {
 function createVariableManager(fw) {
     return $("div.variable-manager").dialog({
         autoOpen: false,
-        width: 700,
-        height: 500,
+        width: $(window).width(),
+        height: $(window).height(),
         modal: true,
         buttons: [
             {
@@ -635,12 +635,19 @@ function createVariableManager(fw) {
                 }
             }],
         open: function () {
-
+            setDialog();
+            setDialogButtons();
         },
         close: function () {
             $(this).dialog('destroy').remove();
         }
     });
+    function setDialog() {
+        $("div.register-choice:not(div.register-choice.2)").hide();
+    }
+    function setDialogButtons() {
+
+    }
 }
 function createImageManager() {
     var input;
@@ -882,8 +889,8 @@ function createCondition(panel_id) {
             });
             $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
         });
-        
-        
+
+
         /*
          //setp1
          //set hover and click on list of registers
@@ -1006,7 +1013,7 @@ function createCondition(panel_id) {
             success: function (ret) {
                 $(".main-row").children(".fa-spinner").remove();
                 var term = ret["term"][0];
-                switch(term.effect_type){
+                switch (term.effect_type) {
                     case "src":
                         var effectType = "Wyświetl obraz";
                         break;
@@ -1017,20 +1024,21 @@ function createCondition(panel_id) {
                         var effectType = "Animacja";
                         break;
                 }
+                $("table tr#no-data").remove();
                 $("table tbody").append(
                         "<tr>\n\
-                            <td>"+term.register_name+"</td>\n\
-                            <td class='text-center'>"+term.fixedValue+"</td>\n\
-                            <td class='text-center'>"+term.condition_type+"</td>\n\
-                            <td class='text-center'>"+term.condition_value+"</td>\n\
-                            <td>"+effectType+"</td>\n\
-                            <td class='text-center'>"+term.effect_content+"</td>\n\
+                            <td>" + term.register_name + "</td>\n\
+                            <td class='text-center'>" + term.fixedValue + "</td>\n\
+                            <td class='text-center'>" + term.condition_type + "</td>\n\
+                            <td class='text-center'>" + term.condition_value + "</td>\n\
+                            <td>" + effectType + "</td>\n\
+                            <td class='text-center'>" + term.effect_content + "</td>\n\
                             <td class='manage text-center'>\n\
-                                <i id='"+term.register_id+"' class='fa fa-edit fa-fw fa-green'></i>\n\
-                                <i id='"+term.register_id+"' class='fa fa-remove fa-fw fa-red'></i>\n\
+                                <i id='" + term.register_id + "' class='fa fa-edit fa-fw fa-green'></i>\n\
+                                <i id='" + term.register_id + "' class='fa fa-remove fa-fw fa-red'></i>\n\
                             </td>\n\
                             <td>\n\
-                                <input name='checkedTermId[]' value='"+term.register_id+"' type='checkbox'></input>\n\
+                                <input name='checkedTermId[]' value='" + term.register_id + "' type='checkbox'></input>\n\
                             </td>\n\
                         </tr>");
             }
@@ -1178,18 +1186,21 @@ function setPanelEvents() {
         });
         $(this).click(function (e) {
             $(this).css({zIndex: 100});
-            if ($("span.label-bms-panel").length > 0) {
-                var relX = parseInt($("span.label-bms-panel").css("left"));
-                var relY = parseInt($("span.label-bms-panel").css("top"));
+            var relX = e.pageX - $(this).offset().left;
+            var relY = e.pageY - $(this).offset().top;
+            if ((parseInt($(this).css("left"))) + relX > parseInt($(this).parent().css("width")) / 2) {
+                relX = relX - 116;
+                console.log("R");
             } else {
-                var relX = e.pageX - $(this).offset().left;
-                var relY = e.pageY - $(this).offset().top;
-                if ((parseInt($(this).css("left"))) + relX > parseInt($(this).parent().css("width")) / 2) {
-                    relX = relX - 115;
-                }
-                if ((parseInt($(this).css("top"))) + relY > parseInt($(this).parent().css("height")) / 2) {
-                    relY = relY - 40;
-                }
+                relX = relX - 4;
+                console.log("L");
+            }
+            if ((parseInt($(this).css("top"))) + relY > parseInt($(this).parent().css("height")) / 2) {
+                relY = relY - 21;
+                console.log("B");
+            }else{
+                relY = relY - 4;
+                console.log("T");
             }
             $("span.label-bms-panel").remove();
             var label = "<span id=" + id + " class='label label-bms-panel' \n\

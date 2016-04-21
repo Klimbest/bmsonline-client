@@ -7,9 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 class DefaultController extends Controller {
 
@@ -32,12 +29,10 @@ class DefaultController extends Controller {
             $pages = $pageRepo->findAll();
             isset($page_id) ? $page = $pageRepo->find($page_id) : $page = $pageRepo->find(2);
             
-            $serializer = new Serializer(array(new GetSetMethodNormalizer()), array('json' => new JsonEncoder()));
-            
             $terms = $termRepo->findAllAsArray();       
                         
             $ret["terms"] = $terms;
-            $ret['template'] = $this->container->get('templating')->render('BmsBundle::page.html.twig', ['pages' => $pages, 'page' => $page, 'terms' => $terms]);
+            $ret['template'] = $this->container->get('templating')->render('BmsBundle::page.html.twig', ['pages' => $pages, 'page' => $page]);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();

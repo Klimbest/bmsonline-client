@@ -10,20 +10,20 @@
         </div>
     </div>
     <div class="row" style="overflow-y: auto; max-height: 550px;">
-        {% if terms is not empty %}
-            <table class="table table-bordered table-condensed table-responsive small">
-                <thead>
-                    <tr>
-                        <th class="">Nazwa zmiennej</th>
-                        <th class="">Wartość aktualna</th>
-                        <th class="text-center"></th>
-                        <th class="">Wartość warunku</th>
-                        <th class="text-center">Typ efektu</th>
-                        <th class="">Parametr efektu</th>
-                        <th class="manage text-center">Zarządzaj</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <table class="table table-bordered table-condensed table-responsive small">
+            <thead>
+                <tr>
+                    <th class="">Nazwa zmiennej</th>
+                    <th class="">Wartość aktualna</th>
+                    <th class="text-center"></th>
+                    <th class="">Wartość warunku</th>
+                    <th class="text-center">Typ efektu</th>
+                    <th class="">Parametr efektu</th>
+                    <th class="manage text-center">Zarządzaj</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if terms is not empty %}
                     <tr>
                         <td></td>
                         <td class="text-center">Jeżeli żaden z poniższych warunków nie jest spełniony</td>
@@ -58,15 +58,17 @@
                                 <i id="{{term.id}}" class="fa fa-edit fa-fw fa-green"></i>
                                 <i id="{{term.id}}" class="fa fa-remove fa-fw fa-red"></i>                                        
                             </td>
-                            <td><input type="checkbox" name="checkedRegId[]" value="{{term.id}}"/></td>
+                            <td><input type="checkbox" name="checkedTermId[]" value="{{term.id}}"/></td>
                         </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <div class="col-md-12 text-center">                
-                <h2><span class="label label-primary"> Brak warunków</span></h2>
-            </div>
-        {% endif %}
+                {% else %}
+                    <tr id="no-data">
+                        <td colspan="11" class="text-center">
+                            <h2><span class="label label-primary"> Brak warunków</span></h2>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
     </div>
 </div>

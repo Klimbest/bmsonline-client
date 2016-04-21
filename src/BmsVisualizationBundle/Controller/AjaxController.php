@@ -20,11 +20,20 @@ class AjaxController extends Controller {
      * @Route("/load_variable_manager", name="bms_visualization_load_variable_manager", options={"expose"=true})
      */
     public function loadVariableManagerAction(Request $request) {
-        if ($request->isXmlHttpRequest()) {
+        if ($request->isXmlHttpRequest()) {            
+            $communicationTypeRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
+            $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $registers = $registerRepo->getAllOrderByName();
+            $devices = $deviceRepo->findAll();
+            $communicationTypes = $communicationTypeRepo->findAll();
+            $options = [
+                'registers' => $registers,
+                'devices' => $devices,
+                'communicationTypes' => $communicationTypes
+            ];
             
-            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:variableManager.html.twig', ['registers' => $registers]);
+            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:variableManager.html.twig', $options);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();

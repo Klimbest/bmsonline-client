@@ -135,7 +135,6 @@ function ajaxRefreshPage(terms) {
                 }
             });
         }
-
         function applyTermEffect(term) {
             $("div#" + term.panel_id + ".bms-panel").show().removeClass("shake-little shake-constant fa-spin");
             switch (term.effect_type) {
