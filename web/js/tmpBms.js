@@ -1,7 +1,7 @@
 /* global parseFloat */
 
 var i;
-var terms, registers;
+var terms;
 
 $(document).ready(function () {
     ajaxChangePage(1);
@@ -79,9 +79,9 @@ function ajaxRefreshPage(terms) {
             } else {
                 $(".error-message span").empty();
             }
-            registers = ret['registers'];
+            var registers = ret['registers'];
             setVariables(registers);
-            makeTerms(terms);
+            makeTerms(terms, registers);
         }
     });
     clearInterval(i);
@@ -98,7 +98,7 @@ function ajaxRefreshPage(terms) {
         });
     }
 
-    function makeTerms(terms) {
+    function makeTerms(terms, registers) {
         if (terms) {
             $.each(terms, function (key, term) {
                 switch (term.condition_type) {
