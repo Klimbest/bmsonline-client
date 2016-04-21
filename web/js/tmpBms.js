@@ -90,9 +90,11 @@ function ajaxRefreshPage(terms) {
 
     function setVariables(registers) {
         $.each(registers, function (key, value) {
-            var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
-            if (displayPrecision !== 2) {
-                value = parseFloat(value).toFixed(displayPrecision);
+            if(value.length > 0){
+                var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
+                if (displayPrecision !== 2) {
+                    value = parseFloat(value).toFixed(displayPrecision);
+                }
             }
             $("div.bms-panel").children("span#" + key).empty().append(value);
         });
