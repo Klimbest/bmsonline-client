@@ -1,5 +1,5 @@
 <div class="variable-manager" title="Manager zmiennych:">
-   {# <div class="row header">
+    {#<div class="row header">
         <div class="col-md-2">
             <div class="row">
                 <div class="col-md-12">
@@ -28,7 +28,7 @@
     <div class="row body">
         <div class="col-md-12">
             {% if registers|length > 0 %}
-                {% for register in registers|sort %}
+                {% for register in registers %}
                     <div id="{{register.id}}" class="row register-choice {{register.device.id}} ">
                         <div class="col-md-2">{{ register.device.name }}</div>
                         <div class="col-md-1">{{ register.function }}</div>
@@ -48,5 +48,6 @@
            {% endfor %}
        </select>
    </div>
+       <input id="variable" type="hidden" value="" />
 </div>
 

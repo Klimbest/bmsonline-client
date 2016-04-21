@@ -157,6 +157,9 @@ function ajaxRefreshPage(terms) {
                 case "text" :
                     $("div#" + term.panel_id + ".bms-panel span.content").text(term.effect_content);
                     break;
+                case "popup" :
+                    alert(term.effect_content);
+                    break;
             }
         }
     }

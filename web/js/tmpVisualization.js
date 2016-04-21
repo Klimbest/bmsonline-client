@@ -595,7 +595,7 @@ function setOpenImageManager() {
             success: function (ret) {
                 $(".main-row").children(".fa-spinner").remove();
                 $(".main-row").append(ret["template"]);
-                createImageManager().dialog("open");
+                createImageManager("data-source").dialog("open");
             }
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -649,7 +649,7 @@ function createVariableManager(fw) {
 
     }
 }
-function createImageManager() {
+function createImageManager(fw) {
     var input;
     return $("div.image-manager").dialog({
         autoOpen: false,
@@ -660,29 +660,34 @@ function createImageManager() {
             {
                 text: "Zapisz",
                 click: function () {
-                    var w = $("div.image-manager input#resolutionX").val();
-                    var h = $("div.image-manager input#resolutionY").val();
-                    $("div.dialog-panel-settings div.panel-preview").css({
-                        width: w + "px",
-                        height: h + "px",
-                        backgroundColor: "rgba(0,0,0,0)",
-                        borderWidth: "0px"
-                    });
-                    $("form#panel input#width").val(w);
-                    $("form#panel input#height").val(h);
-                    $("form#panel input#opacity").val(0);
-                    $("form#panel input#borderWidth").val(0);
-                    var imgSource = $("div.image-manager div.dialog-panel img").attr("src");
-                    if (imgSource.length > 200) {
-                        var data = new FormData();
-                        data.append('file', input.files[0]);
-                        data.append("fileName", $("div.image-manager input#imageName").val());
-                        data.append("resolutionX", $("div.image-manager input#resolutionX").val());
-                        data.append("resolutionY", $("div.image-manager input#resolutionY").val());
-                        saveData(data);
-                    } else {
-                        $("div.dialog-panel-settings input#panel-source-content").val(imgSource);
-                        $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + imgSource + "\" class=\"img-responsive\">");
+                    if (fw === "data-source") {
+                        var w = $("div.image-manager input#resolutionX").val();
+                        var h = $("div.image-manager input#resolutionY").val();
+                        $("div.dialog-panel-settings div.panel-preview").css({
+                            width: w + "px",
+                            height: h + "px",
+                            backgroundColor: "rgba(0,0,0,0)",
+                            borderWidth: "0px"
+                        });
+                        $("form#panel input#width").val(w);
+                        $("form#panel input#height").val(h);
+                        $("form#panel input#opacity").val(0);
+                        $("form#panel input#borderWidth").val(0);
+                        var imgSource = $("div.image-manager div.dialog-panel img").attr("src");
+                        if (imgSource.length > 200) {
+                            var data = new FormData();
+                            data.append('file', input.files[0]);
+                            data.append("fileName", $("div.image-manager input#imageName").val());
+                            data.append("resolutionX", $("div.image-manager input#resolutionX").val());
+                            data.append("resolutionY", $("div.image-manager input#resolutionY").val());
+                            saveData(data);
+                        } else {
+                            $("div.dialog-panel-settings input#panel-source-content").val(imgSource);
+                            $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + imgSource + "\" class=\"img-responsive\">");
+                        }
+                    } else if (fw === "effect") {    
+                        var imgSource = $("div.image-manager div.dialog-panel img").attr("src");
+                        $("form#condition input#effect-value").val(imgSource);
                     }
 
                     $(this).dialog('destroy').remove();
@@ -707,8 +712,7 @@ function createImageManager() {
         if ($("input#panel-source-content").val()) {
             var src = $("input#panel-source-content").val();
             $("div.image-manager input#imageName").val(src);
-            $("div.image-manager input#resolutionX").val(parseInt(dp.css("width")));
-            $("div.image-manager input#resolutionY").val(parseInt(dp.css("height")));
+            
             dp.children("img").attr("src", src);
         }
         //loading image from disk
@@ -889,8 +893,64 @@ function createCondition(panel_id) {
             });
             $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
         });
+        setOpenEffectCss();
+        //zmiana typu efektu == zmiana przycisku managera efektów
+        $("select#effect_type").change(function () {
+            var effect_type = $(this).val();
+            $(".input-group-btn button#effectManager").unbind("click");
+            $("form#condition input#effect-value").val("");
+            switch (effect_type) {
+                case "css":
+                    $(".input-group-btn button#effectManager").prop('disabled', false);
+                    $("form#condition input#effect-value").prop('disabled', true);
+                    setOpenImageManager();
+                    break;
+                case "src":
+                    $(".input-group-btn button#effectManager").prop('disabled', false);
+                    $("form#condition input#effect-value").prop('disabled', true);
+                    setOpenEffectSrc();
+                    break;
+                case "animation":
+                    $(".input-group-btn button#effectManager").prop('disabled', false);
+                    $("form#condition input#effect0-value").prop('disabled', true);
+                    setOpenEffectAnimation();
+                    break;
+                case "text":
+                    $(".input-group-btn button#effectManager").prop('disabled', true);
+                    $("form#condition input#effect-value").prop('disabled', false);
+                    break;
+                case "popup":
+                    $(".input-group-btn button#effectManager").prop('disabled', true);
+                    $("form#condition input#effect-value").prop('disabled', false);
+                    break;
+            }
+        });
 
-
+        function setOpenEffectCss() {
+            $(".input-group-btn button#effectManager").click(function () {
+                alert("Otwieranie Właściwości formatu");
+            });
+        }
+        function setOpenEffectSrc() {
+            $(".input-group-btn button#effectManager").click(function () {
+                $.ajax({
+                    type: "POST",
+                    datatype: "application/json",
+                    url: Routing.generate('bms_visualization_load_image_manager'),
+                    success: function (ret) {
+                        $(".main-row").children(".fa-spinner").remove();
+                        $(".main-row").append(ret["template"]);
+                        createImageManager("effect").dialog("open");
+                    }
+                });
+                $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+            });
+        }
+        function setOpenEffectAnimation() {
+            $(".input-group-btn button#effectManager").click(function () {
+                alert("Otwieranie Animacja");
+            });
+        }
         /*
          //setp1
          //set hover and click on list of registers
@@ -1031,8 +1091,8 @@ function createCondition(panel_id) {
                             <td class='text-center'>" + term.fixedValue + "</td>\n\
                             <td class='text-center'>" + term.condition_type + "</td>\n\
                             <td class='text-center'>" + term.condition_value + "</td>\n\
-                            <td>" + effectType + "</td>\n\
-                            <td class='text-center'>" + term.effect_content + "</td>\n\
+                            <td class='text-center'>" + effectType + "</td>\n\
+                            <td>" + term.effect_content + "</td>\n\
                             <td class='manage text-center'>\n\
                                 <i id='" + term.register_id + "' class='fa fa-edit fa-fw fa-green'></i>\n\
                                 <i id='" + term.register_id + "' class='fa fa-remove fa-fw fa-red'></i>\n\

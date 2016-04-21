@@ -23,44 +23,52 @@
                 </tr>
             </thead>
             <tbody>
-                {% if terms is not empty %}
-                    <tr>
-                        <td></td>
-                        <td class="text-center">Jeżeli żaden z poniższych warunków nie jest spełniony</td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center">Właściwości formatu</td>
-                        <td class="">display;none</td>
-                        <td class=""></td>
-                        <td></td>
-                    </tr>
-                    {% for term in terms %}                    
+                {% if terms is defined %}
+                    {% if terms is not empty %}
                         <tr>
-                            <td class="">{{term.register.name}}</td>
-                            <td class="text-center">{{term.register.registerCurrentData.fixedValue}}</td>
-                            <td class="text-center">{{term.condition.type}}</td>
-                            <td class="text-center">{{term.condition.value}}</td>
-                            <td class="text-center">
-                                {% if term.effect.type == "src" %}
-                                    Wyświetl obraz
-                                {% elseif term.effect.type == "css" %}
-                                    Właściwości formatu
-                                {% elseif term.effect.type == "animation" %}
-                                    Animacja
-                                {% elseif term.effect.type == "alert" %}
-                                    Wyskakujące okienko
-                                {% else %}
-                                    {{term.effect.type}}
-                                {% endif %}
-                            </td>
-                            <td class="">{{term.effect.content}}</td>
-                            <td class="manage text-center">
-                                <i id="{{term.id}}" class="fa fa-edit fa-fw fa-green"></i>
-                                <i id="{{term.id}}" class="fa fa-remove fa-fw fa-red"></i>                                        
-                            </td>
-                            <td><input type="checkbox" name="checkedTermId[]" value="{{term.id}}"/></td>
+                            <td></td>
+                            <td class="text-center">Jeżeli żaden z poniższych warunków nie jest spełniony</td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                            <td class="text-center">Właściwości formatu</td>
+                            <td class="">display;none</td>
+                            <td class=""></td>
+                            <td></td>
                         </tr>
-                    {% endfor %}
+                        {% for term in terms %}                    
+                            <tr>
+                                <td class="">{{term.register.name}}</td>
+                                <td class="text-center">{{term.register.registerCurrentData.fixedValue}}</td>
+                                <td class="text-center">{{term.condition.type}}</td>
+                                <td class="text-center">{{term.condition.value}}</td>
+                                <td class="text-center">
+                                    {% if term.effect.type == "src" %}
+                                        Wyświetl obraz
+                                    {% elseif term.effect.type == "css" %}
+                                        Właściwości formatu
+                                    {% elseif term.effect.type == "animation" %}
+                                        Animacja
+                                    {% elseif term.effect.type == "alert" %}
+                                        Wyskakujące okienko
+                                    {% else %}
+                                        {{term.effect.type}}
+                                    {% endif %}
+                                </td>
+                                <td class="">{{term.effect.content}}</td>
+                                <td class="manage text-center">
+                                    <i id="{{term.id}}" class="fa fa-edit fa-fw fa-green"></i>
+                                    <i id="{{term.id}}" class="fa fa-remove fa-fw fa-red"></i>                                        
+                                </td>
+                                <td><input type="checkbox" name="checkedTermId[]" value="{{term.id}}"/></td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr id="no-data">
+                            <td colspan="11" class="text-center">
+                                <h2><span class="label label-primary"> Brak warunków</span></h2>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% else %}
                     <tr id="no-data">
                         <td colspan="11" class="text-center">
@@ -68,7 +76,7 @@
                         </td>
                     </tr>
                 {% endif %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
