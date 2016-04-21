@@ -90,7 +90,7 @@ function ajaxRefreshPage(terms) {
 
     function setVariables(registers) {
         $.each(registers, function (key, value) {
-            if(value.length > 0){
+            if(value != null){
                 var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
                 if (displayPrecision !== 2) {
                     value = parseFloat(value).toFixed(displayPrecision);
