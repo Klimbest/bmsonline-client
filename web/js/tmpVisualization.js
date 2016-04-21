@@ -903,7 +903,7 @@ function createCondition(panel_id) {
                 case "css":
                     $(".input-group-btn button#effectManager").prop('disabled', false);
                     $("form#condition input#effect-value").prop('disabled', true);
-                    setOpenImageManager();
+                    setOpenEffectCss();
                     break;
                 case "src":
                     $(".input-group-btn button#effectManager").prop('disabled', false);
@@ -911,8 +911,8 @@ function createCondition(panel_id) {
                     setOpenEffectSrc();
                     break;
                 case "animation":
-                    $(".input-group-btn button#effectManager").prop('disabled', false);
-                    $("form#condition input#effect0-value").prop('disabled', true);
+                    $(".input-group-btn button#effectManager").prop('disabled', true);
+                    $("form#condition input#effect-value").prop('disabled', false);
                     setOpenEffectAnimation();
                     break;
                 case "text":
