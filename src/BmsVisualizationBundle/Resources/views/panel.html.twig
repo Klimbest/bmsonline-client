@@ -43,7 +43,7 @@
         <div class="progress" style="margin-bottom: 0px;">
             <div id="{{panel.contentSource}}" style="position: absolute; top: -2px; left: 0%; height: 100%">
                 <img src="/images/system/line.jpg" class="img-responsive"/>
-{#                <i class="fa fa-arrow-down fa-fw"></i>#}
+                {#                <i class="fa fa-arrow-down fa-fw"></i>#}
             </div>
             <div class="progress-bar progress-bar-info" role="progressbar" style="width: 53.33%">
             </div>
@@ -64,6 +64,114 @@
             </div>
             <div class="text-right" style="width: 22.67%; float:left">
                 30°C
+            </div>
+        </div>
+    {% elseif panel.type == 'widgetTemp'%}
+        <div class="progress" style="margin-bottom: 0px;">
+            <div id="{{panel.contentSource}}" style="position: absolute; top: -2px; left: 0%; height: 100%">
+                <img src="/images/system/line.jpg" class="img-responsive"/>
+                {#                <i class="fa fa-arrow-down fa-fw"></i>#}
+            </div>
+            <div class="progress-bar progress-bar-info" role="progressbar" style="width: 44%">
+            </div>
+            <div class="progress-bar progress-bar-warning" role="progressbar" style="width: 32%">
+            </div>
+            <div class="progress-bar progress-bar-danger" role="progressbar" style="width: 24%">
+            </div>
+        </div>
+        <div class="progress progress-label">
+            <div class="text-right" style="width: 4%; float:left">
+                0°C
+            </div>
+            <div class="text-right" style="width: 44%; float:left">
+                22°C
+            </div>
+            <div class="text-right" style="width: 32%; float:left">
+                38°C
+            </div>
+            <div class="text-right" style="width: 20%; float:left">
+                50°C
+            </div>
+        </div>
+    {% elseif panel.type == 'widgetPh'%}
+        <div class="progress" style="margin-bottom: 0px;">
+            <div id="{{panel.contentSource}}" style="position: absolute; top: -2px; left: 0%; height: 100%">
+                <img src="/images/system/line.jpg" class="img-responsive"/>
+                {#                <i class="fa fa-arrow-down fa-fw"></i>#}
+            </div>
+            <div class="progress-bar progress-bar-info" role="progressbar" style="width: 33.33%">
+            </div>
+            <div class="progress-bar progress-bar-warning" role="progressbar" style="width: 13.34%">
+            </div>
+            <div class="progress-bar progress-bar-danger" role="progressbar" style="width: 53.33%">
+            </div>
+        </div>
+        <div class="progress progress-label">
+            <div class="text-right" style="width: 4%; float:left">
+                6
+            </div>
+            <div class="text-right" style="width: 33.33%; float:left">
+                7
+            </div>
+            <div class="text-right" style="width: 13.34%; float:left">
+                7,4
+            </div>
+            <div class="text-right" style="width: 49.33%; float:left">
+                9
+            </div>
+        </div>
+    {% elseif panel.type == 'widgetOrp'%}
+        <div class="progress" style="margin-bottom: 0px;">
+            <div id="{{panel.contentSource}}" style="position: absolute; top: -2px; left: 0%; height: 100%">
+                <img src="/images/system/line.jpg" class="img-responsive"/>
+                {#                <i class="fa fa-arrow-down fa-fw"></i>#}
+            </div>
+            <div class="progress-bar progress-bar-info" role="progressbar" style="width: 50%">
+            </div>
+            <div class="progress-bar progress-bar-warning" role="progressbar" style="width: 30%">
+            </div>
+            <div class="progress-bar progress-bar-danger" role="progressbar" style="width: 20%">
+            </div>
+        </div>
+        <div class="progress progress-label">
+            <div class="text-right" style="width: 4%; float:left">
+                -1500mV
+            </div>
+            <div class="text-right" style="width: 50%; float:left">
+                0mV
+            </div>
+            <div class="text-right" style="width: 30%; float:left">
+                900mV
+            </div>
+            <div class="text-right" style="width: 16%; float:left">
+                1500mV
+            </div>
+        </div>
+    {% elseif panel.type == 'widgetCl'%}
+        <div class="progress" style="margin-bottom: 0px;">
+            <div id="{{panel.contentSource}}" style="position: absolute; top: -2px; left: 0%; height: 100%">
+                <img src="/images/system/line.jpg" class="img-responsive"/>
+                {#                <i class="fa fa-arrow-down fa-fw"></i>#}
+            </div>
+            <div class="progress-bar progress-bar-info" role="progressbar" style="width: 25%">
+            </div>
+            <div class="progress-bar progress-bar-warning" role="progressbar" style="width: 17.5%">
+            </div>
+            <div class="progress-bar progress-bar-danger" role="progressbar" style="width: 57.5%">
+            </div>
+        </div>
+        <div class="progress progress-label">
+            <div class="text-right" style="width: 4%; float:left">
+                0ppm
+            </div>
+            <div class="text-right" style="width: 25%; float:left">
+                0,5ppm
+            </div>
+            <div class="text-right" style="width: 17.5%; float:left">
+                0,85ppm
+            </div>
+            <div class="text-right" style="width: 53.5%; float:left">
+                2ppm
             </div>
         </div>
     {% endif %}
