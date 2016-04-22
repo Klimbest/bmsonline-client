@@ -97,6 +97,13 @@ function ajaxRefreshPage(terms) {
                 }
             }
             $("div.bms-panel").children("span#" + key).empty().append(value);
+            var widgetValue = (value - 15)*100/15;
+            widgetValue = widgetValue.toFixed(displayPrecision);
+            console.log(widgetValue);
+            console.log($("div.bms-panel-widget").find("div#"+key));
+            $("div.bms-panel-widget").find("div#"+key).animate({
+                left: widgetValue+"%"
+            }, 2000);
         });
     }
 

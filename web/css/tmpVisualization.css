@@ -281,3 +281,10 @@ div.row.panel-choice{
     border-radius: 10px 10px 10px 10px;
     cursor: pointer;
 }
+
+div.progress-label{
+    height: 20px;
+    margin-bottom: 0px;
+    overflow: visible;
+    line-height: 20px;
+}

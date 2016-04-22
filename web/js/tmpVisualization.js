@@ -820,9 +820,43 @@ function createImageManager(fw) {
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     }
 }
+function createEffectCssManager(){
+    return $("div.effect-css-manager").dialog({
+        autoOpen: false,
+        width: $(window).width(),
+        height: $(window).height(),
+        modal: true,
+        buttons: [
+            {
+                text: "Zapisz",
+                click: function () {
+                   
+                }
+            },
+            {
+                text: "Anuluj",
+                click: function () {
+                    $(this).dialog('destroy').remove();
+                }
+            }],
+        open: function () {
+            setDialog();
+            setDialogButtons();
+        },
+        close: function () {
+            $(this).dialog('destroy').remove();
+        }
+    });
+    function setDialog() {
+        
+    }
+    function setDialogButtons() {
+
+    }
+    
+}
 
 function createCondition(panel_id) {
-    var dialog = $("div.dialog-condition");
     return $("div.dialog-condition").dialog({
         autoOpen: false,
         width: 1200,
@@ -928,7 +962,17 @@ function createCondition(panel_id) {
 
         function setOpenEffectCss() {
             $(".input-group-btn button#effectManager").click(function () {
-                alert("Otwieranie Właściwości formatu");
+                $.ajax({
+                    type: "POST",
+                    datatype: "application/json",
+                    url: Routing.generate('bms_visualization_load_effect_css_manager'),
+                    success: function (ret) {
+                        $(".main-row").children(".fa-spinner").remove();
+                        $(".main-row").append(ret["template"]);
+                        createEffectCssManager().dialog("open");
+                    }
+                });
+                $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
             });
         }
         function setOpenEffectSrc() {

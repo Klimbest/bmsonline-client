@@ -15,3 +15,10 @@
 .bms-panel.navigation-panel{
     cursor: pointer;
 }
+
+div.progress-label{
+    height: 20px;
+    margin-bottom: 0px;
+    overflow: visible;
+    line-height: 20px;
+}

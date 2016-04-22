@@ -102,6 +102,21 @@ class AjaxController extends Controller {
     }
 
     /**
+     * @Route("/load_effect_css_manager", name="bms_visualization_load_effect_css_manager", options={"expose"=true})
+     */
+    public function loadEffectCssManagerAction(Request $request) {
+        if ($request->isXmlHttpRequest()) {
+            
+            
+            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:effectCssManager.html.twig');
+
+            return new JsonResponse($ret);
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
+    
+    /**
      * @Route("/load_event_manager", name="bms_visualization_load_event_manager", options={"expose"=true})
      */
     public function loadEventManagerAction(Request $request) {
@@ -117,17 +132,15 @@ class AjaxController extends Controller {
             $devices = $deviceRepo->findAll();
             $pages = $pageRepo->findAll();
             $panels = $panelRepo->findAll();
-            $effects = $effectRepo->findAll();
-            $condition = $myConditionRepo->findAll();
+            
             $options = [
                 'registers' => $registers,
                 'devices' => $devices,
                 'panels' => $panels,
-                'pages' => $pages,
-                'effects' => $effects
+                'pages' => $pages
             ];
             
-            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:condition:index.html.twig', $options);
+            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:eventManager.html.twig', $options);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -212,6 +225,7 @@ class AjaxController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
+    
     /**
      * @Route("/add_image", name="bms_visualization_add_image", options={"expose"=true})
      */
