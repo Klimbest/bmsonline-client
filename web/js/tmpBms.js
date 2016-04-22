@@ -101,8 +101,9 @@ function ajaxRefreshPage(terms) {
             widgetValue = widgetValue.toFixed(displayPrecision);
             if (widgetValue < 0) {
                 widgetValue = 0;
+                $("div.bms-panel-widget").find("div#" + key).hide();
             }
-            $("div.bms-panel-widget").find("div#" + key).animate({
+            $("div.bms-panel-widget").find("div#" + key).show().animate({
                 left: widgetValue + "%"
             }, 2000);
         });
