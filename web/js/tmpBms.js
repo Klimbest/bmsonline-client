@@ -90,27 +90,27 @@ function ajaxRefreshPage(terms) {
 
     function setVariables(registers) {
         $.each(registers, function (key, value) {
-            if(value != null){
+            if (value != null) {
                 var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
                 if (displayPrecision !== 2) {
                     value = parseFloat(value).toFixed(displayPrecision);
                 }
             }
             $("div.bms-panel").children("span#" + key).empty().append(value);
-            var widgetValue = (value - 15)*100/15;
+            var widgetValue = (value - 15) * 100 / 15;
             widgetValue = widgetValue.toFixed(displayPrecision);
-            if(widgetValue<0){
+            if (widgetValue < 0) {
                 widgetValue = 0;
             }
-            $("div.bms-panel-widget").find("div#"+key).animate({
-                left: widgetValue+"%"
+            $("div.bms-panel-widget").find("div#" + key).animate({
+                left: widgetValue + "%"
             }, 2000);
         });
     }
 
     function makeTerms(terms, registers) {
         if (terms) {
-            $.each(terms, function (key, term){
+            $.each(terms, function (key, term) {
                 var id = term.panel_id;
                 $("div#" + id + ".bms-panel").hide();
             });
