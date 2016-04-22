@@ -108,19 +108,19 @@ function ajaxRefreshPage(terms) {
                 $("div.bms-panel-widgetTemp").find("div#" + key).hide();
             }
             $("div.bms-panel-widget").find("div#" + key).show().animate({
-                left: widgetValue + "%"
+                left: ((value - 15) * 100 / 15).toFixed(displayPrecision) + "%"
             }, 2000);
             $("div.bms-panel-widgetPh").find("div#" + key).show().animate({
-                left: widgetValue + "%"
+                left: ((value - 6) * 100 / 3).toFixed(displayPrecision) + "%"
             }, 2000);
             $("div.bms-panel-widgetCl").find("div#" + key).show().animate({
-                left: widgetValue + "%"
+                left: ((value) * 100 / 1).toFixed(displayPrecision) + "%"
             }, 2000);
             $("div.bms-panel-widgetOrp").find("div#" + key).show().animate({
-                left: widgetValue + "%"
+                left: ((value - (-1500)) * 100 / 3000).toFixed(displayPrecision) + "%"
             }, 2000);
             $("div.bms-panel-widgetTemp").find("div#" + key).show().animate({
-                left: widgetValue + "%"
+                left: ((value) * 100 / 50).toFixed(displayPrecision) + "%"
             }, 2000);
             
         });
