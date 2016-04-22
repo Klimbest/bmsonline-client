@@ -102,10 +102,27 @@ function ajaxRefreshPage(terms) {
             if (widgetValue < 0) {
                 widgetValue = 0;
                 $("div.bms-panel-widget").find("div#" + key).hide();
+                $("div.bms-panel-widgetPh").find("div#" + key).hide();
+                $("div.bms-panel-widgetCl").find("div#" + key).hide();
+                $("div.bms-panel-widgetOrp").find("div#" + key).hide();
+                $("div.bms-panel-widgetTemp").find("div#" + key).hide();
             }
             $("div.bms-panel-widget").find("div#" + key).show().animate({
                 left: widgetValue + "%"
             }, 2000);
+            $("div.bms-panel-widgetPh").find("div#" + key).show().animate({
+                left: widgetValue + "%"
+            }, 2000);
+            $("div.bms-panel-widgetCl").find("div#" + key).show().animate({
+                left: widgetValue + "%"
+            }, 2000);
+            $("div.bms-panel-widgetOrp").find("div#" + key).show().animate({
+                left: widgetValue + "%"
+            }, 2000);
+            $("div.bms-panel-widgetTemp").find("div#" + key).show().animate({
+                left: widgetValue + "%"
+            }, 2000);
+            
         });
     }
 
