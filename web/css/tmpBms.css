@@ -25,4 +25,5 @@ div.progress-label{
     margin-bottom: 0px;
     overflow: visible;
     line-height: 15px;
+    background-color: rgba(0,0,0,0);
 }
