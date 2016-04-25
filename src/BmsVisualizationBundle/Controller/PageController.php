@@ -108,11 +108,13 @@ class PageController extends Controller {
             $page_id = $request->get("page_id");
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
 
             $pages = $pageRepo->findAll();
             $panels = $panelRepo->findPanelsForPage($request->get("page_id"));
+            $widgets = $widgetBarRepo->findAll();
             
-            $ret['page'] = $this->container->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id]);
+            $ret['page'] = $this->container->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id, 'widgets' => $widgets]);
             $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
             return new JsonResponse($ret);
         } else {

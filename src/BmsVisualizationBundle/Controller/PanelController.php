@@ -271,6 +271,10 @@ class PanelController extends Controller {
             $pages = $pageRepo->findAll();
             $options['pages'] = $pages;
             
+            $lastPanel = $panelRepo->findLastPanel();
+            $newId = $lastPanel->getId();
+            $options['newId'] = (int)($newId + 1);
+            
             $ret["dialog"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelDialog.html.twig', $options);
             
             $ret["panel_id"] = $newPanel->getId();

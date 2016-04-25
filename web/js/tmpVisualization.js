@@ -271,6 +271,13 @@ function editPanel(panel_id) {
             $(".precision-group, .font-group").hide();
             $(".input-group-btn button#manager").unbind("click");
             setOpenImageManager();
+        } else if (panel.hasClass("bms-panel-variable")) {
+            $("div.dialog-panel-data select#panel-type").val("variable");
+            $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + imgSource + "\" class=\"img-responsive\">");
+            $("div.dialog-panel-settings input#panel-source-content").val(imgSource).prop("disabled", true).prop("required", false);
+            $(".precision-group, .font-group").hide();
+            $(".input-group-btn button#manager").unbind("click");
+            setOpenVariableManager();
         }
     }
     function setGeneral() {

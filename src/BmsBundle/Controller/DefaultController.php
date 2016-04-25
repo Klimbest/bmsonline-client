@@ -24,15 +24,17 @@ class DefaultController extends Controller {
         if ($request->isXmlHttpRequest()) {
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
+            $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
             
             $page_id = $request->get("page_id");
             $pages = $pageRepo->findAll();
             isset($page_id) ? $page = $pageRepo->find($page_id) : $page = $pageRepo->find(2);
             
             $terms = $termRepo->findAllAsArray();       
-                        
+                     
+            $widgets = $widgetBarRepo->findAll();   
             $ret["terms"] = $terms;
-            $ret['template'] = $this->container->get('templating')->render('BmsBundle::page.html.twig', ['pages' => $pages, 'page' => $page, 'terms' => $terms]);
+            $ret['template'] = $this->container->get('templating')->render('BmsBundle::page.html.twig', ['pages' => $pages, 'page' => $page, 'terms' => $terms, 'widgets' => $widgets]);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -49,6 +51,7 @@ class DefaultController extends Controller {
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
+            $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
 
             $page_id = $request->get("page_id");
             isset($page_id) ? $page = $pageRepo->find($page_id) : null;
@@ -67,7 +70,16 @@ class DefaultController extends Controller {
                 $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
             }
             
-
+            $widgets = $widgetBarRepo->findAll();
+            foreach ($widgets as $w){
+                if($w->getSetRegisterId() != null){
+                    $register = $w->getSetRegisterId();
+                    $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
+                }
+                $register = $w->getValueRegisterId();
+                $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
+            }
+            
             $regsForTime = $registerRepo->findAll();
             $time = 0;
             foreach ($regsForTime as $rft) {
