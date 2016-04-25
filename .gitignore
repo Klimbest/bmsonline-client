@@ -18,3 +18,4 @@
 /web/images/user/*
 /nbproject/*
 app/config/security.yml
+app/config/security.yml
