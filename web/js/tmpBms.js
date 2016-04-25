@@ -95,7 +95,6 @@ function ajaxRefreshPage(terms) {
                 if (displayPrecision !== 2) {
                     value = parseFloat(value).toFixed(displayPrecision);
                 }
-                value = parseFloat(value);
             }
             $("div.bms-panel").children("span#" + key).empty().append(value);
             
