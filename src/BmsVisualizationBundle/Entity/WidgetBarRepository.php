@@ -10,4 +10,6 @@ namespace BmsVisualizationBundle\Entity;
  */
 class WidgetBarRepository extends \Doctrine\ORM\EntityRepository
 {
+   
+    
 }

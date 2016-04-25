@@ -48,12 +48,12 @@
                     {% set setPoint = (widget.setRegisterId.registerCurrentData.fixedValue-widget.rangeMin)/(widget.rangeMax-widget.rangeMin)*100|round(2, 'common') %}
                 {% endif %}
                 <div class="progress" style="margin-bottom: 0px;">
-                    <div id="{{widget.valueRegisterId.id}}" style="position: absolute; top: -2px; left: 0%; height: 100%">
+                    <div id="value{{widget.valueRegisterId.id}}" style="position: absolute; top: -2px; left: 0%; height: 100%">
                         <img src="/images/system/line.jpg" class="img-responsive"/>                
                         {#                <i class="fa fa-arrow-down fa-fw"></i>#}
                     </div>
                     {% if widget.setRegisterId is not null %}
-                        <div style="position: absolute; top: -2px; left: {{setPoint}}%; height: 100%">
+                        <div id="set{{widget.setRegisterId.id}}" style="position: absolute; top: -2px; left: {{setPoint}}%; height: 100%">
                             <img src="/images/system/linegreen.jpg" class="img-responsive"/>
                         </div>
                     {% endif %}
@@ -65,7 +65,7 @@
                     </div>
                 </div>
                 <div class="progress progress-label">
-                    <div class="text-right" style="width:3%; float:left">
+                    <div id="rangeMin" class="text-right" style="width:3%; float:left">
                         {{widget.rangeMin}}
                     </div>
                     <div class="text-right" style="width:{{optimumMin}}%; float:left">
@@ -74,7 +74,7 @@
                     <div class="text-right" style="width: {{optimumMax - optimumMin}}%; float:left">
                         {{widget.optimumMax}}
                     </div>
-                    <div class="text-right" style="width: {{100-optimumMax-3}}%; float:left">
+                    <div id="rangeMax" class="text-right" style="width: {{100-optimumMax-3}}%; float:left">
                         {{widget.rangeMax}}
                     </div>
                 </div>

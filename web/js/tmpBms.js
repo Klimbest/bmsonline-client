@@ -97,31 +97,34 @@ function ajaxRefreshPage(terms) {
                 }
             }
             $("div.bms-panel").children("span#" + key).empty().append(value);
-            var widgetValue = (value - 15) * 100 / 15;
-            widgetValue = widgetValue.toFixed(displayPrecision);
-            if (widgetValue < 0) {
-                widgetValue = 0;
-                $("div.bms-panel-widget").find("div#" + key).hide();
-                $("div.bms-panel-widgetPh").find("div#" + key).hide();
-                $("div.bms-panel-widgetCl").find("div#" + key).hide();
-                $("div.bms-panel-widgetOrp").find("div#" + key).hide();
-                $("div.bms-panel-widgetTemp").find("div#" + key).hide();
+            if($("div.bms-panel-widget").find("div#value" + key).length > 0){
+                var rangeMin = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
+                var rangeMax = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
+                
+                var widgetValue = (value - rangeMin)/(rangeMax - rangeMin) * 100;
+                widgetValue = widgetValue.toFixed(displayPrecision);
+                if (widgetValue < 0) {
+                    widgetValue = 0;
+                    $("div.bms-panel-widget").find("div#value" + key).hide();
+                }
+                $("div.bms-panel-widget").find("div#value" + key).show().animate({
+                    left: widgetValue + "%"
+                }, 2000);
             }
-            $("div.bms-panel-widget").find("div#" + key).show().animate({
-                left: ((value - 15) * 100 / 15).toFixed(displayPrecision) + "%"
-            }, 2000);
-            $("div.bms-panel-widgetPh").find("div#" + key).show().animate({
-                left: ((value - 6) * 100 / 3).toFixed(displayPrecision) + "%"
-            }, 2000);
-            $("div.bms-panel-widgetCl").find("div#" + key).show().animate({
-                left: ((value) * 100 / 1).toFixed(displayPrecision) + "%"
-            }, 2000);
-            $("div.bms-panel-widgetOrp").find("div#" + key).show().animate({
-                left: ((value - (-1500)) * 100 / 3000).toFixed(displayPrecision) + "%"
-            }, 2000);
-            $("div.bms-panel-widgetTemp").find("div#" + key).show().animate({
-                left: ((value) * 100 / 50).toFixed(displayPrecision) + "%"
-            }, 2000);
+            if($("div.bms-panel-widget").find("div#set" + key).length > 0){
+                var rangeMin = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMin").text().trim());
+                var rangeMax = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMax").text().trim());
+                
+                var widgetValue = (value - rangeMin)/(rangeMax - rangeMin) * 100;
+                widgetValue = widgetValue.toFixed(displayPrecision);
+                if (widgetValue < 0) {
+                    widgetValue = 0;
+                    $("div.bms-panel-widget").find("div#set" + key).hide();
+                }
+                $("div.bms-panel-widget").find("div#set" + key).show().animate({
+                    left: widgetValue + "%"
+                }, 2000);
+            }
             
         });
     }
