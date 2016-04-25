@@ -90,13 +90,15 @@ function ajaxRefreshPage(terms) {
 
     function setVariables(registers) {
         $.each(registers, function (key, value) {
-            if (value != null) {
+            if (value != null) {                
                 var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
                 if (displayPrecision !== 2) {
                     value = parseFloat(value).toFixed(displayPrecision);
                 }
+                value = parseFloat(value);
             }
             $("div.bms-panel").children("span#" + key).empty().append(value);
+            
             if($("div.bms-panel-widget").find("div#value" + key).length > 0){
                 var rangeMin = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
                 var rangeMax = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
