@@ -31,28 +31,28 @@ class WidgetBar {
     /**
      * @var integer
      *
-     * @ORM\Column(name="range_min", type="integer", nullable=false)
+     * @ORM\Column(name="range_min", type="decimal", precision=9, scale=2, nullable=false)
      */
     private $rangeMin;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="range_max", type="integer", nullable=false)
+     * @ORM\Column(name="range_max", type="decimal", precision=9, scale=2, nullable=false)
      */
     private $rangeMax;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="optimum_min", type="integer", nullable=false)
+     * @ORM\Column(name="optimum_min", type="decimal", precision=9, scale=2, nullable=false)
      */
     private $optimumMin;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="optimum_max", type="integer", nullable=false)
+     * @ORM\Column(name="optimum_max", type="decimal", precision=9, scale=2, nullable=false)
      */
     private $optimumMax;
 
