@@ -92,12 +92,9 @@ function ajaxRefreshPage(terms) {
         $.each(registers, function (key, value) {
             if (value != null) {                
                 var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
-                console.log("DP: "+displayPrecision);
-                console.log("V Before: "+value);
-                value = parseFloat(value).toFixed(displayPrecision);
-                console.log("V After: "+value);
+                roundValue = parseFloat(value).toFixed(displayPrecision);
             }
-            $("div.bms-panel").children("span#" + key).empty().append(value);
+            $("div.bms-panel").children("span#" + key).empty().append(roundValue);
             
             if($("div.bms-panel-widget").find("div#value" + key).length > 0){
                 var rangeMin = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
