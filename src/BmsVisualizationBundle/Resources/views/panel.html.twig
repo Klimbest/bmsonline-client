@@ -66,16 +66,16 @@
                 </div>
                 <div class="progress progress-label">
                     <div id="rangeMin" class="text-right" style="width:3%; float:left">
-                        {{widget.rangeMin}}
+                        {{widget.rangeMin|round(2, 'common')}}
                     </div>
                     <div class="text-right" style="width:{{optimumMin}}%; float:left">
-                        {{widget.optimumMin}}
+                        {{widget.optimumMin|round(2, 'common')}}
                     </div>
                     <div class="text-right" style="width: {{optimumMax - optimumMin}}%; float:left">
-                        {{widget.optimumMax}}
+                        {{widget.optimumMax|round(2, 'common')}}
                     </div>
                     <div id="rangeMax" class="text-right" style="width: {{100-optimumMax-3}}%; float:left">
-                        {{widget.rangeMax}}
+                        {{widget.rangeMax|round(2, 'common')}}
                     </div>
                 </div>
             {% endif %}
