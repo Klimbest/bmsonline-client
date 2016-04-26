@@ -48,12 +48,12 @@
                     {% set setPoint = (widget.setRegisterId.registerCurrentData.fixedValue-widget.rangeMin)/(widget.rangeMax-widget.rangeMin)*100|round(2, 'common') %}
                 {% endif %}
                 <div class="progress" style="margin-bottom: 0px;">
-                    <div id="value{{widget.valueRegisterId.id}}" style="position: absolute; top: -2px; left: 0%; height: 100%">
+                    <div id="value{{widget.valueRegisterId.id}}" style="position: absolute; top: -2px; left: 0%; height: 100%; z-index: 15">
                         <img src="/images/system/line.jpg" class="img-responsive"/>                
                         {#                <i class="fa fa-arrow-down fa-fw"></i>#}
                     </div>
                     {% if widget.setRegisterId is not null %}
-                        <div id="set{{widget.setRegisterId.id}}" style="position: absolute; top: -2px; left: {{setPoint}}%; height: 100%">
+                        <div id="set{{widget.setRegisterId.id}}" style="position: absolute; top: -4px; left: {{setPoint}}%; height: 100%; z-index: 14">
                             <img src="/images/system/linegreen.jpg" class="img-responsive"/>
                         </div>
                     {% endif %}

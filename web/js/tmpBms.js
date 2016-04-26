@@ -93,7 +93,6 @@ function ajaxRefreshPage(terms) {
             if (value !== null) {                
                 var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
                 var roundValue = parseFloat(value).toFixed(displayPrecision);
-                //console.log(roundValue);
             }
             $("div.bms-panel").children("span#" + key).empty().append(roundValue);
             
