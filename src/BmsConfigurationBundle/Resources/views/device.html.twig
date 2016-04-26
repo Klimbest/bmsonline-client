@@ -85,8 +85,8 @@
                     <span id="{{device.id}}" class="label label-primary label-last-read">Ostatni odczyt: 
 
                         {% set time = null %}
-                        {% if device.registers|length > 0 %}
-                            {% for register in device.registers %}
+                        {% if registers|length > 0 %}
+                            {% for register in registers %}
                                 {% if(time < register.registerCurrentData.timeOfUpdate) %}
                                     {% set time = register.registerCurrentData.timeOfUpdate %}
                                 {% endif %}
@@ -148,7 +148,7 @@
                     </thead>
                     <tbody>
                         {% if device.registers|length > 0 %}
-                            {% for register in device.registers|sort %}
+                            {% for register in registers %}
                                 <tr>
                                     <td class="register_address_hex">{{ register.registerAddress }}</td>
                                     <td class="register_address_dec">{{ register.registerAddress }}</td>

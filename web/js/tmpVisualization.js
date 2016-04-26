@@ -195,7 +195,7 @@ function createPanel() {
         }
     }
 }
-function editPanel(panel_id) {
+function editPanel(panel_id, register) {
     return $("div.dialog-panel-settings").dialog({
         autoOpen: false,
         width: $(window).width(),
@@ -271,6 +271,15 @@ function editPanel(panel_id) {
             $(".precision-group, .font-group").hide();
             $(".input-group-btn button#manager").unbind("click");
             setOpenImageManager();
+        } else if (panel.hasClass("bms-panel-variable")) {
+            $("div.dialog-panel-settings input#panel-source-content").val(register.name);
+            $("div.dialog-panel-settings div.panel-preview span").empty().append(register.value);
+            $("div.dialog-panel-settings input#panel-source-value").val(register.value);
+            var displayPrecision = panel.children("span.bms-panel-content").attr("value");
+            $("form#panel select#displayPrecision").val(displayPrecision);
+            var value = parseFloat($("input#panel-source-value").val());
+            value = value.toFixed(displayPrecision);
+            $("div.panel-preview").children("span").empty().append(value);
         }
     }
     function setGeneral() {
@@ -685,7 +694,7 @@ function createImageManager(fw) {
                             $("div.dialog-panel-settings input#panel-source-content").val(imgSource);
                             $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + imgSource + "\" class=\"img-responsive\">");
                         }
-                    } else if (fw === "effect") {    
+                    } else if (fw === "effect") {
                         var imgSource = $("div.image-manager div.dialog-panel img").attr("src");
                         $("form#condition input#effect-value").val(imgSource);
                     }
@@ -712,7 +721,7 @@ function createImageManager(fw) {
         if ($("input#panel-source-content").val()) {
             var src = $("input#panel-source-content").val();
             $("div.image-manager input#imageName").val(src);
-            
+
             dp.children("img").attr("src", src);
         }
         //loading image from disk
@@ -820,7 +829,7 @@ function createImageManager(fw) {
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     }
 }
-function createEffectCssManager(){
+function createEffectCssManager() {
     return $("div.effect-css-manager").dialog({
         autoOpen: false,
         width: $(window).width(),
@@ -830,7 +839,7 @@ function createEffectCssManager(){
             {
                 text: "Zapisz",
                 click: function () {
-                   
+
                 }
             },
             {
@@ -848,12 +857,12 @@ function createEffectCssManager(){
         }
     });
     function setDialog() {
-        
+
     }
     function setDialogButtons() {
 
     }
-    
+
 }
 
 function createCondition(panel_id) {
@@ -1179,7 +1188,7 @@ function copyPanel(data) {
             loadPanelList(ret["panelList"]);
 
             setPanelEvents();
-            editPanel(ret["panel_id"]).dialog("open");
+            editPanel(ret["panel_id"], ret["register"]).dialog("open");
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -1344,18 +1353,9 @@ function setPanelEvents() {
         });
         //ustawienia
         $(label + " i.fa-cogs").click(function () {
-            var panel = $("div#" + id + ".bms-panel");
-            if (panel.hasClass("bms-panel-variable")) {
-                var rid = panel.children("span").attr("id");
-                var data = {
-                    reg_id: rid,
-                    panel_id: id
-                };
-            } else {
-                var data = {
-                    panel_id: id
-                };
-            }
+            var data = {
+                panel_id: id
+            };
             $.ajax({
                 type: "POST",
                 datatype: "application/json",
@@ -1365,12 +1365,8 @@ function setPanelEvents() {
                     $(".main-row").children(".fa-spinner").remove();
                     $(".main-row").append(ret["template"]);
 
-                    editPanel(id).dialog("open");
-                    if (panel.hasClass("bms-panel-variable")) {
-                        $("div.dialog-panel-settings input#panel-source-content").val(ret["register"].name);
-                        $("div.dialog-panel-settings div.panel-preview span").empty().append(ret["register"].value);
-                        $("div.dialog-panel-settings input#panel-source-value").val(ret["register"].value);
-                    }
+                    editPanel(id, ret["register"]).dialog("open");
+
                 }
             });
             $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -1710,17 +1706,9 @@ function loadPanelList(panelList) {
     $("div.panel-list i.fa-cogs").click(function () {
         var id = $(this).parent().parent().parent().attr("id");
         var panel = $("div#" + id + ".bms-panel");
-        if (panel.hasClass("bms-panel-variable")) {
-            var rid = panel.children("span").attr("id");
-            var data = {
-                reg_id: rid,
-                panel_id: id
-            };
-        } else {
-            var data = {
-                panel_id: id
-            };
-        }
+        var data = {
+            panel_id: id
+        };
         $.ajax({
             type: "POST",
             datatype: "application/json",
@@ -1730,12 +1718,8 @@ function loadPanelList(panelList) {
                 $(".main-row").children(".fa-spinner").remove();
                 $(".main-row").append(ret["template"]);
 
-                editPanel(id).dialog("open");
-                if (panel.hasClass("bms-panel-variable")) {
-                    $("div.dialog-panel-settings input#panel-source-content").val(ret["register"].name);
-                    $("div.dialog-panel-settings div.panel-preview span").empty().append(ret["register"].value);
-                    $("div.dialog-panel-settings input#panel-source-value").val(ret["register"].value);
-                }
+                editPanel(id, ret["register"]).dialog("open");
+                
             }
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();

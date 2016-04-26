@@ -101,7 +101,6 @@ function ajaxRefreshPage(terms) {
                 var rangeMax = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
                 
                 var widgetValue = (value - rangeMin)/(rangeMax - rangeMin) * 100;
-                //widgetValue = widgetValue.toFixed(displayPrecision);
                 if (widgetValue < 0) {
                     widgetValue = 0;
                     $("div.bms-panel-widget").find("div#value" + key).hide();
@@ -113,9 +112,7 @@ function ajaxRefreshPage(terms) {
             if($("div.bms-panel-widget").find("div#set" + key).length > 0){
                 var rangeMin = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMin").text().trim());
                 var rangeMax = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMax").text().trim());
-                //console.log(value);
                 var widgetValue = (value - rangeMin)/(rangeMax - rangeMin) * 100;
-                //widgetValue = widgetValue.toFixed(displayPrecision);
                 if (widgetValue < 0) {
                     widgetValue = 0;
                     $("div.bms-panel-widget").find("div#set" + key).hide();

@@ -24,4 +24,10 @@ class RegisterRepository extends \Doctrine\ORM\EntityRepository
                         ->getResult();
     }
     
+    public function getAllOrderByAdr($device_id){
+        return $this->getEntityManager()
+                        ->createQuery('SELECT r FROM BmsConfigurationBundle:Register AS r WHERE r.device =' . $device_id . ' ORDER BY r.registerAddress' )
+                        ->getResult();
+    }
+    
 }

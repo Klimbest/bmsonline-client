@@ -17,16 +17,7 @@ class PanelController extends Controller {
     public function loadPanelDialogAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $options = array();
-            $reg_id = $request->get("reg_id");
-            if (isset($reg_id)) {
-                $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-                $register = $registerRepo->findOneById($reg_id);
-
-                $options['register'] = $register;
-                $r["name"] = $register->getName();
-                $r["value"] = $register->getRegisterCurrentData()->getFixedValue();
-                $ret["register"] = $r;
-            }
+            
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $panel_id = $request->get("panel_id");
             if (isset($panel_id)) {                
@@ -36,6 +27,17 @@ class PanelController extends Controller {
                 $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
                 $terms = $termRepo->findAllForPanelAsObject($panel_id);
                 $options['terms'] = $terms;
+                
+                if($panel->getType() === "variable"){
+                    $reg_id = $panel->getContentSource();
+                    $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+                    $register = $registerRepo->findOneById($reg_id);
+
+                    $options['register'] = $register;
+                    $r["name"] = $register->getName();
+                    $r["value"] = $register->getRegisterCurrentData()->getFixedValue();
+                    $ret["register"] = $r;
+                }
             }
             $lastPanel = $panelRepo->findLastPanel();
             $newId = $lastPanel->getId();
@@ -254,12 +256,26 @@ class PanelController extends Controller {
      * @Route("/copy_panel", name="bms_visualization_copy_panel", options={"expose"=true})
      */
     public function copyPanelAction(Request $request) {
-        if ($request->isXmlHttpRequest()) {
+        if ($request->isXmlHttpRequest()) {            
+            $options = array();
+            
             $panel_id = $request->get("panel_id");
 
             $em = $this->getDoctrine()->getManager();
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $panel = $panelRepo->find($panel_id);
+            
+            if($panel->getType() === "variable"){
+                $reg_id = $panel->getContentSource();
+                $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+                $register = $registerRepo->findOneById($reg_id);
+
+                $options['register'] = $register;
+                $r["name"] = $register->getName();
+                $r["value"] = $register->getRegisterCurrentData()->getFixedValue();
+                $ret["register"] = $r;
+            }
+            
             $newPanel = clone $panel;
 
             $newPanel->setTopPosition(0)->setLeftPosition(0);

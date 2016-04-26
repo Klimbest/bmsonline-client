@@ -110,7 +110,7 @@ class DefaultController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
         $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
-
+        $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
         //pobiera aktywne porty(do menu)
         $communicationTypes = $communicationRepo->createQueryBuilder('ct')
                         ->join('ct.hardware_id', 'h')
@@ -118,7 +118,10 @@ class DefaultController extends Controller {
                         ->getQuery()->getResult();
         //pobiera zasoby do zawartości strony
         $device = $deviceRepo->find($device_id);
-
+        
+        $registers = $registerRepo->getAllOrderByAdr($device_id);
+        
+        
         $form = $this->createForm(DeviceType::class, $device, array(
             'action' => $this->generateUrl('bms_configuration_device', array('comm_id' => $comm_id, 'device_id' => $device_id)),
             'method' => 'POST'
@@ -145,7 +148,7 @@ class DefaultController extends Controller {
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
             $template = $this->container
-                            ->get('templating')->render('BmsConfigurationBundle::device.html.twig', ['comms' => $communicationTypes, 'device' => $device, 'form' => $form->createView()]);
+                            ->get('templating')->render('BmsConfigurationBundle::device.html.twig', ['comms' => $communicationTypes, 'device' => $device, 'registers' => $registers, 'form' => $form->createView()]);
 
             return new JsonResponse(array('ret' => $template));
         } else {
