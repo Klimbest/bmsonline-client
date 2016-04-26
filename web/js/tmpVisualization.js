@@ -386,12 +386,18 @@ function editPanel(panel_id, register) {
                     $("div.main-row div.well").append(ret['template']);
                     loadPanelList(ret["panelList"]);
                     setPanelEvents();
+                    setValue($("div#" + ret["panel_id"] + ".bms-panel"), ret['register']);
                 }
             });
             $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
         } else {
             alert(fail_log);
-
+        }
+        
+        function setValue(panel, register){
+            var displayPrecision = panel.children("span").attr("value");
+            var value = parseFloat(register.value).toFixed(parseInt(displayPrecision));
+            panel.children("span").text(value);
         }
     }
 }

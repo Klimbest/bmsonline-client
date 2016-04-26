@@ -171,6 +171,8 @@ class PanelController extends Controller {
             if ($type == "variable") {
                 $registerName = $request->request->get("contentSource");
                 $register = $registerRepo->findOneBy(array('name' => $registerName));
+                $reg["id"] = $register->getId();
+                $reg["value"] = $register->getRegisterCurrentData()->getFixedValue();
                 $contentSource = $register->getId();
             } else {
                 $contentSource = $request->request->get("contentSource");
@@ -209,6 +211,7 @@ class PanelController extends Controller {
 
             $em->flush();
             $ret["panel_id"] = $panel_id;
+            $ret["register"] = $reg;
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
             $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
             $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
