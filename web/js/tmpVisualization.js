@@ -1518,9 +1518,48 @@ function ajaxChangePage(data) {
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
             createPage(ret['page'], ret['panelList']);
+            setVariables(ret['registers']);
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    
+    function setVariables(registers) {
+        $.each(registers, function (key, value) {
+            if (value !== null) {                
+                var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
+                var roundValue = parseFloat(value).toFixed(displayPrecision);
+            }
+            $("div.bms-panel").children("span#" + key).empty().append(roundValue);
+            
+            if($("div.bms-panel-widget").find("div#value" + key).length > 0){
+                var rangeMin = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
+                var rangeMax = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
+                
+                var widgetValue = (value - rangeMin)/(rangeMax - rangeMin) * 100;
+                if (widgetValue < 0) {
+                    widgetValue = 0;
+                    $("div.bms-panel-widget").find("div#value" + key).hide();
+                }
+                $("div.bms-panel-widget").find("div#value" + key).show().animate({
+                    left: widgetValue + "%"
+                }, 2000);
+            }
+            if($("div.bms-panel-widget").find("div#set" + key).length > 0){
+                var rangeMin = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMin").text().trim());
+                var rangeMax = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMax").text().trim());
+                var widgetValue = (value - rangeMin)/(rangeMax - rangeMin) * 100;
+                if (widgetValue < 0) {
+                    widgetValue = 0;
+                    $("div.bms-panel-widget").find("div#set" + key).hide();
+                }
+                $("div.bms-panel-widget").find("div#set" + key).show().animate({
+                    left: widgetValue + "%"
+                }, 2000);
+            }
+            
+        });
+    }
+    
 }
 //utworzenie nowej strony
 function createPage(page, panelList) {
