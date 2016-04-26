@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * TechnicalInformation
  *
  * @ORM\Table(name="technical_information")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BmsConfigurationBundle\Entity\TechnicalInformationRepository")
  */
 class TechnicalInformation
 {
@@ -34,7 +34,15 @@ class TechnicalInformation
      * @ORM\Column(name="status", type="boolean")
      */
     private $status;    
-
+    
+    /**
+  
+     * @var type   * @var \DateTime
+     *
+     * @ORM\Column(name="time", type="datetime", nullable=false)
+     */
+    private $time;
+    
     /**
      * Get id
      *
@@ -92,5 +100,29 @@ class TechnicalInformation
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set time
+     *
+     * @param \DateTime $time
+     *
+     * @return TechnicalInformation
+     */
+    public function setTime($time)
+    {
+        $this->time = $time;
+
+        return $this;
+    }
+
+    /**
+     * Get time
+     *
+     * @return \DateTime
+     */
+    public function getTime()
+    {
+        return $this->time;
     }
 }

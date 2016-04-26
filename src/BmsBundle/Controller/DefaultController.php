@@ -52,24 +52,23 @@ class DefaultController extends Controller {
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
             $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
-
+            $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
+            
             $page_id = $request->get("page_id");
-            isset($page_id) ? $page = $pageRepo->find($page_id) : null;
-
+            //get all panels for page
             $panels = $panelRepo->findVariablePanelsForPage($page_id);
-            $registers = array();
             foreach ($panels as $p) {
                 $rid = $p->getContentSource();
                 $register = $registerRepo->find($rid);
                 $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
             }
-            
+            //get all terms
             $terms = $termRepo->findAll();
             foreach ($terms as $t){
                 $register = $t->getRegister();
                 $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
             }
-            
+            //get all bar widgets
             $widgets = $widgetBarRepo->findAll();
             foreach ($widgets as $w){
                 if($w->getSetRegisterId() != null){
@@ -79,17 +78,10 @@ class DefaultController extends Controller {
                 $register = $w->getValueRegisterId();
                 $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
             }
-            
-            $regsForTime = $registerRepo->findAll();
-            $time = 0;
-            foreach ($regsForTime as $rft) {
-                $lastRead = date_timestamp_get($rft->getRegisterCurrentData()->getTimeOfUpdate());
-                if ($lastRead > $time) {
-                    $time = $lastRead;
-                }
-            }
-
-            $ret["time_of_update"] = $time;
+            //get last hello from RPi            
+            $time = $technicalInformationRepo->getRpiStatus();
+                       
+            $ret['state'] = $time[0]["time"]->getTimestamp();
             $ret['registers'] = $registers;
             return new JsonResponse($ret);
         } else {

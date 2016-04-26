@@ -64,29 +64,40 @@ function ajaxRefreshPage(terms) {
             i = setInterval(function () {
                 $("span.timer").empty().append(x--);
             }, 1000);
-            var now = new Date;
-            now = Date.parse(now);
-            var readDelay = now / 1000 - ret['time_of_update'];
-            if (readDelay >= 300) {
-                $("div.variable-panel span").empty();
-                if (readDelay / 60 < 60) {
-                    $(".error-message span").empty().append("Od " + Math.round(readDelay / 60) + " minut nie ma nowych danych!").show();
-                } else if (readDelay / 60 / 60 < 24) {
-                    $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60) + " godzin nie ma nowych danych!").show();
-                } else {
-                    $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60 / 24) + " dni nie ma nowych danych!").show();
-                }
-            } else {
-                $(".error-message span").empty();
-            }
-            var registers = ret['registers'];
-            setVariables(registers);
-            makeTerms(terms, registers);
+                        
+            setState(ret['state']);
+            setVariables(ret['registers']);
+            makeTerms(terms, ret['registers']);
         }
     });
     clearInterval(i);
     $("span.timer").removeClass("label-primary").addClass("label-danger");
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+
+    function setState(time){
+        var now = Date.parse(new Date);
+        var readDelay = now / 1000 - time;
+        $("span.stats").empty();
+        if (readDelay >= 300) {
+            var errorConnection = "<span class='fa-stack fa-lg blink'>\n\
+                                        <i class='fa fa-wifi fa-stack-1x'></i>\n\
+                                        <i class='fa fa-ban fa-stack-2x fa-red'></i>\n\
+                                   </span>";
+            
+            $("span.stats").append(errorConnection);
+            
+            $("div.variable-panel span").empty();
+            if (readDelay / 60 < 60) {
+                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60) + " minut nie ma nowych danych!").show();
+            } else if (readDelay / 60 / 60 < 24) {
+                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60) + " godzin nie ma nowych danych!").show();
+            } else {
+                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60 / 24) + " dni nie ma nowych danych!").show();
+            }
+        } else {
+            $(".error-message span").empty();
+        }
+    }
 
     function setVariables(registers) {
         $.each(registers, function (key, value) {
