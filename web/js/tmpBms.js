@@ -78,15 +78,16 @@ function ajaxRefreshPage(terms) {
         var now = Date.parse(new Date);
         var readDelay = now / 1000 - time;
         $("span.stats").empty();
+        $(".error-message div").remove();
+        $(".error-message").hide();
+        
         if (readDelay >= 300) {
             var errorConnection = "<span class='fa-stack fa-lg blink'>\n\
                                         <i class='fa fa-wifi fa-stack-1x'></i>\n\
                                         <i class='fa fa-ban fa-stack-2x fa-red'></i>\n\
                                    </span>";
             $("div.variable-panel span").empty();
-            $("span.stats").append(errorConnection);
-        } else {
-            $(".error-message span").empty();
+            $(".error-message").show().append(errorConnection);
         }  
 //            $("div.variable-panel span").empty();
 //            if (readDelay / 60 < 60) {
@@ -97,10 +98,11 @@ function ajaxRefreshPage(terms) {
 //                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60 / 24) + " dni nie ma nowych danych!").show();
 //            }
 //        } 
+
         $.each(devicesStatus, function(){
             if(this.status > 0){
                 var device_id = this.name.substring(2, 3);
-                $(".error-message span").append("Device: " + device_id + " błędny odczyt o " + this.time.date.substring(0, 19) + " sprawdź połączenie modbus!");
+                $(".error-message").show().append("<div class='row'><div class='col-md-12'><span class='label label-danger'>Device: " + device_id + " błędny odczyt o " + this.time.date.substring(0, 19) + " sprawdź połączenie modbus!</span></div></div>");
                 //console.log("Device: " + this.name.substring(2, 3) + " błędny odczyt o " + this.time.date.substring(0, 19) + " sprawdź połączenie modbus!");
             }
         });
