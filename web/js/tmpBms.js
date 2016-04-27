@@ -97,9 +97,11 @@ function ajaxRefreshPage(terms) {
 //                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60 / 24) + " dni nie ma nowych danych!").show();
 //            }
 //        } 
-        devicesStatus.each(function(){
+        $.each(devicesStatus, function(){
             if(this.status > 0){
-                console.log(this.name, this.time);
+                var device_id = this.name.substring(2, 3);
+                $(".error-message span").append("Device: " + device_id + " błędny odczyt o " + this.time.date.substring(0, 19) + " sprawdź połączenie modbus!");
+                //console.log("Device: " + this.name.substring(2, 3) + " błędny odczyt o " + this.time.date.substring(0, 19) + " sprawdź połączenie modbus!");
             }
         });
 
