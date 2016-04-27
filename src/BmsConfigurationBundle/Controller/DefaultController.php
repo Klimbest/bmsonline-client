@@ -512,6 +512,7 @@ class DefaultController extends Controller {
         $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
         $ti = $technicalInformationRepo->findOneById(1);
         $ti->setStatus(1);
+        $ti->setTime();
         $em->persist($ti);        
     }
 }

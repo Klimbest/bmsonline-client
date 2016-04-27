@@ -71,6 +71,13 @@ class Device
     private $active;
     
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="scan_state", type="integer", nullable=true)
+     */
+    private $scanScate;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="localization", type="string", length=255, nullable=true)
@@ -265,5 +272,29 @@ class Device
     public function getLocalization()
     {
         return $this->localization;
+    }
+
+    /**
+     * Set scanScate
+     *
+     * @param integer $scanScate
+     *
+     * @return Device
+     */
+    public function setScanScate($scanScate)
+    {
+        $this->scanScate = $scanScate;
+
+        return $this;
+    }
+
+    /**
+     * Get scanScate
+     *
+     * @return integer
+     */
+    public function getScanScate()
+    {
+        return $this->scanScate;
     }
 }

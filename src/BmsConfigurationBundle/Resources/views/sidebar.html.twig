@@ -48,8 +48,8 @@
                                             <ul class="nav register-level">
                                                 <li>
                                                     <div class="row" {#style="overflow: auto; max-height: 200px;"#}>
-                                                        {% if registers|length > 0 %}
-                                                            {% for register in registers %}
+                                                        {% if device.registers|length > 0 %}
+                                                            {% for register in device.registers %}
                                                                 <div id="{{register.id}}" class="text-center">
                                                                     {{ register.registerAddress }}
                                                                 </div>

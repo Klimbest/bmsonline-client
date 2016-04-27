@@ -105,13 +105,12 @@ class TechnicalInformation
     /**
      * Set time
      *
-     * @param \DateTime $time
      *
      * @return TechnicalInformation
      */
-    public function setTime($time)
+    public function setTime()
     {
-        $this->time = $time;
+        $this->time = new \DateTime();
 
         return $this;
     }
@@ -125,4 +124,7 @@ class TechnicalInformation
     {
         return $this->time;
     }
+    
+    
+    
 }
