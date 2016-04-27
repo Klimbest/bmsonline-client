@@ -65,7 +65,7 @@ function ajaxRefreshPage(terms) {
                 $("span.timer").empty().append(x--);
             }, 1000);
                         
-            setState(ret['state']);
+            setState(ret['state'], ret['devicesStatus']);
             setVariables(ret['registers']);
             makeTerms(terms, ret['registers']);
         }
@@ -74,7 +74,7 @@ function ajaxRefreshPage(terms) {
     $("span.timer").removeClass("label-primary").addClass("label-danger");
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 
-    function setState(time){
+    function setState(time, devicesStatus){
         var now = Date.parse(new Date);
         var readDelay = now / 1000 - time;
         $("span.stats").empty();
@@ -97,6 +97,12 @@ function ajaxRefreshPage(terms) {
 //                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60 / 24) + " dni nie ma nowych danych!").show();
 //            }
 //        } 
+        devicesStatus.each(function(){
+            if(this.status > 0){
+                console.log(this.name, this.time);
+            }
+        });
+
     }
 
     function setVariables(registers) {
