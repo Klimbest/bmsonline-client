@@ -17,4 +17,10 @@ class TechnicalInformationRepository extends \Doctrine\ORM\EntityRepository
                         ->getResult();
     }
     
+    public function getDevicesStatus(){
+        return $this->getEntityManager()
+                        ->createQuery('SELECT ti FROM BmsConfigurationBundle:TechnicalInformation AS ti WHERE ti.name LIKE \'%_errors\' AND ti.status >= 0')
+                        ->getArrayResult();
+    }
+    
 }

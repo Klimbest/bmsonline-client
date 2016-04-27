@@ -24,71 +24,71 @@
             </a>
             <button id="close-cookie" type="button" class="btn btn-success btn-xs">Ok, rozumiem</button>
         </div>#}
-        <div class="container-fluid content-container">
-            <nav class="navbar navbar-default " role="navigation">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="sr-only">Rozwiń nawigację</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="{{path('bms_index')}}">
-                            <img src="{{ asset('images/logo.jpg') }}">
-                        </a>
-                    </div>                    
-                    <div class="collapse navbar-collapse">
-                        <ul class="nav navbar-top-links navbar-right">
-                            <div class="text-right">
-                                <span class="stats"></span>
-                                {% block nav %}
-                                {% endblock %}
-                                <a href="{{path('bms_index')}}">
-                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-building fa-fw"></i> BMS</button>
+    <div class="container-fluid content-container">
+        <nav class="navbar navbar-default " role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Rozwiń nawigację</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{path('bms_index')}}">
+                        <img src="{{ asset('images/logo.jpg') }}">
+                    </a>
+                </div>                    
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-top-links navbar-right">
+                        <div class="text-right">
+                            <span class="stats"></span>
+                            {% block nav %}
+                            {% endblock %}
+                            <a href="{{path('bms_index')}}">
+                                <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-building fa-fw"></i> BMS</button>
+                            </a>
+                            <a href="{{path('bms_data_analyze_index')}}">
+                                <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-line-chart"></i> Analiza danych</button>
+                            </a>
+                            {#                                {% if is_granted('ROLE_ADMIN') %}#}
+                            <a href="{{path('bms_configuration_index')}}">
+                                <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-wrench"></i> Konfiguracja</button>
+                            </a>
+                            <a href="{{path('bms_visualization_index')}}">
+                                <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-paint-brush"></i> Wizualizacja</button>
+                            </a>
+                            {#                                {% endif %}#}
+                            <a href="{{path('fos_user_profile_show')}}">
+                                <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-user"></i> Karta użytkownika</button>
+                            </a>
+
+                            {% if app.user %}
+                                <a href="{{path('fos_user_security_logout')}}">
+                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-sign-out"></i> Wyloguj</button>                                
                                 </a>
-                                <a href="{{path('bms_data_analyze_index')}}">
-                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-line-chart"></i> Analiza danych</button>
-                                </a>
-{#                                {% if is_granted('ROLE_ADMIN') %}#}
-                                    <a href="{{path('bms_configuration_index')}}">
-                                        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-wrench"></i> Konfiguracja</button>
-                                    </a>
-                                    <a href="{{path('bms_visualization_index')}}">
-                                        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-paint-brush"></i> Wizualizacja</button>
-                                    </a>
-{#                                {% endif %}#}
-                                <a href="{{path('fos_user_profile_show')}}">
-                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-user"></i> Karta użytkownika</button>
-                                </a>
+                            {% endif %}
 
-                                {% if app.user %}
-                                    <a href="{{path('fos_user_security_logout')}}">
-                                        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-sign-out"></i> Wyloguj</button>                                
-                                    </a>
-                                {% endif %}
-
-                            </div>
-                            <div class="text-right">
-                                {% if app.user %}
-                                    <small>Zalogowany jako <strong>{{ app.user.username }}</strong></small>
-                                {% else %}  
-                                    <small>Jesteś niezalogowany</small>
-                                {% endif %}
-                            </div>
-                        </ul>
-                    </div>
-
-                    {% block sidebar %}
-                    {% endblock %}
-
+                        </div>
+                        <div class="text-right">
+                            {% if app.user %}
+                                <small>Zalogowany jako <strong>{{ app.user.username }}</strong></small>
+                            {% else %}  
+                                <small>Jesteś niezalogowany</small>
+                            {% endif %}
+                        </div>
+                    </ul>
                 </div>
-            </nav>
 
-            {% block body %}
+                {% block sidebar %}
+                {% endblock %}
 
-            {% endblock %}  
-        </div>
+            </div>
+        </nav>
+
+        {% block body %}
+
+        {% endblock %}  
+    </div>
         <div class="row well footer-well navbar-fixed-bottom">
             <div class="col-xs-3 col-xs-offset-1">
                 Copyright: Klimbest © 2015<br/>

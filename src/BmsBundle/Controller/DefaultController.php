@@ -78,7 +78,9 @@ class DefaultController extends Controller {
                 $register = $w->getValueRegisterId();
                 $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
             }
-            //get last hello from RPi            
+            //get last hello from RPi      
+            $ret['devicesStatus'] = $devicesStatus = $technicalInformationRepo->getDevicesStatus();
+            
             $time = $technicalInformationRepo->getRpiStatus();
                        
             $ret['state'] = $time[0]["time"]->getTimestamp();

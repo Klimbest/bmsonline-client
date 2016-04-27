@@ -83,20 +83,20 @@ function ajaxRefreshPage(terms) {
                                         <i class='fa fa-wifi fa-stack-1x'></i>\n\
                                         <i class='fa fa-ban fa-stack-2x fa-red'></i>\n\
                                    </span>";
-            
-            $("span.stats").append(errorConnection);
-            
             $("div.variable-panel span").empty();
-            if (readDelay / 60 < 60) {
-                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60) + " minut nie ma nowych danych!").show();
-            } else if (readDelay / 60 / 60 < 24) {
-                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60) + " godzin nie ma nowych danych!").show();
-            } else {
-                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60 / 24) + " dni nie ma nowych danych!").show();
-            }
+            $("span.stats").append(errorConnection);
         } else {
             $(".error-message span").empty();
-        }
+        }  
+//            $("div.variable-panel span").empty();
+//            if (readDelay / 60 < 60) {
+//                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60) + " minut nie ma nowych danych!").show();
+//            } else if (readDelay / 60 / 60 < 24) {
+//                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60) + " godzin nie ma nowych danych!").show();
+//            } else {
+//                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60 / 24) + " dni nie ma nowych danych!").show();
+//            }
+//        } 
     }
 
     function setVariables(registers) {

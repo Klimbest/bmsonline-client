@@ -29,15 +29,14 @@ class TechnicalInformation
     private $name;
     
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="status", type="boolean")
+     * @ORM\Column(name="status", type="integer")
      */
     private $status;    
     
     /**
-  
-     * @var type   * @var \DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="time", type="datetime", nullable=false)
      */
