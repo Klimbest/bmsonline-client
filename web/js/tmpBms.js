@@ -6,7 +6,7 @@ var countToRefresh = 0;
 $(document).ready(function () {
     ajaxChangePage(1);
     setInterval(clock, 1000);
-    setInterval(counter, 1000);
+    setInterval(counter, 400);
 
 });
 
@@ -25,7 +25,6 @@ function ajaxChangePage(page_id) {
             $(".content-container").children("div").remove();
             $(".content-container").append(ret["template"]).fadeIn("slow");
             terms = ret['terms'];
-            countToRefresh = 0;
             ajaxRefreshPage(terms);
             setInterval(function () {
                 ajaxRefreshPage(terms);
@@ -37,14 +36,14 @@ function ajaxChangePage(page_id) {
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 
     function minBrowserSizeGuard() {
-        if ($(window).width() < parseInt($(".page").css("width")) + 30) {
+        if ($(window).width() < parseInt($(".page").css("width")) + 45) {
             var label = "<div class='text-center error-label'><h3><span class='label label-primary'>Za mała szerokość przeglądarki</span></h3></div>";
 
             $("div.content-container").children("div:not('.footer-well')").hide();
             $("div.content-container").append(label);
             fire = true;
         }
-        if (fire && $(window).width() >= parseInt($(".page").css("width")) + 30) {
+        if (fire && $(window).width() >= parseInt($(".page").css("width")) + 45) {
             $("div.content-container").children("div:not('.footer-well')").show();
             $("div.error-label").remove();
         }
@@ -223,9 +222,8 @@ function ajaxRefreshPage(terms) {
 function counter() {
     
     countToRefresh++;
-    if ($("span.timer").length > 0) {
-        $("span.timer").empty().append(10 - countToRefresh);
-        $("div.timer div.progress-bar").css({width: countToRefresh*10+"%"});
+    if ($("div.well.page").length > 0) {
+        $("div.timer div.progress-bar").css({width: countToRefresh*400/100+"%"});
     }
 }
 

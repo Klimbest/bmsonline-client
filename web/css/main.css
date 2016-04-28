@@ -56,12 +56,15 @@ a button{
 }
 
 .navbar{
-    margin-bottom: 5px;
+    margin-bottom: -1px;
     border-radius: 0px;
     border-color: #337AB7;
     border-top: none;
-    min-height: 70px;
 }
+.navbar-right{
+    margin-right: 0px;
+}
+
 .navbar-btn,
 .btn-default,
 .btn-default:active,
@@ -84,9 +87,7 @@ a button{
     background-color: #337AB7;
 }
 .navbar-brand { 
-    max-height: 40px;
-    max-width: 30%; 
-    overflow: visible;
+    padding: 15px 15px;
 }
 
 .well{
