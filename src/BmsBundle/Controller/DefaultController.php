@@ -48,11 +48,11 @@ class DefaultController extends Controller {
         if ($request->isXmlHttpRequest()) {
 
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
-            $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
             $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
+            $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
             
             $page_id = $request->get("page_id");
             //get all panels for page
@@ -78,11 +78,18 @@ class DefaultController extends Controller {
                 $register = $w->getValueRegisterId();
                 $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
             }
-            //get last hello from RPi      
-            $ret['devicesStatus'] = $devicesStatus = $technicalInformationRepo->getDevicesStatus();
+            $devicesStatus = $technicalInformationRepo->getDevicesStatus();
             
+            foreach($devicesStatus as &$ds){
+                $devices_id = explode("_", $ds['name']);                
+                $device = $deviceRepo->find((int)$devices_id[1]);
+                $ds['name'] = $device->getName();
+            }            
+            
+            //get last hello from RPi      
             $time = $technicalInformationRepo->getRpiStatus();
-                       
+            
+            $ret['devicesStatus'] = $devicesStatus;
             $ret['state'] = $time[0]["time"]->getTimestamp();
             $ret['registers'] = $registers;
             return new JsonResponse($ret);

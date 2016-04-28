@@ -74,6 +74,7 @@ function ajaxRefreshPage(terms) {
         var now = Date.parse(new Date);
         var readDelay = now / 1000 - time;
         var error = 0;
+        var slaves = "";
         $("span.stats").empty();
         $(".error-message div").remove();
         $(".error-message").hide();
@@ -82,7 +83,7 @@ function ajaxRefreshPage(terms) {
             if (this.status > 0) {
                 error = 1;
                 //var device_id = this.name.substring(2, 3);
-
+                slaves = slaves + " " + this.name;
                 //console.log("Device: " + this.name.substring(2, 3) + " błędny odczyt o " + this.time.date.substring(0, 19) + " sprawdź połączenie modbus!");
             }
         });
@@ -100,7 +101,7 @@ function ajaxRefreshPage(terms) {
         if (error !== 0) {
             $("div.variable-panel span").empty();
             $("span#errorModbusConnection img").attr("src", "/images/system/disconnected.png").addClass("blink");
-            $(".error-message").show().append("<div class='row'><div class='col-md-12'><span class='label label-danger'>Brak synchronizacji danych</span></div></div>");
+            $(".error-message").show().append("<div class='row'><div class='col-md-12'><span class='label label-danger'>Brak synchronizacji danych (slave: " + slaves + ")</span></div></div>");
         } else {
             $("span#errorModbusConnection img").attr("src", "/images/system/connected.png").removeClass("blink");
         }
