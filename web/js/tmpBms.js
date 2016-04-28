@@ -219,11 +219,12 @@ function ajaxRefreshPage(terms) {
 }
 
 function counter() {
+    
+    countToRefresh++;
     if ($("span.timer").length > 0) {
         $("span.timer").empty().append(10 - countToRefresh);
         $("div.timer div.progress-bar").css({width: countToRefresh*10+"%"});
     }
-    countToRefresh++;
 }
 
 function clock() {
