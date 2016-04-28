@@ -13,7 +13,7 @@ div.panel-list-controls{
     height: 80vh;
     z-index: 1;
     position: absolute;
-    margin-top: 0px;
+    margin-top: 82px;
 }
 ul.dropdown-menu{
     background-color: rgba(0,0,0,0);
@@ -277,9 +277,6 @@ div.row.register-choice,
 div.row.panel-choice{
     border-radius: 10px 10px 10px 10px;
     cursor: pointer;
-}
-div.progress{
-    height: 10px;
 }
 
 div.progress-label{

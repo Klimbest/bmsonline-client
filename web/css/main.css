@@ -131,6 +131,7 @@ embed{
 
 .progress{
     background-color: #aaaaaa;
+    height: 10px;
 }
 
 .error-message{
