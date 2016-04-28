@@ -129,10 +129,14 @@ embed{
     height: 80vh;
 }
 
+.progress{
+    background-color: #aaaaaa;
+}
+
 .error-message{
     display: none;
     position: absolute;
-    top: 50px;
+    top: 100px;
     z-index:999;
     background-color: rgba(255,255,255,0.75);
     border: 2px solid black;
