@@ -395,9 +395,11 @@ function editPanel(panel_id, register) {
         }
         
         function setValue(panel, register){
-            var displayPrecision = panel.children("span").attr("value");
-            var value = parseFloat(register.value).toFixed(parseInt(displayPrecision));
-            panel.children("span").text(value);
+            if(panel.hasClass("bms-panel-variable")){
+                var displayPrecision = panel.children("span").attr("value");
+                var value = parseFloat(register.value).toFixed(parseInt(displayPrecision));
+                panel.children("span").text(value);
+            }
         }
     }
 }
@@ -1396,7 +1398,7 @@ function createDialogPageAddSettings() {
 
     return $("div.dialog-page-add-settings").dialog({
         autoOpen: false,
-        height: 300,
+        height: 450,
         width: 450,
         modal: true,
         buttons: [
@@ -1406,7 +1408,8 @@ function createDialogPageAddSettings() {
                     var data = {
                         width: $("div.dialog-page-add-settings input#width").val(),
                         height: $("div.dialog-page-add-settings input#height").val(),
-                        name: $("div.dialog-page-add-settings input#name").val()
+                        name: $("div.dialog-page-add-settings input#name").val(),
+                        backgroundColor: $("div.dialog-page-add-settings input#backgroundColor").val()
                     };
                     ajaxAddPage(data);
                     $(this).dialog("close");

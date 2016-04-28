@@ -93,8 +93,10 @@ function ajaxRefreshPage(terms) {
             $("div.variable-panel span").empty();
             $("span#noInternetConnection img").attr("src", "/images/system/ethernetOff.png").addClass("blink");
             $(".error-message").show().append("<div class='row'><div class='col-md-12'><span class='label label-danger'>Brak połączenia internetowego</span></div></div>");
+            $("span#errorModbusConnection").hide();
         } else {
             $("span#noInternetConnection img").attr("src", "/images/system/ethernetOn.png").removeClass("blink");
+            $("span#errorModbusConnection").show();
         }
 
         if (error !== 0) {

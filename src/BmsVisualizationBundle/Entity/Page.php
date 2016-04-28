@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Page
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BmsVisualizationBundle\Entity\PageRepository")
  */
 class Page {
 
@@ -37,6 +37,13 @@ class Page {
      */
     private $width;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="backgroundColor", type="string", length=20)
+     */
+    private $backgroundColor;
+    
     /**
      * @var integer
      *
@@ -162,5 +169,29 @@ class Page {
     public function getPanels()
     {
         return $this->panels;
+    }
+
+    /**
+     * Set backgroundColor
+     *
+     * @param string $backgroundColor
+     *
+     * @return Page
+     */
+    public function setBackgroundColor($backgroundColor)
+    {
+        $this->backgroundColor = $backgroundColor;
+
+        return $this;
+    }
+
+    /**
+     * Get backgroundColor
+     *
+     * @return string
+     */
+    public function getBackgroundColor()
+    {
+        return $this->backgroundColor;
     }
 }

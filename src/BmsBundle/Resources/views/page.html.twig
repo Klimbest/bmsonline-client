@@ -12,6 +12,7 @@
     <div id="{{page.id}}" class="well page" style="
          width: {{page.width}}px;
          height: {{page.height}}px;
+         background-color: {{page.backgroundColor}};
          ">
         {% for panel in page.panels %}
             {% include 'BmsVisualizationBundle::panel.html.twig' %}

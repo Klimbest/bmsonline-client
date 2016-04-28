@@ -176,6 +176,7 @@ class PanelController extends Controller {
                 $contentSource = $register->getId();
             } else {
                 $contentSource = $request->request->get("contentSource");
+                $reg = null;
             }
 
             if ($request->request->get("visibility") == "true") {

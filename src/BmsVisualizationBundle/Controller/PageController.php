@@ -21,11 +21,13 @@ class PageController extends Controller {
             $height = $request->get("height");
             $width = $request->get("width");
             $name = $request->get("name");
+            $backgroundColor = $request->get("backgroundColor");
             //dodanie nowej strony
             $page = new Page();
             $page->setHeight($height)
                     ->setWidth($width)
-                    ->setName($name);
+                    ->setName($name)
+                    ->setBackgroundColor($backgroundColor);
 
             $em->persist($page);
             $em->flush();
