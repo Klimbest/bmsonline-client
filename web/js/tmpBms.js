@@ -87,7 +87,7 @@ function ajaxRefreshPage(terms) {
             }
         });
 
-        if (readDelay >= 75) {
+        if (readDelay >= 300) {
             $("div.variable-panel span").empty();
             $("span#noInternetConnection img").attr("src", "/images/system/ethernetOff.png").addClass("blink");
             $(".error-message").show().append("<div class='row'><div class='col-xs-12'><span class='label label-danger'>Brak połączenia internetowego</span></div></div>");
