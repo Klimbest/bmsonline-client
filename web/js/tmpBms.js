@@ -77,18 +77,35 @@ function ajaxRefreshPage(terms) {
     function setState(time, devicesStatus){
         var now = Date.parse(new Date);
         var readDelay = now / 1000 - time;
+        var error = 0;
         $("span.stats").empty();
         $(".error-message div").remove();
         $(".error-message").hide();
         
-        if (readDelay >= 300) {
-            var errorConnection = "<span class='fa-stack fa-lg blink'>\n\
-                                        <i class='fa fa-wifi fa-stack-1x'></i>\n\
-                                        <i class='fa fa-ban fa-stack-2x fa-red'></i>\n\
-                                   </span>";
+        $.each(devicesStatus, function(){
+            if(this.status > 0){
+                error = 1;
+                //var device_id = this.name.substring(2, 3);
+                
+                //console.log("Device: " + this.name.substring(2, 3) + " błędny odczyt o " + this.time.date.substring(0, 19) + " sprawdź połączenie modbus!");
+            }
+        });
+
+        if (readDelay >= 75) {
             $("div.variable-panel span").empty();
-            $(".error-message").show().append(errorConnection);
-        }  
+            $("span#noInternetConnection img").attr("src", "/images/system/ethernetOff.png").addClass("blink");
+            $(".error-message").show().append("<div class='row'><div class='col-md-12'><span class='label label-danger'>Brak połączenia internetowego</span></div></div>");
+        }else{
+            $("span#noInternetConnection img").attr("src", "/images/system/ethernetOn.png").removeClass("blink");
+        }
+        
+        if(error !== 0 ){
+            $("div.variable-panel span").empty();            
+            $("span#errorModbusConnection img").attr("src", "/images/system/disconnected.png").addClass("blink");
+            $(".error-message").show().append("<div class='row'><div class='col-md-12'><span class='label label-danger'>Brak synchronizacji danych</span></div></div>");
+        }else{
+            $("span#errorModbusConnection img").attr("src", "/images/system/connected.png").removeClass("blink");
+        }
 //            $("div.variable-panel span").empty();
 //            if (readDelay / 60 < 60) {
 //                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60) + " minut nie ma nowych danych!").show();
@@ -98,14 +115,6 @@ function ajaxRefreshPage(terms) {
 //                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60 / 24) + " dni nie ma nowych danych!").show();
 //            }
 //        } 
-
-        $.each(devicesStatus, function(){
-            if(this.status > 0){
-                var device_id = this.name.substring(2, 3);
-                $(".error-message").show().append("<div class='row'><div class='col-md-12'><span class='label label-danger'>Device: " + device_id + " błędny odczyt o " + this.time.date.substring(0, 19) + " sprawdź połączenie modbus!</span></div></div>");
-                //console.log("Device: " + this.name.substring(2, 3) + " błędny odczyt o " + this.time.date.substring(0, 19) + " sprawdź połączenie modbus!");
-            }
-        });
 
     }
 

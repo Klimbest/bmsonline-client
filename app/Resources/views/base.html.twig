@@ -41,7 +41,13 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-top-links navbar-right">
                         <div class="text-right">
-                            <span class="stats"></span>
+                            <span id="errorModbusConnection" class="fa-stack fa-lg">
+                                <img src="/images/system/connected.png" class="img-responsive" />
+                            </span>                            
+                            <span id="noInternetConnection" class="fa-stack fa-lg">
+                                <img src="/images/system/ethernetOn.png" class="img-responsive" />
+                            </span>                                
+                            
                             {% block nav %}
                             {% endblock %}
                             <a href="{{path('bms_index')}}">
