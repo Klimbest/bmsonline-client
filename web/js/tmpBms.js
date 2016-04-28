@@ -14,7 +14,6 @@ function ajaxChangePage(page_id) {
     var data = {
         page_id: page_id
     };
-
     $.ajax({
         type: "POST",
         datatype: "application/json",
@@ -224,6 +223,8 @@ function counter() {
     countToRefresh++;
     if ($("div.well.page").length > 0) {
         $("div.timer div.progress-bar").css({width: countToRefresh*400/100+"%"});
+    }else{
+        $("div.timer div.progress-bar").css({width: "0%"});
     }
 }
 
