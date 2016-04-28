@@ -1,14 +1,12 @@
 /* global parseFloat */
 
-var i;
 var terms;
+var countToRefresh = 0;
 
 $(document).ready(function () {
     ajaxChangePage(1);
-    setInterval(function () {
-        ajaxRefreshPage(terms);
-    }, 10000);
     setInterval(clock, 1000);
+    setInterval(counter, 1000);
 
 });
 
@@ -27,7 +25,12 @@ function ajaxChangePage(page_id) {
             $(".content-container").children("div").remove();
             $(".content-container").append(ret["template"]).fadeIn("slow");
             terms = ret['terms'];
+            countToRefresh = 0;
             ajaxRefreshPage(terms);
+            setInterval(function () {
+                ajaxRefreshPage(terms);
+            }, 10000);
+
             $(window).resize(minBrowserSizeGuard);
         }
     });
@@ -60,33 +63,28 @@ function ajaxRefreshPage(terms) {
         success: function (ret) {
             $(".content-container").children(".fa-spinner").remove();
             $("span.timer").removeClass("label-danger").addClass("label-primary");
-            var x = 8;
-            i = setInterval(function () {
-                $("span.timer").empty().append(x--);
-            }, 1000);
-                        
             setState(ret['state'], ret['devicesStatus']);
             setVariables(ret['registers']);
             makeTerms(terms, ret['registers']);
         }
     });
-    clearInterval(i);
-    $("span.timer").removeClass("label-primary").addClass("label-danger");
+    countToRefresh = 0;
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 
-    function setState(time, devicesStatus){
+
+    function setState(time, devicesStatus) {
         var now = Date.parse(new Date);
         var readDelay = now / 1000 - time;
         var error = 0;
         $("span.stats").empty();
         $(".error-message div").remove();
         $(".error-message").hide();
-        
-        $.each(devicesStatus, function(){
-            if(this.status > 0){
+
+        $.each(devicesStatus, function () {
+            if (this.status > 0) {
                 error = 1;
                 //var device_id = this.name.substring(2, 3);
-                
+
                 //console.log("Device: " + this.name.substring(2, 3) + " błędny odczyt o " + this.time.date.substring(0, 19) + " sprawdź połączenie modbus!");
             }
         });
@@ -95,15 +93,15 @@ function ajaxRefreshPage(terms) {
             $("div.variable-panel span").empty();
             $("span#noInternetConnection img").attr("src", "/images/system/ethernetOff.png").addClass("blink");
             $(".error-message").show().append("<div class='row'><div class='col-md-12'><span class='label label-danger'>Brak połączenia internetowego</span></div></div>");
-        }else{
+        } else {
             $("span#noInternetConnection img").attr("src", "/images/system/ethernetOn.png").removeClass("blink");
         }
-        
-        if(error !== 0 ){
-            $("div.variable-panel span").empty();            
+
+        if (error !== 0) {
+            $("div.variable-panel span").empty();
             $("span#errorModbusConnection img").attr("src", "/images/system/disconnected.png").addClass("blink");
             $(".error-message").show().append("<div class='row'><div class='col-md-12'><span class='label label-danger'>Brak synchronizacji danych</span></div></div>");
-        }else{
+        } else {
             $("span#errorModbusConnection img").attr("src", "/images/system/connected.png").removeClass("blink");
         }
 //            $("div.variable-panel span").empty();
@@ -120,17 +118,17 @@ function ajaxRefreshPage(terms) {
 
     function setVariables(registers) {
         $.each(registers, function (key, value) {
-            if (value !== null) {                
+            if (value !== null) {
                 var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
                 var roundValue = parseFloat(value).toFixed(displayPrecision);
             }
             $("div.bms-panel").children("span#" + key).empty().append(roundValue);
-            
-            if($("div.bms-panel-widget").find("div#value" + key).length > 0){
+
+            if ($("div.bms-panel-widget").find("div#value" + key).length > 0) {
                 var rangeMin = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
                 var rangeMax = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
-                
-                var widgetValue = (value - rangeMin)/(rangeMax - rangeMin) * 100;
+
+                var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
                 if (widgetValue < 0) {
                     widgetValue = 0;
                     $("div.bms-panel-widget").find("div#value" + key).hide();
@@ -139,10 +137,10 @@ function ajaxRefreshPage(terms) {
                     left: widgetValue + "%"
                 }, 2000);
             }
-            if($("div.bms-panel-widget").find("div#set" + key).length > 0){
+            if ($("div.bms-panel-widget").find("div#set" + key).length > 0) {
                 var rangeMin = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMin").text().trim());
                 var rangeMax = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMax").text().trim());
-                var widgetValue = (value - rangeMin)/(rangeMax - rangeMin) * 100;
+                var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
                 if (widgetValue < 0) {
                     widgetValue = 0;
                     $("div.bms-panel-widget").find("div#set" + key).hide();
@@ -151,7 +149,7 @@ function ajaxRefreshPage(terms) {
                     left: widgetValue + "%"
                 }, 2000);
             }
-            
+
         });
     }
 
@@ -218,6 +216,14 @@ function ajaxRefreshPage(terms) {
             }
         }
     }
+}
+
+function counter() {
+    if ($("span.timer").length > 0) {
+        $("span.timer").empty().append(10 - countToRefresh);
+        $("div.timer div.progress-bar").css({width: countToRefresh*10+"%"});
+    }
+    countToRefresh++;
 }
 
 function clock() {
