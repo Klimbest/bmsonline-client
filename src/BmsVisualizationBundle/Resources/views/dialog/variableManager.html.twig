@@ -71,19 +71,11 @@
                         <div id="address" class="col-md-2">{{ register.registerAddress }}</div>
                         <div id="registerName" class="col-md-2 register_name">{{ register.name }}</div>
                         <div id="description" class="col-md-4">{{ register.description}}</div>
+                        <div id="value" class="col-md-4 hidden">{{register.registerCurrentData.fixedValue}}</div>
                     </div>
                 {% endfor %}
             {% endif %}
         </div>
-    </div>
-    {#<div class="col-md-6">
-        <label for="registers">Rejestry:</label>
-        <select class="form-control registers">
-            {% for register in registers %}
-                <option value="{{ register.name }}&{{register.registerCurrentData.fixedValue}}">{{ register.name }} - {{ register.description }}</option>
-            {% endfor %}
-        </select>
-    </div>#}
-    <input id="variable" type="hidden" value="" />
+    <input id="register" type="hidden" value="" />
 </div>
 

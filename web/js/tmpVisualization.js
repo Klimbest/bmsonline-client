@@ -630,14 +630,14 @@ function createVariableManager(fw) {
                 text: "Zapisz",
                 click: function () {
                     if (fw === "data-source") {
-                        var value = $("div.variable-manager select.registers").val();
+                        var value = $("div.variable-manager input#register").val();
                         var res = value.split("&");
                         $("div.dialog-panel-settings input#panel-source-content").val(res[0]);
                         $("div.dialog-panel-settings div.panel-preview span").empty().append(res[1]);
                         $("div.dialog-panel-settings input#panel-source-value").val(res[1]);
                         $(this).dialog('destroy').remove();
                     } else if (fw === "term-register") {
-                        var value = $("div.variable-manager select.registers").val();
+                        var value = $("div.variable-manager input#registers").val();
                         var res = value.split("&");
                         $("div.dialog-condition input#panel-term-register").val(res[0]);
                         $("div.dialog-condition input#panel-term-register-value").val(res[1]);
@@ -662,6 +662,7 @@ function createVariableManager(fw) {
     
     function setDialogButtons() {
         $("input#deviceSearch").keyup(function () {
+            $("input:not(#deviceSearch)").val("");
             $("div.register-choice").hide();
             var rows = $("div.register-choice").find("div#deviceName");
             if (this.value.length) {
@@ -674,6 +675,7 @@ function createVariableManager(fw) {
             }
         });
         $("input#functionSearch").keyup(function () {
+            $("input:not(#functionSearch)").val("");
             $("div.register-choice").hide();
             var rows = $("div.register-choice").find("div#function");
             if (this.value.length) {
@@ -686,6 +688,7 @@ function createVariableManager(fw) {
             }
         });
         $("input#addressSearch").keyup(function () {
+            $("input:not(#addressSearch)").val("");
             $("div.register-choice").hide();
             var rows = $("div.register-choice").find("div#address");
             if (this.value.length) {
@@ -698,6 +701,7 @@ function createVariableManager(fw) {
             }
         });
         $("input#registerSearch").keyup(function () {
+            $("input:not(#registerSearch)").val("");
             $("div.register-choice").hide();
             var rows = $("div.register-choice").find("div#registerName");
             if (this.value.length) {
@@ -710,6 +714,7 @@ function createVariableManager(fw) {
             }
         });
         $("input#descriptionSearch").keyup(function () {
+            $("input:not(#descriptionSearch)").val("");
             $("div.register-choice").hide();
             var rows = $("div.register-choice").find("div#description");
             if (this.value.length) {
@@ -720,6 +725,18 @@ function createVariableManager(fw) {
             } else{
                 rows.parent().show();
             }
+        });
+        
+        $("div.register-choice").click(function(){
+            var registerName = $(this).children("div#registerName").text();
+            var registerValue = $(this).children("div#value").text();
+            $("input#register").val(registerName + "&" + registerValue);
+        });        
+        
+        $("div.register-choice").hover(function(){
+            this.addClass("active");
+        },function(){
+            this.removeClass("active");
         });
     }
 }
