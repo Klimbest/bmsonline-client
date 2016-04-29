@@ -393,9 +393,9 @@ function editPanel(panel_id, register) {
         } else {
             alert(fail_log);
         }
-        
-        function setValue(panel, register){
-            if(panel.hasClass("bms-panel-variable")){
+
+        function setValue(panel, register) {
+            if (panel.hasClass("bms-panel-variable")) {
                 var displayPrecision = panel.children("span").attr("value");
                 var value = parseFloat(register.value).toFixed(parseInt(displayPrecision));
                 panel.children("span").text(value);
@@ -652,18 +652,75 @@ function createVariableManager(fw) {
                 }
             }],
         open: function () {
-            setDialog();
+            
             setDialogButtons();
         },
         close: function () {
             $(this).dialog('destroy').remove();
         }
     });
-    function setDialog() {
-        $("div.register-choice:not(div.register-choice.2)").hide();
-    }
+    
     function setDialogButtons() {
-
+        $("input#deviceSearch").keyup(function () {
+            $("div.register-choice").hide();
+            var rows = $("div.register-choice").find("div#deviceName");
+            if (this.value.length) {
+//                var data = this.value.split(" ");
+//                $.each(data, function (i, v) {
+                    rows.filter(":contains('" + this.value + "')").parent().show();
+//                });
+            } else{
+                rows.parent().show();
+            }
+        });
+        $("input#functionSearch").keyup(function () {
+            $("div.register-choice").hide();
+            var rows = $("div.register-choice").find("div#function");
+            if (this.value.length) {
+//                var data = this.value.split(" ");
+//                $.each(data, function (i, v) {
+                    rows.filter(":contains('" + this.value + "')").parent().show();
+//                });
+            } else{
+                rows.parent().show();
+            }
+        });
+        $("input#addressSearch").keyup(function () {
+            $("div.register-choice").hide();
+            var rows = $("div.register-choice").find("div#address");
+            if (this.value.length) {
+//                var data = this.value.split(" ");
+//                $.each(data, function (i, v) {
+                    rows.filter(":contains('" + this.value + "')").parent().show();
+//                });
+            } else{
+                rows.parent().show();
+            }
+        });
+        $("input#registerSearch").keyup(function () {
+            $("div.register-choice").hide();
+            var rows = $("div.register-choice").find("div#registerName");
+            if (this.value.length) {
+//                var data = this.value.split(" ");
+//                $.each(data, function (i, v) {
+                    rows.filter(":contains('" + this.value + "')").parent().show();
+//                });
+            } else{
+                rows.parent().show();
+            }
+        });
+        $("input#descriptionSearch").keyup(function () {
+            $("div.register-choice").hide();
+            var rows = $("div.register-choice").find("div#description");
+            if (this.value.length) {
+//                var data = this.value.split(" ");
+//                $.each(data, function (i, v) {
+                    rows.filter(":contains('" + this.value + "')").parent().show();
+//                });
+            } else{
+                rows.parent().show();
+            }
+        });
     }
 }
 function createImageManager(fw) {
@@ -1531,20 +1588,20 @@ function ajaxChangePage(data) {
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    
+
     function setVariables(registers) {
         $.each(registers, function (key, value) {
-            if (value !== null) {                
+            if (value !== null) {
                 var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
                 var roundValue = parseFloat(value).toFixed(displayPrecision);
             }
             $("div.bms-panel").children("span#" + key).empty().append(roundValue);
-            
-            if($("div.bms-panel-widget").find("div#value" + key).length > 0){
+
+            if ($("div.bms-panel-widget").find("div#value" + key).length > 0) {
                 var rangeMin = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
                 var rangeMax = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
-                
-                var widgetValue = (value - rangeMin)/(rangeMax - rangeMin) * 100;
+
+                var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
                 if (widgetValue < 0) {
                     widgetValue = 0;
                     $("div.bms-panel-widget").find("div#value" + key).hide();
@@ -1553,10 +1610,10 @@ function ajaxChangePage(data) {
                     left: widgetValue + "%"
                 }, 2000);
             }
-            if($("div.bms-panel-widget").find("div#set" + key).length > 0){
+            if ($("div.bms-panel-widget").find("div#set" + key).length > 0) {
                 var rangeMin = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMin").text().trim());
                 var rangeMax = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMax").text().trim());
-                var widgetValue = (value - rangeMin)/(rangeMax - rangeMin) * 100;
+                var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
                 if (widgetValue < 0) {
                     widgetValue = 0;
                     $("div.bms-panel-widget").find("div#set" + key).hide();
@@ -1565,10 +1622,10 @@ function ajaxChangePage(data) {
                     left: widgetValue + "%"
                 }, 2000);
             }
-            
+
         });
     }
-    
+
 }
 //utworzenie nowej strony
 function createPage(page, panelList) {
@@ -1767,7 +1824,7 @@ function loadPanelList(panelList) {
                 $(".main-row").append(ret["template"]);
 
                 editPanel(id, ret["register"]).dialog("open");
-                
+
             }
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();

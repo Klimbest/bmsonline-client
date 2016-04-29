@@ -130,15 +130,6 @@ class DefaultController extends Controller {
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $name = $form['name']->getData();
-            $description = $form['description']->getData();
-            $modbus_address = $form['modbusAddress']->getData();
-
-            $device->setName($name)
-                    ->setDescription($description)
-                    ->setModbusAddress($modbus_address);
-
-            $em->persist($device);
             $this->setDataToSync();
             $em->flush();
 
@@ -236,8 +227,7 @@ class DefaultController extends Controller {
      * @Route("/{comm_id}/add_device", name="bms_configuration_add_device", requirements={"comm_id" = "\d+"}, options={"expose"=true})
      */
     public function addDeviceAction($comm_id, Request $request) {
-        //ustawienie połączenia na bazę danego obiektu
-        $em = $this->getDoctrine()->getManager();
+        
         $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
         //pobiera aktywne porty(do menu)
         $communicationTypes = $communicationRepo->createQueryBuilder('ct')
@@ -255,19 +245,20 @@ class DefaultController extends Controller {
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $name = $form['name']->getData();
-            $description = $form['description']->getData();
-            $modbus_address = $form['modbusAddress']->getData();
-            $active = $form['active']->getData();
-            $localization = $form['localization']->getData();
-
-            $device->setName($name)
-                    ->setCommunicationType($comm)
-                    ->setDescription($description)
-                    ->setModbusAddress($modbus_address)
-                    ->setActive($active)
-                    ->setLocalization($localization);
-
+//            $name = $form['name']->getData();
+//            $description = $form['description']->getData();
+//            $modbus_address = $form['modbusAddress']->getData();
+//            $active = $form['active']->getData();
+//            $localization = $form['localization']->getData();
+//
+//            $device->setName($name)
+//                    ->setCommunicationType($comm)
+//                    ->setDescription($description)
+//                    ->setModbusAddress($modbus_address)
+//                    ->setActive($active)
+//                    ->setLocalization($localization);
+//
+            $em = $this->getDoctrine()->getManager();
             $em->persist($device);
             $this->setDataToSync();
             $em->flush();
