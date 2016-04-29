@@ -278,6 +278,13 @@ div.row.panel-choice{
     border-radius: 10px 10px 10px 10px;
     cursor: pointer;
 }
+div.row.register-choice.selected{
+    background-color: #337AB7;
+    color: #FFF;
+}
+div.row.register-choice:hover{
+    background-color: #005A78;
+}
 
 div.progress-label{
     height: 15px;

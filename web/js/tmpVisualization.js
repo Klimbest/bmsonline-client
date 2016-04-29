@@ -731,13 +731,10 @@ function createVariableManager(fw) {
             var registerName = $(this).children("div#registerName").text();
             var registerValue = $(this).children("div#value").text();
             $("input#register").val(registerName + "&" + registerValue);
+            $("div.register-choice").removeClass("selected");
+            $(this).addClass("selected");
         });        
         
-        $("div.register-choice").hover(function(){
-            this.addClass("active");
-        },function(){
-            this.removeClass("active");
-        });
     }
 }
 function createImageManager(fw) {
