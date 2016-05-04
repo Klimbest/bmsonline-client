@@ -662,7 +662,7 @@ function createVariableManager(fw) {
     
     function setDialogButtons() {
         $("input#deviceSearch").keyup(function () {
-            $("input:not(#deviceSearch)").val("");
+            $("div.variable-manager input:not(#deviceSearch)").val("");
             $("div.register-choice").hide();
             var rows = $("div.register-choice").find("div#deviceName");
             if (this.value.length) {
@@ -675,7 +675,7 @@ function createVariableManager(fw) {
             }
         });
         $("input#functionSearch").keyup(function () {
-            $("input:not(#functionSearch)").val("");
+            $("div.variable-manager input:not(#functionSearch)").val("");
             $("div.register-choice").hide();
             var rows = $("div.register-choice").find("div#function");
             if (this.value.length) {
@@ -688,7 +688,7 @@ function createVariableManager(fw) {
             }
         });
         $("input#addressSearch").keyup(function () {
-            $("input:not(#addressSearch)").val("");
+            $("div.variable-manager input:not(#addressSearch)").val("");
             $("div.register-choice").hide();
             var rows = $("div.register-choice").find("div#address");
             if (this.value.length) {
@@ -701,7 +701,7 @@ function createVariableManager(fw) {
             }
         });
         $("input#registerSearch").keyup(function () {
-            $("input:not(#registerSearch)").val("");
+            $("div.variable-manager input:not(#registerSearch)").val("");
             $("div.register-choice").hide();
             var rows = $("div.register-choice").find("div#registerName");
             if (this.value.length) {
@@ -714,7 +714,7 @@ function createVariableManager(fw) {
             }
         });
         $("input#descriptionSearch").keyup(function () {
-            $("input:not(#descriptionSearch)").val("");
+            $("div.variable-manager input:not(#descriptionSearch)").val("");
             $("div.register-choice").hide();
             var rows = $("div.register-choice").find("div#description");
             if (this.value.length) {
