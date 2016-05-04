@@ -652,89 +652,119 @@ function createVariableManager(fw) {
                 }
             }],
         open: function () {
-            
+
             setDialogButtons();
         },
         close: function () {
             $(this).dialog('destroy').remove();
         }
     });
-    
+
     function setDialogButtons() {
         $("input#deviceSearch").keyup(function () {
             $("div.variable-manager input:not(#deviceSearch)").val("");
-            $("div.register-choice").hide();
+            var data = this.value.toUpperCase().split("&");
             var rows = $("div.register-choice").find("div#deviceName");
-            if (this.value.length) {
-//                var data = this.value.split(" ");
-//                $.each(data, function (i, v) {
-                    rows.filter(":contains('" + this.value + "')").parent().show();
-//                });
-            } else{
+            if (this.value == "") {
                 rows.parent().show();
+                return;
             }
+            rows.parent().hide();
+            rows.filter(function (i, v) {
+                var $t = $(this);
+                for (var d = 0; d < data.length; ++d) {
+                    if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
+                        return true;
+                    }
+                }
+                return false;
+            }).parent().show();
         });
         $("input#functionSearch").keyup(function () {
             $("div.variable-manager input:not(#functionSearch)").val("");
-            $("div.register-choice").hide();
+            var data = this.value.toUpperCase().split("&");
             var rows = $("div.register-choice").find("div#function");
-            if (this.value.length) {
-//                var data = this.value.split(" ");
-//                $.each(data, function (i, v) {
-                    rows.filter(":contains('" + this.value + "')").parent().show();
-//                });
-            } else{
+            if (this.value == "") {
                 rows.parent().show();
+                return;
             }
+            rows.parent().hide();
+            rows.filter(function (i, v) {
+                var $t = $(this);
+                for (var d = 0; d < data.length; ++d) {
+                    if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
+                        return true;
+                    }
+                }
+                return false;
+            }).parent().show();
         });
         $("input#addressSearch").keyup(function () {
             $("div.variable-manager input:not(#addressSearch)").val("");
-            $("div.register-choice").hide();
+            var data = this.value.toUpperCase().split("&");
             var rows = $("div.register-choice").find("div#address");
-            if (this.value.length) {
-//                var data = this.value.split(" ");
-//                $.each(data, function (i, v) {
-                    rows.filter(":contains('" + this.value + "')").parent().show();
-//                });
-            } else{
+            if (this.value == "") {
                 rows.parent().show();
+                return;
             }
+            rows.parent().hide();
+            rows.filter(function (i, v) {
+                var $t = $(this);
+                for (var d = 0; d < data.length; ++d) {
+                    if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
+                        return true;
+                    }
+                }
+                return false;
+            }).parent().show();
         });
         $("input#registerSearch").keyup(function () {
             $("div.variable-manager input:not(#registerSearch)").val("");
-            $("div.register-choice").hide();
+            var data = this.value.toUpperCase().split("&");
             var rows = $("div.register-choice").find("div#registerName");
-            if (this.value.length) {
-//                var data = this.value.split(" ");
-//                $.each(data, function (i, v) {
-                    rows.filter(":contains('" + this.value + "')").parent().show();
-//                });
-            } else{
+            if (this.value == "") {
                 rows.parent().show();
+                return;
             }
+            rows.parent().hide();
+            rows.filter(function (i, v) {
+                var $t = $(this);
+                for (var d = 0; d < data.length; ++d) {
+                    if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
+                        return true;
+                    }
+                }
+                return false;
+            }).parent().show();
         });
         $("input#descriptionSearch").keyup(function () {
             $("div.variable-manager input:not(#descriptionSearch)").val("");
-            $("div.register-choice").hide();
+            var data = this.value.toUpperCase().split("&");
             var rows = $("div.register-choice").find("div#description");
-            if (this.value.length) {
-//                var data = this.value.split(" ");
-//                $.each(data, function (i, v) {
-                    rows.filter(":contains('" + this.value + "')").parent().show();
-//                });
-            } else{
+            if (this.value == "") {
                 rows.parent().show();
+                return;
             }
+            rows.parent().hide();
+            rows.filter(function (i, v) {
+                var $t = $(this);
+                for (var d = 0; d < data.length; ++d) {
+                    if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
+                        return true;
+                    }
+                }
+                return false;
+            }).parent().show();
         });
-        
-        $("div.register-choice").click(function(){
+
+        $("div.register-choice").click(function () {
             var registerName = $(this).children("div#registerName").text();
             var registerValue = $(this).children("div#value").text();
             $("input#register").val(registerName + "&" + registerValue);
             $("div.register-choice").removeClass("selected");
             $(this).addClass("selected");
-        });        
-        
+        });
+
     }
 }
 function createImageManager(fw) {
@@ -1407,7 +1437,7 @@ function setPanelEvents() {
                                 " + id + "\n\
                                 <i class='fa fa-fw fa-clone fa-blue'></i>\n\
                                 <i class='fa fa-fw fa-cogs fa-yellow'></i>\n\
-                                <i class='fa fa-fw fa-remove fa-red'></i>\n\
+                                <i class='fa fa-fw fa-trash-o fa-red'></i>\n\
                             </div>\n\
                         </span>";
             $(this).append(label);

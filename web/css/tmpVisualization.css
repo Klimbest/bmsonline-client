@@ -42,12 +42,6 @@ span.toggler.off {
     z-index: 999;
 }
 
-div.panel-list:hover,
-div.dialog-panel-settings ul.nav-tabs li:hover,
-.fa-remove:hover{
-    cursor: pointer;
-}
-
 div.panel-list.active span{
     background-color: #FF0000;
 }
@@ -169,8 +163,10 @@ div.label-page:hover{
 
 i.fa-plus-circle:hover,
 .btn-add-condition:hover,
-div.image-container i.fa-remove:hover,
-div.image-container span.label:hover{
+i.fa-trash-o:hover,
+div.image-container span.label:hover,
+div.panel-list:hover,
+div.dialog-panel-settings ul.nav-tabs li:hover{
     cursor: pointer;
 }
 
@@ -284,6 +280,7 @@ div.row.register-choice.selected{
 }
 div.row.register-choice:hover{
     background-color: #005A78;
+    color: #FFF;
 }
 
 div.progress-label{
