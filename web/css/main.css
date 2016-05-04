@@ -137,7 +137,6 @@ embed{
 .error-message{
     display: none;
     position: absolute;
-    top: 100px;
     z-index:999;
     background-color: rgba(255,255,255,0.75);
     border: 2px solid black;
@@ -145,4 +144,11 @@ embed{
     -moz-box-shadow: 0 0 8px #000000;
     -webkit-box-shadow: 0 0 8px #000000;
     box-shadow: 0 0 8px #000000;
+    cursor: move;
+}
+.error-message i.fa-remove{
+    float: right;
+    margin-top: -6px;
+    margin-right: -4px;
+    cursor: pointer;
 }

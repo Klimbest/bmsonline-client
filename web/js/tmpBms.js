@@ -2,13 +2,23 @@
 
 var terms, interval;
 var countToRefresh = 0;
+var errorClosed = 0;
 
 $(document).ready(function () {
+    setErrorMessage();
     ajaxChangePage(1);
     setInterval(clock, 1000);
     setInterval(counter, 400);
 
 });
+
+function setErrorMessage() {
+    $("div.error-message").draggable();
+    $("div.error-message i.fa-remove").click(function () {
+        errorClosed = 1;
+        $("div.error-message").hide();
+    });
+}
 
 function ajaxChangePage(page_id) {
     var data = {
@@ -72,7 +82,7 @@ function ajaxRefreshPage(terms) {
 
     function setState(time, devicesStatus) {
         var now = Date.parse(new Date);
-        var readDelay = now / 1000 - time;
+        var networkConnectionDelay = now / 1000 - time;
         var error = 0;
         var slaves = "";
         $("span.stats").empty();
@@ -88,7 +98,7 @@ function ajaxRefreshPage(terms) {
             }
         });
 
-        if (readDelay >= 300) {
+        if (networkConnectionDelay >= 300) {
             $("div.variable-panel span").empty();
             $("span#noInternetConnection img").attr("src", "/images/system/ethernetOff.png").addClass("blink");
             $(".error-message").show().append("<div class='row'><div class='col-xs-12'><span class='label label-danger'>Brak połączenia internetowego</span></div></div>");
@@ -101,20 +111,12 @@ function ajaxRefreshPage(terms) {
         if (error !== 0) {
             $("div.variable-panel span").empty();
             $("span#errorModbusConnection img").attr("src", "/images/system/disconnected.png").addClass("blink");
-            $(".error-message").show().append("<div class='row'><div class='col-md-12'><span class='label label-danger'>Brak synchronizacji danych (slave: " + slaves + ")</span></div></div>");
+            if (errorClosed !== 1) {
+                $(".error-message").show().append("<div class='row'><div class='col-md-12'><span class='label label-danger'>Brak synchronizacji danych (slave: " + slaves + ")</span></div></div>");
+            }
         } else {
             $("span#errorModbusConnection img").attr("src", "/images/system/connected.png").removeClass("blink");
         }
-//            $("div.variable-panel span").empty();
-//            if (readDelay / 60 < 60) {
-//                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60) + " minut nie ma nowych danych!").show();
-//            } else if (readDelay / 60 / 60 < 24) {
-//                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60) + " godzin nie ma nowych danych!").show();
-//            } else {
-//                $(".error-message span").empty().append("Od " + Math.round(readDelay / 60 / 60 / 24) + " dni nie ma nowych danych!").show();
-//            }
-//        } 
-
     }
 
     function setVariables(registers) {
@@ -220,11 +222,11 @@ function ajaxRefreshPage(terms) {
 }
 
 function counter() {
-    
+
     countToRefresh++;
     if ($("div.well.page").length > 0) {
-        $("div.timer div.progress-bar").css({width: countToRefresh*400/100+"%"});
-    }else{
+        $("div.timer div.progress-bar").css({width: countToRefresh * 400 / 100 + "%"});
+    } else {
         $("div.timer div.progress-bar").css({width: "0%"});
     }
 }
