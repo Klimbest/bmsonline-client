@@ -1,6 +1,6 @@
 /* global parseFloat */
 
-var terms;
+var terms, interval;
 var countToRefresh = 0;
 
 $(document).ready(function () {
@@ -25,7 +25,7 @@ function ajaxChangePage(page_id) {
             $(".content-container").append(ret["template"]).fadeIn("slow");
             terms = ret['terms'];
             ajaxRefreshPage(terms);
-            setInterval(function () {
+            interval = setInterval(function () {
                 ajaxRefreshPage(terms);
             }, 10000);
 
@@ -33,7 +33,7 @@ function ajaxChangePage(page_id) {
         }
     });
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-
+    clearInterval(interval);
     function minBrowserSizeGuard() {
         if ($(window).width() < parseInt($(".page").css("width")) + 45) {
             var label = "<div class='text-center error-label'><h3><span class='label label-primary'>Za mała szerokość przeglądarki</span></h3></div>";
