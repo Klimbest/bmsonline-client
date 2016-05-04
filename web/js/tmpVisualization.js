@@ -665,51 +665,97 @@ function createVariableManager(fw) {
             $("div.variable-manager input:not(#deviceSearch)").val("");
             var data = this.value.toUpperCase().split("&");
             var rows = $("div.register-choice").find("div#deviceName");
-            filterRows(rows, data);
-        });
-        $("input#functionSearch").keyup(function () {
-            $("div.variable-manager input:not(#functionSearch)").val("");
-            var data = this.value.toUpperCase().split("&");
-            var rows = $("div.register-choice").find("div#function");
-            filterRows(rows, data);
-        });
-        $("input#addressSearch").keyup(function () {
-            $("div.variable-manager input:not(#addressSearch)").val("");
-            var data = this.value.toUpperCase().split("&");
-            var rows = $("div.register-choice").find("div#address");
-            filterRows(rows, data);
-        });
-        $("input#registerSearch").keyup(function () {
-            $("div.variable-manager input:not(#registerSearch)").val("");
-            var data = this.value.toUpperCase().split("&");
-            var rows = $("div.register-choice").find("div#registerName");
-            filterRows(rows, data);
-        });
-        $("input#descriptionSearch").keyup(function () {
-            $("div.variable-manager input:not(#descriptionSearch)").val("");
-            var data = this.value.toUpperCase().split("&");
-            var rows = $("div.register-choice").find("div#description");
-            filterRows(rows, data);
-        });
-        
-        function filterRows(r, d) {
             if (this.value == "") {
-                r.parent().show();
+                rows.parent().show();
                 return;
             }
-            r.parent().hide();
-            r.filter(function (i, v) {
+            rows.parent().hide();
+            rows.filter(function (i, v) {
                 var $t = $(this);
-                for (var d = 0; d < d.length; ++d) {
-                    if ($t.text().toUpperCase().indexOf(d[d]) > -1) {
+                for (var d = 0; d < data.length; ++d) {
+                    if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
                         return true;
                     }
                 }
                 return false;
             }).parent().show();
-        }
-
-
+        });
+        $("input#functionSearch").keyup(function () {
+            $("div.variable-manager input:not(#functionSearch)").val("");
+            var data = this.value.toUpperCase().split("&");
+            var rows = $("div.register-choice").find("div#function");
+            if (this.value == "") {
+                rows.parent().show();
+                return;
+            }
+            rows.parent().hide();
+            rows.filter(function (i, v) {
+                var $t = $(this);
+                for (var d = 0; d < data.length; ++d) {
+                    if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
+                        return true;
+                    }
+                }
+                return false;
+            }).parent().show();
+        });
+        $("input#addressSearch").keyup(function () {
+            $("div.variable-manager input:not(#addressSearch)").val("");
+            var data = this.value.toUpperCase().split("&");
+            var rows = $("div.register-choice").find("div#address");
+            if (this.value == "") {
+                rows.parent().show();
+                return;
+            }
+            rows.parent().hide();
+            rows.filter(function (i, v) {
+                var $t = $(this);
+                for (var d = 0; d < data.length; ++d) {
+                    if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
+                        return true;
+                    }
+                }
+                return false;
+            }).parent().show();
+        });
+        $("input#registerSearch").keyup(function () {
+            $("div.variable-manager input:not(#registerSearch)").val("");
+            var data = this.value.toUpperCase().split("&");
+            var rows = $("div.register-choice").find("div#registerName");
+            if (this.value == "") {
+                rows.parent().show();
+                return;
+            }
+            rows.parent().hide();
+            rows.filter(function (i, v) {
+                var $t = $(this);
+                for (var d = 0; d < data.length; ++d) {
+                    if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
+                        return true;
+                    }
+                }
+                return false;
+            }).parent().show();
+        });
+        $("input#descriptionSearch").keyup(function () {
+            $("div.variable-manager input:not(#descriptionSearch)").val("");
+            var data = this.value.toUpperCase().split("&");
+            var rows = $("div.register-choice").find("div#description");
+            if (this.value == "") {
+                rows.parent().show();
+                return;
+            }
+            rows.parent().hide();
+            rows.filter(function (i, v) {
+                var $t = $(this);
+                for (var d = 0; d < data.length; ++d) {
+                    if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
+                        return true;
+                    }
+                }
+                return false;
+            }).parent().show();
+        });
 
         $("div.register-choice").click(function () {
             var registerName = $(this).children("div#registerName").text();
