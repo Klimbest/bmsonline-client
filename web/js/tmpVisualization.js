@@ -637,7 +637,7 @@ function createVariableManager(fw) {
                         $("div.dialog-panel-settings input#panel-source-value").val(res[1]);
                         $(this).dialog('destroy').remove();
                     } else if (fw === "term-register") {
-                        var value = $("div.variable-manager input#registers").val();
+                        var value = $("div.variable-manager input#register").val();
                         var res = value.split("&");
                         $("div.dialog-condition input#panel-term-register").val(res[0]);
                         $("div.dialog-condition input#panel-term-register-value").val(res[1]);
