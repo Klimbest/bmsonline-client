@@ -310,4 +310,17 @@ class AjaxController extends Controller {
         }
     }
 
+    /**
+     * @Route("/load_progress_bar_manager", name="bms_visualization_load_progress_bar_manager", options={"expose"=true})
+     */
+    public function loadProgressBarManagerAction(Request $request) {
+        if ($request->isXmlHttpRequest()) {            
+            
+            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:progresBarManager.html.twig');
+            return new JsonResponse($ret);
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
+    
 }

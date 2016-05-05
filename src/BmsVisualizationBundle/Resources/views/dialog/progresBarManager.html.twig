@@ -1,0 +1,67 @@
+<div class="dialog-progress-bar" title="Progress bar - właściwości:">
+    <form id="progress-bar">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="row">
+                    <label for="value">Źródło danych wartość odczytana:</label>
+                    <div class="input-group col-md-12">
+                        <div class="form-group">
+                            <input id="panel-source-content" name="Źródło danych" type="text" class="form-control" disabled required/>
+                            <input id="panel-source-value" type="hidden" class="form-control" />
+                        </div>
+                        <span class="input-group-btn">                    
+                            <button id="manager" class="btn btn-default" type="button"><i class="fa fa-plus fa-fw"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="set">Źródło danych wartość zadana:</label>
+                    <div class="input-group col-md-12">
+                        <div class="form-group">
+                            <input id="panel-source-content" name="Źródło danych" type="text" class="form-control" disabled required/>
+                            <input id="panel-source-value" type="hidden" class="form-control" />
+                        </div>
+                        <span class="input-group-btn">                    
+                            <button id="manager" class="btn btn-default" type="button"><i class="fa fa-plus fa-fw"></i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-md-offset-4" style="position: absolute">
+                <div class="progress" style="margin-bottom: 0px;">
+                    <div style="position: absolute; top: -2px; left: 45%; height: 100%; z-index: 15">
+                        <img src="/images/system/line.jpg" class="img-responsive"/>                
+                        <i class="fa fa-arrow-down fa-fw hidden"></i>
+                    </div>
+
+                    <div style="position: absolute; top: -5px; left: 50%; height: 100%; z-index: 14">
+                        <img src="/images/system/linegreen.jpg" class="img-responsive"/>
+                    </div>
+
+                    <div class="progress-bar" role="progressbar" style="width: 33%; background-color: rgb(91, 192, 222)">
+                    </div>
+                    <div class="progress-bar" role="progressbar" style="width: 34%; background-color: rgb(240, 173, 78)">
+                    </div>
+                    <div class="progress-bar" role="progressbar" style="width: 33%; background-color: rgb(217, 83, 79)">
+                    </div>
+                </div>
+                <div class="progress progress-label">
+                    <div class="row">
+                        <div id="rangeMin" class="col-md-2 input-group-sm">
+                            <input class="form-control" type="number"/>
+                        </div>
+                        <div class="col-md-2 col-md-offset-1 input-group-sm">
+                            <input class="form-control" type="number"/>
+                        </div>
+                        <div class="col-md-2 col-md-offset-2 input-group-sm">
+                            <input class="form-control" type="number"/>
+                        </div>
+                        <div id="rangeMax" class="col-md-2 col-md-offset-1 input-group-sm">
+                            <input class="form-control" type="number"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

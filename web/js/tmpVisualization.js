@@ -27,7 +27,21 @@ function setSidebarEvents() {
             success: function (ret) {
                 $(".main-row").children(".fa-spinner").remove();
                 $(".main-row").append(ret["template"]);
-                createPanel().dialog("open");
+                createPanelDialog().dialog("open");
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    });
+    //przycisk dodający progress bar
+    $("button.btn-add-progress-bar").click(function () {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_load_progress_bar_manager'),
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $(".main-row").append(ret["template"]);
+                createProgressBarManager().dialog("open");
             }
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -68,7 +82,7 @@ function setSidebarEvents() {
 }
 
 //*****PANEL START*****
-function createPanel() {
+function createPanelDialog() {
     return $("div.dialog-panel-settings").dialog({
         autoOpen: false,
         width: $(window).width(),
@@ -570,7 +584,7 @@ function setDialogButtonEvent(panel_id) {
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     });
     //delete term
-    $("table .fa-remove").click(function () {
+    $("table .fa-trash-o").click(function () {
         var data = {
             term_id: $(this).attr("id")
         };
@@ -582,7 +596,7 @@ function setDialogButtonEvent(panel_id) {
             success: function (ret) {
                 $(".main-row").children(".fa-spinner").remove();
                 var id = parseInt(ret['term_id']);
-                $("table i#" + id + ".fa-remove").parent().parent().remove();
+                $("table i#" + id + ".fa-trash-o").parent().parent().remove();
             }
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -883,7 +897,7 @@ function createImageManager(fw) {
 
         });
         //removing image from server
-        $("div.image-manager div.image-list i.fa-remove").click(function () {
+        $("div.image-manager div.image-list i.fa-trash-o").click(function () {
             var name = $(this).parent().children("span.label").text();
             var data = {
                 image_name: name.replace(" ", "")
@@ -974,6 +988,39 @@ function createEffectCssManager() {
 
 }
 
+function createProgressBarManager() {
+    return $("div.dialog-progress-bar").dialog({
+        autoOpen: false,
+        width: $(window).width(),
+        height: $(window).height(),
+        modal: true,
+        buttons: [
+            {
+                text: "Zapisz",
+                click: function () {
+
+                }
+            },
+            {
+                text: "Anuluj",
+                click: function () {
+                    $(this).dialog('destroy').remove();
+                }
+            }],
+        open: function () {
+
+            setDialogButtons();
+        },
+        close: function () {
+            $(this).dialog('destroy').remove();
+        }
+    });
+
+    function setDialogButtons() {
+
+    }
+}
+
 function createCondition(panel_id) {
     return $("div.dialog-condition").dialog({
         autoOpen: false,
@@ -1045,7 +1092,7 @@ function createCondition(panel_id) {
             });
             $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
         });
-        setOpenEffectCss();
+        setOpenEffectSrc();
         //zmiana typu efektu == zmiana przycisku managera efektów
         $("select#effect_type").change(function () {
             var effect_type = $(this).val();
@@ -1113,117 +1160,7 @@ function createCondition(panel_id) {
                 alert("Otwieranie Animacja");
             });
         }
-        /*
-         //setp1
-         //set hover and click on list of registers
-         //        dialog.find("div.row.register-choice").each(function () {
-         //            setHover($(this));
-         //            $(this).click(function () {
-         //                $(this).parent().children("div.row.register-choice").css({backgroundColor: "", color: ""}).unbind('mouseenter mouseleave').each(function () {
-         //                    setHover($(this));
-         //                });
-         //                $(this).unbind('mouseenter mouseleave').css({backgroundColor: "#337ab7", color: "#FFF"});
-         //                var register_id = $(this).attr("id");
-         //                dialog.find("input#register_id").val(register_id);
-         //                var description = "Jeżeli wartość rejestru <strong>" + $(this).children(".register_name").text() + "</strong> jest ";
-         //                dialog.find("div#description span#step1").empty().append(description);
-         //            });
-         //        });
-         //        dialog.find("select#device_filter").change(function () {
-         //            var name = $(this).val();
-         //            dialog.find("div.register-choice").hide();
-         //            dialog.find("div." + name).show();
-         //        });
-         
-         //step2
-         dialog.find("select#condition_type, input#condition_val").change(function () {
-         var condition_type = dialog.find("select#condition_type").val();
-         switch (condition_type) {
-         case "==" :
-         var description = "<strong>równa</strong> " + dialog.find("input#condition_val").val();
-         break;
-         case "!=" :
-         var description = "<strong>nierówna</strong> " + dialog.find("input#condition_val").val();
-         break;
-         case ">" :
-         var description = "<strong>większa</strong> od " + dialog.find("input#condition_val").val();
-         break;
-         case "<" :
-         var description = "<strong>mniejsza</strong> od " + dialog.find("input#condition_val").val();
-         break;
-         case ">=" :
-         var description = "<strong>większa lub równa</strong> " + dialog.find("input#condition_val").val();
-         break;
-         case "<=" :
-         var description = "<strong>mniejsza lub równa</strong> " + dialog.find("input#condition_val").val();
-         break;
-         }
-         dialog.find("div#description span#step2").empty().append(description);
-         });
-         
-         dialog.find("div.row.panel-choice").each(function () {
-         setHover($(this));
-         $(this).click(function () {
-         $(this).parent().children("div.row.panel-choice").css({backgroundColor: "", color: ""}).unbind('mouseenter mouseleave').each(function () {
-         setHover($(this));
-         });
-         $(this).unbind('mouseenter mouseleave').css({backgroundColor: "#337ab7", color: "#FFF"});
-         var effect_panel_id = $(this).attr("id");
-         dialog.find("input#effect_panel_id").val(effect_panel_id);
-         });
-         });
-         
-         //        dialog.find("select#effect_type").change(function () {
-         //            var type = $(this).val();
-         //            dialog.find("div.effect_type").hide();
-         //            dialog.find("div#effect_type_" + type + ".effect_type").show();
-         //            switch (type) {
-         //                case "src":
-         //                    dialog.find("div.panel-choice").hide();
-         //                    dialog.find("div.panel-choice.image").show();
-         //                    break;
-         //                case "text":
-         //                    dialog.find("div.panel-choice").hide();
-         //                    dialog.find("div.panel-choice.text").show();
-         //                    break;
-         //                case "css":
-         //                    dialog.find("div.panel-choice").show();
-         //                    dialog.find("div.panel-choice.image, div.panel-choice.navigation").hide();
-         //                    break;
-         //                case "spin":
-         //                    dialog.find("div.panel-choice").show();
-         //                    break;
-         //            }
-         //        });
-         //
-         //        
-         //
-         //        dialog.find("div.row.image-container i.fa-plus-circle").each(function () {
-         //            $(this).click(function () {
-         //                $(this).parent().children('.images').toggleClass('hidden');
-         //                $(this).toggleClass("fa-minus-circle");
-         //            });
-         //        });
-         //
-         //        dialog.find("div.image-list span.label").click(function () {
-         //            var name = $(this).text();
-         //            var url = name;
-         //            $(this).parents(".images").each(function () {
-         //                url = $(this).attr("id") + "/" + url;
-         //            });
-         //            url = "/images/" + url;
-         //            dialog.find("div.dialog-panel img").attr("src", url);
-         //            dialog.find("input#effect_content").val(url);
-         //        });
-         
-         function setHover(item) {
-         item.hover(function () {
-         $(this).css({backgroundColor: "#337ab7"});
-         }, function () {
-         $(this).css({backgroundColor: ""});
-         });
-         }
-         */
+        
     }
     function saveData(data) {
         $.ajax({
@@ -1257,7 +1194,7 @@ function createCondition(panel_id) {
                             <td>" + term.effect_content + "</td>\n\
                             <td class='manage text-center'>\n\
                                 <i id='" + term.register_id + "' class='fa fa-edit fa-fw fa-green'></i>\n\
-                                <i id='" + term.register_id + "' class='fa fa-remove fa-fw fa-red'></i>\n\
+                                <i id='" + term.register_id + "' class='fa fa-trash-o fa-fw fa-red'></i>\n\
                             </td>\n\
                             <td>\n\
                                 <input name='checkedTermId[]' value='" + term.register_id + "' type='checkbox'></input>\n\
@@ -1481,7 +1418,7 @@ function setPanelEvents() {
             $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
         });
         //usuwanie
-        $(label + " i.fa-remove").click(function () {
+        $(label + " i.fa-trash-o").click(function () {
             if (confirm("Na pewno chcesz usunąć ten panel? Zostaną usunięte również wszystkie zdarzenia przypisane do tego panelu.")) {
                 $("div#" + id + ".bms-panel").remove();
                 var data = {
@@ -1699,7 +1636,7 @@ function createPage(page, panelList) {
         });
         //usuwanie strony
         function deletePageEvent(label, page_id) {
-            label.children("i.fa-remove").click(function () {
+            label.children("i.fa-trash-o").click(function () {
                 var data = {
                     page_id: page_id
                 };
@@ -1874,7 +1811,7 @@ function loadPanelList(panelList) {
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     });
     //usuwanie
-    $("div.panel-list i.fa-remove").click(function () {
+    $("div.panel-list i.fa-trash-o").click(function () {
         var id = $(this).parent().parent().parent().attr("id");
         if (confirm("Na pewno chcesz to usunąć?")) {
             $("div#" + id + ".bms-panel").remove();
