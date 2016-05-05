@@ -1,6 +1,11 @@
 .dialog-page-add-settings,
 .dialog-page-edit-settings,
-div.panel-list-controls{
+div.panel-list-controls,
+li#dialog-panel-progress-bar,
+div.dialog-panel-settings div.dialog-panel-format,
+div.dialog-panel-settings div.dialog-panel-navigation,
+div.dialog-panel-settings div.dialog-panel-event,
+div.dialog-panel-settings div.dialog-panel-progress-bar{
     display: none;
 }
 /*SIDEBAR*/
@@ -188,12 +193,6 @@ div.dialog-condition .row{
 
 div.dialog-panel-settings .well .row{
     margin-bottom: 5px;
-}
-
-div.dialog-panel-settings div.dialog-panel-format,
-div.dialog-panel-settings div.dialog-panel-navigation,
-div.dialog-panel-settings div.dialog-panel-event{
-    display: none;
 }
 
 

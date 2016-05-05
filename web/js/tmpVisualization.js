@@ -32,20 +32,6 @@ function setSidebarEvents() {
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     });
-    //przycisk dodający progress bar
-    $("button.btn-add-progress-bar").click(function () {
-        $.ajax({
-            type: "POST",
-            datatype: "application/json",
-            url: Routing.generate('bms_visualization_load_progress_bar_manager'),
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $(".main-row").append(ret["template"]);
-                createProgressBarManager().dialog("open");
-            }
-        });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    });
     //ON/OFF siatka pomocnicza
     $("button.btn-pattern-net").click(function () {
         $(this).children("span").toggleClass('off');
@@ -91,49 +77,36 @@ function createPanelDialog() {
         buttons: [{
                 text: "Zapisz",
                 click: function () {
-                    var data = new FormData();
-                    data.append("page_id", $("div.label-page.active").attr("id"));
-                    data.append("type", $("select#panel-type").val());
-                    data.append("name", $("form#panel input#panel-name").val());
-                    data.append("topPosition", $("form#panel input#topPosition").val());
-                    data.append("leftPosition", $("form#panel input#leftPosition").val());
-                    data.append("width", $("form#panel input#width").val());
-                    data.append("height", $("form#panel input#height").val());
-                    data.append("border", $("form#panel input#borderWidth").val() + "px " + $("form#panel select#borderStyle").val() + " " + $("form#panel input#borderColor").val());
-                    data.append("backgroundColor", hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($("form#panel input#opacity").val())));
-                    data.append("textAlign", $("form#panel div.panel-preview").css("textAlign"));
-                    data.append("fontWeight", $("form#panel div.panel-preview").css("fontWeight"));
-                    data.append("textDecoration", $("form#panel div.panel-preview").css("textDecoration"));
-                    data.append("fontStyle", $("form#panel div.panel-preview").css("fontStyle"));
-                    data.append("fontFamily", $("form#panel select#fontFamily").val());
-                    data.append("fontSize", $("form#panel select#fontSize").val());
-                    data.append("fontColor", $("form#panel input#fontColor").val());
-                    data.append("borderRadius", $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px");
-                    data.append("zIndex", 5);
-                    data.append("visibility", $("form#panel input#visibility").is(':checked'));
-                    data.append("contentSource", $("input#panel-source-content").val());
-                    data.append("displayPrecision", $("form#panel select#displayPrecision").val());
-                    data.append("href", $("div.dialog-panel-navigation select.pages").val());
-                    var fail = false;
-                    var fail_log = '';
-                    $("input").each(function () {
-                        if (!$(this).prop('required')) {
-
-                        } else {
-                            if (!$(this).val()) {
-                                fail = true;
-                                var name = $(this).attr('name');
-                                $(this).parent(".form-group").addClass("has-error");
-                                fail_log += name + " jest wymagane \n";
-                            }
-                        }
-                    });
-                    if (!fail) {
-                        saveData(data);
-                        $(this).dialog('destroy').remove();
+                    if ($("select#panel-type").val() === "progressBar") {
+                        var data = new FormData();
+                        
                     } else {
-                        alert(fail_log);
+                        var data = new FormData();
+                        data.append("page_id", $("div.label-page.active").attr("id"));
+                        data.append("type", $("select#panel-type").val());
+                        data.append("name", $("form#panel input#panel-name").val());
+                        data.append("topPosition", $("form#panel input#topPosition").val());
+                        data.append("leftPosition", $("form#panel input#leftPosition").val());
+                        data.append("width", $("form#panel input#width").val());
+                        data.append("height", $("form#panel input#height").val());
+                        data.append("border", $("form#panel input#borderWidth").val() + "px " + $("form#panel select#borderStyle").val() + " " + $("form#panel input#borderColor").val());
+                        data.append("backgroundColor", hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($("form#panel input#opacity").val())));
+                        data.append("textAlign", $("form#panel div.panel-preview").css("textAlign"));
+                        data.append("fontWeight", $("form#panel div.panel-preview").css("fontWeight"));
+                        data.append("textDecoration", $("form#panel div.panel-preview").css("textDecoration"));
+                        data.append("fontStyle", $("form#panel div.panel-preview").css("fontStyle"));
+                        data.append("fontFamily", $("form#panel select#fontFamily").val());
+                        data.append("fontSize", $("form#panel select#fontSize").val());
+                        data.append("fontColor", $("form#panel input#fontColor").val());
+                        data.append("borderRadius", $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px");
+                        data.append("zIndex", 5);
+                        data.append("visibility", $("form#panel input#visibility").is(':checked'));
+                        data.append("contentSource", $("input#panel-source-content").val());
+                        data.append("displayPrecision", $("form#panel select#displayPrecision").val());
+                        data.append("href", $("div.dialog-panel-navigation select.pages").val());
+                        saveData(data);
                     }
+                    $(this).dialog('destroy').remove();
                 }
             },
             {
@@ -147,6 +120,7 @@ function createPanelDialog() {
             setDialogButtonsData();
             setDialogButtonsFormat();
             setDialogButtonEvent();
+            setDialogButtonProgressBar();
         },
         close: function () {
             $(this).dialog('destroy').remove();
@@ -259,6 +233,7 @@ function editPanel(panel_id, register) {
             setDialogButtonsData();
             setDialogButtonsFormat();
             setDialogButtonEvent(panel_id);
+            setDialogButtonProgressBar();
             setSource();
         },
         close: function () {
@@ -421,7 +396,7 @@ function setDialogButtonsData() {
     //zmiana zakładek
     $("div.dialog-panel-settings li a").click(function () {
         $("div.dialog-panel-settings li").removeClass("active");
-        $("div.row.dialog-panel-data, div.row.dialog-panel-format, div.row.dialog-panel-navigation, div.row.dialog-panel-event").hide();
+        $("div.row.dialog-panel-data, div.row.dialog-panel-format, div.row.dialog-panel-navigation, div.row.dialog-panel-event, div.row.dialog-panel-progress-bar").hide();
         var id = $(this).parent().attr("id");
         $(this).parent().addClass("active");
         $("div.row." + id).show();
@@ -431,25 +406,37 @@ function setDialogButtonsData() {
         var value = $(this).val();
         switch (value) {
             case "variable":
-                $("input#panel-source-content").val("").prop("disabled", true).prop("required", true);
-                $(".input-group-btn button#manager").removeClass("disabled");
+                $("input#panel-source-content").val("").prop("disabled", true).prop("required", true).show();
+                $(".input-group-btn button#manager").removeClass("disabled").show();
                 $(".precision-group, .font-group").show();
                 $(".input-group-btn button#manager").unbind("click");
+                $("li#dialog-panel-progress-bar").hide();
+                $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
                 setOpenVariableManager();
                 break;
             case "image":
-                $("input#panel-source-content").val("").prop("disabled", true).prop("required", false);
-                $(".input-group-btn button#manager").removeClass("disabled");
+                $("input#panel-source-content").val("").prop("disabled", true).prop("required", false).show();
+                $(".input-group-btn button#manager").removeClass("disabled").show();
                 $(".precision-group, .font-group").hide();
                 $(".input-group-btn button#manager").unbind("click");
+                $("li#dialog-panel-progress-bar").hide();
+                $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
                 setOpenImageManager();
                 break;
             case "text":
-                $(".input-group-btn button#manager").addClass("disabled");
-                $("input#panel-source-content").val("").removeAttr("disabled required");
+                $("input#panel-source-content").val("").removeAttr("disabled required").show();
+                $(".input-group-btn button#manager").addClass("disabled").show();
                 $(".precision-group").hide();
                 $(".font-group").show();
                 $(".input-group-btn button#manager").unbind("click");
+                $("li#dialog-panel-progress-bar").hide();
+                $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
+                break;
+            case "progressBar":
+                $("li#dialog-panel-progress-bar").show();
+                $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
+                $("input#panel-source-content").val("").prop("required", false).hide();
+                $(".input-group-btn button#manager").hide();
                 break;
         }
     });
@@ -602,6 +589,46 @@ function setDialogButtonEvent(panel_id) {
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     });
 }
+function setDialogButtonProgressBar() {
+    //zmiana kolorów
+    $("input#color1").on('input', function () {
+        $("div#pb1").css({backgroundColor: $(this).val()});
+    });
+    $("input#color2").on('input', function () {
+        $("div#pb2").css({backgroundColor: $(this).val()});
+    });
+    $("input#color3").on('input', function () {
+        $("div#pb3").css({backgroundColor: $(this).val()});
+    });
+    //dodanie zmiennych
+    $("button#progress-bar-manager-value").click(function () {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_load_variable_manager'),
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $(".main-row").append(ret["template"]);
+                createVariableManager("progress-bar-value").dialog("open");
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    });
+    $("button#progress-bar-manager-set").click(function () {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_load_variable_manager'),
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $(".main-row").append(ret["template"]);
+                createVariableManager("progress-bar-set").dialog("open");
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    });
+}
+
 function setOpenVariableManager() {
     $(".input-group-btn button#manager").click(function () {
         $.ajax({
@@ -655,6 +682,16 @@ function createVariableManager(fw) {
                         var res = value.split("&");
                         $("div.dialog-condition input#panel-term-register").val(res[0]);
                         $("div.dialog-condition input#panel-term-register-value").val(res[1]);
+                        $(this).dialog('destroy').remove();
+                    } else if (fw === "progress-bar-value") {
+                        var value = $("div.variable-manager input#register").val();
+                        var res = value.split("&");
+                        $("input#progress-bar-value").val(res[0]);
+                        $(this).dialog('destroy').remove();
+                    } else if (fw === "progress-bar-set") {
+                        var value = $("div.variable-manager input#register").val();
+                        var res = value.split("&");
+                        $("input#progress-bar-set").val(res[0]);
                         $(this).dialog('destroy').remove();
                     }
                 }
@@ -988,39 +1025,6 @@ function createEffectCssManager() {
 
 }
 
-function createProgressBarManager() {
-    return $("div.dialog-progress-bar").dialog({
-        autoOpen: false,
-        width: $(window).width(),
-        height: $(window).height(),
-        modal: true,
-        buttons: [
-            {
-                text: "Zapisz",
-                click: function () {
-
-                }
-            },
-            {
-                text: "Anuluj",
-                click: function () {
-                    $(this).dialog('destroy').remove();
-                }
-            }],
-        open: function () {
-
-            setDialogButtons();
-        },
-        close: function () {
-            $(this).dialog('destroy').remove();
-        }
-    });
-
-    function setDialogButtons() {
-
-    }
-}
-
 function createCondition(panel_id) {
     return $("div.dialog-condition").dialog({
         autoOpen: false,
@@ -1160,7 +1164,7 @@ function createCondition(panel_id) {
                 alert("Otwieranie Animacja");
             });
         }
-        
+
     }
     function saveData(data) {
         $.ajax({
@@ -1714,6 +1718,10 @@ function loadPanelList(panelList) {
     //ukryj pokaż panele typu variable na liście
     $('input#panel-list-variable').change(function () {
         $(this).is(':checked') ? $("span.panel-list-variable").parent().parent().parent("div.panel-list").show() : $("span.panel-list-variable").parent().parent().parent("div.panel-list").hide();
+    });
+    //ukryj pokaż panele typu widget na liście
+    $('input#panel-list-widget').change(function () {
+        $(this).is(':checked') ? $("span.panel-list-widget").parent().parent().parent("div.panel-list").show() : $("span.panel-list-widget").parent().parent().parent("div.panel-list").hide();
     });
     //obsługa najechania na panel na liscie
     $('div.panel-list').hover(function () {

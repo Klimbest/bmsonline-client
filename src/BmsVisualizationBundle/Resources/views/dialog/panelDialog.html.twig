@@ -34,6 +34,7 @@
         <li id="dialog-panel-format" class=""><a>Format</a></li>
         <li id="dialog-panel-navigation" class=""><a>Nawigacja</a></li>
         <li id="dialog-panel-event" class=""><a>Zdarzenia</a></li>
+        <li id="dialog-panel-progress-bar" class=""><a>Ustawienia</a></li>
     </ul>
 
     <div class="row dialog-panel-data">
@@ -54,6 +55,11 @@
     <div class="row dialog-panel-event">
         <div class="col-md-12">
             {% include 'BmsVisualizationBundle:dialog:panelDialogEvent.html.twig' %}
+        </div>
+    </div>
+    <div class="row dialog-panel-progress-bar">
+        <div class="col-md-12">
+            {% include 'BmsVisualizationBundle:dialog:progresBarManager.html.twig' %}
         </div>
     </div>
 </div>
