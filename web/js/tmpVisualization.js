@@ -948,17 +948,12 @@ function createImageManager(fw) {
             $(this).addClass("selected");
             var url = $(this).children("img").attr("src");
             var img = new Image();
-            var name = $("div.thumbnail-list div").attr("id");
             img.onload = function () {
-                dp.css({
-                    width: this.width,
-                    height: this.height
-                }).children("img").attr("src", url);
-                $("div.image-manager input#resolutionX").val(parseInt(dp.css("width")));
-                $("div.image-manager input#resolutionY").val(parseInt(dp.css("height")));
+                $("div.image-manager input#resolutionX").val(this.width);
+                $("div.image-manager input#resolutionY").val(this.height);
             };
             img.src = url;
-            dp.children("img").attr("src", url);
+            var name = $("div.thumbnail-list div").attr("id");
             $("div.image-manager input#imageName").val(name);
         });
         //change size of image
