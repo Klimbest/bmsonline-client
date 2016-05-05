@@ -545,4 +545,28 @@ class Register
     {
         return $this->description2;
     }
+
+    /**
+     * Set alarm
+     *
+     * @param boolean $alarm
+     *
+     * @return Register
+     */
+    public function setAlarm($alarm)
+    {
+        $this->alarm = $alarm;
+
+        return $this;
+    }
+
+    /**
+     * Get alarm
+     *
+     * @return boolean
+     */
+    public function getAlarm()
+    {
+        return $this->alarm;
+    }
 }

@@ -80,6 +80,11 @@ class RegisterType extends AbstractType{
                     'attr' => array('disabled' => 'disabled'),
                     'label' => 'Odczytywać rejestr?',
                     'required' => false
+                    ))
+                ->add('alarm', CheckboxType::class, array(
+                    'attr' => array('disabled' => 'disabled'),
+                    'label' => 'Rejestr alarmowy?',
+                    'required' => false
                     ));
     }
     
