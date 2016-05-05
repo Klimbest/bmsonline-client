@@ -1,6 +1,6 @@
 <div class="image-manager" title="Manager obrazów:">
     <div class="row form-group-sm">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
@@ -62,7 +62,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-10">
             <div class="row">
                 <div class="col-md-6">
                     <div class="row">
@@ -91,13 +91,28 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="dialog-panel">
-                        <img class="img-responsive" src="" />
-                    </div>
-                </div>
+            <div class="row thumbnail-list">
+                {% for k,dir in images %}
+                    {% for key,subdir in dir %}
+                        {% if subdir is iterable %}
+                            {% for key,subsubdir in subdir %}
+                                {% if subsubdir is iterable %}
+                                {% else %}
+                                    {% set d = k|split('\\')%}
+                                    <div class="text-center"><img class='img-responsive' src='\images\{% for det in d %}{{det}}\{% endfor %}{{subdir}}' /></div>
+
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% set d = k|split('\\')%}
+                            <div class="text-center"><img class='img-responsive' src='\images\{% for det in d %}{{det}}\{% endfor %}{{subdir}}' /></div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
             </div>
         </div>
+    </div>
+    <div class="row">
+
     </div>
 </div>

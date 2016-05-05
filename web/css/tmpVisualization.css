@@ -289,3 +289,16 @@ div.progress-label{
     line-height: 15px;
     background-color: rgba(0,0,0,0);
 }
+div.thumbnail-list{
+    margin-top: 8px;
+}
+
+div.thumbnail-list div{
+    height: 50px;
+    width: 50px;
+    display: inline-block;
+}
+div.thumbnail-list div:hover{
+    border: solid 4px red;
+    cursor: pointer;
+}
