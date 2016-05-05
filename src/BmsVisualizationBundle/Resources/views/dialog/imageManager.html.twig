@@ -97,13 +97,13 @@
                         {% if subdir is iterable %}
                             {% for keykey,subsubdir in subdir %}
                                 {% if subsubdir is iterable %}
-                                    <div id="{{subdir}}" class="text-center">
-                                        <img class='img-responsive' src='/images/{{k}}/{{key}}/{{keykey}}/{{subsubdir}}' />
+                                    <div id="{{subsubdir[keykey]}}" class="text-center">
+                                        <img class='img-responsive' src='/images/{{k}}/{{key}}/{{keykey}}/{{subsubdir[keykey]}}' />
                                         {#                                        <img class='img-responsive' src='/images/{% for det in d %}{{det}}/{% endfor %}{{subdir}}' />#}
                                     </div>
                                 {% else %}
                                     {#                                    {% set d = k|split('\\')%}#}
-                                    <div id="{{subdir}}" class="text-center">
+                                    <div id="{{subsubdir}}" class="text-center">
                                         <img class='img-responsive' src='/images/{{k}}/{{key}}/{{subsubdir}}' />
                                         {#                                        <img class='img-responsive' src='/images/{% for det in d %}{{det}}/{% endfor %}{{subdir}}' />#}
                                     </div>
