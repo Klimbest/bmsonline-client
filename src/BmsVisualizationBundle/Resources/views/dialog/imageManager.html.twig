@@ -97,19 +97,23 @@
                         {% if subdir is iterable %}
                             {% for keykey,subsubdir in subdir %}
                                 {% if subsubdir is iterable %}
+                                    <div id="{{subdir}}" class="text-center">
+                                        <img class='img-responsive' src='/images/{{k}}/{{key}}/{{keykey}}/{{subsubdir}}' />
+                                        {#                                        <img class='img-responsive' src='/images/{% for det in d %}{{det}}/{% endfor %}{{subdir}}' />#}
+                                    </div>
                                 {% else %}
-                                    {% set d = k|split('\\')%}
+                                    {#                                    {% set d = k|split('\\')%}#}
                                     <div id="{{subdir}}" class="text-center">
                                         <img class='img-responsive' src='/images/{{k}}/{{key}}/{{subsubdir}}' />
-{#                                        <img class='img-responsive' src='/images/{% for det in d %}{{det}}/{% endfor %}{{subdir}}' />#}
+                                        {#                                        <img class='img-responsive' src='/images/{% for det in d %}{{det}}/{% endfor %}{{subdir}}' />#}
                                     </div>
                                 {% endif %}
                             {% endfor %}
                         {% else %}
-                            {% set d = k|split('\\')%}
+                            {#                            {% set d = k|split('\\')%}#}
                             <div id="{{subdir}}" class="text-center">
                                 <img class='img-responsive' src='/images/{{k}}/{{subdir}}' />
-{#                                <img class='img-responsive' src='/images/{% for det in d %}{{det}}/{% endfor %}{{subdir}}' />#}
+                                {#                                <img class='img-responsive' src='/images/{% for det in d %}{{det}}/{% endfor %}{{subdir}}' />#}
                             </div>
                         {% endif %}
                     {% endfor %}
