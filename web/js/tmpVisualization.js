@@ -953,7 +953,7 @@ function createImageManager(fw) {
                 $("div.image-manager input#resolutionY").val(this.height);
             };
             img.src = url;
-            var name = $("div.thumbnail-list div").attr("id");
+            var name = $(this).attr("id");
             $("div.image-manager input#imageName").val(name);
         });
         //change size of image
