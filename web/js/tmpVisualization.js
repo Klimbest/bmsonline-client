@@ -842,7 +842,7 @@ function createImageManager(fw) {
                         $("form#panel input#height").val(h);
                         $("form#panel input#opacity").val(0);
                         $("form#panel input#borderWidth").val(0);
-                        var imgSource = $("div.image-manager div.thumbnail-list img.selected").attr("src");
+                        var imgSource = $("div.image-manager div.thumbnail-list div.selected img").attr("src");
                         if (imgSource.length > 200) {
                             var data = new FormData();
                             data.append('file', input.files[0]);
@@ -855,7 +855,7 @@ function createImageManager(fw) {
                             $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + imgSource + "\" class=\"img-responsive\">");
                         }
                     } else if (fw === "effect") {
-                        var imgSource = $("div.image-manager div.thumbnail-list img.selected").attr("src");
+                        var imgSource = $("div.image-manager div.thumbnail-list div.selected img").attr("src");
                         $("form#condition input#effect-value").val(imgSource);
                     }
 
@@ -943,8 +943,23 @@ function createImageManager(fw) {
             $(this).parent().remove();
         });
         //choose image
-        $("div.thumbnail-list img").click(function () {
+        $("div.thumbnail-list div").click(function () {
+            $("div.thumbnail-list div").removeClass("selected");
             $(this).addClass("selected");
+            var url = $(this).children("img").attr("src");
+            var img = new Image();
+            var name = $("div.thumbnail-list div").attr("id");
+            img.onload = function () {
+                dp.css({
+                    width: this.width,
+                    height: this.height
+                }).children("img").attr("src", url);
+                $("div.image-manager input#resolutionX").val(parseInt(dp.css("width")));
+                $("div.image-manager input#resolutionY").val(parseInt(dp.css("height")));
+            };
+            img.src = url;
+            dp.children("img").attr("src", url);
+            $("div.image-manager input#imageName").val(name);
         });
         //change size of image
         $("div.image-manager input#resolutionX").change(function () {

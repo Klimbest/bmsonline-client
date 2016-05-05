@@ -302,3 +302,7 @@ div.thumbnail-list div:hover{
     border: solid 4px red;
     cursor: pointer;
 }
+div.thumbnail-list div.selected{
+    border: solid 4px #337AB7;
+    cursor: pointer;
+}
