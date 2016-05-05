@@ -1,0 +1,61 @@
+{% extends "::base.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ parent() }}
+
+{% endblock %}
+
+{% block body %}
+    {#        {{dump(alarms)}}#}
+    <div class="row main-row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-1 col-md-offset-1">
+                    Id
+                </div>
+                <div class="col-md-2">
+                    Czas wystąpienia
+                </div>
+                <div class="col-md-2">
+                    Nazwa rejestru
+                </div>
+                <div class="col-md-4">
+                    Opis rejestru
+                </div>
+                <div class="col-md-1">
+                    Potwierdzenie
+                </div>
+            </div>
+            {% for alarm in alarms %}
+                <div class="row">
+                    <div class="col-md-1 col-md-offset-1">
+                        <span>{{alarm.id}}</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span>{{alarm.timeOfOccure.date}}</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span>{{alarm.register.name}}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <span>{{alarm.register.description}}</span>
+                    </div>
+                    <div class="col-md-1">
+                        <span>{{alarm.confirmed}}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}
+

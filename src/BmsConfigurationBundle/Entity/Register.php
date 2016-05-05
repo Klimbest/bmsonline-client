@@ -102,6 +102,13 @@ class Register
      * @ORM\Column(name="active", type="boolean", nullable=false, options={"default"=true})
      */
     private $active;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="alarm", type="boolean", nullable=true, options={"default"=false})
+     */
+    private $alarm;    
 
     /**
      * @var integer

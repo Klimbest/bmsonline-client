@@ -2,7 +2,12 @@ bms:
     resource: "@BmsBundle/Controller/"
     type: annotation
     prefix:   /
-    
+
+bms_alarm:
+    resource: "@BmsAlarmBundle/Controller/"
+    type: annotation
+    prefix:   /alarm_history
+
 bms_data_analyze:
     resource: "@BmsDataAnalyzeBundle/Controller/"
     type: annotation

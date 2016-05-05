@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Ob\HighchartsBundle\ObHighchartsBundle(),
             new BmsDataAnalyzeBundle\BmsDataAnalyzeBundle(),
+            new BmsAlarmBundle\BmsAlarmBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

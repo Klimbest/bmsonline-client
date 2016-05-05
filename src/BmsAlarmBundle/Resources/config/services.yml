@@ -1,0 +1,4 @@
+services:
+#    bms_alarm.example:
+#        class: BmsAlarmBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]
