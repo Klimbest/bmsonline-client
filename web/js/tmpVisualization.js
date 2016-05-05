@@ -79,7 +79,7 @@ function createPanelDialog() {
                 click: function () {
                     if ($("select#panel-type").val() === "progressBar") {
                         var data = new FormData();
-                        
+
                     } else {
                         var data = new FormData();
                         data.append("page_id", $("div.label-page.active").attr("id"));
@@ -842,7 +842,7 @@ function createImageManager(fw) {
                         $("form#panel input#height").val(h);
                         $("form#panel input#opacity").val(0);
                         $("form#panel input#borderWidth").val(0);
-                        var imgSource = $("div.image-manager div.dialog-panel img").attr("src");
+                        var imgSource = $("div.image-manager div.thumbnail-list img.selected").attr("src");
                         if (imgSource.length > 200) {
                             var data = new FormData();
                             data.append('file', input.files[0]);
@@ -855,7 +855,7 @@ function createImageManager(fw) {
                             $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + imgSource + "\" class=\"img-responsive\">");
                         }
                     } else if (fw === "effect") {
-                        var imgSource = $("div.image-manager div.dialog-panel img").attr("src");
+                        var imgSource = $("div.image-manager div.thumbnail-list img.selected").attr("src");
                         $("form#condition input#effect-value").val(imgSource);
                     }
 
@@ -942,7 +942,10 @@ function createImageManager(fw) {
             ajaxDeleteImage(data);
             $(this).parent().remove();
         });
-
+        //choose image
+        $("div.thumbnail-list img").click(function () {
+            $(this).addClass("selected");
+        });
         //change size of image
         $("div.image-manager input#resolutionX").change(function () {
             var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));

@@ -99,13 +99,13 @@
                                 {% if subsubdir is iterable %}
                                 {% else %}
                                     {% set d = k|split('\\')%}
-                                    <div class="text-center"><img class='img-responsive' src='\images\{% for det in d %}{{det}}\{% endfor %}{{subdir}}' /></div>
+                                    <div class="text-center"><img class='img-responsive' src='/images/{% for det in d %}{{det}}/{% endfor %}{{subdir}}' /></div>
 
                                 {% endif %}
                             {% endfor %}
                         {% else %}
                             {% set d = k|split('\\')%}
-                            <div class="text-center"><img class='img-responsive' src='\images\{% for det in d %}{{det}}\{% endfor %}{{subdir}}' /></div>
+                            <div class="text-center"><img class='img-responsive' src='/images/{% for det in d %}{{det}}/{% endfor %}{{subdir}}' /></div>
                         {% endif %}
                     {% endfor %}
                 {% endfor %}
