@@ -337,12 +337,12 @@ class DefaultController extends Controller {
             $em->persist($register);
             $em->flush();
             $registerCD->setRegister($register);
+            $registerCD->setTimeOfUpdate(new \DateTime());
             $em->persist($registerCD);
             $em->flush();
             $register->setRegisterCurrentData($registerCD);
             $em->persist($register);
             $this->setDataToSync();
-            $em->flush();
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
             $session->set('device_id', $device_id);
