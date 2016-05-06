@@ -10,4 +10,10 @@ namespace BmsAlarmBundle\Entity;
  */
 class AlarmHistoryRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getAllOrderByTime(){
+        return $this->getEntityManager()
+                        ->createQuery('SELECT h FROM BmsAlarmBundle:AlarmHistory AS h ORDER BY h.timeOfOccure DESC')
+                        ->getResult();
+    }
+    
 }

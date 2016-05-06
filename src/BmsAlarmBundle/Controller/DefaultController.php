@@ -13,7 +13,7 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $alarmRepo = $this->getDoctrine()->getRepository('BmsAlarmBundle:AlarmHistory');
-        $alarms = $alarmRepo->findAll();
+        $alarms = $alarmRepo->getAllOrderByTime();
         
         return $this->render('BmsAlarmBundle:Default:index.html.twig', ['alarms' => $alarms]);
     }
