@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use BmsVisualizationBundle\Entity\Panel;
+use BmsVisualizationBundle\Entity\WidgetBar;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class PanelController extends Controller {
@@ -64,6 +65,8 @@ class PanelController extends Controller {
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             
+            $em = $this->getDoctrine()->getManager();
+            
             $page_id = $request->request->get("page_id");
             $type = $request->request->get("type");
             $name = $request->request->get("name");
@@ -89,6 +92,33 @@ class PanelController extends Controller {
                 $registerName = $request->request->get("contentSource");
                 $register = $registerRepo->findOneBy(array('name' => $registerName));
                 $contentSource = $register->getId();
+            } elseif( $type == "widget") {
+                $progressBar = new WidgetBar();
+                $setRegisterName = $request->request->get("pbRegSet");
+                if($setRegisterName != NULL){
+                    $setRegister = $registerRepo->findOneBy(array('name' => $setRegisterName));
+                    $progressBar->setSetRegisterId($setRegister);
+                }
+                $valueRegister = $registerRepo->findOneBy(array('name' => $request->request->get("pbRegVal")));
+                
+                $rangeMin = $request->request->get("pbMin");
+                $rangeMax = $request->request->get("pbMax");
+                $optimumMin = $request->request->get("pbOptimumMin");
+                $optimumMax = $request->request->get("pbOptimumMax");
+                $color1 = $request->request->get("pbColor1");
+                $color2 = $request->request->get("pbColor2");
+                $color3 = $request->request->get("pbColor3");
+                $progressBar->setValueRegisterId($valueRegister)
+                        ->setRangeMin($rangeMin)
+                        ->setRangeMax($rangeMax)
+                        ->setOptimumMin($optimumMin)
+                        ->setOptimumMax($optimumMax)
+                        ->setColor1($color1)
+                        ->setColor2($color2)
+                        ->setColor3($color3);
+                $em->persist($progressBar);
+                $em->flush();
+                $contentSource = $progressBar->getId();
             } else {
                 $contentSource = $request->request->get("contentSource");
             }
@@ -99,7 +129,6 @@ class PanelController extends Controller {
                 $visibility = 0;
             }
 
-            $em = $this->getDoctrine()->getManager();
 
             $panel = new Panel();
             $page = $pageRepo->find($page_id);
@@ -130,7 +159,7 @@ class PanelController extends Controller {
             $em->persist($panel);
             $em->flush();
 
-            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
+            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel, 'widgets' => array($progressBar)]);
             $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
             $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
             
@@ -147,6 +176,7 @@ class PanelController extends Controller {
         if ($request->isXmlHttpRequest()) {
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+            $progressBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgerBar');
             //get data
             $panel_id = $request->request->get("panel_id");
             $type = $request->request->get("type");
@@ -168,12 +198,41 @@ class PanelController extends Controller {
             $zIndex = $request->request->get("zIndex");
             $displayPrecision = $request->request->get("displayPrecision");            
             $href = $request->request->get("href");
+            
+            $em = $this->getDoctrine()->getManager();
             if ($type == "variable") {
                 $registerName = $request->request->get("contentSource");
                 $register = $registerRepo->findOneBy(array('name' => $registerName));
                 $reg["id"] = $register->getId();
                 $reg["value"] = $register->getRegisterCurrentData()->getFixedValue();
                 $contentSource = $register->getId();
+            } elseif( $type == "widget") {
+                $panel = $panelRepo->find($panel_id);
+                $progressBar = $progerssBarRepo->findOneById($panel->getContentSource());
+                $setRegisterName = $request->request->get("pbRegSet");
+                if($setRegisterName != NULL){
+                    $setRegister = $registerRepo->findOneBy(array('name' => $setRegisterName));
+                    $progressBar->setSetRegisterId($setRegister);
+                }
+                $valueRegister = $registerRepo->findOneBy(array('name' => $request->request->get("pbRegVal")));
+                $rangeMin = $request->request->get("pbMin");
+                $rangeMax = $request->request->get("pbMax");
+                $optimumMin = $request->request->get("pbOptimumMin");
+                $optimumMax = $request->request->get("pbOptimumMax");
+                $color1 = $request->request->get("pbColor1");
+                $color2 = $request->request->get("pbColor2");
+                $color3 = $request->request->get("pbColor3");
+                $progressBar->setValueRegisterId($valueRegister)
+                        ->setRangeMin($rangeMin)
+                        ->setRangeMax($rangeMax)
+                        ->setOptimumMin($optimumMin)
+                        ->setOptimumMax($optimumMax)
+                        ->setColor1($color1)
+                        ->setColor2($color2)
+                        ->setColor3($color3);
+                $em->persist($progressBar);
+                $em->flush();
+                $contentSource = $progressBar->getId();
             } else {
                 $contentSource = $request->request->get("contentSource");
                 $reg = null;
@@ -185,7 +244,6 @@ class PanelController extends Controller {
                 $visibility = 0;
             }
 
-            $em = $this->getDoctrine()->getManager();
 
             $panel = $panelRepo->find($panel_id);
             $panel->setName($name)
@@ -213,7 +271,7 @@ class PanelController extends Controller {
             $em->flush();
             $ret["panel_id"] = $panel_id;
             $ret["register"] = $reg;
-            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
+            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel, 'widgets' => array($progressBar)]);
             $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
             $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
             

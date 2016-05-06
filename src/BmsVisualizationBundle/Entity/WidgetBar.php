@@ -22,13 +22,6 @@ class WidgetBar {
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=50, nullable=false)
-     */
-    private $name;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="range_min", type="decimal", precision=9, scale=2, nullable=false)

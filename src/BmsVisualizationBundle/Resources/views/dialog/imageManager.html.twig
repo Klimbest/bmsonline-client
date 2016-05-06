@@ -100,22 +100,17 @@
                                     {% for image in subsubdir %}
                                         <div id="{{image}}" class="text-center">
                                             <img class='img-responsive' src='/images/{{k}}/{{key}}/{{keykey}}/{{image}}' />
-                                            {#                                        <img class='img-responsive' src='/images/{% for det in d %}{{det}}/{% endfor %}{{subdir}}' />#}
                                         </div>
                                     {% endfor %}
-                                {% else %}
-                                    {#                                    {% set d = k|split('\\')%}#}
+                                {% else %}    
                                     <div id="{{subsubdir}}" class="text-center">
                                         <img class='img-responsive' src='/images/{{k}}/{{key}}/{{subsubdir}}' />
-                                        {#                                        <img class='img-responsive' src='/images/{% for det in d %}{{det}}/{% endfor %}{{subdir}}' />#}
                                     </div>
                                 {% endif %}
                             {% endfor %}
                         {% else %}
-                            {#                            {% set d = k|split('\\')%}#}
                             <div id="{{subdir}}" class="text-center">
                                 <img class='img-responsive' src='/images/{{k}}/{{subdir}}' />
-                                {#                                <img class='img-responsive' src='/images/{% for det in d %}{{det}}/{% endfor %}{{subdir}}' />#}
                             </div>
                         {% endif %}
                     {% endfor %}
