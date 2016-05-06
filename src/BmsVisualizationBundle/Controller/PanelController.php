@@ -206,33 +206,33 @@ class PanelController extends Controller {
                 $reg["id"] = $register->getId();
                 $reg["value"] = $register->getRegisterCurrentData()->getFixedValue();
                 $contentSource = $register->getId();
-            } elseif( $type == "widget") {
-                $panel = $panelRepo->find($panel_id);
-                $progressBar = $progerssBarRepo->findOneById($panel->getContentSource());
-                $setRegisterName = $request->request->get("pbRegSet");
-                if($setRegisterName != NULL){
-                    $setRegister = $registerRepo->findOneBy(array('name' => $setRegisterName));
-                    $progressBar->setSetRegisterId($setRegister);
-                }
-                $valueRegister = $registerRepo->findOneBy(array('name' => $request->request->get("pbRegVal")));
-                $rangeMin = $request->request->get("pbMin");
-                $rangeMax = $request->request->get("pbMax");
-                $optimumMin = $request->request->get("pbOptimumMin");
-                $optimumMax = $request->request->get("pbOptimumMax");
-                $color1 = $request->request->get("pbColor1");
-                $color2 = $request->request->get("pbColor2");
-                $color3 = $request->request->get("pbColor3");
-                $progressBar->setValueRegisterId($valueRegister)
-                        ->setRangeMin($rangeMin)
-                        ->setRangeMax($rangeMax)
-                        ->setOptimumMin($optimumMin)
-                        ->setOptimumMax($optimumMax)
-                        ->setColor1($color1)
-                        ->setColor2($color2)
-                        ->setColor3($color3);
-                $em->persist($progressBar);
-                $em->flush();
-                $contentSource = $progressBar->getId();
+//            } elseif( $type == "widget") {
+//                $panel = $panelRepo->find($panel_id);
+//                $progressBar = $progerssBarRepo->findOneById($panel->getContentSource());
+//                $setRegisterName = $request->request->get("pbRegSet");
+//                if($setRegisterName != NULL){
+//                    $setRegister = $registerRepo->findOneBy(array('name' => $setRegisterName));
+//                    $progressBar->setSetRegisterId($setRegister);
+//                }
+//                $valueRegister = $registerRepo->findOneBy(array('name' => $request->request->get("pbRegVal")));
+//                $rangeMin = $request->request->get("pbMin");
+//                $rangeMax = $request->request->get("pbMax");
+//                $optimumMin = $request->request->get("pbOptimumMin");
+//                $optimumMax = $request->request->get("pbOptimumMax");
+//                $color1 = $request->request->get("pbColor1");
+//                $color2 = $request->request->get("pbColor2");
+//                $color3 = $request->request->get("pbColor3");
+//                $progressBar->setValueRegisterId($valueRegister)
+//                        ->setRangeMin($rangeMin)
+//                        ->setRangeMax($rangeMax)
+//                        ->setOptimumMin($optimumMin)
+//                        ->setOptimumMax($optimumMax)
+//                        ->setColor1($color1)
+//                        ->setColor2($color2)
+//                        ->setColor3($color3);
+//                $em->persist($progressBar);
+//                $em->flush();
+//                $contentSource = $progressBar->getId();
             } else {
                 $contentSource = $request->request->get("contentSource");
                 $reg = null;

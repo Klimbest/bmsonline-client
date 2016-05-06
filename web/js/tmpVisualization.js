@@ -203,40 +203,42 @@ function editPanel(panel_id, register) {
                     var data = new FormData();
                     if ($("select#panel-type").val() === "widget") {
                         var pbForm = $("form#progress-bar");
-                        data.append("pbRegVal", pbForm.find("input#progress-bar-value").val());
-                        data.append("pbRegSet", pbForm.find("input#progress-bar-set").val());
-                        data.append("pbMin", pbForm.find("div#rangeMin input").val());
-                        data.append("pbMax", pbForm.find("div#rangeMax input").val());
-                        data.append("pbOptimumMin", pbForm.find("div#optimumMin input").val());
-                        data.append("pbOptimumMax", pbForm.find("div#optimumMax input").val());
-                        data.append("pbColor1", pbForm.find("input#color1").val());
-                        data.append("pbColor2", pbForm.find("input#color2").val());
-                        data.append("pbColor3", pbForm.find("input#color3").val());
+//                        data.append("pbRegVal", pbForm.find("input#progress-bar-value").val());
+//                        data.append("pbRegSet", pbForm.find("input#progress-bar-set").val());
+//                        data.append("pbMin", pbForm.find("div#rangeMin input").val());
+//                        data.append("pbMax", pbForm.find("div#rangeMax input").val());
+//                        data.append("pbOptimumMin", pbForm.find("div#optimumMin input").val());
+//                        data.append("pbOptimumMax", pbForm.find("div#optimumMax input").val());
+//                        data.append("pbColor1", pbForm.find("input#color1").val());
+//                        data.append("pbColor2", pbForm.find("input#color2").val());
+//                        data.append("pbColor3", pbForm.find("input#color3").val());
+                        alert("Jeszcze nie działa");
+                    }else{
+                        data.append("panel_id", panel_id);
+                        data.append("name", $("form#panel input#panel-name").val());
+                        data.append("type", $("select#panel-type").val());
+                        data.append("topPosition", $("form#panel input#topPosition").val());
+                        data.append("leftPosition", $("form#panel input#leftPosition").val());
+                        data.append("width", $("form#panel input#width").val());
+                        data.append("height", $("form#panel input#height").val());
+                        data.append("border", $("form#panel input#borderWidth").val() + "px " + $("form#panel select#borderStyle").val() + " " + $("form#panel input#borderColor").val());
+                        data.append("backgroundColor", hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($("form#panel input#opacity").val())));
+                        data.append("textAlign", $("form#panel div.panel-preview").css("textAlign"));
+                        data.append("fontWeight", $("form#panel div.panel-preview").css("fontWeight"));
+                        data.append("textDecoration", $("form#panel div.panel-preview").css("textDecoration"));
+                        data.append("fontStyle", $("form#panel div.panel-preview").css("fontStyle"));
+                        data.append("fontFamily", $("form#panel select#fontFamily").val());
+                        data.append("fontSize", $("form#panel select#fontSize").val());
+                        data.append("fontColor", $("form#panel input#fontColor").val());
+                        data.append("borderRadius", $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px");
+                        data.append("zIndex", 5);
+                        data.append("visibility", $("form#panel input#visibility").is(':checked'));
+                        data.append("contentSource", $("input#panel-source-content").val());
+                        data.append("displayPrecision", $("form#panel select#displayPrecision").val());
+                        data.append("href", $("div.dialog-panel-navigation select.pages").val());
+                        saveData(data);
+                        $(this).dialog('destroy').remove();
                     }
-                    data.append("panel_id", panel_id);
-                    data.append("name", $("form#panel input#panel-name").val());
-                    data.append("type", $("select#panel-type").val());
-                    data.append("topPosition", $("form#panel input#topPosition").val());
-                    data.append("leftPosition", $("form#panel input#leftPosition").val());
-                    data.append("width", $("form#panel input#width").val());
-                    data.append("height", $("form#panel input#height").val());
-                    data.append("border", $("form#panel input#borderWidth").val() + "px " + $("form#panel select#borderStyle").val() + " " + $("form#panel input#borderColor").val());
-                    data.append("backgroundColor", hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($("form#panel input#opacity").val())));
-                    data.append("textAlign", $("form#panel div.panel-preview").css("textAlign"));
-                    data.append("fontWeight", $("form#panel div.panel-preview").css("fontWeight"));
-                    data.append("textDecoration", $("form#panel div.panel-preview").css("textDecoration"));
-                    data.append("fontStyle", $("form#panel div.panel-preview").css("fontStyle"));
-                    data.append("fontFamily", $("form#panel select#fontFamily").val());
-                    data.append("fontSize", $("form#panel select#fontSize").val());
-                    data.append("fontColor", $("form#panel input#fontColor").val());
-                    data.append("borderRadius", $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px");
-                    data.append("zIndex", 5);
-                    data.append("visibility", $("form#panel input#visibility").is(':checked'));
-                    data.append("contentSource", $("input#panel-source-content").val());
-                    data.append("displayPrecision", $("form#panel select#displayPrecision").val());
-                    data.append("href", $("div.dialog-panel-navigation select.pages").val());
-                    saveData(data);
-                    $(this).dialog('destroy').remove();
                 }
             }, {
                 text: "Anuluj",
@@ -290,6 +292,12 @@ function editPanel(panel_id, register) {
             var value = parseFloat($("input#panel-source-value").val());
             value = value.toFixed(displayPrecision);
             $("div.panel-preview").children("span").empty().append(value);
+        } else if(panel.hasClass("bms-panel-widget")){
+            $("div.dialog-panel-data select#panel-type").val("widget");
+            $("li#dialog-panel-progress-bar").show();
+                $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
+                $("input#panel-source-content").val("").prop("required", false).hide();
+                $(".input-group-btn button#manager").hide();
         }
     }
     function setGeneral() {
