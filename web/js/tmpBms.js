@@ -211,7 +211,7 @@ function ajaxRefreshPage(terms) {
                     $("div#" + term.panel_id + ".bms-panel").addClass(term.effect_content);
                     break;
                 case "text" :
-                    $("div#" + term.panel_id + ".bms-panel span.bms-panel-content").text(term.effect_content);
+                    $("div#" + term.panel_id + ".bms-panel span.bms-panel-content").empty().append(term.effect_content);
                     break;
                 case "popup" :
                     alert(term.effect_content);
