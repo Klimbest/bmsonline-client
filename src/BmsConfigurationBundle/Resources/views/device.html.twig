@@ -82,7 +82,7 @@
                     <span class="label label-primary hide-button-label">Ukryj / Pokaż kolumny <i class="fa fa-angle-left fa-fw"></i></span>
                 </div>
                 <div class="col-md-4 text-center">
-                    <span id="{{device.id}}" class="label label-primary label-last-read">Ostatni odczyt: 
+                    <span id="{{device.id}}" class="label label-primary label-last-read">Ostatnia aktualizacja danych: 
 
                         {% set time = null %}
                         {% if registers|length > 0 %}
@@ -112,6 +112,7 @@
                     <input id="active_read" type="button" class="btn btn-default btn-xs hidding" value="Aktywny odczyt"></input>
                     <input id="scan_queue" type="button" class="btn btn-default btn-xs hidding clicked" value="Częstotliwość odczytu danych"></input>
                     <input id="archive" type="button" class="btn btn-default btn-xs hidding" value="Archiwizacja"></input>
+                    <input id="alarm" type="button" class="btn btn-default btn-xs hidding" value="Alarmowy"></input>
                     <input id="modificator_read" type="button" class="btn btn-default btn-xs hidding" value="Sposób przeliczania danych przy odczycie"></input>
 {#                    <input id="modificator_write" type="button" class="btn btn-default btn-xs hidding clicked" value="Sposób przeliczania danych przy zapisie"></input>#}
                     <input id="fixed_value" type="button" class="btn btn-default btn-xs hidding" value="Aktualna wartość"></input>
@@ -139,6 +140,7 @@
                             <th class="active_read">Aktywny odczyt</th>
                             <th class="scan_queue">Kolejka odczytu danych</th>
                             <th class="archive">Archiwizacja</th>
+                            <th class="alarm">Alarmowy</th>
                             <th class="modificator_read">Sposób przeliczania danych przy odczycie</th>
                             <th class="modificator_write">Sposób przeliczania danych przy zapisie</th>
                             <th class="fixed_value">Aktualna wartość</th>
@@ -165,6 +167,13 @@
                                     <td class="scan_queue">{{ register.scanQueue }}</td>
                                     <td class="archive text-center">
                                         {% if register.archive == 1 %}
+                                            <i class="fa fa-check-square-o fa-fw fa-green"></i>
+                                        {% else %}
+                                            <i class="fa fa-square-o fa-fw fa-red"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td class="alarm text-center">
+                                        {% if register.alarm == 1 %}
                                             <i class="fa fa-check-square-o fa-fw fa-green"></i>
                                         {% else %}
                                             <i class="fa fa-square-o fa-fw fa-red"></i>
