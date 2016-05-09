@@ -24,7 +24,10 @@
                 <div class="col-md-2">
                     Nazwa rejestru
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-1">
+                    Wartość rejestru
+                </div>
+                <div class="col-md-3">
                     Opis rejestru
                 </div>
                 <div class="col-md-1">
@@ -42,7 +45,10 @@
                     <div class="col-md-2">
                         <span>{{alarm.register.name}}</span>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-1">
+                        <span class="alarmValue">{{alarm.register.registerCurrentData.fixedValue}}</span>
+                    </div>
+                    <div class="col-md-3">
                         <span>{{alarm.register.description}}</span>
                     </div>
                     <div class="col-md-1">
@@ -56,6 +62,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-
+    <script src="{{ asset('js/tmpAlarmHistory.js') }}"></script>
 {% endblock %}
 

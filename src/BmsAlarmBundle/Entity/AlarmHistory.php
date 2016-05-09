@@ -44,6 +44,12 @@ class AlarmHistory {
      */
     private $confirmed;    
     
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="value", type="integer", nullable=false)
+     */
+    private $value;    
 
 
     /**
@@ -126,5 +132,29 @@ class AlarmHistory {
     public function getRegister()
     {
         return $this->register;
+    }
+
+    /**
+     * Set value
+     *
+     * @param integer $value
+     *
+     * @return AlarmHistory
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return integer
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 }
