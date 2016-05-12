@@ -132,7 +132,14 @@ class DefaultController extends Controller {
 
             $this->setDataToSync();
             $em->flush();
-
+            if($device->getActive() == 0 ){
+                foreach($device->getRegisters() as $register){
+                    $rCD = $register->getRegisterCurrentData();
+                    $rCD->setFixedValue(NULL);
+                    
+                    $em->flush();
+                }
+            }
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
 
