@@ -176,7 +176,7 @@ class PanelController extends Controller {
         if ($request->isXmlHttpRequest()) {
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-            $progressBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgerBar');
+            $progressBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
             //get data
             $panel_id = $request->request->get("panel_id");
             $type = $request->request->get("type");
