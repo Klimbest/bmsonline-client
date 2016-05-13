@@ -129,17 +129,10 @@ class DefaultController extends Controller {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $this->setDataToSync();
+            
             $em->flush();
-            if($device->getActive() == 0 ){
-                foreach($device->getRegisters() as $register){
-                    $rCD = $register->getRegisterCurrentData();
-                    $rCD->setFixedValue(NULL);
-                    
-                    $em->flush();
-                }
-            }
+            $this->setDataToSync();
+            
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
 
@@ -181,36 +174,10 @@ class DefaultController extends Controller {
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $name = $form['name']->getData();
-            $description = $form['description']->getData();
-            $description2 = $form['description2']->getData();
-            $register_address = $form['register_address']->getData();
-            $function = $form ['function']->getData();
-            $scan_queue = $form['scan_queue']->getData();
-            $register_size = $form['register_size']->getData();
-            $display_suffix = $form['display_suffix']->getData();
-            $modificator_read = $form['modificator_read']->getData();
-            $modificator_write = $form['modificator_write']->getData();
-            $archive = $form['archive']->getData();
-            $active = $form['active']->getData();
-
-            $register->setName($name)
-                    ->setFunction($function)
-                    ->setDescription($description)
-                    ->setDescription2($description2)
-                    ->setRegisterAddress($register_address)
-                    ->setScanQueue($scan_queue)
-                    ->setRegisterSize($register_size)
-                    ->setDisplaySuffix($display_suffix)
-                    ->setModificatorRead($modificator_read)
-                    ->setModificatorWrite($modificator_write)
-                    ->setArchive($archive)
-                    ->setActive($active);
-
             $em->persist($register);
             $this->setDataToSync();
             $em->flush();
-
+            
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
             $session->set('device_id', $device_id);
@@ -252,19 +219,19 @@ class DefaultController extends Controller {
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-//            $name = $form['name']->getData();
-//            $description = $form['description']->getData();
-//            $modbus_address = $form['modbusAddress']->getData();
-//            $active = $form['active']->getData();
-//            $localization = $form['localization']->getData();
-//
-//            $device->setName($name)
-//                    ->setCommunicationType($comm)
-//                    ->setDescription($description)
-//                    ->setModbusAddress($modbus_address)
-//                    ->setActive($active)
-//                    ->setLocalization($localization);
-//
+            $name = $form['name']->getData();
+            $description = $form['description']->getData();
+            $modbus_address = $form['modbusAddress']->getData();
+            $active = $form['active']->getData();
+            $localization = $form['localization']->getData();
+
+            $device->setName($name)
+                    ->setCommunicationType($comm)
+                    ->setDescription($description)
+                    ->setModbusAddress($modbus_address)
+                    ->setActive($active)
+                    ->setLocalization($localization);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($device);
             $this->setDataToSync();

@@ -25,7 +25,6 @@ function setSidebarEvents() {
             datatype: "application/json",
             url: Routing.generate('bms_visualization_load_panel_dialog'),
             success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
                 $(".main-row").append(ret["template"]);
                 createPanelDialog().dialog("open");
             }
@@ -113,7 +112,7 @@ function createPanelDialog() {
                     data.append("displayPrecision", $("form#panel select#displayPrecision").val());
                     data.append("href", $("div.dialog-panel-navigation select.pages").val());
                     saveData(data);
-                    
+
                     $(this).dialog('destroy').remove();
                 }
             },
@@ -124,11 +123,7 @@ function createPanelDialog() {
                 }
             }],
         open: function () {
-            setDialog();
-            setDialogButtonsData();
-            setDialogButtonsFormat();
-            setDialogButtonEvent();
-            setDialogButtonProgressBar();
+            createPanelAjax();
         },
         close: function () {
             $(this).dialog('destroy').remove();
@@ -156,6 +151,28 @@ function createPanelDialog() {
         };
         panel.css(css);
     }
+    function createPanelAjax() {
+        var data = new FormData();
+        data.append("page_id", $("div.label-page.active").attr("id"));
+        $.ajax({
+            type: "POST",
+            url: Routing.generate('bms_visualization_add_panel'),
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $("div.main-row div.well").append(ret['template']);
+                setDialog();
+                setDialogButtonsData();
+                setDialogButtonsFormat();
+                setDialogButtonEvent(ret["panel_id"]);
+                setDialogButtonProgressBar();
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    }
+
     function saveData(data) {
         var fail = false;
         var fail_log = '';
@@ -173,7 +190,7 @@ function createPanelDialog() {
         if (!fail) {
             $.ajax({
                 type: "POST",
-                url: Routing.generate('bms_visualization_add_panel'),
+                url: Routing.generate('bms_visualization_edit_panel'),
                 data: data,
                 contentType: false,
                 processData: false,
@@ -213,7 +230,7 @@ function editPanel(panel_id, register) {
 //                        data.append("pbColor2", pbForm.find("input#color2").val());
 //                        data.append("pbColor3", pbForm.find("input#color3").val());
                         alert("Jeszcze nie działa");
-                    }else{
+                    } else {
                         data.append("panel_id", panel_id);
                         data.append("name", $("form#panel input#panel-name").val());
                         data.append("type", $("select#panel-type").val());
@@ -248,7 +265,7 @@ function editPanel(panel_id, register) {
             }],
         open: function () {
 
-                        
+
             setGeneral();
             setBorder();
             setFont();
@@ -292,12 +309,12 @@ function editPanel(panel_id, register) {
             var value = parseFloat($("input#panel-source-value").val());
             value = value.toFixed(displayPrecision);
             $("div.panel-preview").children("span").empty().append(value);
-        } else if(panel.hasClass("bms-panel-widget")){
+        } else if (panel.hasClass("bms-panel-widget")) {
             $("div.dialog-panel-data select#panel-type").val("widget");
             $("li#dialog-panel-progress-bar").show();
-                $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
-                $("input#panel-source-content").val("").prop("required", false).hide();
-                $(".input-group-btn button#manager").hide();
+            $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
+            $("input#panel-source-content").val("").prop("required", false).hide();
+            $(".input-group-btn button#manager").hide();
         }
     }
     function setGeneral() {
@@ -600,23 +617,7 @@ function setDialogButtonEvent(panel_id) {
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     });
     //delete term
-    $("table .fa-trash-o").click(function () {
-        var data = {
-            term_id: $(this).attr("id")
-        };
-        $.ajax({
-            type: "POST",
-            datatype: "application/json",
-            url: Routing.generate('bms_visualization_delete_term'),
-            data: data,
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                var id = parseInt(ret['term_id']);
-                $("table i#" + id + ".fa-trash-o").parent().parent().remove();
-            }
-        });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    });
+    setDeleteTerm();
 }
 function setDialogButtonProgressBar() {
     //zmiana kolorów
@@ -906,7 +907,8 @@ function createImageManager(fw) {
     });
 
     function setDialogButtons() {
-        var dp = $("div.image-manager div.dialog-panel");
+        var dp = $("div.image-manager div#new-image");
+        var img = new Image();
         if ($("input#panel-source-content").val()) {
             var src = $("input#panel-source-content").val();
             $("div.image-manager input#imageName").val(src);
@@ -915,18 +917,15 @@ function createImageManager(fw) {
         }
         //loading image from disk
         $("div.image-manager input#image").change(function (event) {
+            dp.empty().append("<img class='img-responsive' src='' />");
             input = event.target;
             if (this.files && this.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    var img = new Image();
                     img.onload = function () {
-                        dp.css({
-                            width: this.width,
-                            height: this.height
-                        }).children("img").attr("src", e.target.result);
-                        $("div.image-manager input#resolutionX").val(parseInt(dp.css("width")));
-                        $("div.image-manager input#resolutionY").val(parseInt(dp.css("height")));
+                        dp.children("img").attr("src", e.target.result);
+                        $("div.image-manager input#resolutionX").val(this.width);
+                        $("div.image-manager input#resolutionY").val(this.height);
                     };
                     img.src = e.target.result;
 
@@ -934,6 +933,7 @@ function createImageManager(fw) {
                 reader.readAsDataURL(input.files[0]);
             }
             var imgName = input.files[0].name;
+            dp.attr("id", imgName);
             $("div.image-manager input#imageName").val(imgName);
 
         });
@@ -987,23 +987,15 @@ function createImageManager(fw) {
         });
         //change size of image
         $("div.image-manager input#resolutionX").change(function () {
-            var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
+            var ar = img.width / img.height;
             var h = $(this).val() / ar;
             $("div.image-manager input#resolutionY").val(Math.round(h));
-            dp.css({
-                width: $(this).val() + "px",
-                height: Math.round(h) + "px"
-            });
 
         });
         $("div.image-manager input#resolutionY").change(function () {
-            var ar = parseInt(dp.css("width")) / parseInt(dp.css("height"));
+            var ar = img.width / img.height;
             var w = $(this).val() * ar;
             $("div.image-manager input#resolutionX").val(Math.round(w));
-            dp.css({
-                width: Math.round(w) + "px",
-                height: $(this).val() + "px"
-            });
         });
         //sidebar
         var imageListItems = $("div.image-manager div.row.image-container i.fa-plus-circle");
@@ -1066,8 +1058,27 @@ function createEffectCssManager() {
     }
 
 }
-
+function setDeleteTerm() {
+    $("table .fa-trash-o").unbind("click").click(function () {
+        var data = {
+            term_id: $(this).attr("id")
+        };
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_delete_term'),
+            data: data,
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                var id = parseInt(ret['term_id']);
+                $("table i#" + id + ".fa-trash-o").parent().parent().remove();
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    });
+}
 function createCondition(panel_id) {
+
     return $("div.dialog-condition").dialog({
         autoOpen: false,
         width: 1200,
@@ -1229,7 +1240,18 @@ function createCondition(panel_id) {
                         var effectType = "Animacja";
                         break;
                 }
-                $("table tr#no-data").remove();
+                if ($("table tr#no-data").length > 0) {
+                    $("table tbody").empty().append("<tr>\n\
+                        <td></td>\n\
+                        <td class='text-center'>Jeżeli żaden z poniższych warunków nie jest spełniony</td>\n\
+                        <td class='text-center'></td>\n\
+                        <td class=text-center'></td>\n\
+                        <td class='text-center'>Właściwości formatu</td>\n\
+                        <td class=''>display;none</td>\n\
+                        <td class=''></td>\n\
+                        <td></td>\n\
+                    </tr>");
+                }
                 $("table tbody").append(
                         "<tr>\n\
                             <td>" + term.register_name + "</td>\n\
@@ -1239,13 +1261,13 @@ function createCondition(panel_id) {
                             <td class='text-center'>" + effectType + "</td>\n\
                             <td>" + term.effect_content + "</td>\n\
                             <td class='manage text-center'>\n\
-                                <i id='" + term.register_id + "' class='fa fa-edit fa-fw fa-green'></i>\n\
-                                <i id='" + term.register_id + "' class='fa fa-trash-o fa-fw fa-red'></i>\n\
+                                <i id='" + term.id + "' class='fa fa-trash-o fa-fw fa-red'></i>\n\
                             </td>\n\
                             <td>\n\
-                                <input name='checkedTermId[]' value='" + term.register_id + "' type='checkbox'></input>\n\
+                                <input name='checkedTermId[]' value='" + term.id + "' type='checkbox'></input>\n\
                             </td>\n\
                         </tr>");
+                setDeleteTerm();
             }
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();

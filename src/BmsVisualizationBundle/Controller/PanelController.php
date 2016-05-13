@@ -62,104 +62,40 @@ class PanelController extends Controller {
     public function addPanelAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
-            $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $page_id = $request->request->get("page_id");
             
             $em = $this->getDoctrine()->getManager();
             
-            $page_id = $request->request->get("page_id");
-            $type = $request->request->get("type");
-            $name = $request->request->get("name");
-            $topPosition = $request->request->get("topPosition");
-            $leftPosition = $request->request->get("leftPosition");
-            $width = $request->request->get("width");
-            $height = $request->request->get("height");
-            $border = $request->request->get("border");
-            $backgroundColor = $request->request->get("backgroundColor");
-            $textAlign = $request->request->get("textAlign");
-            $fontWeight = $request->request->get("fontWeight");
-            $textDecoration = $request->request->get("textDecoration");
-            $fontStyle = $request->request->get("fontStyle");
-            $fontFamily = $request->request->get("fontFamily");
-            $fontSize = $request->request->get("fontSize");
-            $content_source = $request->request->get("content_source");
-            $fontColor = $request->request->get("fontColor");
-            $borderRadius = $request->request->get("borderRadius");
-            $zIndex = $request->request->get("zIndex");
-            $displayPrecision = $request->request->get("displayPrecision");
-            $href = $request->request->get("href");
-            if ($type == "variable") {
-                $registerName = $request->request->get("contentSource");
-                $register = $registerRepo->findOneBy(array('name' => $registerName));
-                $contentSource = $register->getId();
-            } elseif( $type == "widget") {
-                $progressBar = new WidgetBar();
-                $setRegisterName = $request->request->get("pbRegSet");
-                if($setRegisterName != NULL){
-                    $setRegister = $registerRepo->findOneBy(array('name' => $setRegisterName));
-                    $progressBar->setSetRegisterId($setRegister);
-                }
-                $valueRegister = $registerRepo->findOneBy(array('name' => $request->request->get("pbRegVal")));
-                
-                $rangeMin = $request->request->get("pbMin");
-                $rangeMax = $request->request->get("pbMax");
-                $optimumMin = $request->request->get("pbOptimumMin");
-                $optimumMax = $request->request->get("pbOptimumMax");
-                $color1 = $request->request->get("pbColor1");
-                $color2 = $request->request->get("pbColor2");
-                $color3 = $request->request->get("pbColor3");
-                $progressBar->setValueRegisterId($valueRegister)
-                        ->setRangeMin($rangeMin)
-                        ->setRangeMax($rangeMax)
-                        ->setOptimumMin($optimumMin)
-                        ->setOptimumMax($optimumMax)
-                        ->setColor1($color1)
-                        ->setColor2($color2)
-                        ->setColor3($color3);
-                $em->persist($progressBar);
-                $em->flush();
-                $contentSource = $progressBar->getId();
-            } else {
-                $contentSource = $request->request->get("contentSource");
-            }
-
-            if ($request->request->get("visibility") == "true") {
-                $visibility = 1;
-            } else {
-                $visibility = 0;
-            }
-
-
             $panel = new Panel();
             $page = $pageRepo->find($page_id);
             $panel->setPage($page)
-                    ->setName($name)
-                    ->setType($type)
-                    ->setTopPosition($topPosition)
-                    ->setLeftPosition($leftPosition)
-                    ->setWidth($width)
-                    ->setHeight($height)
-                    ->setBorder($border)
-                    ->setBackgroundColor($backgroundColor)
-                    ->setTextAlign($textAlign)
-                    ->setFontWeight($fontWeight)
-                    ->setTextDecoration($textDecoration)
-                    ->setFontStyle($fontStyle)
-                    ->setFontFamily($fontFamily)
-                    ->setFontSize($fontSize)
-                    ->setContentSource($content_source)
-                    ->setFontColor($fontColor)
-                    ->setBorderRadius($borderRadius)
-                    ->setZIndex($zIndex)
-                    ->setVisibility($visibility)
-                    ->setContentSource($contentSource)
-                    ->setDisplayPrecision($displayPrecision)
-                    ->setHref($href);
+                    ->setName("new")
+                    ->setType("new")
+                    ->setTopPosition(0)
+                    ->setLeftPosition(0)
+                    ->setWidth(0)
+                    ->setHeight(0)
+                    ->setBorder("new")
+                    ->setBackgroundColor("new")
+                    ->setTextAlign("new")
+                    ->setFontWeight("new")
+                    ->setTextDecoration("new")
+                    ->setFontStyle("new")
+                    ->setFontFamily("new")
+                    ->setFontSize(0)
+                    ->setFontColor("new")
+                    ->setBorderRadius("new")
+                    ->setZIndex(0)
+                    ->setVisibility(0)
+                    ->setContentSource("new")
+                    ->setDisplayPrecision(0)
+                    ->setHref(NULL);
 
             $em->persist($panel);
             $em->flush();
 
-            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel, 'widgets' => array($progressBar)]);
+            $ret["panel_id"] = $panel->getId();
             $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
             $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
             
@@ -200,39 +136,41 @@ class PanelController extends Controller {
             $href = $request->request->get("href");
             
             $em = $this->getDoctrine()->getManager();
+            $widgetArray = array();
             if ($type == "variable") {
                 $registerName = $request->request->get("contentSource");
                 $register = $registerRepo->findOneBy(array('name' => $registerName));
                 $reg["id"] = $register->getId();
                 $reg["value"] = $register->getRegisterCurrentData()->getFixedValue();
                 $contentSource = $register->getId();
-//            } elseif( $type == "widget") {
-//                $panel = $panelRepo->find($panel_id);
-//                $progressBar = $progerssBarRepo->findOneById($panel->getContentSource());
-//                $setRegisterName = $request->request->get("pbRegSet");
-//                if($setRegisterName != NULL){
-//                    $setRegister = $registerRepo->findOneBy(array('name' => $setRegisterName));
-//                    $progressBar->setSetRegisterId($setRegister);
-//                }
-//                $valueRegister = $registerRepo->findOneBy(array('name' => $request->request->get("pbRegVal")));
-//                $rangeMin = $request->request->get("pbMin");
-//                $rangeMax = $request->request->get("pbMax");
-//                $optimumMin = $request->request->get("pbOptimumMin");
-//                $optimumMax = $request->request->get("pbOptimumMax");
-//                $color1 = $request->request->get("pbColor1");
-//                $color2 = $request->request->get("pbColor2");
-//                $color3 = $request->request->get("pbColor3");
-//                $progressBar->setValueRegisterId($valueRegister)
-//                        ->setRangeMin($rangeMin)
-//                        ->setRangeMax($rangeMax)
-//                        ->setOptimumMin($optimumMin)
-//                        ->setOptimumMax($optimumMax)
-//                        ->setColor1($color1)
-//                        ->setColor2($color2)
-//                        ->setColor3($color3);
-//                $em->persist($progressBar);
-//                $em->flush();
-//                $contentSource = $progressBar->getId();
+            } elseif( $type == "widget") {
+                $progressBar = new WidgetBar();
+                $setRegisterName = $request->request->get("pbRegSet");
+                if($setRegisterName != NULL){
+                    $setRegister = $registerRepo->findOneBy(array('name' => $setRegisterName));
+                    $progressBar->setSetRegisterId($setRegister);
+                }
+                $valueRegister = $registerRepo->findOneBy(array('name' => $request->request->get("pbRegVal")));
+                
+                $rangeMin = $request->request->get("pbMin");
+                $rangeMax = $request->request->get("pbMax");
+                $optimumMin = $request->request->get("pbOptimumMin");
+                $optimumMax = $request->request->get("pbOptimumMax");
+                $color1 = $request->request->get("pbColor1");
+                $color2 = $request->request->get("pbColor2");
+                $color3 = $request->request->get("pbColor3");
+                $progressBar->setValueRegisterId($valueRegister)
+                        ->setRangeMin($rangeMin)
+                        ->setRangeMax($rangeMax)
+                        ->setOptimumMin($optimumMin)
+                        ->setOptimumMax($optimumMax)
+                        ->setColor1($color1)
+                        ->setColor2($color2)
+                        ->setColor3($color3);
+                $em->persist($progressBar);
+                $em->flush();
+                array_push($widgetArray, $progressBar);
+                $contentSource = $progressBar->getId();
             } else {
                 $contentSource = $request->request->get("contentSource");
                 $reg = null;
@@ -271,7 +209,7 @@ class PanelController extends Controller {
             $em->flush();
             $ret["panel_id"] = $panel_id;
             $ret["register"] = $reg;
-            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel, 'widgets' => array($progressBar)]);
+            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel, 'widgets' => $widgetArray]);
             $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
             $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
             
