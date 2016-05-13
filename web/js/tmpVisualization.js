@@ -89,6 +89,7 @@ function createPanelDialog() {
                         data.append("pbColor2", pbForm.find("input#color2").val());
                         data.append("pbColor3", pbForm.find("input#color3").val());
                     }
+                    data.append("panel_id", $("input#panel_id").val());
                     data.append("page_id", $("div.label-page.active").attr("id"));
                     data.append("type", $("select#panel-type").val());
                     data.append("name", $("form#panel input#panel-name").val());
@@ -163,6 +164,7 @@ function createPanelDialog() {
             success: function (ret) {
                 $(".main-row").children(".fa-spinner").remove();
                 $("div.main-row div.well").append(ret['template']);
+                $("input#panel_id").val(ret["panel_id"]);
                 setDialog();
                 setDialogButtonsData();
                 setDialogButtonsFormat();
@@ -1072,6 +1074,7 @@ function setDeleteTerm() {
                 $(".main-row").children(".fa-spinner").remove();
                 var id = parseInt(ret['term_id']);
                 $("table i#" + id + ".fa-trash-o").parent().parent().remove();
+                console.log($("div.dialog-panel-event table tbody tr").length);
             }
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
