@@ -181,8 +181,7 @@ class PanelController extends Controller {
             } else {
                 $visibility = 0;
             }
-
-
+            
             $panel = $panelRepo->find($panel_id);
             $panel->setName($name)
                     ->setType($type)
@@ -317,12 +316,12 @@ class PanelController extends Controller {
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
             
             $panel = $panelRepo->find($panel_id);
-            $terms = $termRepo->findAllForPanel($panel_id);
+            $terms = $termRepo->findAllForPanelAsObject($panel_id);
             
             foreach($terms as $term){
                 $em->remove($term);
+                
             }
-            
             $em->remove($panel);
             $em->flush();
 

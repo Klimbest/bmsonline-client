@@ -120,6 +120,11 @@ function createPanelDialog() {
             {
                 text: "Anuluj",
                 click: function () {
+                    var data = {
+                        panel_id: $("input#panel_id").val()
+                    };
+                    $("div#" + $("input#panel_id").val() + ".bms-panel").remove();
+                    ajaxDeletePanel(data);
                     $(this).dialog('destroy').remove();
                 }
             }],
@@ -127,6 +132,11 @@ function createPanelDialog() {
             createPanelAjax();
         },
         close: function () {
+            var data = {
+                panel_id: $("input#panel_id").val()
+            };
+            $("div#" + $("input#panel_id").val() + ".bms-panel").remove();
+            ajaxDeletePanel(data);
             $(this).dialog('destroy').remove();
         }
     });
@@ -1074,7 +1084,14 @@ function setDeleteTerm() {
                 $(".main-row").children(".fa-spinner").remove();
                 var id = parseInt(ret['term_id']);
                 $("table i#" + id + ".fa-trash-o").parent().parent().remove();
-                console.log($("div.dialog-panel-event table tbody tr").length);
+                if( $("div.dialog-panel-event table tbody tr").length == 1 ){
+                    $("div.dialog-panel-event table tbody tr").remove().append(
+                            "<tr id='no-data'>\n\
+                                <td colspan='11' class='text-center'>\n\
+                                    <h2><span class='label label-primary'> Brak warunków</span></h2>\n\
+                                </td>\n\
+                            </tr>");
+                }
             }
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
