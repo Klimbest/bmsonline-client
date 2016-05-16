@@ -80,8 +80,7 @@ div.panel-list-container{
 /*BODY*/
 .main-row{
     /*max-height: 79vh;*/
-    max-width: 100%;
-    overflow: auto;
+    max-width: 80%;
     margin-right: 0px;
     margin-left: 210px;
 }
