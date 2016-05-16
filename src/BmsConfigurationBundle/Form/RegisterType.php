@@ -85,6 +85,11 @@ class RegisterType extends AbstractType{
                     'attr' => array('disabled' => 'disabled'),
                     'label' => 'Rejestr alarmowy?',
                     'required' => false
+                    ))
+                ->add('bit_register', CheckboxType::class, array(
+                    'attr' => array('disabled' => 'disabled'),
+                    'label' => 'Rejestr bitowy?',
+                    'required' => false
                     ));
     }
     

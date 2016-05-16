@@ -111,6 +111,13 @@ class Register
     private $alarm;    
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="bit_register", type="boolean", nullable=true, options={"default"=false})
+     */
+    private $bit_register;    
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -568,5 +575,29 @@ class Register
     public function getAlarm()
     {
         return $this->alarm;
+    }
+
+    /**
+     * Set bitRegister
+     *
+     * @param boolean $bitRegister
+     *
+     * @return Register
+     */
+    public function setBitRegister($bitRegister)
+    {
+        $this->bit_register = $bitRegister;
+
+        return $this;
+    }
+
+    /**
+     * Get bitRegister
+     *
+     * @return boolean
+     */
+    public function getBitRegister()
+    {
+        return $this->bit_register;
     }
 }

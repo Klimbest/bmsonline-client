@@ -13,6 +13,7 @@ form div.row{
 }
 .tcpip, .btn-save, .btn-cancel,
 .name, .modificator_write, .scan_queue,
+/*.bit_register,*/ 
 .register-level, .device-level, .hidden-item{
     display: none;
 }

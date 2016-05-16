@@ -87,6 +87,9 @@
                         <div class="col-md-3">
                             {{form_widget(form.register_size)}}
                         </div>
+                        <div class="col-md-2">
+                            {{form_row(form.bit_register)}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -130,16 +133,32 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-2">
                 {{form_row(form.archive)}}                
                 {{form_row(form.active)}}           
-                {{form_row(form.alarm)}}
+                {{form_row(form.alarm)}}    
             </div>
-            <div class="col-md-8">
+            <div class="col-md-10">
                 {{form_row(form.description2)}}                
                 {{form_row(form.description2)}}
             </div>
         </div>
+        {% if register.bitRegister == 1 %}
+            <div class="row bits">
+                <div class="col-md-12">
+                    {% for i in 0..register.registerSize-1 %}
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" value="R_B_{{i}}" />
+                            </div> 
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" value="{{i}}" />
+                            </div> 
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
         <div class="row text-right">
             <div class="col-md-12">
                 <button class="btn btn-default btn-edit" type="button">Edytuj</button>
