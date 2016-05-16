@@ -148,9 +148,9 @@
                                     </td>
                                     <td class="manage text-center">
                                         <i id="{{device.id}}" class="fa fa-edit fa-fw fa-green fa-device"></i>
-                                        <a href="{{ path('bms_configuration_del_device', {'comm_id': device.communicationType.id, 'device_id': device.id}) }}">
+                                        {#<a href="{{ path('bms_configuration_del_device', {'comm_id': device.communicationType.id, 'device_id': device.id}) }}">
                                             <i class="fa fa-remove fa-fw fa-red"></i>
-                                        </a>
+                                        </a>#}
                                     </td>
                                     <td><input type="checkbox" name="checkedDevId[]" value="{{device.id}}"/></td>
                                 </tr>
