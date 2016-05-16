@@ -332,6 +332,7 @@ function editPanel(panel_id, register) {
     function setGeneral() {
         var panel = $("div#" + panel_id + ".bms-panel");
         $("form#panel input#panel-name").val(panel.attr("title"));
+        $("form#panel input#panel_id").val(panel_id);
         $("form#panel input#topPosition").val(parseInt(panel.css("top")));
         $("form#panel input#leftPosition").val(parseInt(panel.css("left")));
         $("form#panel input#width").val(parseInt(panel.css("width")));
