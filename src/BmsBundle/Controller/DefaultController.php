@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Process\Process;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class DefaultController extends Controller {
@@ -16,8 +15,6 @@ class DefaultController extends Controller {
      */
     public function bmsIndexAction() {
 
-//        $process = new Process('bash ../../orderToRPi.sh dbSync');
-//        $process->run();
         return $this->render('BmsBundle::index.html.twig');
     }
 

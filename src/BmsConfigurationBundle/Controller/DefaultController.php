@@ -15,6 +15,7 @@ use BmsConfigurationBundle\Entity\Device;
 use BmsConfigurationBundle\Entity\Register;
 use BmsConfigurationBundle\Entity\RegisterCurrentData;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Process\Process;
 
 class DefaultController extends Controller {
 
@@ -89,10 +90,9 @@ class DefaultController extends Controller {
                     ->setUpdated(new \DateTime());
 
             $em->persist($comm);
-            
-            $this->setDataToSync();
+
             $em->flush();
-            
+
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
             $template = $this->container->get('templating')->render('BmsConfigurationBundle::communicationType.html.twig', ['comms' => $communicationTypes, 'comm' => $comm, 'form' => $form->createView()]);
@@ -118,10 +118,10 @@ class DefaultController extends Controller {
                         ->getQuery()->getResult();
         //pobiera zasoby do zawartości strony
         $device = $deviceRepo->find($device_id);
-        
+
         $registers = $registerRepo->getAllOrderByAdr($device_id);
-        
-        
+
+
         $form = $this->createForm(DeviceType::class, $device, array(
             'action' => $this->generateUrl('bms_configuration_device', array('comm_id' => $comm_id, 'device_id' => $device_id)),
             'method' => 'POST'
@@ -129,10 +129,9 @@ class DefaultController extends Controller {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $em->flush();
-            $this->setDataToSync();
-            
+
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
 
@@ -175,14 +174,14 @@ class DefaultController extends Controller {
         if ($form->isSubmitted() && $form->isValid()) {
 
             $em->persist($register);
-            $this->setDataToSync();
             $em->flush();
-            
+
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
             $session->set('device_id', $device_id);
 
 
+            $this->setDataToSync(); 
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
 
@@ -201,7 +200,7 @@ class DefaultController extends Controller {
      * @Route("/{comm_id}/add_device", name="bms_configuration_add_device", requirements={"comm_id" = "\d+"}, options={"expose"=true})
      */
     public function addDeviceAction($comm_id, Request $request) {
-        
+
         $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
         //pobiera aktywne porty(do menu)
         $communicationTypes = $communicationRepo->createQueryBuilder('ct')
@@ -234,7 +233,6 @@ class DefaultController extends Controller {
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($device);
-            $this->setDataToSync();
             $em->flush();
 
             $session = $request->getSession();
@@ -316,7 +314,6 @@ class DefaultController extends Controller {
             $em->flush();
             $register->setRegisterCurrentData($registerCD);
             $em->persist($register);
-            $this->setDataToSync();
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
             $session->set('device_id', $device_id);
@@ -350,7 +347,6 @@ class DefaultController extends Controller {
         }
         $em->flush();
         $em->remove($device);
-        $this->setDataToSync();
         $em->flush();
         $em->getConnection()->exec("ALTER TABLE device AUTO_INCREMENT = 1;");
         $em->getConnection()->exec("ALTER TABLE register AUTO_INCREMENT = 1;");
@@ -373,7 +369,6 @@ class DefaultController extends Controller {
 
         $em->remove($registerCD);
         $em->remove($register);
-        $this->setDataToSync();
         $em->flush();
         $em->getConnection()->exec("ALTER TABLE register AUTO_INCREMENT = 1;");
         $em->getConnection()->exec("ALTER TABLE register_current_data AUTO_INCREMENT = 1;");
@@ -404,7 +399,7 @@ class DefaultController extends Controller {
                 $em->remove($registerCD);
                 $em->remove($register);
             }
-            $this->setDataToSync();
+
             $em->flush();
         }
 
@@ -472,12 +467,16 @@ class DefaultController extends Controller {
         }
     }
 
-    public function setDataToSync(){
-        $em = $this->getDoctrine()->getManager();
-        $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
-        $ti = $technicalInformationRepo->findOneById(1);
-        $ti->setStatus(1);
-        $ti->setTime();
-        $em->persist($ti);        
+    public function setDataToSync() {
+
+//            $em = $this->getDoctrine()->getManager();
+//            $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
+//            $ti = $technicalInformationRepo->findOneById(1);
+//            $ti->setStatus(1);
+//            $ti->setTime();
+//            $em->persist($ti);
+        $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync'");
+        $process->run();
     }
+
 }
