@@ -476,6 +476,7 @@ class DefaultController extends Controller {
 //            $ti->setTime();
 //            $em->persist($ti);
         $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync'&");
+        $process->disableOutput(); 
         $process->run();
     }
 
