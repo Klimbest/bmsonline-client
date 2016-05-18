@@ -296,7 +296,8 @@ class DefaultController extends Controller {
             'action' => $this->generateUrl('bms_configuration_add_register', array('comm_id' => $comm_id, 'device_id' => $device_id)),
             'method' => 'POST'
         ));
-
+        
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

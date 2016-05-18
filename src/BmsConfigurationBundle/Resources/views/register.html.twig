@@ -146,16 +146,19 @@
         {% if register.bitRegister == 1 %}
             <div class="row bits">
                 <div class="col-md-12">
-                    {% for bitRegister in register.bitRegisters %}                        
+                    {% for bitRegister in form.bit_registers %}                        
                         <div class="row">
                             <div class="col-md-1">
-                                <span>{{bitRegister.name}}</span>
+                                {{form_row(bitRegister.name)}}
+{#                                <span>{{bitRegister.name}}</span>#}
                             </div> 
                             <div class="col-md-4">
-                                <input id="bmsconfigurationbundle_bitRregister_{{bitRegister.bitPosition}}_description" type="text" class="form-control" value="{{bitRegister.description}}" disabled />
+                                {{form_row(bitRegister.description)}}
+{#                                <input id="bmsconfigurationbundle_bitRregister_{{bitRegister.bitPosition}}_description" type="text" class="form-control" value="{{bitRegister.description}}" disabled />#}
                             </div> 
                             <div class="col-md-1">
-                                <span>{{bitRegister.bitValue}}</span>
+                                {{form_row(bitRegister.bitValue)}}
+{#                                <span>{{bitRegister.bitValue}}</span>#}
                             </div> 
                         </div>
                     {% endfor %}

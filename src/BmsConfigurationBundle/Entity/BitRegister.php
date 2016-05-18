@@ -36,16 +36,16 @@ class BitRegister {
     private $description;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="bit_value", type="boolean", nullable=false, options={"default"=false})
+     * @ORM\Column(name="bit_value", type="integer", nullable=false, options={"default"=0})
      */
     private $bitValue; 
     
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="position", type="boolean", nullable=false, options={"default"=false})
+     * @ORM\Column(name="bit_position", type="integer", nullable=false)
      */
     private $bitPosition;
     
