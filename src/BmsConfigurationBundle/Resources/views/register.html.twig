@@ -149,13 +149,13 @@
                     {% for bitRegister in register.bitRegisters %}
                         <div class="row">
                             <div class="col-md-1">
-                                {{bitRegister.name}}
+                                <span>{{bitRegister.name}}</span>
                             </div> 
                             <div class="col-md-4">
                                 <input type="text" class="form-control" value="{{bitRegister.description}}" disabled />
                             </div> 
-                            <div class="col-md-2">
-                                <input type="text" class="form-control" value="{{bitRegister.bitValue}}" disabled />
+                            <div class="col-md-1">
+                                <span>{{bitRegister.bitValue}}</span>
                             </div> 
                         </div>
                     {% endfor %}

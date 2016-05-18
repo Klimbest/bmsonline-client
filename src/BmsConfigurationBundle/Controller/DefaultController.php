@@ -201,6 +201,7 @@ class DefaultController extends Controller {
             $session->set('comm_id', $comm_id);
             $session->set('device_id', $device_id);
 
+            $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
 
             $this->setDataToSync();
             return $this->redirectToRoute('bms_configuration_index');
@@ -335,9 +336,32 @@ class DefaultController extends Controller {
             $em->flush();
             $register->setRegisterCurrentData($registerCD);
             $em->persist($register);
+            
+            if ($register->getBitRegister() == 1) {
+                $binVal = decbin($register->getRegisterCurrentData()->getFixedValue());
+                for ($i = 0; $i < $register->getRegisterSize(); $i++) {
+                    $bitRegister = new BitRegister();
+                    $bitRegister->setRegister($register);
+                    $bitRegister->setName($register->getName() . "_B" . $i);
+                    $bitRegister->setBitValue(substr($binVal, $i, 1));
+                    $em->persist($bitRegister);
+                    $register->addBitRegister($bitRegister);
+                }
+            } else {
+                $bitRegisters = $register->getBitRegisters();
+                foreach ($bitRegisters as $br) {
+                    $register->removeBitRegister($br);
+                    $em->remove($br);
+                }
+            }
+
+
+            $em->flush();
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
             $session->set('device_id', $device_id);
+
+            $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
 
 
             return $this->redirectToRoute('bms_configuration_index');
