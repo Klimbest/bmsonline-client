@@ -152,10 +152,29 @@ class Register
      */ 
     private $registerArchiveData;
 
+     /**
+     * 
+     * @var type \BmsConfigurationBundle\Entity\BitRegister
+     * 
+     * @ORM\OneToMany(targetEntity="BitRegister", mappedBy="register")
+     */
+    private $bit_registers;
+    
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->registerArchiveData = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bit_registers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Set registerAddress
      *
      * @param string $registerAddress
+     *
      * @return Register
      */
     public function setRegisterAddress($registerAddress)
@@ -168,252 +187,11 @@ class Register
     /**
      * Get registerAddress
      *
-     * @return string 
+     * @return string
      */
     public function getRegisterAddress()
     {
         return $this->registerAddress;
-    }
-
-    
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return Register
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     * @return Register
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string 
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set displaySuffix
-     *
-     * @param string $displaySuffix
-     * @return Register
-     */
-    public function setDisplaySuffix($displaySuffix)
-    {
-        $this->displaySuffix = $displaySuffix;
-
-        return $this;
-    }
-
-    /**
-     * Get displaySuffix
-     *
-     * @return string 
-     */
-    public function getDisplaySuffix()
-    {
-        return $this->displaySuffix;
-    }
-
-    /**
-     * Set modificatorRead
-     *
-     * @param integer $modificatorRead
-     * @return Register
-     */
-    public function setModificatorRead($modificatorRead)
-    {
-        $this->modificatorRead = $modificatorRead;
-
-        return $this;
-    }
-
-    /**
-     * Get modificatorRead
-     *
-     * @return integer 
-     */
-    public function getModificatorRead()
-    {
-        return $this->modificatorRead;
-    }
-
-    /**
-     * Set modificatorWrite
-     *
-     * @param integer $modificatorWrite
-     * @return Register
-     */
-    public function setModificatorWrite($modificatorWrite)
-    {
-        $this->modificatorWrite = $modificatorWrite;
-
-        return $this;
-    }
-
-    /**
-     * Get modificatorWrite
-     *
-     * @return integer 
-     */
-    public function getModificatorWrite()
-    {
-        return $this->modificatorWrite;
-    }
-
-    /**
-     * Set archive
-     *
-     * @param boolean $archive
-     * @return Register
-     */
-    public function setArchive($archive)
-    {
-        $this->archive = $archive;
-
-        return $this;
-    }
-
-    /**
-     * Get archive
-     *
-     * @return boolean 
-     */
-    public function getArchive()
-    {
-        return $this->archive;
-    }
-
-    /**
-     * Set active
-     *
-     * @param boolean $active
-     * @return Register
-     */
-    public function setActive($active)
-    {
-        $this->active = $active;
-
-        return $this;
-    }
-
-    /**
-     * Get active
-     *
-     * @return boolean 
-     */
-    public function getActive()
-    {
-        return $this->active;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set device
-     *
-     * @param \BmsConfigurationBundle\Entity\Device $device
-     * @return Register
-     */
-    public function setDevice(\BmsConfigurationBundle\Entity\Device $device = null)
-    {
-        $this->device = $device;
-
-        return $this;
-    }
-
-    /**
-     * Get device
-     *
-     * @return \BmsConfigurationBundle\Entity\Device 
-     */
-    public function getDevice()
-    {
-        return $this->device;
-    }
-
-    /**
-     * Set registerCurrentData
-     *
-     * @param \BmsConfigurationBundle\Entity\RegisterCurrentData $registerCurrentData
-     * @return Register
-     */
-    public function setRegisterCurrentData(\BmsConfigurationBundle\Entity\RegisterCurrentData $registerCurrentData = null)
-    {
-        $this->registerCurrentData = $registerCurrentData;
-
-        return $this;
-    }
-
-    /**
-     * Get registerCurrentData
-     *
-     * @return \BmsConfigurationBundle\Entity\RegisterCurrentData 
-     */
-    public function getRegisterCurrentData()
-    {
-        return $this->registerCurrentData;
-    }
-
-    /**
-     * Set scanQueue
-     *
-     * @param integer $scanQueue
-     * @return Register
-     */
-    public function setScanQueue($scanQueue)
-    {
-        $this->scanQueue = $scanQueue;
-
-        return $this;
-    }
-
-    /**
-     * Get scanQueue
-     *
-     * @return integer 
-     */
-    public function getScanQueue()
-    {
-        return $this->scanQueue;
     }
 
     /**
@@ -438,71 +216,6 @@ class Register
     public function getFunction()
     {
         return $this->function;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->registerArchiveData = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Set register
-     *
-     * @param string $register
-     *
-     * @return Register
-     */
-    public function setRegister($register)
-    {
-        $this->register = $register;
-
-        return $this;
-    }
-
-    /**
-     * Get register
-     *
-     * @return string
-     */
-    public function getRegister()
-    {
-        return $this->register;
-    }
-
-    /**
-     * Add registerArchiveDatum
-     *
-     * @param \BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum
-     *
-     * @return Register
-     */
-    public function addRegisterArchiveDatum(\BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum)
-    {
-        $this->registerArchiveData[] = $registerArchiveDatum;
-
-        return $this;
-    }
-
-    /**
-     * Remove registerArchiveDatum
-     *
-     * @param \BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum
-     */
-    public function removeRegisterArchiveDatum(\BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum)
-    {
-        $this->registerArchiveData->removeElement($registerArchiveDatum);
-    }
-
-    /**
-     * Get registerArchiveData
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRegisterArchiveData()
-    {
-        return $this->registerArchiveData;
     }
 
     /**
@@ -530,6 +243,78 @@ class Register
     }
 
     /**
+     * Set scanQueue
+     *
+     * @param integer $scanQueue
+     *
+     * @return Register
+     */
+    public function setScanQueue($scanQueue)
+    {
+        $this->scanQueue = $scanQueue;
+
+        return $this;
+    }
+
+    /**
+     * Get scanQueue
+     *
+     * @return integer
+     */
+    public function getScanQueue()
+    {
+        return $this->scanQueue;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Register
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Register
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
      * Set description2
      *
      * @param string $description2
@@ -551,6 +336,126 @@ class Register
     public function getDescription2()
     {
         return $this->description2;
+    }
+
+    /**
+     * Set displaySuffix
+     *
+     * @param string $displaySuffix
+     *
+     * @return Register
+     */
+    public function setDisplaySuffix($displaySuffix)
+    {
+        $this->displaySuffix = $displaySuffix;
+
+        return $this;
+    }
+
+    /**
+     * Get displaySuffix
+     *
+     * @return string
+     */
+    public function getDisplaySuffix()
+    {
+        return $this->displaySuffix;
+    }
+
+    /**
+     * Set modificatorRead
+     *
+     * @param string $modificatorRead
+     *
+     * @return Register
+     */
+    public function setModificatorRead($modificatorRead)
+    {
+        $this->modificatorRead = $modificatorRead;
+
+        return $this;
+    }
+
+    /**
+     * Get modificatorRead
+     *
+     * @return string
+     */
+    public function getModificatorRead()
+    {
+        return $this->modificatorRead;
+    }
+
+    /**
+     * Set modificatorWrite
+     *
+     * @param integer $modificatorWrite
+     *
+     * @return Register
+     */
+    public function setModificatorWrite($modificatorWrite)
+    {
+        $this->modificatorWrite = $modificatorWrite;
+
+        return $this;
+    }
+
+    /**
+     * Get modificatorWrite
+     *
+     * @return integer
+     */
+    public function getModificatorWrite()
+    {
+        return $this->modificatorWrite;
+    }
+
+    /**
+     * Set archive
+     *
+     * @param boolean $archive
+     *
+     * @return Register
+     */
+    public function setArchive($archive)
+    {
+        $this->archive = $archive;
+
+        return $this;
+    }
+
+    /**
+     * Get archive
+     *
+     * @return boolean
+     */
+    public function getArchive()
+    {
+        return $this->archive;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return Register
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 
     /**
@@ -599,5 +504,131 @@ class Register
     public function getBitRegister()
     {
         return $this->bit_register;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set device
+     *
+     * @param \BmsConfigurationBundle\Entity\Device $device
+     *
+     * @return Register
+     */
+    public function setDevice(\BmsConfigurationBundle\Entity\Device $device = null)
+    {
+        $this->device = $device;
+
+        return $this;
+    }
+
+    /**
+     * Get device
+     *
+     * @return \BmsConfigurationBundle\Entity\Device
+     */
+    public function getDevice()
+    {
+        return $this->device;
+    }
+
+    /**
+     * Set registerCurrentData
+     *
+     * @param \BmsConfigurationBundle\Entity\RegisterCurrentData $registerCurrentData
+     *
+     * @return Register
+     */
+    public function setRegisterCurrentData(\BmsConfigurationBundle\Entity\RegisterCurrentData $registerCurrentData = null)
+    {
+        $this->registerCurrentData = $registerCurrentData;
+
+        return $this;
+    }
+
+    /**
+     * Get registerCurrentData
+     *
+     * @return \BmsConfigurationBundle\Entity\RegisterCurrentData
+     */
+    public function getRegisterCurrentData()
+    {
+        return $this->registerCurrentData;
+    }
+
+    /**
+     * Add registerArchiveDatum
+     *
+     * @param \BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum
+     *
+     * @return Register
+     */
+    public function addRegisterArchiveDatum(\BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum)
+    {
+        $this->registerArchiveData[] = $registerArchiveDatum;
+
+        return $this;
+    }
+
+    /**
+     * Remove registerArchiveDatum
+     *
+     * @param \BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum
+     */
+    public function removeRegisterArchiveDatum(\BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum)
+    {
+        $this->registerArchiveData->removeElement($registerArchiveDatum);
+    }
+
+    /**
+     * Get registerArchiveData
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRegisterArchiveData()
+    {
+        return $this->registerArchiveData;
+    }
+
+    /**
+     * Add bitRegister
+     *
+     * @param \BmsConfigurationBundle\Entity\BitRegister $bitRegister
+     *
+     * @return Register
+     */
+    public function addBitRegister(\BmsConfigurationBundle\Entity\BitRegister $bitRegister)
+    {
+        $this->bit_registers[] = $bitRegister;
+
+        return $this;
+    }
+
+    /**
+     * Remove bitRegister
+     *
+     * @param \BmsConfigurationBundle\Entity\BitRegister $bitRegister
+     */
+    public function removeBitRegister(\BmsConfigurationBundle\Entity\BitRegister $bitRegister)
+    {
+        $this->bit_registers->removeElement($bitRegister);
+    }
+
+    /**
+     * Get bitRegisters
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBitRegisters()
+    {
+        return $this->bit_registers;
     }
 }

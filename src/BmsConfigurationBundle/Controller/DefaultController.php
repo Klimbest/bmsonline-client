@@ -13,6 +13,7 @@ use BmsConfigurationBundle\Form\DeviceType;
 use BmsConfigurationBundle\Form\RegisterType;
 use BmsConfigurationBundle\Entity\Device;
 use BmsConfigurationBundle\Entity\Register;
+use BmsConfigurationBundle\Entity\BitRegister;
 use BmsConfigurationBundle\Entity\RegisterCurrentData;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Process\Process;
@@ -20,7 +21,7 @@ use Symfony\Component\Process\Process;
 class DefaultController extends Controller {
 
     /**
-     * @Route("/", name="bms_configuration_index")
+     * @Route("/", name="bms_configuration_index", options={"expose"=true})
      */
     public function bmsConfigurationIndexAction(Request $request) {
 
@@ -174,14 +175,33 @@ class DefaultController extends Controller {
         if ($form->isSubmitted() && $form->isValid()) {
 
             $em->persist($register);
-            $em->flush();
 
+
+            if ($register->getBitRegister() == 1) {
+                $binVal = decbin($register->getRegisterCurrentData()->getFixedValue());
+                for ($i = 0; $i < $register->getRegisterSize(); $i++) {
+                    $bitRegister = new BitRegister();
+                    $bitRegister->setRegister($register);
+                    $bitRegister->setName($register->getName() . "_B" . $i);
+                    $bitRegister->setBitValue(substr($binVal, $i));
+                    $em->persist($bitRegister);
+                    $register->addBitRegister($bitRegister);
+                }
+            } else {
+                $bitRegisters = $register->getBitRegisters();
+                foreach ($bitRegisters as $br) {
+                    $br->remove();
+                }
+            }
+
+
+            $em->flush();
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
             $session->set('device_id', $device_id);
 
 
-            $this->setDataToSync(); 
+            $this->setDataToSync();
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
 
@@ -476,7 +496,7 @@ class DefaultController extends Controller {
 //            $ti->setTime();
 //            $em->persist($ti);
         $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync'");
-        $process->disableOutput(); 
+        $process->disableOutput();
         $process->run();
     }
 

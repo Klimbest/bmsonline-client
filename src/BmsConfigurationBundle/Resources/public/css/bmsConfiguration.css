@@ -174,3 +174,8 @@ input.clicked{
     font-weight: bold;
     background-color: #adadad;
 }
+
+div.bits{
+    max-height: 200px;
+    overflow: auto;
+}

@@ -146,13 +146,16 @@
         {% if register.bitRegister == 1 %}
             <div class="row bits">
                 <div class="col-md-12">
-                    {% for i in 0..register.registerSize-1 %}
+                    {% for bitRegister in register.bitRegisters %}
                         <div class="row">
-                            <div class="col-md-3">
-                                <input type="text" class="form-control" value="R_B_{{i}}" />
+                            <div class="col-md-1">
+                                {{bitRegister.name}}
                             </div> 
-                            <div class="col-md-3">
-                                <input type="text" class="form-control" value="{{i}}" />
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" value="{{bitRegister.description}}" disabled />
+                            </div> 
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" value="{{bitRegister.bitValue}}" disabled />
                             </div> 
                         </div>
                     {% endfor %}
