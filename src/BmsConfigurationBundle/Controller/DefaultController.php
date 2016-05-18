@@ -184,7 +184,7 @@ class DefaultController extends Controller {
                     $bitRegister->setRegister($register);
                     $bitRegister->setName($register->getName() . "_B" . $i);
                     $bitRegister->setBitValue(substr($binVal, $i, 1));
-                    $bitRegister->setPosition($i);
+                    $bitRegister->setBitPosition($i);
                     $em->persist($bitRegister);
                     $register->addBitRegister($bitRegister);
                 }
