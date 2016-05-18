@@ -183,7 +183,7 @@ class DefaultController extends Controller {
                     $bitRegister = new BitRegister();
                     $bitRegister->setRegister($register);
                     $bitRegister->setName($register->getName() . "_B" . $i);
-                    $bitRegister->setBitValue(substr($binVal, $i));
+                    $bitRegister->setBitValue(substr($binVal, $i, 1));
                     $em->persist($bitRegister);
                     $register->addBitRegister($bitRegister);
                 }
