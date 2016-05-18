@@ -190,7 +190,8 @@ class DefaultController extends Controller {
             } else {
                 $bitRegisters = $register->getBitRegisters();
                 foreach ($bitRegisters as $br) {
-                    $br->remove();
+                    $register->removeBitRegister($br);
+                    $em->remove($br);
                 }
             }
 
