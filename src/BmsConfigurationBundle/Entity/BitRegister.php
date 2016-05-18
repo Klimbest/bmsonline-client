@@ -40,7 +40,14 @@ class BitRegister {
      *
      * @ORM\Column(name="bit_value", type="boolean", nullable=false, options={"default"=false})
      */
-    private $bitValue;
+    private $bitValue; 
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="position", type="boolean", nullable=false, options={"default"=false})
+     */
+    private $bitPosition;
     
     /**
      * 
@@ -156,5 +163,29 @@ class BitRegister {
     public function getBitValue()
     {
         return $this->bitValue;
+    }
+
+    /**
+     * Set bitPosition
+     *
+     * @param boolean $bitPosition
+     *
+     * @return BitRegister
+     */
+    public function setBitPosition($bitPosition)
+    {
+        $this->bitPosition = $bitPosition;
+
+        return $this;
+    }
+
+    /**
+     * Get bitPosition
+     *
+     * @return boolean
+     */
+    public function getBitPosition()
+    {
+        return $this->bitPosition;
     }
 }
