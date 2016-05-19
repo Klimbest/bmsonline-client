@@ -244,9 +244,9 @@ function formEvents() {
                                                 name='bmsconfigurationbundle_register[bit_registers][" + i + "][bitPosition]'\n\
                                                 value='" + i + "' type='hidden'>\n\
                                         </input>\n\
-                                        <input id='bmsconfigurationbundle_register_bit_registers_" + i + "_register' class='form-control hidden-item'\n\
+                                        <input id='bmsconfigurationbundle_register_bit_registers_" + i + "_register'\n\
                                                 name='bmsconfigurationbundle_register[bit_registers][" + i + "][register]'\n\
-                                                value='" + parseInt($("ul.nav.register-level li div div.active").attr("id")) + "' type='number'>\n\
+                                                value='" + parseInt($("ul.nav.register-level li div div.active").attr("id")) + "' type='hidden'>\n\
                                         </input>\n\
                                       </div>");
             }

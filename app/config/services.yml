@@ -11,3 +11,9 @@ services:
         class: BmsBundle\Form\RegistrationFormType
         tags:
             - { name: form.type, alias: app_user_registration }
+    
+    bmsconfiguration.form.type.task:
+        class: BmsConfigurationBundle\Form\BitRegisterType
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type }
