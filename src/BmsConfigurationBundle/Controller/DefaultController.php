@@ -180,7 +180,7 @@ class DefaultController extends Controller {
                 $bitRegisters = $register->getBitRegisters();
                 foreach ($bitRegisters as $br) {
 //                    $bitRegister = new BitRegister();
-                    $bitRegister->setRegister($register);
+                    
 //                    $bitRegister->setName($register->getName() . "_B" . $i);
 //                    $bitRegister->setBitValue(substr($binVal, $i, 1));
 //                    $bitRegister->setBitPosition($i);
