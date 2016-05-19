@@ -221,7 +221,7 @@ function formEvents() {
                                             <div class='form-group'>\n\
                                                 <input id='bmsconfigurationbundle_register_bit_registers_" + i + "_name' class='form-control'\n\
                                                         name='bmsconfigurationbundle_register[bit_registers][" + i + "][name]' required='required' maxlength='16' \n\
-                                                        class='form-control' value='C1_B_8_B" + i + "' type='text'>\n\
+                                                        class='form-control' value='" + $("input#bmsconfigurationbundle_register_name").val() + "_B" + i + "' type='text'>\n\
                                                 </input>\n\
                                             </div>\n\
                                         </div>\n\
