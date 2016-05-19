@@ -143,28 +143,27 @@
                 {{form_row(form.description2)}}
             </div>
         </div>
-        {% if register.bitRegister == 1 %}
-            <div class="row bits">
-                <div class="col-md-12">
-                    {% for bitRegister in form.bit_registers %}                        
-                        <div class="row">
-                            <div class="col-md-2">
-                                {{form_row(bitRegister.name)}}
+        <div class="row bits" data-prototype="{{ form_widget(form.bit_registers.vars.prototype)|e }}">
+            <div class="col-md-12">                    
+                {% for bitRegister in form.bit_registers %}                        
+                    <div class="row bit_registers">
+                        <div class="col-md-2">
+                            {{form_row(bitRegister.name)}}
 {#                                <span>{{bitRegister.name}}</span>#}
-                            </div> 
-                            <div class="col-md-4">
-                                {{form_row(bitRegister.description)}}
+                        </div> 
+                        <div class="col-md-4">
+                            {{form_row(bitRegister.description)}}
 {#                                <input id="bmsconfigurationbundle_bitRregister_{{bitRegister.bitPosition}}_description" type="text" class="form-control" value="{{bitRegister.description}}" disabled />#}
-                            </div> 
-                            <div class="col-md-1">
-                                {{form_row(bitRegister.bitValue)}}
-{#                                <span>{{bitRegister.bitValue}}</span>#}
-                            </div> 
-                        </div>
-                    {% endfor %}
-                </div>
+                        </div> 
+                        <div class="col-md-1">
+                            {{form_row(bitRegister.bitValue)}}
+                        </div> 
+                        {{form_row(bitRegister.bitPosition)}}
+
+                    </div>
+                {% endfor %}
             </div>
-        {% endif %}
+        </div>
         <div class="row text-right">
             <div class="col-md-12">
                 <button class="btn btn-default btn-edit" type="button">Edytuj</button>

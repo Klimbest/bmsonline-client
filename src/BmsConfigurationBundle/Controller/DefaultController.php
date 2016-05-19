@@ -176,17 +176,15 @@ class DefaultController extends Controller {
 
             $em->persist($register);
 
-
             if ($register->getBitRegister() == 1) {
-                $binVal = decbin($register->getRegisterCurrentData()->getFixedValue());
-                for ($i = 0; $i < $register->getRegisterSize(); $i++) {
-                    $bitRegister = new BitRegister();
-                    $bitRegister->setRegister($register);
-                    $bitRegister->setName($register->getName() . "_B" . $i);
-                    $bitRegister->setBitValue(substr($binVal, $i, 1));
-                    $bitRegister->setBitPosition($i);
-                    $em->persist($bitRegister);
-                    $register->addBitRegister($bitRegister);
+                $bitRegisters = $register->getBitRegisters();
+                foreach ($bitRegisters as $br) {
+//                    $bitRegister = new BitRegister();
+//                    $bitRegister->setRegister($register);
+//                    $bitRegister->setName($register->getName() . "_B" . $i);
+//                    $bitRegister->setBitValue(substr($binVal, $i, 1));
+//                    $bitRegister->setBitPosition($i);
+                    $em->persist($br);
                 }
             } else {
                 $bitRegisters = $register->getBitRegisters();
@@ -214,7 +212,7 @@ class DefaultController extends Controller {
             return new JsonResponse(array('ret' => $template));
         } else {
 
-            return $this->render('BmsConfigurationBundle::register.html.twig', ['comms' => $communicationTypes, 'target' => $target, 'register' => $register, 'form' => $form->createView()]);
+            return $this->render('BmsConfigurationBundle::register.html.twig', ['comms' => $communicationTypes, 'register' => $register, 'form' => $form->createView()]);
             //throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
         }
     }

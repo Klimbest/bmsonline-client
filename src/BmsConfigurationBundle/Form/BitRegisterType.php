@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class BitRegisterType extends AbstractType{
@@ -21,15 +21,17 @@ class BitRegisterType extends AbstractType{
                     'attr' => array('disabled' => 'disabled', 'maxlength' => 16),
                     'label' => false 
                     ))
-                ->add('description', TextareaType::class, array(
-                    'attr' => array('disabled' => 'disabled', 'maxlength' => 255),
-                    'label' => false 
-                    ))
-                ->add('bitValue', IntegerType::class, array(
+                ->add('description', TextType::class, array(
                     'attr' => array('disabled' => 'disabled'),
                     'required' => false,
                     'label' => false 
-                    ));
+                    ))
+                ->add('bitValue', IntegerType::class, array(
+                    'attr' => array('disabled' => 'disabled', 'max'=>1, 'min'=>0, 'step'=>1),
+                    'required' => false,
+                    'label' => false 
+                    ))
+                ->add('bitPosition', HiddenType::class);
     }
     
     

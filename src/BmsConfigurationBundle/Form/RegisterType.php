@@ -20,7 +20,7 @@ class RegisterType extends AbstractType{
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options){
-//        $defaultvalue = $options['data']->getRegisterAddress();
+        
         $builder->add('register_address', TextType::class, array(
                     'attr' => array('disabled' => 'disabled', 'maxlength' => 4),
                     'label' => 'Adres rejestru'
@@ -93,7 +93,10 @@ class RegisterType extends AbstractType{
                     'required' => false
                     ))
                 ->add('bit_registers',CollectionType::class, array(
-                    'entry_type' => BitRegisterType::class
+                    'entry_type' => BitRegisterType::class,
+                    'allow_add'  => true,
+                    'label' => false
+                    
                 ));
     }
     

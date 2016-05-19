@@ -7,8 +7,11 @@ Number.prototype.pad = function (size) {
     return s;
 };
 
-$(document).ready(function () {
+var $collectionHolder;
+var $addTagLink = $('<a href="#" class="add_tag_link">Add a tag</a>');
+var $newLinkLi = $('<li></li>').append($addTagLink);
 
+$(document).ready(function () {
 
     setInterval(function () {
         refreshPage();
@@ -142,9 +145,6 @@ function ajaxAppend(url) {
             formEvents();
             tableEvents();
             updateAddressFormat();
-        },
-        error: function (status) {
-            console.log(status);
         }
     });
     $(".main-row").addClass("text-center").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -209,6 +209,46 @@ function formEvents() {
     $(".main-row span.hide-mainrow-label").click(function () {
         $(this).parent().parent().next("div.well").toggle();
         $(this).children("i.fa").toggleClass('fa-angle-down');
+    });
+
+    $("input#bmsconfigurationbundle_register_bit_register").change(function () {
+        if ($(this).is(':checked')) {
+            $('div.bits').append("<div class='col-md-12'></div>");
+            var bit_container = $('div.bits').children("div");
+            for(var i = 0; i< $('select#bmsconfigurationbundle_register_register_size').val(); i++){
+                bit_container.append("<div class='row bit_registers'>\n\
+                                        <div class='col-md-2'>\n\
+                                            <div class='form-group'>\n\
+                                                <input id='bmsconfigurationbundle_register_bit_registers_"+i+"_name' class='form-control'\n\
+                                                        name='bmsconfigurationbundle_register[bit_registers][" + i + "][name]' required='required' maxlength='16' \n\
+                                                        class='form-control' value='C1_B_8_B"+i+"' type='text'>\n\
+                                                </input>\n\
+                                            </div>\n\
+                                        </div>\n\
+                                        <div class='col-md-4'>\n\
+                                            <div class='form-group'>\n\
+                                                <input id='bmsconfigurationbundle_register_bit_registers_"+i+"_description' class='form-control'\n\
+                                                        name='bmsconfigurationbundle_register[bit_registers][" + i + "][description]' type='text'>\n\
+                                                </input>\n\
+                                            </div>\n\
+                                        </div>\n\
+                                        <div class='col-md-1'>\n\
+                                            <div class='form-group'>\n\
+                                                <input id='bmsconfigurationbundle_register_bit_registers_"+i+"_bitValue' class='form-control'\n\
+                                                        name='bmsconfigurationbundle_register[bit_registers][" + i + "][bitValue]'\n\
+                                                        max='1' min='0' step='1' value='0' type='number'>\n\
+                                                </input>\n\
+                                            </div>\n\
+                                        </div>\n\
+                                        <input id='bmsconfigurationbundle_register_bit_registers_"+i+"_bitPosition'\n\
+                                                name='bmsconfigurationbundle_register[bit_registers][" + i + "][_bitPosition]'\n\
+                                                value='"+i+"' type='hidden'>\n\
+                                        </input>\n\
+                                      </div>");
+            }
+        } else {
+            $('div.bits').empty();
+        }
     });
 
     $("input#read_mod_val").val($("input#bmsconfigurationbundle_register_modificator_read").val());
