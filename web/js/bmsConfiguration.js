@@ -241,7 +241,7 @@ function formEvents() {
                                             </div>\n\
                                         </div>\n\
                                         <input id='bmsconfigurationbundle_register_bit_registers_"+i+"_bitPosition'\n\
-                                                name='bmsconfigurationbundle_register[bit_registers][" + i + "][_bitPosition]'\n\
+                                                name='bmsconfigurationbundle_register[bit_registers][" + i + "][bitPosition]'\n\
                                                 value='"+i+"' type='hidden'>\n\
                                         </input>\n\
                                       </div>");

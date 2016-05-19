@@ -172,7 +172,7 @@ class DefaultController extends Controller {
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
 
             $em->persist($register);
 
@@ -180,7 +180,7 @@ class DefaultController extends Controller {
                 $bitRegisters = $register->getBitRegisters();
                 foreach ($bitRegisters as $br) {
 //                    $bitRegister = new BitRegister();
-//                    $bitRegister->setRegister($register);
+                    $bitRegister->setRegister($register);
 //                    $bitRegister->setName($register->getName() . "_B" . $i);
 //                    $bitRegister->setBitValue(substr($binVal, $i, 1));
 //                    $bitRegister->setBitPosition($i);
@@ -212,8 +212,8 @@ class DefaultController extends Controller {
             return new JsonResponse(array('ret' => $template));
         } else {
 
-            return $this->render('BmsConfigurationBundle::register.html.twig', ['comms' => $communicationTypes, 'register' => $register, 'form' => $form->createView()]);
-            //throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
+            //return $this->render('BmsConfigurationBundle::register.html.twig', ['comms' => $communicationTypes, 'register' => $register, 'form' => $form->createView()]);
+            throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
         }
     }
 
