@@ -31,7 +31,8 @@ class BitRegisterType extends AbstractType{
                     'required' => false,
                     'label' => false 
                     ))
-                ->add('bitPosition', HiddenType::class);
+                ->add('bitPosition', HiddenType::class)
+                ->add('register', IntegerType::class);
     }
     
     
