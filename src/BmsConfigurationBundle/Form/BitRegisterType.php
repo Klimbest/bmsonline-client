@@ -31,12 +31,12 @@ class BitRegisterType extends AbstractType{
                     'label' => false 
                     ))
                 ->add('description', TextType::class, array(
-                    'attr' => array('disabled' => 'disabled'),
+                    'attr' => array('disabled' => 'disabled', 'maxlength' => 16),
                     'required' => false,
                     'label' => false 
                     ))
-                ->add('bitValue', IntegerType::class, array(
-                    'attr' => array('disabled' => 'disabled', 'max'=>1, 'min'=>0, 'step'=>1),
+                ->add('bitValue', TextType::class, array(
+                    'attr' => array('disabled' => 'disabled'),
                     'required' => false,
                     'label' => false 
                     ))

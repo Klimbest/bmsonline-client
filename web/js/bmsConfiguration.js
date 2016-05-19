@@ -156,7 +156,7 @@ function formEvents() {
     $(".btn-edit").click(function () {
         $(this).hide().parent().children().hide();
         $(this).parent().find(".btn-save, .btn-cancel").show();
-        $(this).parent().parent().parent().find("input[type=text],\n\
+        $(this).parent().parent().parent().find("input[type=text]:not(div.permanentDisabled input),\n\
                                                     input[type=number],\n\
                                                     input[type=checkbox],\n\
                                                     select,\n\
@@ -236,7 +236,7 @@ function formEvents() {
                                             <div class='form-group'>\n\
                                                 <input id='bmsconfigurationbundle_register_bit_registers_" + i + "_bitValue' class='form-control'\n\
                                                         name='bmsconfigurationbundle_register[bit_registers][" + i + "][bitValue]'\n\
-                                                        max='1' min='0' step='1' value='0' type='number'>\n\
+                                                        max='1' min='0' step='1' type='number'>\n\
                                                 </input>\n\
                                             </div>\n\
                                         </div>\n\
