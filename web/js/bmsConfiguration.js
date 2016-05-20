@@ -255,7 +255,7 @@ function formEvents() {
                                             </div>\n\
                                         </div>\n\
                                         <div class='col-md-1 text-center'>\n\
-                                            <span class='bitValue'>" + pad((registerValue >>> 0).toString(2), registerSize, 0)[i] + "</span>\n\
+                                            <span class='bitValue'>" + pad((registerValue >>> 0).toString(2), registerSize, 0)[registerSize - i] + "</span>\n\
                                         </div>\n\
                                         <input id='bmsconfigurationbundle_register_bit_registers_" + i + "_bitPosition'\n\
                                                 name='bmsconfigurationbundle_register[bit_registers][" + i + "][bitPosition]'\n\
@@ -271,7 +271,7 @@ function formEvents() {
                                         </input>\n\
                                         <input id='bmsconfigurationbundle_register_bit_registers_" + i + "_bitValue'\n\
                                                 name='bmsconfigurationbundle_register[bit_registers][" + i + "][bitValue]'\n\
-                                                value=" + pad((registerValue >>> 0).toString(2), registerSize, 0)[i] + " type='hidden'>\n\
+                                                value=" + pad((registerValue >>> 0).toString(2), registerSize, 0)[registerSize-1 - i] + " type='hidden'>\n\
                                         </input>\n\
                                       </div>");
         }
