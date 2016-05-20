@@ -28,7 +28,7 @@ class BitRegisterType extends AbstractType{
         
         $builder->add('name', HiddenType::class)
                 ->add('description', TextType::class, array(
-                    'attr' => array('disabled' => 'disabled', 'maxlength' => 16),
+                    'attr' => array('disabled' => 'disabled'),
                     'required' => false,
                     'label' => false 
                     ))

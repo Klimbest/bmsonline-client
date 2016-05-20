@@ -138,7 +138,9 @@ function ajaxAppend(url) {
             $(".main-row").children().remove();
             $(".main-row").hide().append(ret["ret"]).fadeIn("slow");
             refreshPage();
-            formEvents();
+            if(ret['refresh'] !== 1){
+                formEvents();
+            }
             tableEvents();
             updateAddressFormat();
         }

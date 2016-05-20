@@ -505,6 +505,7 @@ class DefaultController extends Controller {
             $ret["times_of_update"] = $times;
 
             $ret["time_of_update"] = $time;
+            $ret["refresh"] = 1;
 
             return new JsonResponse($ret);
         } else {
