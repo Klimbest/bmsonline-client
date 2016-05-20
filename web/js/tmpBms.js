@@ -120,40 +120,41 @@ function ajaxRefreshPage(terms) {
     }
 
     function setVariables(registers) {
-        $.each(registers, function (key, value) {
-            if (value !== null) {
-                var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
-                var roundValue = parseFloat(value).toFixed(displayPrecision);
-            }
-            $("div.bms-panel").children("span#" + key).empty().append(roundValue);
-
-            if ($("div.bms-panel-widget").find("div#value" + key).length > 0) {
-                var rangeMin = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
-                var rangeMax = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
-
-                var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
-                if (widgetValue < 0) {
-                    widgetValue = 0;
-                    $("div.bms-panel-widget").find("div#value" + key).hide();
+        if(registers){
+            $.each(registers, function (key, value) {
+                if (value !== null) {
+                    var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
+                    var roundValue = parseFloat(value).toFixed(displayPrecision);
                 }
-                $("div.bms-panel-widget").find("div#value" + key).show().animate({
-                    left: widgetValue + "%"
-                }, 2000);
-            }
-            if ($("div.bms-panel-widget").find("div#set" + key).length > 0) {
-                var rangeMin = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMin").text().trim());
-                var rangeMax = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMax").text().trim());
-                var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
-                if (widgetValue < 0) {
-                    widgetValue = 0;
-                    $("div.bms-panel-widget").find("div#set" + key).hide();
-                }
-                $("div.bms-panel-widget").find("div#set" + key).show().animate({
-                    left: widgetValue + "%"
-                }, 2000);
-            }
+                $("div.bms-panel").children("span#" + key).empty().append(roundValue);
 
-        });
+                if ($("div.bms-panel-widget").find("div#value" + key).length > 0) {
+                    var rangeMin = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
+                    var rangeMax = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
+
+                    var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
+                    if (widgetValue < 0) {
+                        widgetValue = 0;
+                        $("div.bms-panel-widget").find("div#value" + key).hide();
+                    }
+                    $("div.bms-panel-widget").find("div#value" + key).show().animate({
+                        left: widgetValue + "%"
+                    }, 2000);
+                }
+                if ($("div.bms-panel-widget").find("div#set" + key).length > 0) {
+                    var rangeMin = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMin").text().trim());
+                    var rangeMax = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMax").text().trim());
+                    var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
+                    if (widgetValue < 0) {
+                        widgetValue = 0;
+                        $("div.bms-panel-widget").find("div#set" + key).hide();
+                    }
+                    $("div.bms-panel-widget").find("div#set" + key).show().animate({
+                        left: widgetValue + "%"
+                    }, 2000);
+                }
+            });
+        }
     }
 
     function makeTerms(terms, registers) {
@@ -198,26 +199,24 @@ function ajaxRefreshPage(terms) {
             });
         }
         function applyTermEffect(term) {
-            if (terms) {
-                $("div#" + term.panel_id + ".bms-panel").show().removeClass("shake-little shake-constant fa-spin");
-                switch (term.effect_type) {
-                    case "css" :
-                        var content = term.effect_content.split(";");
-                        $("div#" + term.panel_id + ".bms-panel").css(content[0], content[1]);
-                        break;
-                    case "src" :
-                        $("div#" + term.panel_id + ".bms-panel img").attr("src", term.effect_content);
-                        break;
-                    case "animation" :
-                        $("div#" + term.panel_id + ".bms-panel").addClass(term.effect_content);
-                        break;
-                    case "text" :
-                        $("div#" + term.panel_id + ".bms-panel span.bms-panel-content").empty().append(term.effect_content);
-                        break;
-                    case "popup" :
-                        alert(term.effect_content);
-                        break;
-                }
+            $("div#" + term.panel_id + ".bms-panel").show().removeClass("shake-little shake-constant fa-spin");
+            switch (term.effect_type) {
+                case "css" :
+                    var content = term.effect_content.split(";");
+                    $("div#" + term.panel_id + ".bms-panel").css(content[0], content[1]);
+                    break;
+                case "src" :
+                    $("div#" + term.panel_id + ".bms-panel img").attr("src", term.effect_content);
+                    break;
+                case "animation" :
+                    $("div#" + term.panel_id + ".bms-panel").addClass(term.effect_content);
+                    break;
+                case "text" :
+                    $("div#" + term.panel_id + ".bms-panel span.bms-panel-content").empty().append(term.effect_content);
+                    break;
+                case "popup" :
+                    alert(term.effect_content);
+                    break;
             }
         }
     }
