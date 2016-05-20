@@ -222,7 +222,6 @@ function formEvents() {
     $("input#bmsconfigurationbundle_register_bit_register").change(function () {
         if ($(this).is(':checked')) {
             $('div.bits-label').removeClass("hidden-item");
-            $('div.bits').append("<div class='col-md-12'></div>");
             setBits();
         } else {
             $('div.bits').empty();
