@@ -198,24 +198,26 @@ function ajaxRefreshPage(terms) {
             });
         }
         function applyTermEffect(term) {
-            $("div#" + term.panel_id + ".bms-panel").show().removeClass("shake-little shake-constant fa-spin");
-            switch (term.effect_type) {
-                case "css" :
-                    var content = term.effect_content.split(";");
-                    $("div#" + term.panel_id + ".bms-panel").css(content[0], content[1]);
-                    break;
-                case "src" :
-                    $("div#" + term.panel_id + ".bms-panel img").attr("src", term.effect_content);
-                    break;
-                case "animation" :
-                    $("div#" + term.panel_id + ".bms-panel").addClass(term.effect_content);
-                    break;
-                case "text" :
-                    $("div#" + term.panel_id + ".bms-panel span.bms-panel-content").empty().append(term.effect_content);
-                    break;
-                case "popup" :
-                    alert(term.effect_content);
-                    break;
+            if (terms) {
+                $("div#" + term.panel_id + ".bms-panel").show().removeClass("shake-little shake-constant fa-spin");
+                switch (term.effect_type) {
+                    case "css" :
+                        var content = term.effect_content.split(";");
+                        $("div#" + term.panel_id + ".bms-panel").css(content[0], content[1]);
+                        break;
+                    case "src" :
+                        $("div#" + term.panel_id + ".bms-panel img").attr("src", term.effect_content);
+                        break;
+                    case "animation" :
+                        $("div#" + term.panel_id + ".bms-panel").addClass(term.effect_content);
+                        break;
+                    case "text" :
+                        $("div#" + term.panel_id + ".bms-panel span.bms-panel-content").empty().append(term.effect_content);
+                        break;
+                    case "popup" :
+                        alert(term.effect_content);
+                        break;
+                }
             }
         }
     }
