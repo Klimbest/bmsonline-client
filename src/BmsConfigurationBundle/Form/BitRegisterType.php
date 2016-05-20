@@ -26,20 +26,13 @@ class BitRegisterType extends AbstractType{
      */
     public function buildForm(FormBuilderInterface $builder, array $options){
         
-        $builder->add('name', TextType::class, array(
-                    'attr' => array('disabled' => 'disabled', 'maxlength' => 16),
-                    'label' => false 
-                    ))
+        $builder->add('name', HiddenType::class)
                 ->add('description', TextType::class, array(
                     'attr' => array('disabled' => 'disabled', 'maxlength' => 16),
                     'required' => false,
                     'label' => false 
                     ))
-                ->add('bitValue', TextType::class, array(
-                    'attr' => array('disabled' => 'disabled'),
-                    'required' => false,
-                    'label' => false 
-                    ))
+                ->add('bitValue', HiddenType::class)
                 ->add('bitPosition', HiddenType::class)
                 ->add('register', HiddenType::class);
         
