@@ -241,10 +241,9 @@ function formEvents() {
         var bit_container = $('div.bits').children("div");
         bit_container.empty();
         var registerValue = $("span.registerValue").text();
-        var registerSize = $('select#bmsconfigurationbundle_register_register_size').val()
+        var registerSize = $('select#bmsconfigurationbundle_register_register_size').val();
         
         for (var i = 0; i < registerSize; i++) {
-            console.log(pad((registerValue >>> 0).toString(2), registerSize, 0)[i]);
             bit_container.append("<div class='row bit_registers'>\n\
                                         <div class='col-md-2 text-center'>\n\
                                             <span class='bitName'>" + $("input#bmsconfigurationbundle_register_name").val() + "_B" + i + "</span>\n\
