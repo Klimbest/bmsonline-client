@@ -93,7 +93,7 @@ class DefaultController extends Controller {
             $em->persist($comm);
 
             $em->flush();
-
+            $this->setDataToSync();
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
             $template = $this->container->get('templating')->render('BmsConfigurationBundle::communicationType.html.twig', ['comms' => $communicationTypes, 'comm' => $comm, 'form' => $form->createView()]);
@@ -135,6 +135,7 @@ class DefaultController extends Controller {
 
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
+            $this->setDataToSync();
 
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
@@ -253,6 +254,7 @@ class DefaultController extends Controller {
 
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
+            $this->setDataToSync();
 
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
@@ -350,6 +352,7 @@ class DefaultController extends Controller {
             $session->set('device_id', $device_id);
 
             $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
+            $this->setDataToSync();
 
 
             return $this->redirectToRoute('bms_configuration_index');
@@ -386,6 +389,7 @@ class DefaultController extends Controller {
 
         $session = $request->getSession();
         $session->set('comm_id', $comm_id);
+        $this->setDataToSync();
 
         return $this->redirectToRoute('bms_configuration_index');
     }
@@ -416,6 +420,7 @@ class DefaultController extends Controller {
         $session = $request->getSession();
         $session->set('comm_id', $comm_id);
         $session->set('device_id', $device_id);
+            $this->setDataToSync();
 
         return $this->redirectToRoute('bms_configuration_index');
     }
@@ -454,6 +459,7 @@ class DefaultController extends Controller {
         $session = $request->getSession();
         $session->set('comm_id', $comm_id);
         $session->set('device_id', $device_id);
+            $this->setDataToSync();
 
         return $this->redirectToRoute('bms_configuration_index');
     }
@@ -521,6 +527,8 @@ class DefaultController extends Controller {
 //            $ti->setStatus(1);
 //            $ti->setTime();
 //            $em->persist($ti);
+        $host = $this->getRequest()->getHost();
+        var_dump($host);
         $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync'");
         $process->disableOutput();
         $process->run();
