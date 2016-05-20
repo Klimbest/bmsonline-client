@@ -529,8 +529,7 @@ class DefaultController extends Controller {
 //            $em->persist($ti);
         $host = $request->getHost();
         $h = explode(".", $host);
-        var_dump($h[0]);
-        $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync'");
+        $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync' " .$h[0]);
         $process->disableOutput();
         $process->run();
     }
