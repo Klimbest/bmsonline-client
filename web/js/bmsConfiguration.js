@@ -222,7 +222,7 @@ function formEvents() {
     $("input#bmsconfigurationbundle_register_bit_register").change(function () {
         if ($(this).is(':checked')) {
             $('div.bits-label').removeClass("hidden-item");
-            $('div.bits').append("<div class='col-md-12'></div>");
+            $('div.bits').empty().append("<div class='col-md-12'></div>");
             setBits();
         } else {
             $('div.bits').empty();
@@ -237,7 +237,7 @@ function formEvents() {
     }
 
     function setBits() {
-        var bit_container = $('div.bits').children("div");
+        var bit_container = $('div.bits div');
         bit_container.empty();
         var registerValue = $("span.registerValue").text();
         var registerSize = $('select#bmsconfigurationbundle_register_register_size').val();

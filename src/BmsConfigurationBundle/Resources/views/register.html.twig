@@ -156,27 +156,25 @@
             </div>
         </div>
         <div class="row bits" data-prototype="{{ form_widget(form.bit_registers.vars.prototype)|e }}">
-            {% if register.bitRegister == 0 %}
-                <div class="col-md-12">   
-                    {% for bitRegister in form.bit_registers %}                        
-                        <div class="row bit_registers">
-                            <div class="col-md-2 text-center">
-                                <span class="bitName"></span>
-                            </div> 
-                            <div class="col-md-5 text-center">
-                                {{form_row(bitRegister.description)}}
-                            </div> 
-                            <div class="col-md-1 text-center">
-                                <span class="bitValue"></span>
-                            </div> 
-                            {{form_row(bitRegister.bitPosition)}}
-                            {{form_row(bitRegister.register)}}
-                            {{form_row(bitRegister.name)}}
-                            {{form_row(bitRegister.bitValue)}}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
+            <div class="col-md-12">   
+                {% for bitRegister in form.bit_registers %}                        
+                    <div class="row bit_registers">
+                        <div class="col-md-2 text-center">
+                            <span class="bitName"></span>
+                        </div> 
+                        <div class="col-md-5 text-center">
+                            {{form_row(bitRegister.description)}}
+                        </div> 
+                        <div class="col-md-1 text-center">
+                            <span class="bitValue"></span>
+                        </div> 
+                        {{form_row(bitRegister.bitPosition)}}
+                        {{form_row(bitRegister.register)}}
+                        {{form_row(bitRegister.name)}}
+                        {{form_row(bitRegister.bitValue)}}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
         <div class="row text-right">
             <div class="col-md-12">
