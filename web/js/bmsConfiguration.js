@@ -155,7 +155,6 @@ function formEvents() {
         $(this).find("span.bitName").empty().append(name);
         var value = $(this).children("input[name*='bitValue']").val();
         $(this).find("span.bitValue").empty().append(value);
-        console.log($(this).find("span.bitValue"));
     });
 
     $(".btn-edit").click(function () {
@@ -216,17 +215,39 @@ function formEvents() {
         $(this).children("i.fa").toggleClass('fa-angle-down');
     });
     $("input#bmsconfigurationbundle_register_bit_register").unbind("change");
+    $("select#bmsconfigurationbundle_register_register_size").change(function () {
+        if ($("input#bmsconfigurationbundle_register_bit_register").is(':checked')) {
+            setBits();
+        }
+    });
     $("input#bmsconfigurationbundle_register_bit_register").change(function () {
         if ($(this).is(':checked')) {
-
             $('div.bits-label').removeClass("hidden-item");
             $('div.bits').append("<div class='col-md-12'></div>");
-            var bit_container = $('div.bits').children("div");
-            bit_container.empty();
-            for (var i = 0; i < $('select#bmsconfigurationbundle_register_register_size').val(); i++) {
-                bit_container.append("<div class='row bit_registers'>\n\
+            setBits();
+        } else {
+            $('div.bits').empty();
+            $('div.bits-label').addClass("hidden-item");
+        }
+    });
+    
+    function pad(n, width, z) {
+        z = z || '0';
+        n = n + '';
+        return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+    }
+
+    function setBits() {
+        var bit_container = $('div.bits').children("div");
+        bit_container.empty();
+        var registerValue = $("span.registerValue").text();
+        var registerSize = $('select#bmsconfigurationbundle_register_register_size').val()
+        
+        for (var i = 0; i < registerSize; i++) {
+            console.log(pad((registerValue >>> 0).toString(2), registerSize, 0)[i]);
+            bit_container.append("<div class='row bit_registers'>\n\
                                         <div class='col-md-2 text-center'>\n\
-                                            <span class='bitName'>" +$("input#bmsconfigurationbundle_register_name").val() + "_B" + i + "</span>\n\
+                                            <span class='bitName'>" + $("input#bmsconfigurationbundle_register_name").val() + "_B" + i + "</span>\n\
                                         </div>\n\
                                         <div class='col-md-5'>\n\
                                             <div class='form-group'>\n\
@@ -236,7 +257,7 @@ function formEvents() {
                                             </div>\n\
                                         </div>\n\
                                         <div class='col-md-1 text-center'>\n\
-                                            <span class='bitValue'>0</span>\n\
+                                            <span class='bitValue'>" + pad((registerValue >>> 0).toString(2), registerSize, 0)[i] + "</span>\n\
                                         </div>\n\
                                         <input id='bmsconfigurationbundle_register_bit_registers_" + i + "_bitPosition'\n\
                                                 name='bmsconfigurationbundle_register[bit_registers][" + i + "][bitPosition]'\n\
@@ -252,15 +273,11 @@ function formEvents() {
                                         </input>\n\
                                         <input id='bmsconfigurationbundle_register_bit_registers_" + i + "_bitValue'\n\
                                                 name='bmsconfigurationbundle_register[bit_registers][" + i + "][bitValue]'\n\
-                                                type='hidden'>\n\
+                                                value=" + pad((registerValue >>> 0).toString(2), registerSize, 0)[i] + " type='hidden'>\n\
                                         </input>\n\
                                       </div>");
-            }
-        } else {
-            $('div.bits').empty();
-            $('div.bits-label').addClass("hidden-item");
         }
-    });
+    }
 
     $("input#read_mod_val").val($("input#bmsconfigurationbundle_register_modificator_read").val());
 
