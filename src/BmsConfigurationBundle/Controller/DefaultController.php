@@ -459,7 +459,7 @@ class DefaultController extends Controller {
         $session = $request->getSession();
         $session->set('comm_id', $comm_id);
         $session->set('device_id', $device_id);
-            $this->setDataToSync($request);
+        $this->setDataToSync($request);
 
         return $this->redirectToRoute('bms_configuration_index');
     }
@@ -528,7 +528,8 @@ class DefaultController extends Controller {
 //            $ti->setTime();
 //            $em->persist($ti);
         $host = $request->getHost();
-        var_dump($host);
+        $h = explode(".", $host);
+        var_dump($h[0]);
         $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync'");
         $process->disableOutput();
         $process->run();
