@@ -13,7 +13,6 @@ $(document).ready(function () {
         refreshPage();
     }, 1000 * 60);
 
-    formEvents();
     tableEvents();
 
     setActiveLevel($("div.active"));
@@ -138,9 +137,7 @@ function ajaxAppend(url) {
             $(".main-row").children().remove();
             $(".main-row").hide().append(ret["ret"]).fadeIn("slow");
             refreshPage();
-            if(ret['refresh'] !== 1){
-                formEvents();
-            }
+            formEvents();
             tableEvents();
             updateAddressFormat();
         }
@@ -635,9 +632,6 @@ function refreshPage() {
             });
             $("i.fa-pulse").remove();
 
-        },
-        error: function (status) {
-            console.log(status);
         }
     });
     $(".main-row").addClass("text-center").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();

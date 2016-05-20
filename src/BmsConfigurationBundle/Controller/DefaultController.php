@@ -175,6 +175,7 @@ class DefaultController extends Controller {
         if ($form->isSubmitted()) {
 
 
+            $em->persist($register);
             if ($register->getBitRegister() == 1) {
                 $bitRegisters = $register->getBitRegisters();
                 foreach ($bitRegisters as $br) {
@@ -194,7 +195,6 @@ class DefaultController extends Controller {
             }
 
 
-            $em->persist($register);
             $em->flush();
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
