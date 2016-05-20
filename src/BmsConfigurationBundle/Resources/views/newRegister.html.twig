@@ -78,11 +78,17 @@
                                 <option value="/">/</option>
                             </select>
                         </div>
-                        <div class="col-md-2">
+                        <div  class="col-md-2">
+                            <input id="read_mod_val" type="text" class="form-control" value="" disabled="disabled"></input>
+                        </div>
+                        <div class="col-md-2 hidden">
                             {{form_widget(form.modificator_read)}}
                         </div>
                         <div class="col-md-2">
                             {{form_widget(form.register_size)}}
+                        </div>
+                        <div class="col-md-2">
+                            {{form_row(form.bit_register)}}
                         </div>
                     </div>
                 </div>
@@ -130,11 +136,43 @@
             <div class="col-md-4">
                 {{form_row(form.archive)}}                
                 {{form_row(form.active)}}              
-                {{form_row(form.alarm)}}         
+                {{form_row(form.alarm)}}                
             </div>
             <div class="col-md-8">
                 {{form_row(form.description2)}}                
                 {{form_row(form.description2)}}
+            </div>
+        </div>
+        <div class="row bits-label hidden-item">
+            <div class="col-md-2 text-center">
+                <label>Nazwa skrócona</label>
+            </div>
+            <div class="col-md-5 text-center">
+                <label>Opis</label>
+            </div>
+            <div class="col-md-1 text-center">
+                <label>Wartość</label>
+            </div>
+        </div>
+        <div class="row bits" data-prototype="{{ form_widget(form.bit_registers.vars.prototype)|e }}">
+            <div class="col-md-12">   
+                {% for bitRegister in form.bit_registers %}                        
+                    <div class="row bit_registers">
+                        <div class="col-md-2 text-center">
+                            <span class="bitName"></span>
+                        </div> 
+                        <div class="col-md-5 text-center">
+                            {{form_row(bitRegister.description)}}
+                        </div> 
+                        <div class="col-md-1 text-center">
+                            <span class="bitValue"></span>
+                        </div> 
+                        {{form_row(bitRegister.bitPosition)}}
+                        {{form_row(bitRegister.register)}}
+                        {{form_row(bitRegister.name)}}
+                        {{form_row(bitRegister.bitValue)}}
+                    </div>
+                {% endfor %}
             </div>
         </div>
         <div class="row text-right">

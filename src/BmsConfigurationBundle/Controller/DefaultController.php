@@ -179,11 +179,6 @@ class DefaultController extends Controller {
             if ($register->getBitRegister() == 1) {
                 $bitRegisters = $register->getBitRegisters();
                 foreach ($bitRegisters as $br) {
-//                    $bitRegister = new BitRegister();
-                    
-//                    $bitRegister->setName($register->getName() . "_B" . $i);
-//                    $bitRegister->setBitValue(substr($binVal, $i, 1));
-//                    $bitRegister->setBitPosition($i);
                     $em->persist($br);
                 }
             } else {
@@ -298,7 +293,7 @@ class DefaultController extends Controller {
         
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() ) {
 
             $registerAddress = $form['register_address']->getData();
             $function = $form['function']->getData();
@@ -329,6 +324,16 @@ class DefaultController extends Controller {
                     ->setDevice($device);
 
             $em->persist($register);
+            
+            if ($register->getBitRegister() == 1) {
+                $bitRegisters = $register->getBitRegisters();
+                foreach ($bitRegisters as $br) {
+                    $br->setRegister($register);
+                    $em->persist($br);
+                }
+            } 
+            
+            $em->persist($register);
             $em->flush();
             $registerCD->setRegister($register);
             $registerCD->setTimeOfUpdate(new \DateTime());
@@ -336,25 +341,8 @@ class DefaultController extends Controller {
             $em->flush();
             $register->setRegisterCurrentData($registerCD);
             $em->persist($register);
+                  
             
-            if ($register->getBitRegister() == 1) {
-                $binVal = decbin($register->getRegisterCurrentData()->getFixedValue());
-                for ($i = 0; $i < $register->getRegisterSize(); $i++) {
-                    $bitRegister = new BitRegister();
-                    $bitRegister->setRegister($register);
-                    $bitRegister->setName($register->getName() . "_B" . $i);
-                    $bitRegister->setBitValue(substr($binVal, $i, 1));
-                    $em->persist($bitRegister);
-                    $register->addBitRegister($bitRegister);
-                }
-            } else {
-                $bitRegisters = $register->getBitRegisters();
-                foreach ($bitRegisters as $br) {
-                    $register->removeBitRegister($br);
-                    $em->remove($br);
-                }
-            }
-
 
             $em->flush();
             $session = $request->getSession();
@@ -412,11 +400,18 @@ class DefaultController extends Controller {
 
         $registerCD = $register->getRegisterCurrentData();
 
+        $bitRegisters = $register->getBitRegisters();
+        foreach ($bitRegisters as $br) {
+            $register->removeBitRegister($br);
+            $em->remove($br);
+        }
+        
         $em->remove($registerCD);
         $em->remove($register);
         $em->flush();
         $em->getConnection()->exec("ALTER TABLE register AUTO_INCREMENT = 1;");
         $em->getConnection()->exec("ALTER TABLE register_current_data AUTO_INCREMENT = 1;");
+        $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
 
         $session = $request->getSession();
         $session->set('comm_id', $comm_id);
@@ -441,16 +436,21 @@ class DefaultController extends Controller {
 
                 $registerCD = $register->getRegisterCurrentData();
 
+                $bitRegisters = $register->getBitRegisters();
+                foreach ($bitRegisters as $br) {
+                    $register->removeBitRegister($br);
+                    $em->remove($br);
+                }
                 $em->remove($registerCD);
-                $em->remove($register);
+                $em->remove($register);                
             }
-
             $em->flush();
         }
 
         $em->getConnection()->exec("ALTER TABLE register AUTO_INCREMENT = 1;");
         $em->getConnection()->exec("ALTER TABLE register_current_data AUTO_INCREMENT = 1;");
-
+        $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
+        
         $session = $request->getSession();
         $session->set('comm_id', $comm_id);
         $session->set('device_id', $device_id);
