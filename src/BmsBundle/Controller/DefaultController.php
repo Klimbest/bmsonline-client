@@ -60,8 +60,13 @@ class DefaultController extends Controller {
             $panels = $panelRepo->findVariablePanelsForPage($page_id);
             foreach ($panels as $p) {
                 $rid = $p->getContentSource();
-                $register = $registerRepo->find($rid);
-                $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
+                if(substr($rid, 0, 3) == "bit"){
+                    $register = $bitRegisterRepo->find(substr($rid, 3));
+                    $registers[$rid] = $register->getBitValue();
+                }else{
+                    $register = $registerRepo->find($rid);
+                    $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
+                }
             }
             //get all terms
             $terms = $termRepo->findAll();
