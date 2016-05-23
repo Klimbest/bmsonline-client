@@ -284,15 +284,14 @@ class PanelController extends Controller {
                 $rid = $panel->getContentSource();
                 if(substr($rid, 0, 3) == "bit"){
                     $register = $bitRegisterRepo->find(substr($rid, 3));
-                    $registers[$rid] = $register->getBitValue();
+                    $r["value"] = $register->getBitValue();
                 }else{
                     $register = $registerRepo->find($rid);
-                    $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
+                    $r["value"] = $register->getRegisterCurrentData()->getFixedValue();
                 }
 
                 $options['register'] = $register;
-                $r["name"] = $register->getName();
-                $r["value"] = $register->getRegisterCurrentData()->getFixedValue();
+                $r["name"] = $register->getName();                
                 $ret["register"] = $r;
             }
             
