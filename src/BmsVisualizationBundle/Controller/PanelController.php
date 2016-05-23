@@ -279,9 +279,16 @@ class PanelController extends Controller {
             $panel = $panelRepo->find($panel_id);
             
             if($panel->getType() === "variable"){
-                $reg_id = $panel->getContentSource();
                 $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-                $register = $registerRepo->findOneById($reg_id);
+                $bitRegisterRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:BitRegister');
+                $rid = $p->getContentSource();
+                if(substr($rid, 0, 3) == "bit"){
+                    $register = $bitRegisterRepo->find(substr($rid, 3));
+                    $registers[$rid] = $register->getBitValue();
+                }else{
+                    $register = $registerRepo->find($rid);
+                    $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
+                }
 
                 $options['register'] = $register;
                 $r["name"] = $register->getName();
