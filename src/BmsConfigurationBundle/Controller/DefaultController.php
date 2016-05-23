@@ -291,11 +291,11 @@ class DefaultController extends Controller {
             'action' => $this->generateUrl('bms_configuration_add_register', array('comm_id' => $comm_id, 'device_id' => $device_id)),
             'method' => 'POST'
         ));
-        
-        
+
+
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() ) {
+        if ($form->isSubmitted()) {
 
             $registerAddress = $form['register_address']->getData();
             $function = $form['function']->getData();
@@ -326,15 +326,15 @@ class DefaultController extends Controller {
                     ->setDevice($device);
 
             $em->persist($register);
-            
+
             if ($register->getBitRegister() == 1) {
                 $bitRegisters = $register->getBitRegisters();
                 foreach ($bitRegisters as $br) {
                     $br->setRegister($register);
                     $em->persist($br);
                 }
-            } 
-            
+            }
+
             $em->persist($register);
             $em->flush();
             $registerCD->setRegister($register);
@@ -343,8 +343,8 @@ class DefaultController extends Controller {
             $em->flush();
             $register->setRegisterCurrentData($registerCD);
             $em->persist($register);
-                  
-            
+
+
 
             $em->flush();
             $session = $request->getSession();
@@ -409,7 +409,7 @@ class DefaultController extends Controller {
             $register->removeBitRegister($br);
             $em->remove($br);
         }
-        
+
         $em->remove($registerCD);
         $em->remove($register);
         $em->flush();
@@ -420,7 +420,7 @@ class DefaultController extends Controller {
         $session = $request->getSession();
         $session->set('comm_id', $comm_id);
         $session->set('device_id', $device_id);
-            $this->setDataToSync($request);
+        $this->setDataToSync($request);
 
         return $this->redirectToRoute('bms_configuration_index');
     }
@@ -447,7 +447,7 @@ class DefaultController extends Controller {
                     $em->remove($br);
                 }
                 $em->remove($registerCD);
-                $em->remove($register);                
+                $em->remove($register);
             }
             $em->flush();
         }
@@ -455,7 +455,7 @@ class DefaultController extends Controller {
         $em->getConnection()->exec("ALTER TABLE register AUTO_INCREMENT = 1;");
         $em->getConnection()->exec("ALTER TABLE register_current_data AUTO_INCREMENT = 1;");
         $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
-        
+
         $session = $request->getSession();
         $session->set('comm_id', $comm_id);
         $session->set('device_id', $device_id);
@@ -521,15 +521,9 @@ class DefaultController extends Controller {
 
     public function setDataToSync($request) {
 
-//            $em = $this->getDoctrine()->getManager();
-//            $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
-//            $ti = $technicalInformationRepo->findOneById(1);
-//            $ti->setStatus(1);
-//            $ti->setTime();
-//            $em->persist($ti);
         $host = $request->getHost();
         $h = explode(".", $host);
-        $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync' " .$h[0]);
+        $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync' " . $h[0]);
         $process->disableOutput();
         $process->run();
     }
