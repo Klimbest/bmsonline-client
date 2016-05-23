@@ -65,7 +65,15 @@
         <div class="col-md-12">
             {% if registers|length > 0 %}
                 {% for register in registers %}
-                    <div id="{{register.id}}" class="row register-choice {{register.device.id}} ">
+                    <div id="{{register.id}}" class="row register-choice {{register.device.id}} "
+                         style="
+                         {% if register.alarm == 1 %}
+                             color: #FF0000;
+                         {% endif %}
+                         {% if register.bitRegister == 1 %}
+                             color: #007fff;
+                         {% endif %}
+                         ">
                         <div id="deviceName" class="col-md-2">{{ register.device.name }}</div>
                         <div id="function" class="col-md-2">{{ register.function }}</div>
                         <div id="address" class="col-md-2">{{ register.registerAddress }}</div>
@@ -73,6 +81,16 @@
                         <div id="description" class="col-md-4">{{ register.description}}</div>
                         <div id="value" class="col-md-4 hidden">{{register.registerCurrentData.fixedValue}}</div>
                     </div>
+                    {% for bitRegister in register.bitRegisters %}
+                        <div id="{{register.id}}_b{{bitRegister.id}}" class="row register-choice {{register.device.id}} " style="color: #007fff">
+                            <div id="deviceName" class="col-md-2">{{ register.device.name }}</div>
+                            <div id="function" class="col-md-2">bit</div>
+                            <div id="address" class="col-md-2">{{ register.registerAddress }}</div>
+                            <div id="registerName" class="col-md-2 register_name">{{ bitRegister.name }}</div>
+                            <div id="description" class="col-md-4">{{ bitRegister.description}}</div>
+                            <div id="value" class="col-md-4 hidden">{{bitRegister.bitValue}}</div>
+                        </div>
+                    {% endfor %}
                 {% endfor %}
             {% endif %}
         </div>
