@@ -281,7 +281,7 @@ class PanelController extends Controller {
             if($panel->getType() === "variable"){
                 $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
                 $bitRegisterRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:BitRegister');
-                $rid = $p->getContentSource();
+                $rid = $panel->getContentSource();
                 if(substr($rid, 0, 3) == "bit"){
                     $register = $bitRegisterRepo->find(substr($rid, 3));
                     $registers[$rid] = $register->getBitValue();
