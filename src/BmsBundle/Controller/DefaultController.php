@@ -50,6 +50,7 @@ class DefaultController extends Controller {
 
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+            $bitRegisterRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:BitRegister');
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
             $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
