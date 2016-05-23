@@ -112,7 +112,6 @@ class PageController extends Controller {
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-            $bitRegisterRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:BitRegister');
 
             $pages = $pageRepo->findAll();
             $panels = $panelRepo->findPanelsForPage($request->get("page_id"));
@@ -122,13 +121,8 @@ class PageController extends Controller {
             foreach ($panels as $p) {
                 if($p->getType() === "variable"){
                     $rid = $p->getContentSource();
-                    if(substr($rid, 0, 3) == "bit"){
-                        $register = $bitRegisterRepo->find(substr($rid, 3));
-                        $registers[$rid] = $register->getBitValue();
-                    }else{
-                        $register = $registerRepo->find($rid);
-                        $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
-                    }
+                    $register = $registerRepo->find($rid);
+                    $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
                 }
             }
                         

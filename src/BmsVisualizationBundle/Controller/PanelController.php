@@ -31,18 +31,12 @@ class PanelController extends Controller {
                 
                 if($panel->getType() === "variable"){
                     $reg_id = $panel->getContentSource();
-                    if(substr($reg_id, 0, 3) == "bit"){
-                        $bitRegisterRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:BitRegister');
-                        $register = $bitRegisterRepo->findOneById(substr($reg_id, 3));
-                        $r["value"] = $register->getBitValue();
-                        
-                    }else{                    
-                        $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-                        $register = $registerRepo->findOneById($reg_id);
-                        $r["value"] = $register->getRegisterCurrentData()->getFixedValue();
-                    }
+                    $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+                    $register = $registerRepo->findOneById($reg_id);
+
                     $options['register'] = $register;
                     $r["name"] = $register->getName();
+                    $r["value"] = $register->getRegisterCurrentData()->getFixedValue();
                     $ret["register"] = $r;
                 }
             }
@@ -118,7 +112,6 @@ class PanelController extends Controller {
         if ($request->isXmlHttpRequest()) {
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-            $bitRegisterRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:BitRegister');
             $progressBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
             //get data
             $panel_id = $request->request->get("panel_id");
@@ -147,16 +140,9 @@ class PanelController extends Controller {
             if ($type == "variable") {
                 $registerName = $request->request->get("contentSource");
                 $register = $registerRepo->findOneBy(array('name' => $registerName));
-                if(isset($register)){
-                    $reg["id"] = $register->getId();
-                    $reg["value"] = $register->getRegisterCurrentData()->getFixedValue();
-                    $contentSource = $register->getId();
-                }else{
-                    $register = $bitRegisterRepo->findOneBy(array('name' => $registerName));
-                    $reg["id"] = $register->getId();
-                    $reg["value"] = $register->getBitValue();
-                    $contentSource = "bit". $register->getId();
-                }
+                $reg["id"] = $register->getId();
+                $reg["value"] = $register->getRegisterCurrentData()->getFixedValue();
+                $contentSource = $register->getId();
             } elseif( $type == "widget") {
                 $progressBar = new WidgetBar();
                 $setRegisterName = $request->request->get("pbRegSet");

@@ -154,7 +154,6 @@ class AjaxController extends Controller {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-            $bitRegisterRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:BitRegister');
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $conditionRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:MyCondition');
             $effectRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Effect');
@@ -162,10 +161,6 @@ class AjaxController extends Controller {
             //get REGISER data
             $registerName = $request->request->get('register_name');
             $register = $registerRepo->findOneBy(array('name' => $registerName));
-//            if(!isset($register)){
-//                $register = $bitRegisterRepo->findOneBy(array('name' => $registerName));
-//            }
-            
             //get PANEL data
             $panel_id = $request->request->get('panel_id');
             $panel = $panelRepo->findOneById($panel_id);
