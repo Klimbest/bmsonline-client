@@ -1961,12 +1961,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "4677a24c7905af53bb7f41821f0a4119fa2a421a"
+                "reference": "b9fec1737f8c0d0e23779c9486edf202b2fa7c53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/4677a24c7905af53bb7f41821f0a4119fa2a421a",
-                "reference": "4677a24c7905af53bb7f41821f0a4119fa2a421a",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/b9fec1737f8c0d0e23779c9486edf202b2fa7c53",
+                "reference": "b9fec1737f8c0d0e23779c9486edf202b2fa7c53",
                 "shasum": ""
             },
             "require": {
@@ -2025,7 +2025,7 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2016-05-13 18:13:23"
+            "time": "2016-05-24 10:07:02"
         },
         {
             "name": "symfony/swiftmailer-bundle",

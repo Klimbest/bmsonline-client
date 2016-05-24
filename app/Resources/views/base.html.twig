@@ -63,20 +63,22 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
-                                <span class="label label-primary">Czas: </span><span class="label label-primary clock">{{"now"|date("H:i:s")}}</span>
-                                <div class="progress timer" style="margin-bottom: 1px;">
-                                    <div class="progress-bar progress-bar-success" role="progressbar" style="width: 0%;"></div>
-                                </div>
-                            </div>                            
-                            <div class="col-md-9 text-right">
-                                <span id="errorModbusConnection" class="fa-stack">
-                                    <img src="/images/system/connected.png" class="img-responsive" />
-                                </span>                            
-                                <span id="noInternetConnection" class="fa-stack">
-                                    <img src="/images/system/ethernetOn.png" class="img-responsive" />
-                                </span>   
-                            </div>
+                            {% if is_granted("ROLE_BMS") %}
+                                <div class="col-md-3">
+                                    <span class="label label-primary">Czas: </span><span class="label label-primary clock">{{"now"|date("H:i:s")}}</span>
+                                    <div class="progress timer" style="margin-bottom: 1px;">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" style="width: 0%;"></div>
+                                    </div>
+                                </div>                          
+                                <div class="col-md-9 text-right">
+                                    <span id="errorModbusConnection" class="fa-stack">
+                                        <img src="/images/system/connected.png" class="img-responsive" />
+                                    </span>                            
+                                    <span id="noInternetConnection" class="fa-stack">
+                                        <img src="/images/system/ethernetOn.png" class="img-responsive" />
+                                    </span>   
+                                </div> 
+                            {% endif %} 
                         </div>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
@@ -86,20 +88,25 @@
                                 {% block nav %}
                                 {% endblock %}
 
-                                <a href="{{path('fos_user_profile_show')}}">
-                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-user"></i> Karta użytkownika</button>
-                                </a>
-                                <a href="{{path('fos_user_security_logout')}}">
-                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-sign-out"></i> Wyloguj</button>                                
-                                </a>
+                                {% if is_granted("ROLE_ADMIN") %}
+                                    <a href="{{path('bms_admin')}}">
+                                        <button type="button" class="btn btn-default navbar-btn">Panel administratora</button>
+                                    </a>
+                                {% endif %}
+                                {% if app.user %}
+                                    <a href="{{path('fos_user_profile_show')}}">
+                                        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-user"></i> Karta użytkownika</button>
+                                    </a>
+                                    <a href="{{path('fos_user_security_logout')}}">
+                                        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-sign-out"></i> Wyloguj</button>                                
+                                    </a>                                   
+                                {% endif %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 text-right">
                                 {% if app.user %}
-                                    <small><strong>{{ app.user.username }}</strong></small>
-                                {% else %}
-                                    <small><strong>Nazwa użytkownika</strong></small>
+                                    <small><strong>{{ app.user.username }}</strong></small>                                
                                 {% endif %}
                             </div>
                         </div>
