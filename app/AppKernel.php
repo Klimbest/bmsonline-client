@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new Ob\HighchartsBundle\ObHighchartsBundle(),
             new BmsDataAnalyzeBundle\BmsDataAnalyzeBundle(),
             new BmsAlarmBundle\BmsAlarmBundle(),
+            new BmsAdminBundle\BmsAdminBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

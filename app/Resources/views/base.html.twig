@@ -35,26 +35,36 @@
                     <ul class="nav navbar-nav">
                         <div class="row">
                             <div class="col-md-12">
-                                <a href="{{path('bms_index')}}">
-                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-building fa-fw"></i> BMS</button>
-                                </a>
-                                <a href="{{path('bms_data_analyze_index')}}">
-                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-line-chart"></i> Analiza danych</button>
-                                </a>
-                                <a href="{{path('bms_configuration_index')}}">
-                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-wrench"></i> Konfiguracja</button>
-                                </a>
-                                <a href="{{path('bms_visualization_index')}}">
-                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-paint-brush"></i> Wizualizacja</button>
-                                </a>
-                                <a href="{{path('bms_alarm_index')}}">
-                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-bell-o"></i> Historia alarmów</button>
-                                </a>
+                                {% if is_granted("ROLE_BMS") %}
+                                    <a href="{{path('bms_index')}}">
+                                        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-building fa-fw"></i> BMS</button>
+                                    </a>
+                                {% endif %}
+                                {% if is_granted("ROLE_DATA_ANALYZE") %}
+                                    <a href="{{path('bms_data_analyze_index')}}">
+                                        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-line-chart"></i> Analiza danych</button>
+                                    </a>
+                                {% endif %}
+                                {% if is_granted("ROLE_CONFIGURATION") %}
+                                    <a href="{{path('bms_configuration_index')}}">
+                                        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-wrench"></i> Konfiguracja</button>
+                                    </a>
+                                {% endif %}
+                                {% if is_granted("ROLE_VISUALIZATION") %}
+                                    <a href="{{path('bms_visualization_index')}}">
+                                        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-paint-brush"></i> Wizualizacja</button>
+                                    </a>
+                                {% endif %}
+                                {% if is_granted("ROLE_ALARM_HISTORY") %}
+                                    <a href="{{path('bms_alarm_index')}}">
+                                        <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-bell-o"></i> Historia alarmów</button>
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
-                                <span class="label label-primary">Czas: </span><span class="label label-primary clock"></span>
+                                <span class="label label-primary">Czas: </span><span class="label label-primary clock">{{"now"|date("H:i:s")}}</span>
                                 <div class="progress timer" style="margin-bottom: 1px;">
                                     <div class="progress-bar progress-bar-success" role="progressbar" style="width: 0%;"></div>
                                 </div>
@@ -77,10 +87,10 @@
                                 {% endblock %}
 
                                 <a href="{{path('fos_user_profile_show')}}">
-                                    <button type="button" class="btn btn-default navbar-btn disabled"><i class="fa fa-user"></i> Karta użytkownika</button>
+                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-user"></i> Karta użytkownika</button>
                                 </a>
                                 <a href="{{path('fos_user_security_logout')}}">
-                                    <button type="button" class="btn btn-default navbar-btn disabled"><i class="fa fa-sign-out"></i> Wyloguj</button>                                
+                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-sign-out"></i> Wyloguj</button>                                
                                 </a>
                             </div>
                         </div>
@@ -125,22 +135,22 @@
                 <a href="https://www.rss.com/"><i class="fa fa-rss-square fa-2x" style="color: #f26522"></i></a>
             </div>
         </div>#}
-    {% block javascripts %}
-        <script src="{{ asset('js/__jquery-1.11.3.js') }}"></script>
-        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-        <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
-        <script src="{{ asset('js/main.js') }}"></script>
-        <script src="{{ asset('js/datetimepicker-master/jquery.datetimepicker.js') }}"></script>
-        <script src="{{ asset('js/_bootstrap.js') }}"></script>
-        <script src="{{ asset('js/jquery.cookie.js') }}"></script>
-        <script src="{{ asset('js/jquery-ui.js') }}"></script>
-        <script src="{{ asset('js/jquery.formatDateTime.js') }}"></script>
-        <script src="{{ asset('js/jquery.ui.resizable.snap.ext.js') }}"></script>
-        <script src="{{ asset('js/jquery.ae.image.resize.js') }}"></script>
-        <script src="{{ asset('js/jquery.form.js') }}"></script>
-        <script src="{{ asset('js/ajaxq.js') }}"></script>
+        {% block javascripts %}
+            <script src="{{ asset('js/__jquery-1.11.3.js') }}"></script>
+            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+            <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+            <script src="{{ asset('js/main.js') }}"></script>
+            <script src="{{ asset('js/datetimepicker-master/jquery.datetimepicker.js') }}"></script>
+            <script src="{{ asset('js/_bootstrap.js') }}"></script>
+            <script src="{{ asset('js/jquery.cookie.js') }}"></script>
+            <script src="{{ asset('js/jquery-ui.js') }}"></script>
+            <script src="{{ asset('js/jquery.formatDateTime.js') }}"></script>
+            <script src="{{ asset('js/jquery.ui.resizable.snap.ext.js') }}"></script>
+            <script src="{{ asset('js/jquery.ae.image.resize.js') }}"></script>
+            <script src="{{ asset('js/jquery.form.js') }}"></script>
+            <script src="{{ asset('js/ajaxq.js') }}"></script>
 
 
-    {% endblock %}
-</body>
+        {% endblock %}
+    </body>
 </html>

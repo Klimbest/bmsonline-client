@@ -2,6 +2,11 @@ bms:
     resource: "@BmsBundle/Controller/"
     type: annotation
     prefix:   /
+    
+bms_admin:
+    resource: "@BmsAdminBundle/Controller/"
+    type: annotation
+    prefix:   /bms_admin
 
 bms_alarm:
     resource: "@BmsAlarmBundle/Controller/"
@@ -16,12 +21,12 @@ bms_data_analyze:
 bms_visualization:
     resource: "@BmsVisualizationBundle/Controller/"
     type: annotation
-    prefix:   /bms_admin/visualization
+    prefix:   /visualization
 
 bms_configuration:
     resource: "@BmsConfigurationBundle/Controller/"
     type: annotation
-    prefix:   /bms_admin/configuration
+    prefix:   /configuration
     
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
