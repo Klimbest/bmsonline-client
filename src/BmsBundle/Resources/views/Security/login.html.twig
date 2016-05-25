@@ -3,28 +3,29 @@
 
 {% block title %}Logowanie - {% endblock %}
 
+{% block nav %}
+
+{% endblock %}
+
 {% block body %}
     {% if app.user %}
 
         <div class="row">
             <div class="col-xs-3 col-xs-offset-2 text-center error">
-                 <h3>Jesteś już zalogowany jako {{ app.user }}</h3>
+                <h3>Jesteś już zalogowany jako {{ app.user }}</h3>
             </div>
         </div>
 
     {% else %}
-
-
         {% block fos_user_content %}
             {% trans_default_domain 'FOSUserBundle' %}
-
             {% if error %}
                 <div class="col-xs-6 col-xs-offset-3 text-center error">
                     <h4>{{ error.messageKey|trans(error.messageData, 'security') }}</h4>
                 </div>
             {% endif %}
 
-            <div class="col-xs-3 col-xs-offset-2 text-center" id="user_control_window">
+            <div class="col-xs-4 col-xs-offset-4 text-center" id="user_control_window">
                 <div>
                     <h3>Logowanie do systemu BMS</h3>
                 </div>
@@ -39,9 +40,11 @@
                     </div>
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
 
-                    <a href="{{path('fos_user_registration_register')}}">Załóż konto</a>
                     <div class="form-group">
                         <input class="btn btn-default" type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}">
+                        <a href="{{path('fos_user_registration_register')}}">
+                            <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-user-plus"></i>Załóż konto</button>
+                        </a>
                     </div>
                 </form>
             </div>

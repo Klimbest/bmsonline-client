@@ -27,7 +27,7 @@ security:
             anonymous:    true
             remember_me:
                 secret:   '%secret%'
-                lifetime: 60
+                lifetime: 300
             
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY,  requires_channel: https }
