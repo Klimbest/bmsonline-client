@@ -60,6 +60,7 @@ a button{
     border-radius: 0px;
     border-color: #337AB7;
     border-top: none;
+    height: 82px;
 }
 .navbar-right{
     margin-right: 0px;

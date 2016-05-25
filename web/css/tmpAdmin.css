@@ -1,0 +1,11 @@
+div.row.header{
+    border-bottom: 1px solid rgba(0,0,0,1);
+}
+
+div.row.user{
+    border-bottom: 1px solid #337ab7;
+}
+
+div.row.user{
+    cursor: pointer;
+}
