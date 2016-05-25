@@ -93,7 +93,10 @@ fos_user:
         form:
             type: BmsBundle\Form\RegistrationFormType
             validation_groups: null
-    
+    resetting:
+        email:
+            template: FOSUserBundle:Resetting:email.txt.twig
+        
 liip_imagine:
     resolvers:
        default:
