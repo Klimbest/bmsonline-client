@@ -15,7 +15,7 @@
             {% trans_default_domain 'FOSUserBundle' %}
             {% if error %}
                 <div class="col-xs-6 col-xs-offset-3 text-center error">
-                    <h4>{{ error.messageKey|trans(error.messageData, 'security') }}</h4>
+                    <h3><label class="label label-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</label></h3>
                 </div>
             {% endif %}
             <div class="col-xs-4 col-xs-offset-4 text-center" id="user_control_window">

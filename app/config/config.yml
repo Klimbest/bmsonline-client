@@ -95,6 +95,9 @@ fos_user:
             validation_groups: null
     resetting:
         email:
+            from_email:
+                address: bms.klimbest@gmail.com
+                sender_name: BMSOnline Admin
             template: FOSUserBundle:Resetting:email.txt.twig
         
 liip_imagine:
