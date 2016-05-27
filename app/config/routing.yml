@@ -2,11 +2,6 @@ bms:
     resource: "@BmsBundle/Controller/"
     type: annotation
     prefix:   /
-    
-bms_admin:
-    resource: "@BmsAdminBundle/Controller/"
-    type: annotation
-    prefix:   /bms_admin
 
 bms_alarm:
     resource: "@BmsAlarmBundle/Controller/"
@@ -36,3 +31,12 @@ fos_user:
 
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"
+    
+admin_area:
+    resource: "@SonataAdminBundle/Resources/config/routing/sonata_admin.xml"
+    prefix: /manage    
+    
+_sonata_admin:
+    resource: .
+    type: sonata_admin
+    prefix: /manage

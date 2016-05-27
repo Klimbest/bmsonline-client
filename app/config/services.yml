@@ -14,3 +14,9 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         tags:
             - { name: form.type }
+            
+    admin.user:
+        class: BmsBundle\Admin\UserAdmin
+        arguments: [~, BmsBundle\Entity\User, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: User }
