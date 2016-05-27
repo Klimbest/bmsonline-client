@@ -19,4 +19,6 @@ services:
         class: BmsBundle\Admin\UserAdmin
         arguments: [~, BmsBundle\Entity\User, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: User }
+            - { name: sonata.admin, manager_type: orm, label: Użytkownik }
+        calls:
+            - [ setTemplate, [edit, AppBundle:PostAdmin:edit.html.twig]]
