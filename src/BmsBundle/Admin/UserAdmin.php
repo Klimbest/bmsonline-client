@@ -11,13 +11,16 @@ class UserAdmin extends AbstractAdmin {
 
     protected $datagridValues = array(
         '_page' => 1
-    );    
-    
+    );
 
     protected function configureFormFields(FormMapper $formMapper) {
         $formMapper->add('username', 'text')
-                ->add('enabled', 'checkbox')
-                ->add('locked', 'checkbox')
+                ->add('enabled', 'checkbox', array(
+                    'required' => false
+                ))
+                ->add('locked', 'checkbox', array(
+                    'required' => false
+                ))
                 ->add('roles');
     }
 
@@ -37,6 +40,4 @@ class UserAdmin extends AbstractAdmin {
         return $actions;
     }
 
-    
-    
 }

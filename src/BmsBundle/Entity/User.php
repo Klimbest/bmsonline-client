@@ -27,7 +27,7 @@ class User extends BaseUser
     
     public function __toString()
     {
-        return $this->name;
+        return $this->username;
     }
     
     public function setUsername($username)

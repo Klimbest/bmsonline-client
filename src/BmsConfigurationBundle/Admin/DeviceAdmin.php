@@ -12,7 +12,11 @@ class DeviceAdmin extends AbstractAdmin {
     protected function configureFormFields(FormMapper $formMapper) {
         $formMapper->add('name')
                 ->add('description')
-                ->add('modbusAddress');
+                ->add('modbusAddress')
+                ->add('communicationType', 'entity', array(
+                    'class' => 'BmsConfigurationBundle\Entity\CommunicationType',
+                    'choice_label' => 'name',
+                ));
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper) {
@@ -25,15 +29,17 @@ class DeviceAdmin extends AbstractAdmin {
         $listMapper->addIdentifier('name')
                 ->add('description')
                 ->add('modbusAddress')
-                ->add('_action', null, array(
-                            'actions' => array(
-                                'show' => array(),
-                                'edit' => array(),
-                                'delete' => array(),
-                                )
-                    ))
-                ;
+                ->add('communicationType', null, array(), 'entity', array(
+                    'class'    => 'BmsConfigurationBundle\Entity\CommunicationType',
+                    'choice_label' => 'name',
+                ))->add('_action', null, array(
+                    'actions' => array(
+                        'show' => array(),
+                        'edit' => array(),
+                        'delete' => array(),
+                    )
+                ))
+        ;
     }
-       
 
 }
