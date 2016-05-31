@@ -24,7 +24,6 @@ services:
         tags:
             - name: sonata.admin
               manager_type: orm
-              group: Administracja
               label: Użytkownik
               
     sonata.admin.hardware:
@@ -36,7 +35,6 @@ services:
         tags:
             - name: sonata.admin
               manager_type: orm
-              group: Sieć modbus
               label: Połączenie fizyczne 
 
     sonata.admin.communicationtype:
@@ -46,10 +44,9 @@ services:
             - BmsConfigurationBundle\Entity\CommunicationType
             - ~
         tags:
-            - name: sonata.admin
+            - name:         sonata.admin
               manager_type: orm
-              group: Sieć modbus
-              label: Typ podsieci
+              label:        Typ podsieci
 
     sonata.admin.device:
         class: BmsConfigurationBundle\Admin\DeviceAdmin
@@ -58,9 +55,50 @@ services:
             - BmsConfigurationBundle\Entity\Device
             - ~
         tags:
-            - name: sonata.admin
+            - name:         sonata.admin
               manager_type: orm
-              group: Sieć modbus
-              label: Urządzenie
-              
+              label:        Urządzenie
     
+    sonata.admin.register:
+        class: BmsConfigurationBundle\Admin\RegisterAdmin
+        arguments: 
+            - ~
+            - BmsConfigurationBundle\Entity\Register
+            - ~
+        tags:
+            - name:         sonata.admin
+              manager_type: orm
+              label:        Rejestr
+   
+    sonata.admin.page:
+        class: BmsVisualizationBundle\Admin\PageAdmin
+        arguments: 
+            - ~
+            - BmsVisualizationBundle\Entity\Page
+            - ~
+        tags:
+            - name:         sonata.admin
+              manager_type: orm
+              label:        Strona
+              
+    sonata.admin.panel:
+        class: BmsVisualizationBundle\Admin\PanelAdmin
+        arguments: 
+            - ~
+            - BmsVisualizationBundle\Entity\Panel
+            - ~
+        tags:
+            - name:         sonata.admin
+              manager_type: orm
+              label:        Panel
+              
+    sonata.admin.term:
+        class: BmsVisualizationBundle\Admin\TermAdmin
+        arguments: 
+            - ~
+            - BmsVisualizationBundle\Entity\Term
+            - ~
+        tags:
+            - name:         sonata.admin
+              manager_type: orm
+              label:        Warunek

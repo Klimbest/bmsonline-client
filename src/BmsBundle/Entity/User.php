@@ -25,6 +25,11 @@ class User extends BaseUser
         // your own logic
     }
     
+    public function __toString()
+    {
+        return $this->name;
+    }
+    
     public function setUsername($username)
     {
         $this->username = $this->emailCanonical;

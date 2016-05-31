@@ -32,7 +32,7 @@ file that was distributed with this source code.
 
         {% block stylesheets %}
             {% for stylesheet in sonata_admin.adminPool.getOption('stylesheets', []) %}
-                    <link rel="stylesheet" href="{{ asset(stylesheet) }}">
+                <link rel="stylesheet" href="{{ asset(stylesheet) }}">
             {% endfor %}
             <link rel="stylesheet" href="{{ asset('css/sonataCustomize.css') }}">
         {% endblock %}
@@ -46,7 +46,7 @@ file that was distributed with this source code.
                     USE_STICKYFORMS: {% if sonata_admin.adminPool.getOption('use_stickyforms') %}true{% else %}false{% endif %}
                 };
                 window.SONATA_TRANSLATIONS = {
-                    CONFIRM_EXIT:  '{{ 'confirm_exit'|trans({}, 'SonataAdminBundle')|escape('js') }}'
+                    CONFIRM_EXIT: '{{ 'confirm_exit'|trans({}, 'SonataAdminBundle')|escape('js') }}'
                 };
 
                 // http://getbootstrap.com/getting-started/#support-ie10-width
@@ -69,16 +69,16 @@ file that was distributed with this source code.
 
             {# localize select2 #}
             {% if sonata_admin.adminPool.getOption('use_select2') %}
-                {% if locale == 'pt' %}{% set locale = 'pt_PT' %}{% endif %}
+            {% if locale == 'pt' %}{% set locale = 'pt_PT' %}{% endif %}
 
-                {# omit default EN locale #}
-                {% if locale[:2] != 'en' %}
-                    <script src="{{ asset('bundles/sonatacore/vendor/select2/select2_locale_' ~ locale|replace({'_':'-'}) ~ '.js') }}"></script>
-                {% endif %}
+            {# omit default EN locale #}
+            {% if locale[:2] != 'en' %}
+                <script src="{{ asset('bundles/sonatacore/vendor/select2/select2_locale_' ~ locale|replace({'_':'-'}) ~ '.js') }}"></script>
             {% endif %}
-        {% endblock %}
+        {% endif %}
+    {% endblock %}
 
-        <title>
+    <title>
         {% block sonata_head_title %}
             {{ 'Admin'|trans({}, 'SonataAdminBundle') }}
 
@@ -99,9 +99,9 @@ file that was distributed with this source code.
                 {% endif %}
             {% endif%}
         {% endblock %}
-        </title>
-    </head>
-    <body {% block body_attributes %}class="sonata-bc skin-black fixed"{% endblock %}>
+    </title>
+</head>
+<body {% block body_attributes %}class="sonata-bc skin-black fixed"{% endblock %}>
 
     <div class="wrapper">
 
@@ -109,14 +109,14 @@ file that was distributed with this source code.
             <header class="main-header">
                 {% block sonata_header_noscript_warning %}
                     <noscript>
-                        <div class="noscript-warning">
-                            {{ 'noscript_warning'|trans({}, 'SonataAdminBundle') }}
-                        </div>
+                    <div class="noscript-warning">
+                        {{ 'noscript_warning'|trans({}, 'SonataAdminBundle') }}
+                    </div>
                     </noscript>
                 {% endblock %}
                 {% block logo %}
                     {% spaceless %}
-                        <a class="logo" href="{{ path('sonata_admin_dashboard') }}">
+                        <a class="logo" href="{{ path('bms_index') }}">
                             {% if 'single_image' == sonata_admin.adminPool.getOption('title_mode') or 'both' == sonata_admin.adminPool.getOption('title_mode') %}
                                 <img src="{{ asset(sonata_admin.adminPool.titlelogo) }}" alt="{{ sonata_admin.adminPool.title }}">
                             {% endif %}
@@ -133,7 +133,33 @@ file that was distributed with this source code.
                         </a>
 
                         <div class="navbar-left">
-                            {% block sonata_breadcrumb %}
+                            {% if is_granted("ROLE_BMS") %}
+                                <a href="{{path('bms_index')}}">
+                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-building fa-fw"></i> BMS</button>
+                                </a>
+                            {% endif %}
+                            {% if is_granted("ROLE_DATA_ANALYZE") %}
+                                <a href="{{path('bms_data_analyze_index')}}">
+                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-line-chart"></i> Analiza danych</button>
+                                </a>
+                            {% endif %}
+                            {% if is_granted("ROLE_CONFIGURATION") %}
+                                <a href="{{path('bms_configuration_index')}}">
+                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-wrench"></i> Konfiguracja</button>
+                                </a>
+                            {% endif %}
+                            {% if is_granted("ROLE_VISUALIZATION") %}
+                                <a href="{{path('bms_visualization_index')}}">
+                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-paint-brush"></i> Wizualizacja</button>
+                                </a>
+                            {% endif %}
+                            {% if is_granted("ROLE_ALARM_HISTORY") %}
+                                <a href="{{path('bms_alarm_index')}}">
+                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-bell-o"></i> Historia alarmów</button>
+                                </a>
+                            {% endif %}
+
+                            {#{% block sonata_breadcrumb %}
                                 <div class="hidden-xs">
                                     {% if _breadcrumb is not empty or action is defined %}
                                         <ol class="nav navbar-top-links breadcrumb">
@@ -159,7 +185,7 @@ file that was distributed with this source code.
                                         </ol>
                                     {% endif %}
                                 </div>
-                            {% endblock sonata_breadcrumb %}
+                            {% endblock sonata_breadcrumb %}#}
                         </div>
 
                         {% block sonata_top_nav_menu %}
@@ -197,11 +223,11 @@ file that was distributed with this source code.
                                     <form action="{{ path('sonata_admin_search') }}" method="GET" class="sidebar-form" role="search">
                                         <div class="input-group custom-search-form">
                                             <input type="text" name="q" value="{{ app.request.get('q') }}" class="form-control" placeholder="{{ 'search_placeholder'|trans({}, 'SonataAdminBundle') }}">
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-flat" type="submit">
-                                                        <i class="fa fa-search"></i>
-                                                    </button>
-                                                </span>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-flat" type="submit">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </span>
                                         </div>
                                     </form>
                                 {% endif %}
@@ -213,7 +239,7 @@ file that was distributed with this source code.
                                     {{ knp_menu_render('sonata_admin_sidebar', {template: sonata_admin.adminPool.getTemplate('knp_menu_template')}) }}
                                 {% endif %}
                             {% endblock side_bar_nav %}
-                            
+
                         {% endblock sonata_side_nav %}
                     </section>
                 </aside>
@@ -221,63 +247,6 @@ file that was distributed with this source code.
 
             <div class="content-wrapper">
                 {% block sonata_page_content %}
-                    <section class="content-header">
-
-                        {% block sonata_page_content_header %}
-                            {% block sonata_page_content_nav %}
-                                {% if _tab_menu is not empty or _actions is not empty or _list_filters_actions is not empty %}
-                                    <nav class="navbar navbar-default" role="navigation">
-                                        <div class="container-fluid">
-                                            {% block tab_menu_navbar_header %}
-                                                {% if _navbar_title is not empty %}
-                                                    <div class="navbar-header">
-                                                        <a class="navbar-brand" href="#">{{ _navbar_title|raw }}</a>
-                                                    </div>
-                                                {% endif %}
-                                            {% endblock %}
-
-                                            <div class="navbar-collapse">
-                                                <div class="navbar-left">
-                                                    {% if _tab_menu is not empty %}
-                                                        {{ _tab_menu|raw }}
-                                                    {% endif %}
-                                                </div>
-
-                                                {% if admin is defined and action is defined and action == 'list' and admin.listModes|length > 1 %}
-                                                    <div class="nav navbar-right btn-group">
-                                                        {% for mode, settings in admin.listModes %}
-                                                            <a href="{{ admin.generateUrl('list', app.request.query.all|merge({_list_mode: mode})) }}" class="btn btn-default navbar-btn btn-sm{% if admin.getListMode() == mode %} active{% endif %}"><i class="{{ settings.class }}"></i></a>
-                                                        {% endfor %}
-                                                    </div>
-                                                {% endif %}
-                                                
-                                                {% block sonata_admin_content_actions_wrappers %}
-                                                    {% if _actions|replace({ '<li>': '', '</li>': '' })|trim is not empty %}
-                                                        <ul class="nav navbar-nav navbar-right">
-                                                        {% if _actions|split('</a>')|length > 2 %}
-                                                            <li class="dropdown sonata-actions">
-                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ 'link_actions'|trans({}, 'SonataAdminBundle') }} <b class="caret"></b></a>
-                                                                <ul class="dropdown-menu" role="menu">
-                                                                    {{ _actions|raw }}
-                                                                </ul>
-                                                            </li>
-                                                        {% else %}
-                                                            {{ _actions|raw }}
-                                                        {% endif %}
-                                                        </ul>
-                                                    {% endif %}
-                                                {% endblock sonata_admin_content_actions_wrappers %}
-
-                                                {% if _list_filters_actions is not empty %}
-                                                    {{ _list_filters_actions|raw }}
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </nav>
-                                {% endif %}
-                            {% endblock sonata_page_content_nav %}
-                        {% endblock sonata_page_content_header %}
-                    </section>
 
                     <section class="content">
                         {% block sonata_admin_content %}
@@ -325,10 +294,17 @@ file that was distributed with this source code.
         {% block bootlint %}
             {# Bootlint - https://github.com/twbs/bootlint#in-the-browser #}
             <script type="text/javascript">
-                javascript:(function(){var s=document.createElement("script");s.onload=function(){bootlint.showLintReportForCurrentDocument([], {hasProblems: false, problemFree: false});};s.src="https://maxcdn.bootstrapcdn.com/bootlint/latest/bootlint.min.js";document.body.appendChild(s)})();
+                javascript:(function () {
+                    var s = document.createElement("script");
+                    s.onload = function () {
+                        bootlint.showLintReportForCurrentDocument([], {hasProblems: false, problemFree: false});
+                    };
+                    s.src = "https://maxcdn.bootstrapcdn.com/bootlint/latest/bootlint.min.js";
+                    document.body.appendChild(s)
+                })();
             </script>
         {% endblock %}
     {% endif %}
 
-    </body>
+</body>
 </html>

@@ -119,6 +119,8 @@ sonata_block:
             contexts: [admin]
         sonata.admin.block.search_result:
             contexts: [admin]
+        sonata.admin.block.stats:
+            contexts: [admin]
             
 sonata_admin:
     security:
@@ -128,9 +130,103 @@ sonata_admin:
     title_logo:           images/logo.jpg
     options:
         title_mode:     "single_image"
+        use_select2:    false
+    show_mosaic_button: false
     dashboard:
         blocks:
-            -
-                position: top
-                class: col-md-5
+            -   position: top
+                class: col-md-3
+                type: sonata.admin.block.stats
+                settings: 
+                    code:  sonata.admin.user         
+                    icon:  fa-user                  
+                    text:  Zarejestrowanych użytkowników
+                    color: bg-yellow  
+            -   position: top
+                class: col-md-3
                 type: sonata.admin.block.admin_list
+                settings:
+                    groups: [ sonata.admin.group.administration ]
+            -   position: bottom
+                class: col-md-2
+                type: sonata.admin.block.stats
+                settings: 
+                    code:  sonata.admin.communicationtype        
+                    icon:  fa-usb                  
+                    text:  Aktywnych portów
+                    color: bg-blue       
+            -   position: bottom 
+                class: col-md-2
+                type: sonata.admin.block.stats
+                settings: 
+                    code:  sonata.admin.register
+                    icon:  fa-hdd-o                  
+                    text:  Dodanych rejestrów
+                    color: bg-red  
+            -   position: bottom 
+                class: col-md-2
+                type: sonata.admin.block.stats
+                settings: 
+                    code:  sonata.admin.device        
+                    icon:  fa-cog                  
+                    text:  Dodanych urządzeń
+                    color: bg-green         
+            -   position: bottom
+                class: col-md-6
+                type: sonata.admin.block.admin_list
+                settings:
+                    groups: [ sonata.admin.group.configuration ]
+            -   position: bottom
+                class: col-md-2
+                type: sonata.admin.block.stats
+                settings: 
+                    code:  sonata.admin.page        
+                    icon:  fa-file                  
+                    text:  Dodanych stron
+                    color: bg-blue       
+            -   position: bottom 
+                class: col-md-2
+                type: sonata.admin.block.stats
+                settings: 
+                    code:  sonata.admin.panel
+                    icon:  fa-image                  
+                    text:  Dodanych paneli
+                    color: bg-red  
+            -   position: bottom 
+                class: col-md-2
+                type: sonata.admin.block.stats
+                settings: 
+                    code:  sonata.admin.term        
+                    icon:  fa-magic                  
+                    text:  Dodanych warunków
+                    color: bg-green         
+            -   position: bottom
+                class: col-md-6
+                type: sonata.admin.block.admin_list
+                settings:
+                    groups: [ sonata.admin.group.visualization ]
+            
+        groups:
+            sonata.admin.group.administration:
+                label:           Administracja
+                label_catalogue: BmsBundle
+                icon:            '<i class="fa fa-users"></i>'
+                items:
+                    - sonata.admin.user
+            sonata.admin.group.configuration:
+                label:           Konfiguracja
+                label_catalogue: BmsConfigurationBundle
+                icon:            '<i class="fa fa-wrench"></i>'
+                items:
+                    - sonata.admin.hardware
+                    - sonata.admin.communicationtype
+                    - sonata.admin.device
+                    - sonata.admin.register
+            sonata.admin.group.visualization:
+                label:           Wizualizacja
+                label_catalogue: BmsVisualizationBundle
+                icon:            '<i class="fa fa-paint-brush"></i>'
+                items:
+                    - sonata.admin.page
+                    - sonata.admin.panel
+                    - sonata.admin.term

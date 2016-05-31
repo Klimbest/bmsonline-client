@@ -89,7 +89,7 @@
                                 {% endblock %}
 
                                 {% if is_granted("ROLE_ADMIN") %}
-                                    <a href="{{path('admin_bms_user_list')}}">
+                                    <a href="{{path('sonata_admin_dashboard')}}">
                                         <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-users"></i> Panel administratora</button>
                                     </a>
                                 {% endif %}
