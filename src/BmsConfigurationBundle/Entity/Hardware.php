@@ -48,7 +48,12 @@ class Hardware
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
-
+    
+    public function __toString()
+    {
+        return $this->name;
+    }
+    
     /**
      * Set raspiKey
      *

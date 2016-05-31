@@ -901,12 +901,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "abb35b94ed8ec78a504c9e1a2cd803d85d3ffad9"
+                "reference": "d1fccc6335b74beca94525551cacc06b256ed261"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/abb35b94ed8ec78a504c9e1a2cd803d85d3ffad9",
-                "reference": "abb35b94ed8ec78a504c9e1a2cd803d85d3ffad9",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/d1fccc6335b74beca94525551cacc06b256ed261",
+                "reference": "d1fccc6335b74beca94525551cacc06b256ed261",
                 "shasum": ""
             },
             "require": {
@@ -962,7 +962,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-05-13 11:27:34"
+            "time": "2016-05-27 12:14:43"
         },
         {
             "name": "imagine/imagine",
@@ -2069,12 +2069,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataEasyExtendsBundle.git",
-                "reference": "9431942759fd4e5bf6c95c00938c3d76ab2cc048"
+                "reference": "084af94e10d05a3fbc3fac406a182145369eaf05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataEasyExtendsBundle/zipball/9431942759fd4e5bf6c95c00938c3d76ab2cc048",
-                "reference": "9431942759fd4e5bf6c95c00938c3d76ab2cc048",
+                "url": "https://api.github.com/repos/sonata-project/SonataEasyExtendsBundle/zipball/084af94e10d05a3fbc3fac406a182145369eaf05",
+                "reference": "084af94e10d05a3fbc3fac406a182145369eaf05",
                 "shasum": ""
             },
             "require": {
@@ -2120,7 +2120,7 @@
                 "Easy Extends",
                 "sonata"
             ],
-            "time": "2016-05-22 13:44:23"
+            "time": "2016-05-31 00:00:04"
         },
         {
             "name": "sonata-project/exporter",
@@ -2698,12 +2698,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "b9fec1737f8c0d0e23779c9486edf202b2fa7c53"
+                "reference": "aaf180ead68dac5c931f93dcfd08a8a3f594ea4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/b9fec1737f8c0d0e23779c9486edf202b2fa7c53",
-                "reference": "b9fec1737f8c0d0e23779c9486edf202b2fa7c53",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/aaf180ead68dac5c931f93dcfd08a8a3f594ea4c",
+                "reference": "aaf180ead68dac5c931f93dcfd08a8a3f594ea4c",
                 "shasum": ""
             },
             "require": {
@@ -2762,7 +2762,7 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2016-05-24 10:07:02"
+            "time": "2016-05-26 07:56:59"
         },
         {
             "name": "symfony/swiftmailer-bundle",
@@ -3005,16 +3005,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.24.0",
+            "version": "v1.24.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "3e5aa30ebfbafd5951fb1b01e338e1800ce7e0e8"
+                "reference": "3566d311a92aae4deec6e48682dc5a4528c4a512"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/3e5aa30ebfbafd5951fb1b01e338e1800ce7e0e8",
-                "reference": "3e5aa30ebfbafd5951fb1b01e338e1800ce7e0e8",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/3566d311a92aae4deec6e48682dc5a4528c4a512",
+                "reference": "3566d311a92aae4deec6e48682dc5a4528c4a512",
                 "shasum": ""
             },
             "require": {
@@ -3062,7 +3062,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-01-25 21:22:18"
+            "time": "2016-05-30 09:11:59"
         },
         {
             "name": "willdurand/jsonp-callback-validator",

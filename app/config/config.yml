@@ -117,7 +117,20 @@ sonata_block:
         # enable the SonataAdminBundle block
         sonata.admin.block.admin_list:
             contexts: [admin]
+        sonata.admin.block.search_result:
+            contexts: [admin]
             
 sonata_admin:
-    templates:
-        dashboard: BmsBundle::layout.html.twig
+    security:
+        admin_permissions:
+            - LIST
+    title:                'Bmsonline zarządzanie'
+    title_logo:           images/logo.jpg
+    options:
+        title_mode:     "single_image"
+    dashboard:
+        blocks:
+            -
+                position: top
+                class: col-md-5
+                type: sonata.admin.block.admin_list

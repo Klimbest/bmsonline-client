@@ -10,8 +10,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 class UserAdmin extends AbstractAdmin {
 
     protected function configureFormFields(FormMapper $formMapper) {
-        $formMapper->add('id', 'number')
-                ->add('username', 'text')
+        $formMapper->add('username', 'text')
                 ->add('enabled', 'checkbox')
                 ->add('locked', 'checkbox')
                 ->add('roles');
@@ -29,8 +28,16 @@ class UserAdmin extends AbstractAdmin {
                 ->addIdentifier('username')
                 ->add('enabled')
                 ->add('locked')
-                ->add('last_login', 'datetime')
-                ->add('roles');
+                ->add('last_login', 'datetime');
+    }
+    
+    public function getDashboardActions()
+    {
+        $actions = parent::getDashboardActions();
+
+        unset($actions['create']);
+
+        return $actions;
     }
 
 }

@@ -172,6 +172,11 @@ class Device
         $this->registers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->name;
+    }
+    
     /**
      * Add registers
      *

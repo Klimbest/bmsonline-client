@@ -15,10 +15,52 @@ services:
         tags:
             - { name: form.type }
             
-    admin.user:
+    sonata.admin.user:
         class: BmsBundle\Admin\UserAdmin
-        arguments: [~, BmsBundle\Entity\User, ~]
+        arguments: 
+            - ~
+            - BmsBundle\Entity\User
+            - ~
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Użytkownik }
-        calls:
-            - [ setTemplate, [edit, AppBundle:PostAdmin:edit.html.twig]]
+            - name: sonata.admin
+              manager_type: orm
+              group: Administracja
+              label: Użytkownik
+              
+    sonata.admin.hardware:
+        class: BmsConfigurationBundle\Admin\HardwareAdmin
+        arguments: 
+            - ~
+            - BmsConfigurationBundle\Entity\Hardware
+            - ~
+        tags:
+            - name: sonata.admin
+              manager_type: orm
+              group: Sieć modbus
+              label: Połączenie fizyczne 
+
+    sonata.admin.communicationtype:
+        class: BmsConfigurationBundle\Admin\CommunicationTypeAdmin
+        arguments: 
+            - ~
+            - BmsConfigurationBundle\Entity\CommunicationType
+            - ~
+        tags:
+            - name: sonata.admin
+              manager_type: orm
+              group: Sieć modbus
+              label: Typ podsieci
+
+    sonata.admin.device:
+        class: BmsConfigurationBundle\Admin\DeviceAdmin
+        arguments: 
+            - ~
+            - BmsConfigurationBundle\Entity\Device
+            - ~
+        tags:
+            - name: sonata.admin
+              manager_type: orm
+              group: Sieć modbus
+              label: Urządzenie
+              
+    

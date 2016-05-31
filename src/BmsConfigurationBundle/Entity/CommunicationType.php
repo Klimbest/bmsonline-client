@@ -130,6 +130,11 @@ class CommunicationType
     {
         $this->devices = new ArrayCollection();
     }
+    
+    public function __toString()
+    {
+        return $this->name;
+    }
 
     /**
      * Set name
