@@ -133,6 +133,9 @@ file that was distributed with this source code.
                         </a>
 
                         <div class="navbar-left">
+                                <a href="{{path('sonata_admin_dashboard')}}">
+                                    <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-home fa-fw"></i></button>
+                                </a>
                             {% if is_granted("ROLE_BMS") %}
                                 <a href="{{path('bms_index')}}">
                                     <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-building fa-fw"></i> BMS</button>

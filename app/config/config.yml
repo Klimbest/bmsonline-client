@@ -124,8 +124,18 @@ sonata_block:
             
 sonata_admin:
     security:
+        handler:              sonata.admin.security.handler.noop
         admin_permissions:
+            # Defaults:
+            - CREATE
             - LIST
+            - DELETE
+        object_permissions:
+            # Defaults:
+            - VIEW
+            - EDIT
+            - DELETE
+        acl_user_manager:     null
     title:                'Bmsonline zarządzanie'
     title_logo:           images/logo.jpg
     options:
@@ -208,11 +218,13 @@ sonata_admin:
             
         groups:
             sonata.admin.group.administration:
-                label:           Administracja
+                on_top:         true
+                label:           Użytkownicy
                 label_catalogue: BmsBundle
                 icon:            '<i class="fa fa-users"></i>'
                 items:
                     - sonata.admin.user
+                                        
             sonata.admin.group.configuration:
                 label:           Konfiguracja
                 label_catalogue: BmsConfigurationBundle
@@ -222,6 +234,7 @@ sonata_admin:
                     - sonata.admin.communicationtype
                     - sonata.admin.device
                     - sonata.admin.register
+                    
             sonata.admin.group.visualization:
                 label:           Wizualizacja
                 label_catalogue: BmsVisualizationBundle
