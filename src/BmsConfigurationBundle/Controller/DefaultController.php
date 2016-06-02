@@ -252,10 +252,12 @@ class DefaultController extends Controller {
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($device);
+            $em->flush();
             
             $technical_info = new TechnicalInformation();
-            $technical_info->setName("d_".$device->getId()."errors")
-                    ->setStatus(0);
+            $technical_info->setName("d_".$device->getId()."_errors")
+                    ->setStatus(0)
+                    ->setTime(new \DateTime());
             $em->persist($technical_info);
             $em->flush();
 
