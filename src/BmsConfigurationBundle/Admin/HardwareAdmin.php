@@ -10,8 +10,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 class HardwareAdmin extends AbstractAdmin {
 
     protected function configureFormFields(FormMapper $formMapper) {
-        $formMapper->add('id')
-                ->add('name')
+        $formMapper->add('name')
                 ->add('raspiKey')
                 ->add('active')
                 ->add('connected');
