@@ -15,6 +15,7 @@ use BmsConfigurationBundle\Entity\Device;
 use BmsConfigurationBundle\Entity\Register;
 use BmsConfigurationBundle\Entity\BitRegister;
 use BmsConfigurationBundle\Entity\RegisterCurrentData;
+use BmsConfigurationBundle\Entity\TechnicalInformation;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Process\Process;
 
@@ -219,6 +220,7 @@ class DefaultController extends Controller {
     public function addDeviceAction($comm_id, Request $request) {
 
         $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
+        $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
         //pobiera aktywne porty(do menu)
         $communicationTypes = $communicationRepo->createQueryBuilder('ct')
                         ->join('ct.hardware_id', 'h')
@@ -250,12 +252,18 @@ class DefaultController extends Controller {
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($device);
+            
+            $technical_info = new TechnicalInformation();
+            $technical_info->setName("d_".$device->getId()."errors")
+                    ->setStatus(0);
+            $em->persist($technical_info);
             $em->flush();
 
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
             $this->setDataToSync($request);
 
+            
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
             $template = $this->container
