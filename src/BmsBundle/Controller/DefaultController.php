@@ -42,13 +42,6 @@ class DefaultController extends Controller {
         }
     }
 
-     /**
-     * @Route("/resetting/token_send", name="bms_token_send")
-     */
-    public function tokenSendAction(){
-     return $this->render('BmsBundle:Resetting:tokenSend.html.twig');        
-    }        
-    
     /**
      * @Route("/bms_refresh_page", name="bms_refresh_page", options={"expose"=true})
      */

@@ -104,7 +104,7 @@ class ResettingController extends Controller
         $user = $userManager->findUserByConfirmationToken($token);
 
         if (null === $user) {
-            return new RedirectResponse($this->container->get('router')->generate('bms_token_send'));
+            return $this->render('BmsBundle:Resetting:passwordAlreadyChanged.html.twig');
         }
 
         $event = new GetResponseUserEvent($user, $request);
