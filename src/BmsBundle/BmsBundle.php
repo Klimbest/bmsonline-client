@@ -2,7 +2,7 @@
 
 namespace BmsBundle;
 
-use BmsBundle\Compiler\FOSUserOverridePass;
+use BmsBundle\DependencyInjection\Compiler\FOSUserOverridePass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
