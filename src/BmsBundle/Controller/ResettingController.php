@@ -80,7 +80,8 @@ class ResettingController extends Controller
         $email = $request->query->get('email');
 
         if (empty($email)) {
-            return new RedirectResponse($this->container->get('router')->generate('fos_user_security_login'));
+            // the user does not come from the sendEmail action
+            return new RedirectResponse($this->generateUrl('fos_user_resetting_request'));
         }
 
         return $this->render('FOSUserBundle:Resetting:checkEmail.html.twig', array(
@@ -103,7 +104,7 @@ class ResettingController extends Controller
         $user = $userManager->findUserByConfirmationToken($token);
 
         if (null === $user) {
-            throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
+            return new RedirectResponse($this->container->get('router')->generate('fos_user_security_login'));
         }
 
         $event = new GetResponseUserEvent($user, $request);
