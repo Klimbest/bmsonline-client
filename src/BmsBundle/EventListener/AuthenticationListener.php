@@ -2,7 +2,7 @@
 
 // src/BmsBundle/EventListener/AuthenticationListener.php
 
-namespace BmsBundle\BmsBundleEventListener;
+namespace BmsBundle\BmsBundle\EventListener;
 
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\EventListener\AuthenticationListener as FOSAuthenticationListener;
