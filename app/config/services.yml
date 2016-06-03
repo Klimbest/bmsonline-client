@@ -9,9 +9,9 @@ services:
         tags:
             - { name: form.type, alias: app_user_registration }
     
-    bms.password_resetting:
-        class: BmsBundle\EventListener\PasswordResettingListener
-        arguments: ["@router"]
+    bms.authentication_listener:
+        class: BmsBundle\EventListener\AuthenticationListener
+        arguments: ['@fos_user.security.login_manager', '%fos_user.firewall_name%']
         tags:
             - { name: kernel.event_subscriber }
     
