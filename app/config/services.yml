@@ -9,6 +9,12 @@ services:
         tags:
             - { name: form.type, alias: app_user_registration }
     
+    bms.password_resetting:
+        class: BmsBundle\EventListener\PasswordResettingListener
+        arguments: [@router]
+        tags:
+            - { name: kernel.event_subscriber }
+    
     bmsconfiguration.form.type.task:
         class: BmsConfigurationBundle\Form\BitRegisterType
         arguments: ["@doctrine.orm.entity_manager"]
