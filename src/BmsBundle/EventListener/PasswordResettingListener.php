@@ -32,7 +32,7 @@ class PasswordResettingListener implements EventSubscriberInterface
 
     public function onPasswordResettingSuccess(FormEvent $event)
     {
-        $url = $this->router->generate('homepage');
+        $url = $this->router->generate('fos_user_security_login');
 
         $event->setResponse(new RedirectResponse($url));
     }
