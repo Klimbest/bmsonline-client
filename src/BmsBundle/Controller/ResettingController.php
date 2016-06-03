@@ -121,6 +121,7 @@ class ResettingController extends Controller
 
         if ($form->isValid()) {
             $event = new FormEvent($form, $request);
+            $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_SUCCESS, $event);
             
             $userManager->updateUser($user);
 

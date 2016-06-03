@@ -11,7 +11,7 @@ services:
     
     bms.password_resetting:
         class: BmsBundle\EventListener\PasswordResettingListener
-        arguments: [@router]
+        arguments: ["@router"]
         tags:
             - { name: kernel.event_subscriber }
     
