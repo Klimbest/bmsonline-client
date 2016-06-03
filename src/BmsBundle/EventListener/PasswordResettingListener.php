@@ -1,6 +1,6 @@
 <?php
 
-namespace Acme\UserBundle\EventListener;
+namespace BmsBundle\EventListener;
 
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
