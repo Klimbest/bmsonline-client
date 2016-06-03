@@ -3,10 +3,12 @@
 namespace BmsBundle\EventListener;
 
 use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\Event\UserEvent;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
+use FOS\UserBundle\Security\LoginManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Exception\AccountStatusException;
 
 class AuthenticationListener implements EventSubscriberInterface
 {
@@ -23,7 +25,7 @@ class AuthenticationListener implements EventSubscriberInterface
     {
         return array(
             FOSUserEvents::REGISTRATION_COMPLETED => 'authenticate',
-            FOSUserEvents::REGISTRATION_CONFIRMED => 'authenticate',
+            FOSUserEvents::REGISTRATION_CONFIRMED => 'authenticate'
         );
     }
 

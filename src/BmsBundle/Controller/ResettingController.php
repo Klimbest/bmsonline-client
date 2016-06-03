@@ -130,7 +130,7 @@ class ResettingController extends Controller
                 $response = new RedirectResponse($url);
             }
 
-            $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+
 
             return $response;
         }
