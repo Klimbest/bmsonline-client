@@ -22,7 +22,8 @@ class DeviceAdmin extends AbstractAdmin {
     protected function configureDatagridFilters(DatagridMapper $datagridMapper) {
         $datagridMapper->add('name')
                 ->add('description')
-                ->add('modbusAddress');
+                ->add('modbusAddress')
+                ->add('communicationType');
     }
 
     protected function configureListFields(ListMapper $listMapper) {

@@ -80,8 +80,7 @@ class ResettingController extends Controller
         $email = $request->query->get('email');
 
         if (empty($email)) {
-            // the user does not come from the sendEmail action
-            return new RedirectResponse($this->generateUrl('fos_user_resetting_request'));
+            return new RedirectResponse($this->container->get('router')->generate('fos_user_security_login'));
         }
 
         return $this->render('FOSUserBundle:Resetting:checkEmail.html.twig', array(

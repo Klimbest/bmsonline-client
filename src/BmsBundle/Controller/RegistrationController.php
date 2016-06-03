@@ -85,7 +85,7 @@ class RegistrationController extends Controller
         $user = $this->get('fos_user.user_manager')->findUserByEmail($email);
 
         if (null === $user) {
-            throw new NotFoundHttpException(sprintf('The user with email "%s" does not exist', $email));
+            return new RedirectResponse($this->container->get('router')->generate('fos_user_security_login'));
         }
 
         return $this->render('FOSUserBundle:Registration:checkEmail.html.twig', array(
