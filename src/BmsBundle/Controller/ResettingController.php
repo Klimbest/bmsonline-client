@@ -126,6 +126,7 @@ class ResettingController extends Controller
             $userManager->updateUser($user);
 
             if (null === $response = $event->getResponse()) {
+                $session = $request->getSession();
                 $this->session->getFlashBag()->add('success', 'Hasło poprawnie zmienione, możesz się zalogować.');
                 $url = $this->generateUrl('fos_user_security_login');
                 $response = new RedirectResponse($url);
