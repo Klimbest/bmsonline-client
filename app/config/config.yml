@@ -32,7 +32,7 @@ framework:
         handler_id:           session.handler.native_file
         save_path:            "%kernel.root_dir%/../var/sessions/%kernel.environment%"
         #60 seconds
-        cookie_lifetime: 3600  
+        #cookie_lifetime: 3600  
         #50 seconds - only needed for testing. Dont use this in a production environment
         #gc_maxlifetime: 50
         #only needed for testing. Dont use this in a production environment
