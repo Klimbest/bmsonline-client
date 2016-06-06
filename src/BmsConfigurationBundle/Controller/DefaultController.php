@@ -541,5 +541,8 @@ class DefaultController extends Controller {
         $process->run();
     }
 
+    public function setDataToSyncShow(){
+        
+    }
     
 }
