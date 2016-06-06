@@ -88,19 +88,14 @@ class DataAnalyzeController extends Controller {
             )
         );
         $detailChart->yAxis($yAxis);
-        $detailChart->tooltip->pointFormat('<span style="color:{point.color}">O</span> {series.name}: <b>{point.y}</b><br/>');
-        $detailChart->tooltip->crosshairs([true, true])
-                ->pointFormat("")
-                ->formatter("")
+        $detailChart->tooltip->pointFormat('<span style="color:{point.color}">O</span> {series.name}: <b>{point.y}</b><br/>')
+                ->crosshairs(true)
                 ->backgroundColor("rgba(255,255,255,0)")
                 ->borderColor("rgba(255,255,255,0)")
-                ->borderWidth(0)
-                ->shadow(false)
-                ->xDateFormat(" ")
+                ->shadow(true)
                 ->shared(true)
-                ->backgroundColor('#FFF')
-                ->borderColor('#000')
-                ->style(['width' => '250px']);
+                ->style(['width' => '250px'])
+                ->useHTML(true);
         $detailChart->legend->align('right')
                 ->y(25)
                 ->x(-50)
@@ -113,6 +108,14 @@ class DataAnalyzeController extends Controller {
                 ->itemMarginBottom(0)
                 ->itemHoverStyle(['color' => '#5BC0DE']);
         $detailChart->series();
+//        $detailChart->plotOptions->series([
+//            'marker' => [
+//                'enabled' => true,
+//                'fillColor' => "#FFF",
+//                'lineWidth' => 1,
+//                'lineColor' => null
+//            ]
+//        ]);
         $detailChart->exporting->enabled(true);
         return $detailChart;
     }
@@ -218,13 +221,13 @@ class DataAnalyzeController extends Controller {
                 $time = $rad["timeOfInsert"]->getTimestamp() * 1000;
                 array_push($arrayToChart, [$time, $rad["fixedValue"]]);
             }
-            $series = array(
+            $series = [
                 'id' => $register->getId(),
                 'name' => $register->getDescription(),
                 'data' => $arrayToChart,
                 'yAxis' => $yAxis,
                 'suffix' => '°C'
-            );
+            ];
 
             return new JsonResponse($series);
         } else {

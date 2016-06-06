@@ -1,6 +1,6 @@
 /* global registersToChart */
 
-registersToChart = [[12, 1]];
+registersToChart = [[8, 1]];
 $(document).ready(function () {
     var mchart = $('#masterContainer').highcharts();
     var dchart = $('#detailContainer').highcharts();
@@ -122,7 +122,12 @@ function setDialogButtons() {
         registersToChart.push([regId, parseInt(yAxis)]);
         loadData(regId, dtpStart, dtpEnd, parseInt(yAxis));
         $("option#" + parseInt(regId)).hide();
-
+    });
+    $("#addCustomLine").click(function () {
+        var yAxis = $('input[name=axType]:checked').val();
+        var value = parseFloat($('input#customValue').val());
+        var color = $('input#customColor').val();
+        addCustomLine(value, yAxis, color);
     });
 }
 //załadowanie danych
@@ -150,6 +155,7 @@ function loadData(registerId, dtpStart, dtpEnd, yAxis) {
                 type: "spline",
                 lineWidth: 1
             };
+
             setSeries(series);
         }
     });
@@ -160,15 +166,31 @@ function loadData(registerId, dtpStart, dtpEnd, yAxis) {
 
         dchart.addSeries(series);
         mchart.addSeries(series);
-//
-//        dchart.redraw();
-//        mchart.redraw();
 
         setClickable();
         $("select#avRegs").val(null);
         $("." + parseInt(series.id)).hide();
     }
 }
+
+function addCustomLine(value, yAxis, color) {
+
+    var dchart = $('#detailContainer').highcharts();
+
+    console.log(color);
+
+    var series = {
+        data: [[dchart.xAxis[0].min, value], [dchart.xAxis[0].max, value]],
+        yAxis: parseInt(yAxis),
+        type: "spline",
+        lineWidth: 1,
+        lineColor: color,
+        name: "Linia dodatkowa " + value
+    };
+
+    dchart.addSeries(series);
+}
+
 
 function setClickable() {
     $(".highcharts-legend-item").find("i").each(function () {

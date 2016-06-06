@@ -2,7 +2,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/tmpDataAnalyze.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/dataAnalyze.css')}}">
     <link rel="stylesheet" href="{{ asset('css/jquery.datetimepicker.css')}}">
     
 {% endblock %}
@@ -36,6 +36,6 @@
         {{ chart(detailChart) }}
         {{ chart(masterChart) }}
     </script>
-    <script src="{{ asset('bundles/bmsdataanalyze/js/bmsDataAnalyze.js') }}"></script>
+    <script src="{{ asset('js/bmsDataAnalyze.js') }}"></script>
 {% endblock %}
 

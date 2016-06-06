@@ -1,49 +1,67 @@
-<div class="row text-right">
-    <div class="col-sm-10">
-        <span id="timer" class="label label-primary">Auto odświeżanie za - s</span>
-    </div>
-</div>
-<div id="detailContainer" style="height: 500px"></div>
-<div id="masterContainer" style="height: 100px" hidden></div>
-<div class="row">
-    <div class="col-sm-5 col-sm-offset-1">
-        <div class="row">
-            <div class="col-sm-12">
-                Początek: <input type="text" id="dtpStart">
-                Koniec: <input type="text" id="dtpEnd">
-                <button id="changeScope" type="button" class="btn btn-default">Zmień zakres</button>
-            </div>
-        </div>
-        <div id="time_controls" class="row">
-            <div class="col-sm-12">
-                <button id="setHour" type="button" class="btn btn-xs btn-primary">godzina</button>
-                <button id="setDay" type="button" class="btn btn-xs btn-primary">dzień</button>
-                <button id="setWeek" type="button" class="btn btn-xs btn-primary">tydzień</button>
-                <button id="setMonth" type="button" class="btn btn-xs btn-primary">miesiąc</button>
-                <button id="setYear" type="button" class="btn btn-xs btn-primary">rok</button>
-                <button id="setAll" type="button" class="btn btn-xs btn-primary">całość</button>
-            </div>
+
+<form class="form-inline" role="form">
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="detailContainer" style="height: 500px"></div>
+            <div id="masterContainer" style="height: 100px" hidden></div>
         </div>
     </div>
-    <div class="col-sm-5">
-        <div class="row">
-            <div class="col-sm-12">
-                <select id="avRegs">
-                    {% for register in registers %}
-                        <option class="{{register.id}}" value="{{register.id}}">{{register.id}} - ({{register.name}}) {{register.description}}</option>
-                    {% endfor %}
-                </select>
-                <button id="addSeries" type="button" class="btn btn-primary">Dodaj serie</button>
+    <div class="row">
+        <div class="col-sm-5 col-sm-offset-1">
+            <div class="row">
+                <div class="col-sm-5">
+                    <label for="dtpStart">Początek: </label>
+                    <input type="text" class="form-control" id="dtpStart">
+                </div>
+                <div class="col-sm-5">
+                    <label for="dtpEnd">Koniec: </label>
+                    <input type="text" class="form-control" id="dtpEnd">
+                </div>
+                <div class="col-sm-2">
+                    <button id="changeScope" type="button" class="btn btn-default">Zmień zakres</button>
+                </div>
+            </div>
+            <div class="row">
+                <div id="time_controls" class="row">
+                    <div class="col-sm-8 col-sm-offset-1">
+                        <button id="setHour" type="button" class="btn btn-xs btn-primary">godzina</button>
+                        <button id="setDay" type="button" class="btn btn-xs btn-primary">dzień</button>
+                        <button id="setWeek" type="button" class="btn btn-xs btn-primary">tydzień</button>
+                        <button id="setMonth" type="button" class="btn btn-xs btn-primary">miesiąc</button>
+                        <button id="setYear" type="button" class="btn btn-xs btn-primary">rok</button>
+                        <button id="setAll" type="button" class="btn btn-xs btn-primary">całość</button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <span class="label label-primary">Do której skali przypisać?</span>
-                <label class="radio-inline"><input type="radio" name="axType" value="2">num</label>
-                <label class="radio-inline"><input type="radio" name="axType" value="1" checked>°C</label>
-                <label class="radio-inline"><input type="radio" name="axType" value="0">%</label>
+        <div class="col-sm-5 col-sm-offset-1">
+            <div class="row">
+                <div class="col-sm-12">
+                    <select class="form-control" id="avRegs">
+                        {% for register in registers %}
+                            <option class="{{register.id}}" value="{{register.id}}">{{register.id}} - ({{register.name}}) {{register.description}}</option>
+                        {% endfor %}
+                    </select>
+                    <button id="addSeries" type="button" class="btn btn-primary">Dodaj serie</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <span class="label label-primary">Do której skali przypisać?</span>
+                    <label class="radio-inline"><input type="radio" name="axType" value="2">num</label>
+                    <label class="radio-inline"><input type="radio" name="axType" value="1" checked>°C</label>
+                    <label class="radio-inline"><input type="radio" name="axType" value="0">%</label>
+                </div>
             </div>
         </div>
     </div>
-</div>
- 
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-1">
+            <label for="customValue">Wartość dodatkowej linii: </label>
+            <input type="number" step="0.1" class="form-control" id="customValue">
+            <input id="customColor" type="color" class="form-control" value="#bb0000" />
+            <button id="addCustomLine" type="button" class="btn btn-default">Dodaj linię</button>
+        </div>
+    </div>
+
+</form>
