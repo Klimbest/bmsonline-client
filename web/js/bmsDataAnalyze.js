@@ -177,8 +177,6 @@ function addCustomLine(value, yAxis, color) {
 
     var dchart = $('#detailContainer').highcharts();
 
-    console.log(color);
-
     var series = {
         data: [[dchart.xAxis[0].min, value], [dchart.xAxis[0].max, value]],
         yAxis: parseInt(yAxis),
