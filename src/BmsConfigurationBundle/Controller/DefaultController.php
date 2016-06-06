@@ -13,7 +13,6 @@ use BmsConfigurationBundle\Form\DeviceType;
 use BmsConfigurationBundle\Form\RegisterType;
 use BmsConfigurationBundle\Entity\Device;
 use BmsConfigurationBundle\Entity\Register;
-use BmsConfigurationBundle\Entity\BitRegister;
 use BmsConfigurationBundle\Entity\RegisterCurrentData;
 use BmsConfigurationBundle\Entity\TechnicalInformation;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -29,22 +28,26 @@ class DefaultController extends Controller {
         $session = $request->getSession();
         $target = $session->get('target');
 
+        $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
+        $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync'])->getStatus();
+
         $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
         $communicationTypes = $communicationRepo->createQueryBuilder('ct')
                         ->join('ct.hardware_id', 'h')
                         ->getQuery()->getResult();
         $comm_id = $session->get('comm_id');
         $device_id = $session->get('device_id');
+
         $session->remove('comm_id');
         $session->remove('device_id');
 
         if ($request->isXmlHttpRequest()) {
             $template = $this->container
-                            ->get('templating')->render('BmsConfigurationBundle::target.html.twig', ['comms' => $communicationTypes, 'target' => $target]);
+                            ->get('templating')->render('BmsConfigurationBundle::target.html.twig', ['comms' => $communicationTypes, 'target' => $target, 'sync' => $sync]);
 
             return new JsonResponse(array('ret' => $template));
         } else {
-            return $this->render('BmsConfigurationBundle::index.html.twig', ['comms' => $communicationTypes, 'target' => $target, 'comm_id' => $comm_id, 'device_id' => $device_id]);
+            return $this->render('BmsConfigurationBundle::index.html.twig', ['comms' => $communicationTypes, 'target' => $target, 'comm_id' => $comm_id, 'device_id' => $device_id, 'sync' => $sync]);
         }
     }
 
@@ -94,7 +97,7 @@ class DefaultController extends Controller {
             $em->persist($comm);
 
             $em->flush();
-            $this->setDataToSyncShow();
+            $this->setDataToSync();
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
             $template = $this->container->get('templating')->render('BmsConfigurationBundle::communicationType.html.twig', ['comms' => $communicationTypes, 'comm' => $comm, 'form' => $form->createView()]);
@@ -136,7 +139,7 @@ class DefaultController extends Controller {
 
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
-            $this->setDataToSyncShow();
+            $this->setDataToSync();
 
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
@@ -176,7 +179,6 @@ class DefaultController extends Controller {
 
         if ($form->isSubmitted()) {
 
-
             $em->persist($register);
             if ($register->getBitRegister() == 1) {
                 $bitRegisters = $register->getBitRegisters();
@@ -199,7 +201,7 @@ class DefaultController extends Controller {
 
             $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
 
-            $this->setDataToSyncShow();
+            $this->setDataToSync();
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
 
@@ -253,9 +255,9 @@ class DefaultController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $em->persist($device);
             $em->flush();
-            
+
             $technical_info = new TechnicalInformation();
-            $technical_info->setName("d_".$device->getId()."_errors")
+            $technical_info->setName("d_" . $device->getId() . "_errors")
                     ->setStatus(0)
                     ->setTime(new \DateTime());
             $em->persist($technical_info);
@@ -263,9 +265,9 @@ class DefaultController extends Controller {
 
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
-            $this->setDataToSyncShow();
+            $this->setDataToSync();
 
-            
+
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
             $template = $this->container
@@ -354,16 +356,13 @@ class DefaultController extends Controller {
             $register->setRegisterCurrentData($registerCD);
             $em->persist($register);
 
-
-
             $em->flush();
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
             $session->set('device_id', $device_id);
 
             $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
-            $this->setDataToSyncShow();
-
+            $this->setDataToSync();
 
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
@@ -399,7 +398,7 @@ class DefaultController extends Controller {
 
         $session = $request->getSession();
         $session->set('comm_id', $comm_id);
-        $this->setDataToSyncShow();
+        $this->setDataToSync();
 
         return $this->redirectToRoute('bms_configuration_index');
     }
@@ -430,7 +429,7 @@ class DefaultController extends Controller {
         $session = $request->getSession();
         $session->set('comm_id', $comm_id);
         $session->set('device_id', $device_id);
-        $this->setDataToSyncShow();
+        $this->setDataToSync();
 
         return $this->redirectToRoute('bms_configuration_index');
     }
@@ -469,8 +468,8 @@ class DefaultController extends Controller {
         $session = $request->getSession();
         $session->set('comm_id', $comm_id);
         $session->set('device_id', $device_id);
-        $this->setDataToSyncShow();
-
+        $this->setDataToSync();
+        
         return $this->redirectToRoute('bms_configuration_index');
     }
 
@@ -479,6 +478,7 @@ class DefaultController extends Controller {
      */
     public function delManyDevicesAction($comm_id, Request $request) {
 
+        $this->setDataToSync();
         return new Response();
     }
 
@@ -529,20 +529,39 @@ class DefaultController extends Controller {
         }
     }
 
-    /**
-     * @Route("/sync", name="bms_configuration_synchronize", options={"expose"=true})
-     */
-    public function setDataToSyncAction(Request $request) {
+    public function setDataToSync() {
+        $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
+        $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
 
-        $host = $request->getHost();
-        $h = explode(".", $host);
-        $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync' " . $h[0]);
-        $process->disableOutput();
-        $process->run();
-    }
+        $sync->setStatus(1);
 
-    public function setDataToSyncShow(){
+        $this->getDoctrine()->getManager()->flush();
         
     }
-    
+
+    /**
+     * @Route("/synchronize", name="bms_configuration_synchronize_database", options={"expose"=true})
+     */
+    public function synchronizeDatabase(Request $request) {
+        if ($request->isXmlHttpRequest()) {
+            $host = $request->getHost();
+            $h = explode(".", $host);
+            $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync' " . $h[0]);
+            //$process->disableOutput();
+            $process->run();
+
+            $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
+            $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
+
+            $sync->setStatus(0);
+
+            $this->getDoctrine()->getManager()->flush();
+            $ret['sync'] = $sync->getStatus();
+            
+            return new JsonResponse($ret);
+        } else {
+            throw new\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
+        }
+    }
+
 }

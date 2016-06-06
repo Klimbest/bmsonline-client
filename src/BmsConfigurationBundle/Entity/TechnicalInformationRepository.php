@@ -23,4 +23,6 @@ class TechnicalInformationRepository extends \Doctrine\ORM\EntityRepository
                         ->getArrayResult();
     }
     
+    
+    
 }
