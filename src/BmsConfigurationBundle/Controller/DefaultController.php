@@ -94,7 +94,7 @@ class DefaultController extends Controller {
             $em->persist($comm);
 
             $em->flush();
-            $this->setDataToSync($request);
+            $this->setDataToSyncShow();
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
             $template = $this->container->get('templating')->render('BmsConfigurationBundle::communicationType.html.twig', ['comms' => $communicationTypes, 'comm' => $comm, 'form' => $form->createView()]);
@@ -136,7 +136,7 @@ class DefaultController extends Controller {
 
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
-            $this->setDataToSync($request);
+            $this->setDataToSyncShow();
 
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
@@ -199,7 +199,7 @@ class DefaultController extends Controller {
 
             $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
 
-            $this->setDataToSync($request);
+            $this->setDataToSyncShow();
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
 
@@ -263,7 +263,7 @@ class DefaultController extends Controller {
 
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
-            $this->setDataToSync($request);
+            $this->setDataToSyncShow();
 
             
             return $this->redirectToRoute('bms_configuration_index');
@@ -362,7 +362,7 @@ class DefaultController extends Controller {
             $session->set('device_id', $device_id);
 
             $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
-            $this->setDataToSync($request);
+            $this->setDataToSyncShow();
 
 
             return $this->redirectToRoute('bms_configuration_index');
@@ -399,7 +399,7 @@ class DefaultController extends Controller {
 
         $session = $request->getSession();
         $session->set('comm_id', $comm_id);
-        $this->setDataToSync($request);
+        $this->setDataToSyncShow();
 
         return $this->redirectToRoute('bms_configuration_index');
     }
@@ -430,7 +430,7 @@ class DefaultController extends Controller {
         $session = $request->getSession();
         $session->set('comm_id', $comm_id);
         $session->set('device_id', $device_id);
-        $this->setDataToSync($request);
+        $this->setDataToSyncShow();
 
         return $this->redirectToRoute('bms_configuration_index');
     }
@@ -469,7 +469,7 @@ class DefaultController extends Controller {
         $session = $request->getSession();
         $session->set('comm_id', $comm_id);
         $session->set('device_id', $device_id);
-        $this->setDataToSync($request);
+        $this->setDataToSyncShow();
 
         return $this->redirectToRoute('bms_configuration_index');
     }
@@ -529,7 +529,10 @@ class DefaultController extends Controller {
         }
     }
 
-    public function setDataToSync($request) {
+    /**
+     * @Route("/sync", name="bms_configuration_synchronize", options={"expose"=true})
+     */
+    public function setDataToSyncAction(Request $request) {
 
         $host = $request->getHost();
         $h = explode(".", $host);
@@ -538,4 +541,5 @@ class DefaultController extends Controller {
         $process->run();
     }
 
+    
 }

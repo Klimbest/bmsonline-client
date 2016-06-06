@@ -88,7 +88,7 @@ class DataAnalyzeController extends Controller {
             )
         );
         $detailChart->yAxis($yAxis);
-        //$detailChart->tooltip->pointFormat('<span style="color:{point.color}">O</span> {series.name}: <b>{point.y}</b><br/>')
+        $detailChart->tooltip->pointFormat('<span style="color:{point.color}">O</span> {series.name}: <b>{point.y}</b><br/>');
         $detailChart->tooltip->crosshairs([true, true])
                 ->pointFormat("")
                 ->formatter("")
@@ -96,11 +96,11 @@ class DataAnalyzeController extends Controller {
                 ->borderColor("rgba(255,255,255,0)")
                 ->borderWidth(0)
                 ->shadow(false)
-                ->xDateFormat(" ");
-//                ->shared(true)
-//                ->backgroundColor('#FFF')
-//                ->borderColor('#000')
-//                ->style(['width' => '250px']);
+                ->xDateFormat(" ")
+                ->shared(true)
+                ->backgroundColor('#FFF')
+                ->borderColor('#000')
+                ->style(['width' => '250px']);
         $detailChart->legend->align('right')
                 ->y(25)
                 ->x(-50)

@@ -27,15 +27,21 @@
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
-        "friendsofsymfony/jsrouting-bundle": "dev-master",
-        "friendsofsymfony/user-bundle": "~2.0@dev",
-        "symfony/filesystem": "dev-master",
-        "symfony/serializer": "dev-master",
-        "liip/imagine-bundle": "*@dev",
-        "ob/highcharts-bundle": "dev-master",
+        "friendsofsymfony/jsrouting-bundle": "^1.1",
+        "friendsofsymfony/user-bundle": "dev-master#d1fccc6335b74beca94525551cacc06b256ed261",
+        
+        "liip/imagine-bundle": "^1.5",
+        "ob/highcharts-bundle": "^1.4",
+        
         "sonata-project/admin-bundle": "3.x-dev",
-        "sonata-project/doctrine-orm-admin-bundle": "3.x-dev",
-        "sonata-project/easy-extends-bundle": "3.x-dev"
+        "sonata-project/doctrine-orm-admin-bundle": "^3.0",
+        "sonata-project/easy-extends-bundle": "^2.1",
+        "sonata-project/user-bundle": "dev-rc_sf3tweaks",
+        
+        "sonata-project/core-bundle": "^3.0",
+        "sonata-project/datagrid-bundle": "^2.2",
+        "sonata-project/formatter-bundle": "^3.0"
+        
         
     },
     "require-dev": {
@@ -70,5 +76,11 @@
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/responseconcepts/SonataUserBundle"
+        }
+    ]
 }
