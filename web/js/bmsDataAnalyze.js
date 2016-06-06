@@ -1,6 +1,6 @@
 /* global registersToChart */
 
-registersToChart = [[8, 1]];
+registersToChart = [[2, 1]];
 $(document).ready(function () {
     var mchart = $('#masterContainer').highcharts();
     var dchart = $('#detailContainer').highcharts();
