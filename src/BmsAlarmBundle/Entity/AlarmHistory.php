@@ -47,7 +47,7 @@ class AlarmHistory {
     /**
      * @var integer
      *
-     * @ORM\Column(name="value", type="integer", nullable=false)
+     * @ORM\Column(name="value", type="integer", nullable=true)
      */
     private $value;    
 

@@ -107,8 +107,7 @@ $(document).ready(function () {
             url: Routing.generate('bms_configuration_synchronize_database'),
             success: function (ret) {
                 $(".main-row").children(".fa-spinner, div#loading").remove();
-
-                if (ret['sync'] == 0) {
+                if (ret['sync'] === 0) {
                     $("button#synchronizeDatabase").parent().parent().remove();
                 }
             }

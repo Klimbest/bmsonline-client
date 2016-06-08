@@ -24,7 +24,7 @@ class BitRegister {
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=16, nullable=false, unique=true)
+     * @ORM\Column(name="name", type="string", length=30, nullable=false, unique=true)
      */
     private $name;
 
