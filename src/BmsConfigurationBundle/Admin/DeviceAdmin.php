@@ -13,6 +13,7 @@ class DeviceAdmin extends AbstractAdmin {
         $formMapper->add('name')
                 ->add('description')
                 ->add('modbusAddress')
+                ->add('active')
                 ->add('communicationType', 'entity', array(
                     'class' => 'BmsConfigurationBundle\Entity\CommunicationType',
                     'choice_label' => 'name',
@@ -30,6 +31,7 @@ class DeviceAdmin extends AbstractAdmin {
         $listMapper->addIdentifier('name')
                 ->add('description')
                 ->add('modbusAddress')
+                ->add('active')
                 ->add('communicationType', null, array(), 'entity', array(
                     'class'    => 'BmsConfigurationBundle\Entity\CommunicationType',
                     'choice_label' => 'name'))
