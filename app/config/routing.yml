@@ -1,3 +1,8 @@
+write:
+    resource: "@WriteBundle/Controller/"
+    type:     annotation
+    prefix:   /write
+
 bms:
     resource: "@BmsBundle/Controller/"
     type: annotation
