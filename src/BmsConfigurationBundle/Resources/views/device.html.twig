@@ -115,10 +115,10 @@
                     <input id="alarm" type="button" class="btn btn-default btn-xs hidding" value="Alarmowy"></input>
                     <input id="bit_register" type="button" class="btn btn-default btn-xs hidding" value="Bitowy"></input>
                     <input id="modificator_read" type="button" class="btn btn-default btn-xs hidding" value="Sposób przeliczania danych przy odczycie"></input>
-{#                    <input id="modificator_write" type="button" class="btn btn-default btn-xs hidding clicked" value="Sposób przeliczania danych przy zapisie"></input>#}
+                    {#                    <input id="modificator_write" type="button" class="btn btn-default btn-xs hidding clicked" value="Sposób przeliczania danych przy zapisie"></input>#}
                     <input id="fixed_value" type="button" class="btn btn-default btn-xs hidding" value="Aktualna wartość"></input>
                     <input id="description2" type="button" class="btn btn-default btn-xs hidding " value="Dodatkowy opis"></input>
-{#                    <input id="data_group" type="button" class="btn btn-default btn-xs hidding" value="Grupa danych"></input>#}
+                    {#                    <input id="data_group" type="button" class="btn btn-default btn-xs hidding" value="Grupa danych"></input>#}
                     <input id="manage" type="button" class="btn btn-default btn-xs hidding" value="Zarządzaj"></input>
                 </div>
             </div>
@@ -198,8 +198,12 @@
                                         <a href="{{ path('bms_configuration_del_register', {'comm_id': device.communicationType.id, 'device_id': device.id, 'register_id': register.id}) }}">
                                             <i class="fa fa-remove fa-fw fa-red"></i>
                                         </a>
+                                        {% if register.modificatorWrite > 0 %}
+                                            <i id="{{register.id}}" class="fa fa-pencil fa-fw"></i>
+                                        {% endif %}
                                     </td>
                                     <td><input type="checkbox" name="checkedRegId[]" value="{{register.id}}"/></td>
+
                                 </tr>
                             {% endfor %}
                         {% else %}
@@ -213,6 +217,12 @@
                 </table>
             </div>
         </form>
+        <div id="write-form" title="Zapis rejestru">
+            <form class="form-horizontal">
+                <input id="value" type="number" class="form-control" min="0" max="100">
+                <input id="register_id" type="hidden" />
+            </form>
+        </div>
     </div>
 </div>
 

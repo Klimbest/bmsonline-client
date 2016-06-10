@@ -406,6 +406,45 @@ function tableEvents() {
     $("button.refresh").click(function () {
         refreshPage();
     });
+
+    $("tr td.manage i.fa-pencil").click(function () {
+        var rid = $(this).attr("id");
+        $("#write-form").dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: [{
+                    text: "Zapisz do urządzenia",
+                    click: function () {
+                        var data = {
+                            value: $("div#write-form form input#value").val(),
+                            register_id: rid
+                        };
+                        $.ajax({
+                            type: "POST",
+                            datatype: "application/json",
+                            url: Routing.generate('write_register'),
+                            data: data,
+                            success: function (ret) {
+                                $(".main-row").append(ret["template"]);
+                            }
+                        });
+                        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+                        $(this).dialog('close');
+                    }
+                },
+                {
+                    text: "Anuluj",
+                    click: function () {
+                        $(this).dialog('close');
+                    }
+                }],
+            open: function () {
+            },
+            close: function () {
+                $(this).dialog('close');
+            }
+        }).dialog("open");
+    });
 }
 
 function updateAddressFormat() {

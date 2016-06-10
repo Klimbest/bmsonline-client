@@ -7,19 +7,43 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use BmsConfigurationBundle\Entity\RegisterWriteData;
+use Symfony\Component\Process\Process;
 
-class DefaultController extends Controller
-{
+class DefaultController extends Controller {
+
     /**
      * @Route("/", name="write_register", options={"expose"=true})
      */
-    public function writeAction(Request $request)
-    {
-        if ($request->isXmlHttpRequest()) {            
-            
+    public function writeAction(Request $request) {
+        if ($request->isXmlHttpRequest()) {
+
+            $value = $request->get("value");
+            $register_id = $request->get("register_id");
+            $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+            $register = $registerRepo->find($register_id);
+            $em = $this->getDoctrine()->getManager();
+            $write = new RegisterWriteData();
+            $write->setRegister($register)
+                    ->setGetToProcess(0)
+                    ->setValue($value)
+                    ->setSuccessWrite(0)
+                    ->setTimeOfUpdate(new \DateTime())
+                    ->setUsername($this->getUser());
+
+            $em->persist($write);
+            $em->flush();
+
+            $host = $request->getHost();
+            $h = explode(".", $host);
+            $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/addToWrite' " . $h[0] . $register . " " . $value . " " . $this->getUser());
+            //$process->disableOutput();
+            $process->run();
+
             return new JsonResponse();
         } else {
             throw new AccessDeniedHttpException();
         }
     }
+
 }

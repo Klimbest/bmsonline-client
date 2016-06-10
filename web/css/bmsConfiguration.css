@@ -1,7 +1,7 @@
 
 
 .hide-button-label, .hide-mainrow-label, 
-i.fa-edit, i.fa-refresh{
+i.fa-edit, i.fa-refresh, i.fa-pencil{
     cursor: pointer;
 }
 
@@ -14,7 +14,7 @@ form div.row{
 .tcpip, .btn-save, .btn-cancel,
 .name, .modificator_write, .scan_queue,
 /*.bit_register,*/ 
-.register-level, .device-level, .hidden-item{
+.register-level, .device-level, .hidden-item, div#write-form{
     display: none;
 }
 
