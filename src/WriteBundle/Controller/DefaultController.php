@@ -36,7 +36,9 @@ class DefaultController extends Controller {
 
             $host = $request->getHost();
             $h = explode(".", $host);
-            $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/addToWrite' " . $h[0] . $register . " " . $value . " " . $this->getUser());
+            $exe = "bash ../../_bin/orderToRPi.sh 'bin/addToWrite' " . $h[0] . $register . " " . $value . " " . $this->getUser();
+            var_dump($exe);
+            $process = new Process($exe);
             //$process->disableOutput();
             $process->run();
 
