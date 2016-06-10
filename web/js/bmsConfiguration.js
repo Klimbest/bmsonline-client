@@ -425,7 +425,8 @@ function tableEvents() {
                             url: Routing.generate('write_register'),
                             data: data,
                             success: function (ret) {
-                                $(".main-row").append(ret["template"]);
+                                $(".main-row").children(".fa-spinner").remove();
+                                
                             }
                         });
                         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
