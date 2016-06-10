@@ -13,6 +13,14 @@ use Doctrine\ORM\Mapping as ORM;
 class RegisterWriteData
 {
     /**
+     * 
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+    */
+    private $id;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="value", type="string", length=4, nullable=true)
@@ -22,9 +30,7 @@ class RegisterWriteData
     /**
      * @var \BmsConfigurationBundle\Entity\Register
      *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="BmsConfigurationBundle\Entity\Register", inversedBy="registerCurrentData")
+     * @ORM\ManyToOne(targetEntity="BmsConfigurationBundle\Entity\Register", inversedBy="registerCurrentData")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="register_id", referencedColumnName="id")
      * })

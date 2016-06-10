@@ -32,8 +32,8 @@ class DeviceAdmin extends AbstractAdmin {
                 ->add('modbusAddress')
                 ->add('communicationType', null, array(), 'entity', array(
                     'class'    => 'BmsConfigurationBundle\Entity\CommunicationType',
-                    'choice_label' => 'name',
-                ))->add('_action', null, array(
+                    'choice_label' => 'name'))
+                ->add('_action', null, array(
                     'actions' => array(
                         'show' => array(),
                         'edit' => array(),

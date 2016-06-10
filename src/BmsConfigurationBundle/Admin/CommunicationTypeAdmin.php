@@ -37,6 +37,10 @@ class CommunicationTypeAdmin extends AbstractAdmin {
                 ->add('timeoutBetweenSend')
                 ->add('timeoutBeforeScan')
                 ->add('updated')
+                ->add('hardware', null, array(), 'entity', array(
+                    'class'    => 'BmsConfigurationBundle\Entity\Hardware',
+                    'choice_label' => 'name',
+                ))
                 ->add('_action', null, array(
                             'actions' => array(
                                 'show' => array(),

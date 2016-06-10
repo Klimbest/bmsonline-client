@@ -26,7 +26,12 @@ class RegisterAdmin extends AbstractAdmin {
                 ->add('description')
                 ->add('description2')
                 ->add('modificatorRead')
-                ;
+                ->add('active')
+                ->add('archive')
+                ->add('device', null, array(), 'entity', array(
+                    'class'    => 'BmsConfigurationBundle\Entity\Device',
+                    'choice_label' => 'name',
+                ));
     }
        
 

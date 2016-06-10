@@ -16,8 +16,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="BmsConfigurationBundle\Entity\RegisterRepository")
  * @UniqueEntity(fields="name", message="Nazwa rejestru musi być unikalna w obrębie całego systemu.")
  */
-class Register
-{
+class Register {
+
     /**
      * @var string
      *
@@ -32,14 +32,14 @@ class Register
      * @ORM\Column(name="function", type="string", length=2, nullable=false)
      */
     private $function;
-    
+
     /**
      * @var integer
      *
      * @ORM\Column(name="register_size", type="integer", nullable=false)
      */
     private $registerSize;
-    
+
     /**
      * @var integer
      *
@@ -67,7 +67,7 @@ class Register
      * @ORM\Column(name="description2", type="string", length=255, nullable=true)
      */
     private $description2;
-    
+
     /**
      * @var string
      *
@@ -102,21 +102,21 @@ class Register
      * @ORM\Column(name="active", type="boolean", nullable=false, options={"default"=true})
      */
     private $active;
-    
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="alarm", type="boolean", nullable=true, options={"default"=false})
      */
-    private $alarm;    
+    private $alarm;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="bit_register", type="boolean", nullable=true, options={"default"=false})
      */
-    private $bit_register;    
-    
+    private $bit_register;
+
     /**
      * @var integer
      *
@@ -141,33 +141,35 @@ class Register
      * @var type \BmsConfigurationBundle\Entity\RegisterCurrentData
      * 
      * @ORM\OneToOne(targetEntity="RegisterCurrentData", mappedBy="register")
-     */ 
+     */
     private $registerCurrentData;
-    
+
     /**
      *
      * @var type \BmsConfigurationBundle\Entity\RegisterArchiveData
      * 
      * @ORM\OneToMany(targetEntity="RegisterArchiveData", mappedBy="register")
-     */ 
+     */
     private $registerArchiveData;
 
-     /**
+    /**
      * 
      * @var type \BmsConfigurationBundle\Entity\BitRegister
      * 
      * @ORM\OneToMany(targetEntity="BitRegister", mappedBy="register")
      */
     private $bit_registers;
-    
-    
+
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->registerArchiveData = new \Doctrine\Common\Collections\ArrayCollection();
         $this->bit_registers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString() {
+        return $this->name;
     }
 
     /**
@@ -177,8 +179,7 @@ class Register
      *
      * @return Register
      */
-    public function setRegisterAddress($registerAddress)
-    {
+    public function setRegisterAddress($registerAddress) {
         $this->registerAddress = $registerAddress;
 
         return $this;
@@ -189,8 +190,7 @@ class Register
      *
      * @return string
      */
-    public function getRegisterAddress()
-    {
+    public function getRegisterAddress() {
         return $this->registerAddress;
     }
 
@@ -201,8 +201,7 @@ class Register
      *
      * @return Register
      */
-    public function setFunction($function)
-    {
+    public function setFunction($function) {
         $this->function = $function;
 
         return $this;
@@ -213,8 +212,7 @@ class Register
      *
      * @return string
      */
-    public function getFunction()
-    {
+    public function getFunction() {
         return $this->function;
     }
 
@@ -225,8 +223,7 @@ class Register
      *
      * @return Register
      */
-    public function setRegisterSize($registerSize)
-    {
+    public function setRegisterSize($registerSize) {
         $this->registerSize = $registerSize;
 
         return $this;
@@ -237,8 +234,7 @@ class Register
      *
      * @return integer
      */
-    public function getRegisterSize()
-    {
+    public function getRegisterSize() {
         return $this->registerSize;
     }
 
@@ -249,8 +245,7 @@ class Register
      *
      * @return Register
      */
-    public function setScanQueue($scanQueue)
-    {
+    public function setScanQueue($scanQueue) {
         $this->scanQueue = $scanQueue;
 
         return $this;
@@ -261,8 +256,7 @@ class Register
      *
      * @return integer
      */
-    public function getScanQueue()
-    {
+    public function getScanQueue() {
         return $this->scanQueue;
     }
 
@@ -273,8 +267,7 @@ class Register
      *
      * @return Register
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
 
         return $this;
@@ -285,8 +278,7 @@ class Register
      *
      * @return string
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -297,8 +289,7 @@ class Register
      *
      * @return Register
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
 
         return $this;
@@ -309,8 +300,7 @@ class Register
      *
      * @return string
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -321,8 +311,7 @@ class Register
      *
      * @return Register
      */
-    public function setDescription2($description2)
-    {
+    public function setDescription2($description2) {
         $this->description2 = $description2;
 
         return $this;
@@ -333,8 +322,7 @@ class Register
      *
      * @return string
      */
-    public function getDescription2()
-    {
+    public function getDescription2() {
         return $this->description2;
     }
 
@@ -345,8 +333,7 @@ class Register
      *
      * @return Register
      */
-    public function setDisplaySuffix($displaySuffix)
-    {
+    public function setDisplaySuffix($displaySuffix) {
         $this->displaySuffix = $displaySuffix;
 
         return $this;
@@ -357,8 +344,7 @@ class Register
      *
      * @return string
      */
-    public function getDisplaySuffix()
-    {
+    public function getDisplaySuffix() {
         return $this->displaySuffix;
     }
 
@@ -369,8 +355,7 @@ class Register
      *
      * @return Register
      */
-    public function setModificatorRead($modificatorRead)
-    {
+    public function setModificatorRead($modificatorRead) {
         $this->modificatorRead = $modificatorRead;
 
         return $this;
@@ -381,8 +366,7 @@ class Register
      *
      * @return string
      */
-    public function getModificatorRead()
-    {
+    public function getModificatorRead() {
         return $this->modificatorRead;
     }
 
@@ -393,8 +377,7 @@ class Register
      *
      * @return Register
      */
-    public function setModificatorWrite($modificatorWrite)
-    {
+    public function setModificatorWrite($modificatorWrite) {
         $this->modificatorWrite = $modificatorWrite;
 
         return $this;
@@ -405,8 +388,7 @@ class Register
      *
      * @return integer
      */
-    public function getModificatorWrite()
-    {
+    public function getModificatorWrite() {
         return $this->modificatorWrite;
     }
 
@@ -417,8 +399,7 @@ class Register
      *
      * @return Register
      */
-    public function setArchive($archive)
-    {
+    public function setArchive($archive) {
         $this->archive = $archive;
 
         return $this;
@@ -429,8 +410,7 @@ class Register
      *
      * @return boolean
      */
-    public function getArchive()
-    {
+    public function getArchive() {
         return $this->archive;
     }
 
@@ -441,8 +421,7 @@ class Register
      *
      * @return Register
      */
-    public function setActive($active)
-    {
+    public function setActive($active) {
         $this->active = $active;
 
         return $this;
@@ -453,8 +432,7 @@ class Register
      *
      * @return boolean
      */
-    public function getActive()
-    {
+    public function getActive() {
         return $this->active;
     }
 
@@ -465,8 +443,7 @@ class Register
      *
      * @return Register
      */
-    public function setAlarm($alarm)
-    {
+    public function setAlarm($alarm) {
         $this->alarm = $alarm;
 
         return $this;
@@ -477,8 +454,7 @@ class Register
      *
      * @return boolean
      */
-    public function getAlarm()
-    {
+    public function getAlarm() {
         return $this->alarm;
     }
 
@@ -489,8 +465,7 @@ class Register
      *
      * @return Register
      */
-    public function setBitRegister($bitRegister)
-    {
+    public function setBitRegister($bitRegister) {
         $this->bit_register = $bitRegister;
 
         return $this;
@@ -501,8 +476,7 @@ class Register
      *
      * @return boolean
      */
-    public function getBitRegister()
-    {
+    public function getBitRegister() {
         return $this->bit_register;
     }
 
@@ -511,8 +485,7 @@ class Register
      *
      * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -523,8 +496,7 @@ class Register
      *
      * @return Register
      */
-    public function setDevice(\BmsConfigurationBundle\Entity\Device $device = null)
-    {
+    public function setDevice(\BmsConfigurationBundle\Entity\Device $device = null) {
         $this->device = $device;
 
         return $this;
@@ -535,8 +507,7 @@ class Register
      *
      * @return \BmsConfigurationBundle\Entity\Device
      */
-    public function getDevice()
-    {
+    public function getDevice() {
         return $this->device;
     }
 
@@ -547,8 +518,7 @@ class Register
      *
      * @return Register
      */
-    public function setRegisterCurrentData(\BmsConfigurationBundle\Entity\RegisterCurrentData $registerCurrentData = null)
-    {
+    public function setRegisterCurrentData(\BmsConfigurationBundle\Entity\RegisterCurrentData $registerCurrentData = null) {
         $this->registerCurrentData = $registerCurrentData;
 
         return $this;
@@ -559,8 +529,7 @@ class Register
      *
      * @return \BmsConfigurationBundle\Entity\RegisterCurrentData
      */
-    public function getRegisterCurrentData()
-    {
+    public function getRegisterCurrentData() {
         return $this->registerCurrentData;
     }
 
@@ -571,8 +540,7 @@ class Register
      *
      * @return Register
      */
-    public function addRegisterArchiveDatum(\BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum)
-    {
+    public function addRegisterArchiveDatum(\BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum) {
         $this->registerArchiveData[] = $registerArchiveDatum;
 
         return $this;
@@ -583,8 +551,7 @@ class Register
      *
      * @param \BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum
      */
-    public function removeRegisterArchiveDatum(\BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum)
-    {
+    public function removeRegisterArchiveDatum(\BmsConfigurationBundle\Entity\RegisterArchiveData $registerArchiveDatum) {
         $this->registerArchiveData->removeElement($registerArchiveDatum);
     }
 
@@ -593,8 +560,7 @@ class Register
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getRegisterArchiveData()
-    {
+    public function getRegisterArchiveData() {
         return $this->registerArchiveData;
     }
 
@@ -605,8 +571,7 @@ class Register
      *
      * @return Register
      */
-    public function addBitRegister(\BmsConfigurationBundle\Entity\BitRegister $bitRegister)
-    {
+    public function addBitRegister(\BmsConfigurationBundle\Entity\BitRegister $bitRegister) {
         $this->bit_registers[] = $bitRegister;
 
         return $this;
@@ -617,8 +582,7 @@ class Register
      *
      * @param \BmsConfigurationBundle\Entity\BitRegister $bitRegister
      */
-    public function removeBitRegister(\BmsConfigurationBundle\Entity\BitRegister $bitRegister)
-    {
+    public function removeBitRegister(\BmsConfigurationBundle\Entity\BitRegister $bitRegister) {
         $this->bit_registers->removeElement($bitRegister);
     }
 
@@ -627,8 +591,8 @@ class Register
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getBitRegisters()
-    {
+    public function getBitRegisters() {
         return $this->bit_registers;
     }
+
 }
