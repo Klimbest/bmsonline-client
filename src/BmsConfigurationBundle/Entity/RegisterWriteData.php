@@ -23,7 +23,7 @@ class RegisterWriteData
     /**
      * @var string
      *
-     * @ORM\Column(name="value", type="string", length=4, nullable=true)
+     * @ORM\Column(name="value", type="string", length=4, nullable=false)
      */
     private $value;
 
