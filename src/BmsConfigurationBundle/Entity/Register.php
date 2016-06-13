@@ -148,7 +148,7 @@ class Register {
      *
      * @var type \BmsConfigurationBundle\Entity\RegisterArchiveData
      * 
-     * @ORM\OneToMany(targetEntity="RegisterArchiveData", mappedBy="register", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="RegisterArchiveData", mappedBy="register")
      */
     private $registerArchiveData;
 
