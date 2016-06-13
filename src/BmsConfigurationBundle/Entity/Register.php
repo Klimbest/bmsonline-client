@@ -140,7 +140,7 @@ class Register {
      *
      * @var type \BmsConfigurationBundle\Entity\RegisterCurrentData
      * 
-     * @ORM\OneToOne(targetEntity="RegisterCurrentData", mappedBy="register")
+     * @ORM\OneToOne(targetEntity="RegisterCurrentData", mappedBy="register", cascade={"remove"})
      */
     private $registerCurrentData;
 
@@ -148,7 +148,7 @@ class Register {
      *
      * @var type \BmsConfigurationBundle\Entity\RegisterArchiveData
      * 
-     * @ORM\OneToMany(targetEntity="RegisterArchiveData", mappedBy="register")
+     * @ORM\OneToMany(targetEntity="RegisterArchiveData", mappedBy="register", cascade={"remove"})
      */
     private $registerArchiveData;
 
@@ -156,7 +156,7 @@ class Register {
      * 
      * @var type \BmsConfigurationBundle\Entity\BitRegister
      * 
-     * @ORM\OneToMany(targetEntity="BitRegister", mappedBy="register")
+     * @ORM\OneToMany(targetEntity="BitRegister", mappedBy="register", cascade={"remove"})
      */
     private $bit_registers;
 

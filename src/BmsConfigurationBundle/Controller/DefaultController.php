@@ -420,17 +420,9 @@ class DefaultController extends Controller {
         $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
         $register = $registerRepo->find($register_id);
 
-        $registerCD = $register->getRegisterCurrentData();
-
-        $bitRegisters = $register->getBitRegisters();
-        foreach ($bitRegisters as $br) {
-            $register->removeBitRegister($br);
-            $em->remove($br);
-        }
-
-        $em->remove($registerCD);
         $em->remove($register);
         $em->flush();
+        
         $em->getConnection()->exec("ALTER TABLE register AUTO_INCREMENT = 1;");
         $em->getConnection()->exec("ALTER TABLE register_current_data AUTO_INCREMENT = 1;");
         $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
@@ -457,14 +449,6 @@ class DefaultController extends Controller {
 
                 $register = $registerRepo->find($registersToDeleteId);
 
-                $registerCD = $register->getRegisterCurrentData();
-
-                $bitRegisters = $register->getBitRegisters();
-                foreach ($bitRegisters as $br) {
-                    $register->removeBitRegister($br);
-                    $em->remove($br);
-                }
-                $em->remove($registerCD);
                 $em->remove($register);
             }
             $em->flush();
