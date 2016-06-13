@@ -208,4 +208,14 @@ class RegisterWriteData
     {
         return $this->username;
     }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }

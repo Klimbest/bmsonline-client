@@ -136,7 +136,7 @@ class DefaultController extends Controller {
             
             if($device->getActive() == 0){                
                 $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
-                $technical_info = $technicalInformationRepo->findBy(['name' => "d_" . $device->getId() . "_errors"]);
+                $technical_info = $technicalInformationRepo->findOneBy(['name' => "d_" . $device->getId() . "_errors"]);
                 $technical_info->setStatus(-1);
                 $device->setScanState(-1);
             }
@@ -396,7 +396,7 @@ class DefaultController extends Controller {
             $em->remove($rCD);
             $em->remove($r);
         }
-        $technical_info = $technicalInformationRepo->findBy(array('name' => "d_" . $device->getId() . "_errors"));
+        $technical_info = $technicalInformationRepo->findOneBy(['name' => "d_" . $device->getId() . "_errors"]);
         $em->remove($technical_info);
         
         $em->flush();

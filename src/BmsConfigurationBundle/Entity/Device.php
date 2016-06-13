@@ -75,7 +75,7 @@ class Device
      *
      * @ORM\Column(name="scan_state", type="integer", nullable=true)
      */
-    private $scanScate;
+    private $scanState;
     
     /**
      * @var string
@@ -83,87 +83,7 @@ class Device
      * @ORM\Column(name="localization", type="string", length=255, nullable=true)
      */
     private $localization;
-    
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return Device
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     * @return Device
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string 
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set modbusAddress
-     *
-     * @param integer $modbusAddress
-     * @return Device
-     */
-    public function setModbusAddress($modbusAddress)
-    {
-        $this->modbusAddress = $modbusAddress;
-
-        return $this;
-    }
-
-    /**
-     * Get modbusAddress
-     *
-     * @return integer 
-     */
-    public function getModbusAddress()
-    {
-        return $this->modbusAddress;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-   
+     
     /**
      * Constructor
      */
@@ -177,66 +97,95 @@ class Device
         return $this->name;
     }
     
+   
+
     /**
-     * Add registers
+     * Set name
      *
-     * @param \BmsConfigurationBundle\Entity\Register $registers
+     * @param string $name
+     *
      * @return Device
      */
-    public function addRegister(\BmsConfigurationBundle\Entity\Register $registers)
+    public function setName($name)
     {
-        $this->registers[] = $registers;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Remove registers
+     * Get name
      *
-     * @param \BmsConfigurationBundle\Entity\Register $registers
+     * @return string
      */
-    public function removeRegister(\BmsConfigurationBundle\Entity\Register $registers)
+    public function getName()
     {
-        $this->registers->removeElement($registers);
+        return $this->name;
     }
 
     /**
-     * Get registers
+     * Set description
      *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getRegisters()
-    {
-        return $this->registers;
-    }
-
-    /**
-     * Set communicationType
+     * @param string $description
      *
-     * @param \BmsConfigurationBundle\Entity\CommunicationType $communicationType
      * @return Device
      */
-    public function setCommunicationType(\BmsConfigurationBundle\Entity\CommunicationType $communicationType = null)
+    public function setDescription($description)
     {
-        $this->communicationType = $communicationType;
+        $this->description = $description;
 
         return $this;
     }
 
     /**
-     * Get communicationType
+     * Get description
      *
-     * @return \BmsConfigurationBundle\Entity\CommunicationType 
+     * @return string
      */
-    public function getCommunicationType()
+    public function getDescription()
     {
-        return $this->communicationType;
+        return $this->description;
+    }
+
+    /**
+     * Set modbusAddress
+     *
+     * @param integer $modbusAddress
+     *
+     * @return Device
+     */
+    public function setModbusAddress($modbusAddress)
+    {
+        $this->modbusAddress = $modbusAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get modbusAddress
+     *
+     * @return integer
+     */
+    public function getModbusAddress()
+    {
+        return $this->modbusAddress;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
      * Set active
      *
      * @param boolean $active
+     *
      * @return Device
      */
     public function setActive($active)
@@ -249,7 +198,7 @@ class Device
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActive()
     {
@@ -257,9 +206,34 @@ class Device
     }
 
     /**
+     * Set scanState
+     *
+     * @param integer $scanState
+     *
+     * @return Device
+     */
+    public function setScanState($scanState)
+    {
+        $this->scanState = $scanState;
+
+        return $this;
+    }
+
+    /**
+     * Get scanState
+     *
+     * @return integer
+     */
+    public function getScanState()
+    {
+        return $this->scanState;
+    }
+
+    /**
      * Set localization
      *
      * @param string $localization
+     *
      * @return Device
      */
     public function setLocalization($localization)
@@ -272,7 +246,7 @@ class Device
     /**
      * Get localization
      *
-     * @return string 
+     * @return string
      */
     public function getLocalization()
     {
@@ -280,26 +254,60 @@ class Device
     }
 
     /**
-     * Set scanScate
+     * Set communicationType
      *
-     * @param integer $scanScate
+     * @param \BmsConfigurationBundle\Entity\CommunicationType $communicationType
      *
      * @return Device
      */
-    public function setScanScate($scanScate)
+    public function setCommunicationType(\BmsConfigurationBundle\Entity\CommunicationType $communicationType = null)
     {
-        $this->scanScate = $scanScate;
+        $this->communicationType = $communicationType;
 
         return $this;
     }
 
     /**
-     * Get scanScate
+     * Get communicationType
      *
-     * @return integer
+     * @return \BmsConfigurationBundle\Entity\CommunicationType
      */
-    public function getScanScate()
+    public function getCommunicationType()
     {
-        return $this->scanScate;
+        return $this->communicationType;
+    }
+
+    /**
+     * Add register
+     *
+     * @param \BmsConfigurationBundle\Entity\Register $register
+     *
+     * @return Device
+     */
+    public function addRegister(\BmsConfigurationBundle\Entity\Register $register)
+    {
+        $this->registers[] = $register;
+
+        return $this;
+    }
+
+    /**
+     * Remove register
+     *
+     * @param \BmsConfigurationBundle\Entity\Register $register
+     */
+    public function removeRegister(\BmsConfigurationBundle\Entity\Register $register)
+    {
+        $this->registers->removeElement($register);
+    }
+
+    /**
+     * Get registers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRegisters()
+    {
+        return $this->registers;
     }
 }
