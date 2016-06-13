@@ -113,7 +113,7 @@ class Register {
     /**
      * @var boolean
      *
-     * @ORM\Column(name="bit_register", type="boolean", nullable=true, options={"default"=false}, cascade={"remove"})
+     * @ORM\Column(name="bit_register", type="boolean", nullable=true, options={"default"=false})
      */
     private $bit_register;
 
@@ -156,7 +156,7 @@ class Register {
      * 
      * @var type \BmsConfigurationBundle\Entity\BitRegister
      * 
-     * @ORM\OneToMany(targetEntity="BitRegister", mappedBy="register")
+     * @ORM\OneToMany(targetEntity="BitRegister", mappedBy="register", cascade={"remove"})
      */
     private $bit_registers;
 
