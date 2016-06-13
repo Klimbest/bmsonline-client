@@ -34,6 +34,7 @@ class DefaultController extends Controller {
         $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
         $communicationTypes = $communicationRepo->createQueryBuilder('ct')
                         ->join('ct.hardware_id', 'h')
+                        ->where('h.active = 1')
                         ->getQuery()->getResult();
         $comm_id = $session->get('comm_id');
         $device_id = $session->get('device_id');
@@ -419,16 +420,7 @@ class DefaultController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
         $register = $registerRepo->find($register_id);
-
-        $registerCD = $register->getRegisterCurrentData();
-
-        $bitRegisters = $register->getBitRegisters();
-        foreach ($bitRegisters as $br) {
-            $register->removeBitRegister($br);
-            $em->remove($br);
-        }
-
-        $em->remove($registerCD);
+        
         $em->remove($register);
         $em->flush();
         $em->getConnection()->exec("ALTER TABLE register AUTO_INCREMENT = 1;");
@@ -457,14 +449,6 @@ class DefaultController extends Controller {
 
                 $register = $registerRepo->find($registersToDeleteId);
 
-                $registerCD = $register->getRegisterCurrentData();
-
-                $bitRegisters = $register->getBitRegisters();
-                foreach ($bitRegisters as $br) {
-                    $register->removeBitRegister($br);
-                    $em->remove($br);
-                }
-                $em->remove($registerCD);
                 $em->remove($register);
             }
             $em->flush();
