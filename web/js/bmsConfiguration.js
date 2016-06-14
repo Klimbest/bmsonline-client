@@ -296,7 +296,8 @@ function formEvents() {
     }
 
     $("input#read_mod_val").val($("input#bmsconfigurationbundle_register_modificator_read").val());
-
+    $("input#write_mod_val").val($("input#bmsconfigurationbundle_register_modificator_write").val());
+    
     $("select#read_mod_operator, input#read_mod_val").change(function () {
         var oper = $("select#read_mod_operator").val();
         var mod = $("input#read_mod_val").val();
@@ -307,6 +308,18 @@ function formEvents() {
             $("input#bmsconfigurationbundle_register_modificator_read").val(mod);
         }
     });
+    
+    $("select#write_mod_operator, input#write_mod_val").change(function () {
+        var oper = $("select#write_mod_operator").val();
+        var mod = $("input#write_mod_val").val();
+        if (oper === "*") {
+            $("#bmsconfigurationbundle_register_modificator_write").val(mod);
+        } else if (oper === "/") {
+            mod = 1 / mod;
+            $("input#bmsconfigurationbundle_register_modificator_write").val(mod);
+        }
+    });
+    
 
 }
 

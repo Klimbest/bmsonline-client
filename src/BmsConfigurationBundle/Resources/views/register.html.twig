@@ -88,17 +88,38 @@
             </div>
             <div class="col-md-1">
                 <label class="control-label">Operator</label>
-                <select id="read_mod_operator"  class="form-control" disabled="disabled">
+                <select id="write_mod_operator"  class="form-control" disabled="disabled">
                     <option value="*">*</option>
                     <option value="/">/</option>
                 </select>
             </div>
             <div  class="col-md-2">
                 <label class="control-label">Współczynnik</label>
-                <input id="read_mod_val" type="text" class="form-control" value="" disabled="disabled"></input>
+                <input id="write_mod_val" type="text" class="form-control" value="" disabled="disabled"></input>
             </div>
             <div class="hidden">
                 {{form_widget(form.modificator_write)}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-md-offset-3">
+                <label class="control-label">Dopuszczalne wartości do zapisu</label>
+                <select id="write_limit_type"  class="form-control" disabled="disabled">
+                    <option value="interval">Przedział</option>
+                    <option value="set">Zbiór</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">Limit min</label>
+                <input id="write_limit_min" type="number" class="form-control" value="" disabled="disabled"></input>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">Limit max</label>
+                <input id="write_limit_max" type="number" class="form-control" value="" disabled="disabled"></input>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">Krok</label>
+                <input id="write_limit_step" type="number" class="form-control" value="" disabled="disabled"></input>
             </div>
         </div>
         <div class="row">
