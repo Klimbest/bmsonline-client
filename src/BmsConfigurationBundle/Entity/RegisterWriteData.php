@@ -31,9 +31,7 @@ class RegisterWriteData
      * @var \BmsConfigurationBundle\Entity\Register
      *
      * @ORM\ManyToOne(targetEntity="BmsConfigurationBundle\Entity\Register", inversedBy="registerWriteData")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="register_id", referencedColumnName="id", onDelete="NO ACTION")
-     * })
+     * @ORM\JoinColumn(name="register_id", referencedColumnName="id", onDelete="NO ACTION")
      */
     private $register;
 
