@@ -99,6 +99,20 @@ class Register {
     private $writeRegister;
     
     /**
+     * @var decimal
+     *
+     * @ORM\Column(name="write_limit_min", type="decimal", precision=15, scale=8, nullable=false)
+     */
+    private $writeLimitMin;
+    
+    /**
+     * @var decimal
+     *
+     * @ORM\Column(name="write_limit_max", type="decimal", precision=15, scale=8, nullable=false)
+     */
+    private $writeLimitMax;
+    
+    /**
      * @var boolean
      *
      * @ORM\Column(name="archive_register", type="boolean", nullable=false, options={"default"=false})
@@ -674,5 +688,53 @@ class Register {
     public function getRegisterWriteData()
     {
         return $this->registerWriteData;
+    }
+
+    /**
+     * Set writeLimitMin
+     *
+     * @param string $writeLimitMin
+     *
+     * @return Register
+     */
+    public function setWriteLimitMin($writeLimitMin)
+    {
+        $this->writeLimitMin = $writeLimitMin;
+
+        return $this;
+    }
+
+    /**
+     * Get writeLimitMin
+     *
+     * @return string
+     */
+    public function getWriteLimitMin()
+    {
+        return $this->writeLimitMin;
+    }
+
+    /**
+     * Set writeLimitMax
+     *
+     * @param string $writeLimitMax
+     *
+     * @return Register
+     */
+    public function setWriteLimitMax($writeLimitMax)
+    {
+        $this->writeLimitMax = $writeLimitMax;
+
+        return $this;
+    }
+
+    /**
+     * Get writeLimitMax
+     *
+     * @return string
+     */
+    public function getWriteLimitMax()
+    {
+        return $this->writeLimitMax;
     }
 }

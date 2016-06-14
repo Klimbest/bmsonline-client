@@ -42,12 +42,12 @@ class RegisterType extends AbstractType {
                 ->add('register_size', ChoiceType::class, array(
                     'choices' => array('8' => 8, '16' => 16, '32' => 32),
                     'attr' => array('disabled' => 'disabled'),
-                    'label' => 'Rozmiar rejestru(8, 16, 32)',
+                    'label' => 'Rozmiar rejestru (8, 16, 32)',
                     'required' => false
                 ))
                 ->add('name', TextType::class, array(
                     'attr' => array('disabled' => 'disabled', 'maxlength' => 16),
-                    'label' => 'Nazwa skrócona (max 16 znaków)'
+                    'label' => 'Nazwa skrócona (max 20 znaków)'
                 ))
                 ->add('description', TextareaType::class, array(
                     'attr' => array('disabled' => 'disabled', 'maxlength' => 255),
