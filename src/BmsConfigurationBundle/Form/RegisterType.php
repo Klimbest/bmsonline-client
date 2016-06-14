@@ -25,7 +25,7 @@ class RegisterType extends AbstractType {
                     'attr' => array('disabled' => 'disabled', 'maxlength' => 4),
                     'label' => 'Adres rejestru'
                 ))
-                ->add('function', ChoiceType::class, array(
+                ->add('read_function', ChoiceType::class, array(
                     'choices' => array('01 - Discrete Output Coils' => '01',
                         '02 - Discrete Input Contacts' => '02',
                         '03 - Analog Output Holding Registers' => '03',
@@ -33,10 +33,11 @@ class RegisterType extends AbstractType {
                     'label' => 'Funkcja odczytu modbus',
                     'attr' => array('disabled' => 'disabled'),
                 ))
-                ->add('scan_queue', IntegerType::class, array(
-                    'attr' => array('disabled' => 'disabled', 'min' => 1, 'max' => 5),
-                    'label' => 'Kolejka odczytu danych(od 1 do 5)',
-                    'data' => 1
+                ->add('write_function', ChoiceType::class, array(
+                    'choices' => array('05 - Force Single Coil' => '05',
+                        '06 - Preset Single Register' => '06'),
+                    'label' => 'Funkcja zapisu modbus',
+                    'attr' => array('disabled' => 'disabled'),
                 ))
                 ->add('register_size', ChoiceType::class, array(
                     'choices' => array('8' => 8, '16' => 16, '32' => 32),
@@ -57,36 +58,36 @@ class RegisterType extends AbstractType {
                     'label' => 'Dodatkowy opis',
                     'required' => false
                 ))
-                ->add('display_suffix', TextType::class, array(
-                    'attr' => array('disabled' => 'disabled'),
-                    'label' => 'Grupa danych',
-                    'required' => false
-                ))
                 ->add('modificator_read', NumberType::class, array(
                     'scale' => 6,
                     'attr' => array('disabled' => 'disabled', 'step' => 0.000001),
                     'label' => 'Sposób przeliczania danych przy odczycie'
                 ))
-                ->add('modificator_write', IntegerType::class, array(
-                    'attr' => array('disabled' => 'disabled'),
-                    'label' => 'Sposób przeliczania danych przy zapisie',
-                    'required' => false
+                ->add('modificator_write', NumberType::class, array(
+                    'scale' => 6,
+                    'attr' => array('disabled' => 'disabled', 'step' => 0.000001),
+                    'label' => 'Sposób przeliczania danych przy zapisie'
                 ))
-                ->add('archive', CheckboxType::class, array(
+                ->add('archive_register', CheckboxType::class, array(
                     'attr' => array('disabled' => 'disabled'),
                     'label' => 'Archiwizować rejestr?',
                     'required' => false,
                 ))
-                ->add('active', CheckboxType::class, array(
+                ->add('active_register', CheckboxType::class, array(
                     'attr' => array('disabled' => 'disabled'),
                     'label' => 'Odczytywać rejestr?',
                     'required' => false
                 ))
-                ->add('alarm', CheckboxType::class, array(
+                ->add('alarm_register', CheckboxType::class, array(
                     'attr' => array('disabled' => 'disabled'),
                     'label' => 'Rejestr alarmowy?',
                     'required' => false
                 ))
+                ->add('write_register', CheckboxType::class, [
+                    'attr' => array('disabled' => 'disabled'),
+                    'label' => 'Rejestr do zapisu?',
+                    'required' => false
+                    ])
                 ->add('bit_register', CheckboxType::class, array(
                     'attr' => array('disabled' => 'disabled'),
                     'label' => 'Rejestr bitowy?',
