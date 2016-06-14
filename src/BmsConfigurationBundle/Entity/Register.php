@@ -8,16 +8,25 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Register
  *
- * @ORM\Table(name="register", uniqueConstraints={@ORM\UniqueConstraint(name="device_id", columns={"device_id", "register_address", "function"}),
- *                                                @ORM\UniqueConstraint(name="reg_name", columns={"name"}) }, 
- *                             indexes={@ORM\Index(name="device", columns={"device_id"}),
- *                                      @ORM\Index(name="name", columns={"name"})
+ * @ORM\Table(name="register", uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="device_id", columns={"device_id", "register_address", "function"}),
+ *      @ORM\UniqueConstraint(name="reg_name", columns={"name"}) 
  * })
+ * 
  * @ORM\Entity(repositoryClass="BmsConfigurationBundle\Entity\RegisterRepository")
  * @UniqueEntity(fields="name", message="Nazwa rejestru musi być unikalna w obrębie całego systemu.")
  */
 class Register {
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+    
     /**
      * @var string
      *
@@ -117,14 +126,7 @@ class Register {
      */
     private $bit_register;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    
 
     /**
      * @var \BmsConfigurationBundle\Entity\Device
@@ -160,6 +162,14 @@ class Register {
      */
     private $bit_registers;
 
+    /**
+     *
+     * @var type \BmsConfigurationBundle\Entity\RegisterWriteData
+     * 
+     * @ORM\OneToMany(targetEntity="RegisterWriteData", mappedBy="register")
+     */
+    private $registerWriteData;
+    
     /**
      * Constructor
      */
@@ -595,4 +605,28 @@ class Register {
         return $this->bit_registers;
     }
 
+
+    /**
+     * Set registerWriteData
+     *
+     * @param \BmsConfigurationBundle\Entity\RegisterWriteData $registerWriteData
+     *
+     * @return Register
+     */
+    public function setRegisterWriteData(\BmsConfigurationBundle\Entity\RegisterWriteData $registerWriteData = null)
+    {
+        $this->registerWriteData = $registerWriteData;
+
+        return $this;
+    }
+
+    /**
+     * Get registerWriteData
+     *
+     * @return \BmsConfigurationBundle\Entity\RegisterWriteData
+     */
+    public function getRegisterWriteData()
+    {
+        return $this->registerWriteData;
+    }
 }

@@ -313,7 +313,7 @@ class DefaultController extends Controller {
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isValid() ) {
 
             $registerAddress = $form['register_address']->getData();
             $function = $form['function']->getData();
