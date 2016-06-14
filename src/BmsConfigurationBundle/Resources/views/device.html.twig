@@ -104,21 +104,21 @@
             </div>
             <div class="row">
                 <div class="col-md-8 hide-button-container hidden-item">
-                    <input id="register_address_hex" type="button" class="btn btn-default btn-xs hidding" value="Adres rejestru(HEX)"></input>
-                    <input id="register_address_dec" type="button" class="btn btn-default btn-xs hidding" value="Adres rejestru(DEC)"></input>
-                    <input id="function" type="button" class="btn btn-default btn-xs hidding " value="Funkcja"></input>
-                    <input id="name" type="button" class="btn btn-default btn-xs hidding clicked" value="Nazwa skrócona"></input>
-                    <input id="description" type="button" class="btn btn-default btn-xs hidding " value="Pełna nazwa"></input>
-                    <input id="active_read" type="button" class="btn btn-default btn-xs hidding" value="Aktywny odczyt"></input>
-                    <input id="scan_queue" type="button" class="btn btn-default btn-xs hidding clicked" value="Częstotliwość odczytu danych"></input>
-                    <input id="archive" type="button" class="btn btn-default btn-xs hidding" value="Archiwizacja"></input>
-                    <input id="alarm" type="button" class="btn btn-default btn-xs hidding" value="Alarmowy"></input>
-                    <input id="bit_register" type="button" class="btn btn-default btn-xs hidding" value="Bitowy"></input>
-                    <input id="modificator_read" type="button" class="btn btn-default btn-xs hidding" value="Sposób przeliczania danych przy odczycie"></input>
-                    {#                    <input id="modificator_write" type="button" class="btn btn-default btn-xs hidding clicked" value="Sposób przeliczania danych przy zapisie"></input>#}
+                    <input id="register_address_hex" type="button" class="btn btn-default btn-xs hidding" value="Adres(HEX)"></input>
+                    <input id="register_address_dec" type="button" class="btn btn-default btn-xs hidding" value="Adres(DEC)"></input>
+                    <input id="name" type="button" class="btn btn-default btn-xs hidding" value="Nazwa"></input>
+                    <input id="read_function" type="button" class="btn btn-default btn-xs hidding " value="Funkcja odczytu"></input>
+                    <input id="write_function" type="button" class="btn btn-default btn-xs hidding " value="Funkcja zapisu"></input>
+                    <input id="description" type="button" class="btn btn-default btn-xs hidding " value="Opis"></input>
+                    <input id="active_register" type="button" class="btn btn-default btn-xs hidding" value="Odczytywać?"></input>
+                    <input id="archive_register" type="button" class="btn btn-default btn-xs hidding" value="Archiwizować?"></input>
+                    <input id="alarm_register" type="button" class="btn btn-default btn-xs hidding" value="Alarmowy?"></input>
+                    <input id="bit_register" type="button" class="btn btn-default btn-xs hidding" value="Bitowy?"></input>
+                    <input id="write_register" type="button" class="btn btn-default btn-xs hidding" value="Zapis?"></input>
+                    <input id="modificator_read" type="button" class="btn btn-default btn-xs hidding" value="Przelicznik odczyt"></input>
+                    <input id="modificator_write" type="button" class="btn btn-default btn-xs hidding" value="Przelicznik zapis"></input>
                     <input id="fixed_value" type="button" class="btn btn-default btn-xs hidding" value="Aktualna wartość"></input>
                     <input id="description2" type="button" class="btn btn-default btn-xs hidding " value="Dodatkowy opis"></input>
-                    {#                    <input id="data_group" type="button" class="btn btn-default btn-xs hidding" value="Grupa danych"></input>#}
                     <input id="manage" type="button" class="btn btn-default btn-xs hidding" value="Zarządzaj"></input>
                 </div>
             </div>
@@ -133,19 +133,20 @@
                 <table class="table table-bordered table-condensed small">
                     <thead>
                         <tr>
-                            <th class="register_address_hex">Adres rejestru(HEX)</th>
-                            <th class="register_address_dec">Adres rejestru(DEC)</th>
-                            <th class="function">Funkcja</th>
-                            <th class="name">Nazwa skrócona</th>
-                            <th class="description">Pełna nazwa</th>
-                            <th class="active_read">Aktywny odczyt</th>
-                            <th class="scan_queue">Kolejka odczytu danych</th>
-                            <th class="archive">Archiwizacja</th>
-                            <th class="alarm">Alarmowy</th>
-                            <th class="bit_register">Bitowy</th>
-                            <th class="modificator_read">Sposób przeliczania danych przy odczycie</th>
-                            <th class="modificator_write">Sposób przeliczania danych przy zapisie</th>
-                            <th class="fixed_value">Aktualna wartość</th>
+                            <th class="register_address_hex">Adres(HEX)</th>
+                            <th class="register_address_dec">Adres(DEC)</th>
+                            <th class="name">Nazwa</th>
+                            <th class="read_function">Funkcja odczytu</th>
+                            <th class="write_function">Funkcja zapisu</th>
+                            <th class="description">Opis</th>
+                            <th class="active_register">Odczytywać?</th>
+                            <th class="archive_register">Archiwizować?</th>
+                            <th class="alarm_register">Alarmowy?</th>
+                            <th class="bit_register">Bitowy?</th>
+                            <th class="write_register">Zapis?</th>
+                            <th class="modificator_read">Przelicznik odczyt</th>
+                            <th class="modificator_write">Przelicznik zapis</th>
+                            <th class="fixed_value">Wartość</th>
                             <th class="description2">Dodatkowy opis</th>
                             <th class="manage">Zarządzaj</th>
                         </tr>
@@ -156,26 +157,26 @@
                                 <tr>
                                     <td class="register_address_hex">{{ register.registerAddress }}</td>
                                     <td class="register_address_dec">{{ register.registerAddress }}</td>
-                                    <td class="function">{{ register.function }}</td>
                                     <td class="name">{{ register.name }}</td>
+                                    <td class="read_function">{{ register.readFunction }}</td>
+                                    <td class="write_function">{{ register.writeFunction }}</td>
                                     <td class="description">{{ register.description}}</td>
                                     <td class="active_read text-center">
-                                        {% if register.active == 1 %}
+                                        {% if register.activeRegister == 1 %}
                                             <i class="fa fa-check-square-o fa-fw fa-green"></i>
                                         {% else %}
                                             <i class="fa fa-square-o fa-fw fa-red"></i>
                                         {% endif %}
                                     </td>
-                                    <td class="scan_queue">{{ register.scanQueue }}</td>
                                     <td class="archive text-center">
-                                        {% if register.archive == 1 %}
+                                        {% if register.archiveRegister == 1 %}
                                             <i class="fa fa-check-square-o fa-fw fa-green"></i>
                                         {% else %}
                                             <i class="fa fa-square-o fa-fw fa-red"></i>
                                         {% endif %}
                                     </td>
                                     <td class="alarm text-center">
-                                        {% if register.alarm == 1 %}
+                                        {% if register.alarmRegister == 1 %}
                                             <i class="fa fa-check-square-o fa-fw fa-green"></i>
                                         {% else %}
                                             <i class="fa fa-square-o fa-fw fa-red"></i>
@@ -183,6 +184,13 @@
                                     </td>
                                     <td class="bit_register text-center">
                                         {% if register.bitRegister == 1 %}
+                                            <i class="fa fa-check-square-o fa-fw fa-green"></i>
+                                        {% else %}
+                                            <i class="fa fa-square-o fa-fw fa-red"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td class="write_register text-center">
+                                        {% if register.writeRegister == 1 %}
                                             <i class="fa fa-check-square-o fa-fw fa-green"></i>
                                         {% else %}
                                             <i class="fa fa-square-o fa-fw fa-red"></i>
@@ -198,7 +206,7 @@
                                         <a href="{{ path('bms_configuration_del_register', {'comm_id': device.communicationType.id, 'device_id': device.id, 'register_id': register.id}) }}">
                                             <i class="fa fa-remove fa-fw fa-red"></i>
                                         </a>
-                                        {% if register.modificatorWrite > 0 %}
+                                        {% if register.writeRegister == 1 %}
                                             <i id="{{register.id}}" class="fa fa-pencil fa-fw"></i>
                                         {% endif %}
                                     </td>

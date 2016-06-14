@@ -48,12 +48,12 @@
             <div class="col-md-3">
                 <div class="row">
                     <div class="col-md-12">
-                        {{form_label(form.function)}}<br /><br />
+                        {{form_label(form.read_function)}}<br /><br />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-10">
-                        {{form_widget(form.function)}}
+                        {{form_widget(form.read_function)}}
                     </div>
                 </div>
             </div>
@@ -107,7 +107,7 @@
                         {{form_widget(form.modificator_write)}}
                     </div>
                 </div>
-            </div>
+            </div>{#
             <div class="col-md-4">
                 <div class="row">
                     <div class="col-md-12">
@@ -131,13 +131,13 @@
                         {{form_widget(form.display_suffix)}}
                     </div>
                 </div>
-            </div>
+            </div>#}
         </div>
         <div class="row">
             <div class="col-md-2">
-                {{form_row(form.archive)}}                
-                {{form_row(form.active)}}           
-                {{form_row(form.alarm)}}    
+                {{form_row(form.archive_register)}}                
+                {{form_row(form.active_register)}}           
+                {{form_row(form.alarm_register)}}    
             </div>
             <div class="col-md-10">
                 {{form_row(form.description2)}}                
@@ -157,21 +157,21 @@
         </div>
         <div class="row bits" data-prototype="{{ form_widget(form.bit_registers.vars.prototype)|e }}">
             <div class="col-md-12">   
-                {% for bitRegister in form.bit_registers %}                        
+                {% for bit_register in form.bit_registers %}                        
                     <div class="row bit_registers">
                         <div class="col-md-2 text-center">
                             <span class="bitName"></span>
                         </div> 
                         <div class="col-md-5 text-center">
-                            {{form_row(bitRegister.description)}}
+                            {{form_row(bit_register.description)}}
                         </div> 
                         <div class="col-md-1 text-center">
                             <span class="bitValue"></span>
                         </div> 
-                        {{form_row(bitRegister.bitPosition)}}
-                        {{form_row(bitRegister.register)}}
-                        {{form_row(bitRegister.name)}}
-                        {{form_row(bitRegister.bitValue)}}
+                        {{form_row(bit_register.bitPosition)}}
+                        {{form_row(bit_register.register)}}
+                        {{form_row(bit_register.name)}}
+                        {{form_row(bit_register.bitValue)}}
                     </div>
                 {% endfor %}
             </div>

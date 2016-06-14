@@ -12,8 +12,6 @@ form div.row{
     padding-bottom: 5px;
 }
 .tcpip, .btn-save, .btn-cancel,
-.name, .modificator_write, .scan_queue,
-/*.bit_register,*/ 
 .register-level, .device-level, .hidden-item, div#write-form{
     display: none;
 }
