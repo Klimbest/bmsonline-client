@@ -313,64 +313,65 @@ class DefaultController extends Controller {
 
         $form->handleRequest($request);
 
-        if ($form->isValid() ) {
+        if ($form->isSubmitted()) {
 
-            $registerAddress = $form['register_address']->getData();
-            $function = $form['function']->getData();
-            $scanQueue = $form['scan_queue']->getData();
-            $register_size = $form['register_size']->getData();
-            $name = $form['name']->getData();
-            $description = $form['description']->getData();
-            $description2 = $form['description2']->getData();
-            $displaySuffix = $form['display_suffix']->getData();
-            $modificatorRead = $form['modificator_read']->getData();
-            $modificatorWrite = $form['modificator_write']->getData();
-            $archive = $form['archive']->getData();
-            $active = $form['active']->getData();
+            if ($form->isValid()) {
+                $registerAddress = $form['register_address']->getData();
+                $function = $form['function']->getData();
+                $scanQueue = $form['scan_queue']->getData();
+                $register_size = $form['register_size']->getData();
+                $name = $form['name']->getData();
+                $description = $form['description']->getData();
+                $description2 = $form['description2']->getData();
+                $displaySuffix = $form['display_suffix']->getData();
+                $modificatorRead = $form['modificator_read']->getData();
+                $modificatorWrite = $form['modificator_write']->getData();
+                $archive = $form['archive']->getData();
+                $active = $form['active']->getData();
 
 
-            $register->setRegisterAddress($registerAddress)
-                    ->setFunction($function)
-                    ->setScanQueue($scanQueue)
-                    ->setRegisterSize($register_size)
-                    ->setName($name)
-                    ->setDescription($description)
-                    ->setDescription2($description2)
-                    ->setDisplaySuffix($displaySuffix)
-                    ->setModificatorRead($modificatorRead)
-                    ->setModificatorWrite($modificatorWrite)
-                    ->setArchive($archive)
-                    ->setActive($active)
-                    ->setDevice($device);
+                $register->setRegisterAddress($registerAddress)
+                        ->setFunction($function)
+                        ->setScanQueue($scanQueue)
+                        ->setRegisterSize($register_size)
+                        ->setName($name)
+                        ->setDescription($description)
+                        ->setDescription2($description2)
+                        ->setDisplaySuffix($displaySuffix)
+                        ->setModificatorRead($modificatorRead)
+                        ->setModificatorWrite($modificatorWrite)
+                        ->setArchive($archive)
+                        ->setActive($active)
+                        ->setDevice($device);
 
-            $em->persist($register);
+                $em->persist($register);
 
-            if ($register->getBitRegister() == 1) {
-                $bitRegisters = $register->getBitRegisters();
-                foreach ($bitRegisters as $br) {
-                    $br->setRegister($register);
-                    $em->persist($br);
+                if ($register->getBitRegister() == 1) {
+                    $bitRegisters = $register->getBitRegisters();
+                    foreach ($bitRegisters as $br) {
+                        $br->setRegister($register);
+                        $em->persist($br);
+                    }
                 }
+
+                $em->persist($register);
+                $em->flush();
+                $registerCD->setRegister($register);
+                $registerCD->setTimeOfUpdate(new \DateTime());
+                $em->persist($registerCD);
+                $em->flush();
+                $register->setRegisterCurrentData($registerCD);
+                $em->persist($register);
+
+                $em->flush();
+                $session = $request->getSession();
+                $session->set('comm_id', $comm_id);
+                $session->set('device_id', $device_id);
+
+                $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
+                $this->setDataToSync();
             }
-
-            $em->persist($register);
-            $em->flush();
-            $registerCD->setRegister($register);
-            $registerCD->setTimeOfUpdate(new \DateTime());
-            $em->persist($registerCD);
-            $em->flush();
-            $register->setRegisterCurrentData($registerCD);
-            $em->persist($register);
-
-            $em->flush();
-            $session = $request->getSession();
-            $session->set('comm_id', $comm_id);
-            $session->set('device_id', $device_id);
-
-            $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
-            $this->setDataToSync();
-
-            return $this->redirectToRoute('bms_configuration_index');
+                return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
             $template = $this->container
                             ->get('templating')->render('BmsConfigurationBundle::newRegister.html.twig', ['comms' => $communicationTypes, 'comm' => $comm, 'device' => $device, 'form' => $form->createView()]);
