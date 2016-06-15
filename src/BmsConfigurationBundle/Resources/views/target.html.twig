@@ -32,17 +32,23 @@
                 <div class="col-md-2">
                     Nazwa
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                     Transmisja
                 </div>
                 <div class="col-md-1">
                     Parzystość
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                     Bity danych
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                     Bity stopu
+                </div>
+                <div class="col-md-2">
+                    Response timeout
+                </div>
+                <div class="col-md-1">
+                    RTS delay
                 </div>
                 <div class="col-md-2">
                     Czas aktualizacji
@@ -56,17 +62,23 @@
                     <div class="col-md-2">
                         {{ comm.name }}
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         {{ comm.baudRate }}
                     </div>
                     <div class="col-md-1">
                         {{ comm.parity }}
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         {{ comm.dataBits }}
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         {{ comm.stopBits }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ comm.timeoutResponse }} ms
+                    </div>
+                    <div class="col-md-1">
+                        {{ comm.timeoutBetweenSend }} ms
                     </div>
                     <div class="col-md-2">
                         {{ comm.updated|date('Y-m-d H:i') }}

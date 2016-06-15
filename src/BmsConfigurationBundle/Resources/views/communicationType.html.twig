@@ -12,56 +12,42 @@
         {{form_start(form)}}
         <div class="row">
             <div class="col-md-6 col-md-offset-1">
-                {{ form_label(form.name) }}
-                {{ form_widget(form.name)}}
+                {{ form_row(form.name)}}
             </div>
             <div class="col-md-3 col-md-offset-1">
-                {{ form_label(form.type) }}
-                {{ form_widget(form.type)}}
+                {{ form_row(form.type)}}
             </div>
         </div>
         <div class="row">
             <div class="col-md-4 col-md-offset-1 rtuascii">
-                {{ form_label(form.baudRate) }}
-                {{ form_widget(form.baudRate)}}
+                {{ form_row(form.baudRate)}}
             </div>
             <div class="col-md-4 col-md-offset-2 rtuascii">
-                {{ form_label(form.parity) }}
-                {{ form_widget(form.parity)}}
+                {{ form_row(form.parity)}}
             </div>
         </div>
         <div class="row">
             <div class="col-md-4 col-md-offset-1 rtuascii">
-                {{ form_label(form.dataBits) }}
-                {{ form_widget(form.dataBits)}}
+                {{ form_row(form.dataBits)}}
             </div>
             <div class="col-md-4 col-md-offset-2 rtuascii">
-                {{ form_label(form.stopBits) }}
-                {{ form_widget(form.stopBits)}}
+                {{ form_row(form.stopBits)}}
             </div>
         </div>
         <div class="row">
             <div class="col-md-4 col-md-offset-1 tcpip">
-                {{ form_label(form.ipAddress) }}
-                {{ form_widget(form.ipAddress)}}
+                {{ form_row(form.ipAddress)}}
             </div>
             <div class="col-md-4 col-md-offset-2 tcpip">
-                {{ form_label(form.port) }}
-                {{ form_widget(form.port)}}
+                {{ form_row(form.port)}}
             </div>
         </div>
         <div class="row">
             <div class="col-md-4 rtuascii">
-                {{ form_label(form.timeoutResponse) }}
-                {{ form_widget(form.timeoutResponse)}}
+                {{ form_row(form.timeoutResponse)}}
             </div>
             <div class="col-md-4 rtuascii">
-                {{ form_label(form.timeoutBetweenSend) }}
-                {{ form_widget(form.timeoutBetweenSend)}}
-            </div>
-            <div class="col-md-4 rtuascii">
-                {{ form_label(form.timeoutBeforeScan) }}
-                {{ form_widget(form.timeoutBeforeScan)}}
+                {{ form_row(form.timeoutBetweenSend)}}
             </div>
         </div>
         <div class="row text-right">
