@@ -43,13 +43,10 @@ class CommunicationTypeType extends AbstractType {
                     'attr' => array('disabled' => 'disabled'),
                 ))->add('timeoutResponse', IntegerType::class, array(
                     'attr' => array('disabled' => 'disabled', 'step' => 1, 'max' => 10000, 'min' => 300),
-                    'label' => 'Timeout oczekiwania na odpowiedź od urządzenia (ms)'
+                    'label' => 'Response timeout (ms)'
                 ))->add('timeoutBetweenSend', IntegerType::class, array(
                     'attr' => array('disabled' => 'disabled', 'step' => 1, 'max' => 10000, 'min' => 25),
-                    'label' => 'Timeout pomiędzy zapytaniami o rejestry (ms)'
-                ))->add('timeoutBeforeScan', IntegerType::class, array(
-                    'attr' => array('disabled' => 'disabled', 'step' => 1, 'max' => 999, 'min' => 1),
-                    'label' => 'Timeout pomiędzy czytaniem z interfejsu (s)'
+                    'label' => 'RTS delay (ms)'
                 ))->add('ipAddress', TextType::class, array(
                     'attr' => array('disabled' => 'disabled'),
                     'required' => false
