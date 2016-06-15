@@ -443,19 +443,19 @@ function tableEvents() {
                             }
                         });
                         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-                        $(this).dialog('destroy').remove();
+                        $(this).dialog('close').remove();
                     }
                 },
                 {
                     text: "Anuluj",
                     click: function () {
-                        $(this).dialog('destroy').remove();
+                        $(this).dialog('close').remove();
                     }
                 }],
             open: function () {
             },
             close: function () {
-                $(this).dialog('destroy').remove();
+                $(this).dialog('close').remove();
             }
         }).dialog("open");
     });
