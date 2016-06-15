@@ -437,25 +437,25 @@ function tableEvents() {
                             datatype: "application/json",
                             url: Routing.generate('write_register'),
                             data: data,
-                            success: function (ret) {
+                            success: function () {
                                 $(".main-row").children(".fa-spinner").remove();
                                 
                             }
                         });
                         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-                        $(this).dialog('close');
+                        $(this).dialog('destroy').remove();
                     }
                 },
                 {
                     text: "Anuluj",
                     click: function () {
-                        $(this).dialog('close');
+                        $(this).dialog('destroy').remove();
                     }
                 }],
             open: function () {
             },
             close: function () {
-                $(this).dialog('close');
+                $(this).dialog('destroy').remove();
             }
         }).dialog("open");
     });
