@@ -91,14 +91,7 @@ class CommunicationType
      * @ORM\Column(name="timeout_between_send", type="integer", nullable=false, options={"default"=30000})
      */
     private $timeoutBetweenSend;
-    
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="timeout_before_scan", type="integer", nullable=false, options={"default"=10})
-     */
-    private $timeoutBeforeScan;
-    
+        
     /**
      * @var \DateTime
      *
@@ -457,27 +450,5 @@ class CommunicationType
         return $this->timeoutBetweenSend;
     }
 
-    /**
-     * Set timeoutBeforeScan
-     *
-     * @param integer $timeoutBeforeScan
-     *
-     * @return CommunicationType
-     */
-    public function setTimeoutBeforeScan($timeoutBeforeScan)
-    {
-        $this->timeoutBeforeScan = $timeoutBeforeScan;
-
-        return $this;
-    }
-
-    /**
-     * Get timeoutBeforeScan
-     *
-     * @return integer
-     */
-    public function getTimeoutBeforeScan()
-    {
-        return $this->timeoutBeforeScan;
-    }
+    
 }

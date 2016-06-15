@@ -556,5 +556,23 @@ class DefaultController extends Controller {
             throw new\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
         }
     }
+    
+    public function stopScanner(Request $request) {
+            $host = $request->getHost();
+            $h = explode(".", $host);
+            $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/stopScanner' " . $h[0]);
+            //$process->disableOutput();
+            $process->run();
 
+            $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
+            $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
+
+            $sync->setStatus(0);
+
+            $this->getDoctrine()->getManager()->flush();
+           
+    }
+    
+    
+    
 }

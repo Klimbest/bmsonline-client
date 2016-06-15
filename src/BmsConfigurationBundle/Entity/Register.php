@@ -101,16 +101,23 @@ class Register {
     /**
      * @var decimal
      *
-     * @ORM\Column(name="write_limit_min", type="decimal", precision=15, scale=8, nullable=false)
+     * @ORM\Column(name="write_limit_min", type="decimal", precision=9, scale=2, nullable=false)
      */
     private $writeLimitMin;
     
     /**
      * @var decimal
      *
-     * @ORM\Column(name="write_limit_max", type="decimal", precision=15, scale=8, nullable=false)
+     * @ORM\Column(name="write_limit_max", type="decimal", precision=9, scale=2, nullable=false)
      */
     private $writeLimitMax;
+    
+    /**
+     * @var decimal
+     *
+     * @ORM\Column(name="write_step", type="decimal", precision=9, scale=2, nullable=false)
+     */
+    private $writeStep;
     
     /**
      * @var boolean
