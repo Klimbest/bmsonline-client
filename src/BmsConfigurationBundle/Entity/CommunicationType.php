@@ -67,7 +67,7 @@ class CommunicationType
     /**
      * @var string
      *
-     * @ORM\Column(name="ip_address", type="string", length=10, nullable=true)
+     * @ORM\Column(name="ip_address", type="string", length=20, nullable=true)
      */
     private $ipAddress;
 
