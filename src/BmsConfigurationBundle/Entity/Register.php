@@ -86,11 +86,18 @@ class Register {
     private $modificatorRead;
 
     /**
-     * @var integer
+     * @var decimal
      *
      * @ORM\Column(name="modificator_write", type="decimal", precision=15, scale=8, nullable=false)
      */
     private $modificatorWrite;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="amount_to_read", type="integer", nullable=true)
+     */
+    private $amountToRead;
 
     /**
      * @var boolean
@@ -166,6 +173,14 @@ class Register {
 
     /**
      *
+     * @var type \BmsAlarmBundle\Entity\AlarmHistory
+     * 
+     * @ORM\OneToMany(targetEntity="\BmsAlarmBundle\Entity\AlarmHistory", mappedBy="register", cascade={"remove"})
+     */
+    private $alarmHistory;
+    
+    /**
+     *
      * @var type RegisterArchiveData
      * 
      * @ORM\OneToMany(targetEntity="RegisterArchiveData", mappedBy="register", cascade={"remove"})
@@ -195,6 +210,7 @@ class Register {
         $this->registerArchiveData = new ArrayCollection();
         $this->bitRegisters = new ArrayCollection();
         $this->registerWriteData = new ArrayCollection();
+        $this->alarmHistory = new ArrayCollection();
     }
 
     public function __toString() {
@@ -768,5 +784,63 @@ class Register {
     public function getWriteStep()
     {
         return $this->writeStep;
+    }
+
+    /**
+     * Set amountToRead
+     *
+     * @param integer $amountToRead
+     *
+     * @return Register
+     */
+    public function setAmountToRead($amountToRead)
+    {
+        $this->amountToRead = $amountToRead;
+
+        return $this;
+    }
+
+    /**
+     * Get amountToRead
+     *
+     * @return integer
+     */
+    public function getAmountToRead()
+    {
+        return $this->amountToRead;
+    }
+
+    /**
+     * Add alarmHistory
+     *
+     * @param \BmsConfigurationBundle\Entity\AlarmHistory $alarmHistory
+     *
+     * @return Register
+     */
+    public function addAlarmHistory(\BmsConfigurationBundle\Entity\AlarmHistory $alarmHistory)
+    {
+        $this->alarmHistory[] = $alarmHistory;
+
+        return $this;
+    }
+
+    /**
+     * Remove alarmHistory
+     *
+     * @param \BmsConfigurationBundle\Entity\AlarmHistory $alarmHistory
+     */
+    public function removeAlarmHistory(\BmsConfigurationBundle\Entity\AlarmHistory $alarmHistory)
+    {
+        $this->alarmHistory->removeElement($alarmHistory);
+    }
+
+    /**
+     * Get alarmHistory
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAlarmHistory()
+    {
+        return $this->alarmHistory;
     }
 }
