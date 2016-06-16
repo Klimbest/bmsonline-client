@@ -813,11 +813,11 @@ class Register {
     /**
      * Add alarmHistory
      *
-     * @param \BmsConfigurationBundle\Entity\AlarmHistory $alarmHistory
+     * @param \BmsAlarmBundle\Entity\AlarmHistory $alarmHistory
      *
      * @return Register
      */
-    public function addAlarmHistory(\BmsConfigurationBundle\Entity\AlarmHistory $alarmHistory)
+    public function addAlarmHistory(\BmsAlarmBundle\Entity\AlarmHistory $alarmHistory)
     {
         $this->alarmHistory[] = $alarmHistory;
 
@@ -827,9 +827,9 @@ class Register {
     /**
      * Remove alarmHistory
      *
-     * @param \BmsConfigurationBundle\Entity\AlarmHistory $alarmHistory
+     * @param \BmsAlarmBundle\Entity\AlarmHistory $alarmHistory
      */
-    public function removeAlarmHistory(\BmsConfigurationBundle\Entity\AlarmHistory $alarmHistory)
+    public function removeAlarmHistory(\BmsAlarmBundle\Entity\AlarmHistory $alarmHistory)
     {
         $this->alarmHistory->removeElement($alarmHistory);
     }
