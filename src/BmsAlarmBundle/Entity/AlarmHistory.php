@@ -51,7 +51,6 @@ class AlarmHistory {
      */
     private $value;    
 
-
     /**
      * Get id
      *
@@ -111,30 +110,6 @@ class AlarmHistory {
     }
 
     /**
-     * Set register
-     *
-     * @param \BmsConfigurationBundle\Entity\Register $register
-     *
-     * @return AlarmHistory
-     */
-    public function setRegister(\BmsConfigurationBundle\Entity\Register $register = null)
-    {
-        $this->register = $register;
-
-        return $this;
-    }
-
-    /**
-     * Get register
-     *
-     * @return \BmsConfigurationBundle\Entity\Register
-     */
-    public function getRegister()
-    {
-        return $this->register;
-    }
-
-    /**
      * Set value
      *
      * @param integer $value
@@ -156,5 +131,29 @@ class AlarmHistory {
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * Set register
+     *
+     * @param \BmsConfigurationBundle\Entity\Register $register
+     *
+     * @return AlarmHistory
+     */
+    public function setRegister(\BmsConfigurationBundle\Entity\Register $register = null)
+    {
+        $this->register = $register;
+
+        return $this;
+    }
+
+    /**
+     * Get register
+     *
+     * @return \BmsConfigurationBundle\Entity\Register
+     */
+    public function getRegister()
+    {
+        return $this->register;
     }
 }
