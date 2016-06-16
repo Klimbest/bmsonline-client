@@ -127,21 +127,20 @@ class DefaultController extends Controller {
 
         $registers = $registerRepo->getAllOrderByAdr($device_id);
 
-        $form = $this->createForm(DeviceType::class, $device, 
-                ['action' => $this->generateUrl('bms_configuration_device', ['comm_id' => $comm_id, 'device_id' => $device_id]),
-                 'method' => 'POST'
-                ]);
+        $form = $this->createForm(DeviceType::class, $device, ['action' => $this->generateUrl('bms_configuration_device', ['comm_id' => $comm_id, 'device_id' => $device_id]),
+            'method' => 'POST'
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
-            if($device->getActive() == 0){                
+
+            if ($device->getActive() == 0) {
                 $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
                 $technical_info = $technicalInformationRepo->findOneBy(['name' => "d_" . $device->getId() . "_errors"]);
                 $technical_info->setStatus(-1);
                 $device->setScanState(-1);
             }
-            
+
             $em->flush();
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
@@ -149,9 +148,8 @@ class DefaultController extends Controller {
 
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
-            $template = $this->container->get('templating')->render('BmsConfigurationBundle::device.html.twig', 
-                    ['comms' => $communicationTypes, 'device' => $device, 'registers' => $registers, 'form' => $form->createView()]
-                    );
+            $template = $this->container->get('templating')->render('BmsConfigurationBundle::device.html.twig', ['comms' => $communicationTypes, 'device' => $device, 'registers' => $registers, 'form' => $form->createView()]
+            );
 
             return new JsonResponse(array('ret' => $template));
         } else {
@@ -315,63 +313,61 @@ class DefaultController extends Controller {
 
         if ($form->isSubmitted()) {
 
-            if ($form->isValid()) {
-                $registerAddress = $form['register_address']->getData();
-                $function = $form['function']->getData();
-                $scanQueue = $form['scan_queue']->getData();
-                $register_size = $form['register_size']->getData();
-                $name = $form['name']->getData();
-                $description = $form['description']->getData();
-                $description2 = $form['description2']->getData();
-                $displaySuffix = $form['display_suffix']->getData();
-                $modificatorRead = $form['modificator_read']->getData();
-                $modificatorWrite = $form['modificator_write']->getData();
-                $archive = $form['archive']->getData();
-                $active = $form['active']->getData();
+            $registerAddress = $form['register_address']->getData();
+            $function = $form['function']->getData();
+            $scanQueue = $form['scan_queue']->getData();
+            $register_size = $form['register_size']->getData();
+            $name = $form['name']->getData();
+            $description = $form['description']->getData();
+            $description2 = $form['description2']->getData();
+            $displaySuffix = $form['display_suffix']->getData();
+            $modificatorRead = $form['modificator_read']->getData();
+            $modificatorWrite = $form['modificator_write']->getData();
+            $archive = $form['archive']->getData();
+            $active = $form['active']->getData();
 
 
-                $register->setRegisterAddress($registerAddress)
-                        ->setFunction($function)
-                        ->setScanQueue($scanQueue)
-                        ->setRegisterSize($register_size)
-                        ->setName($name)
-                        ->setDescription($description)
-                        ->setDescription2($description2)
-                        ->setDisplaySuffix($displaySuffix)
-                        ->setModificatorRead($modificatorRead)
-                        ->setModificatorWrite($modificatorWrite)
-                        ->setArchive($archive)
-                        ->setActive($active)
-                        ->setDevice($device);
+            $register->setRegisterAddress($registerAddress)
+                    ->setFunction($function)
+                    ->setScanQueue($scanQueue)
+                    ->setRegisterSize($register_size)
+                    ->setName($name)
+                    ->setDescription($description)
+                    ->setDescription2($description2)
+                    ->setDisplaySuffix($displaySuffix)
+                    ->setModificatorRead($modificatorRead)
+                    ->setModificatorWrite($modificatorWrite)
+                    ->setArchive($archive)
+                    ->setActive($active)
+                    ->setDevice($device);
 
-                $em->persist($register);
+            $em->persist($register);
 
-                if ($register->getBitRegister() == 1) {
-                    $bitRegisters = $register->getBitRegisters();
-                    foreach ($bitRegisters as $br) {
-                        $br->setRegister($register);
-                        $em->persist($br);
-                    }
+            if ($register->getBitRegister() == 1) {
+                $bitRegisters = $register->getBitRegisters();
+                foreach ($bitRegisters as $br) {
+                    $br->setRegister($register);
+                    $em->persist($br);
                 }
-
-                $em->persist($register);
-                $em->flush();
-                $registerCD->setRegister($register);
-                $registerCD->setTimeOfUpdate(new \DateTime());
-                $em->persist($registerCD);
-                $em->flush();
-                $register->setRegisterCurrentData($registerCD);
-                $em->persist($register);
-
-                $em->flush();
-                $session = $request->getSession();
-                $session->set('comm_id', $comm_id);
-                $session->set('device_id', $device_id);
-
-                $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
-                $this->setDataToSync();
             }
-                return $this->redirectToRoute('bms_configuration_index');
+
+            $em->persist($register);
+            $em->flush();
+            $registerCD->setRegister($register);
+            $registerCD->setTimeOfUpdate(new \DateTime());
+            $em->persist($registerCD);
+            $em->flush();
+            $register->setRegisterCurrentData($registerCD);
+            $em->persist($register);
+
+            $em->flush();
+            $session = $request->getSession();
+            $session->set('comm_id', $comm_id);
+            $session->set('device_id', $device_id);
+
+            $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
+            $this->setDataToSync();
+            return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
             $template = $this->container
                             ->get('templating')->render('BmsConfigurationBundle::newRegister.html.twig', ['comms' => $communicationTypes, 'comm' => $comm, 'device' => $device, 'form' => $form->createView()]);
@@ -400,7 +396,7 @@ class DefaultController extends Controller {
         }
         $technical_info = $technicalInformationRepo->findOneBy(['name' => "d_" . $device->getId() . "_errors"]);
         $em->remove($technical_info);
-        
+
         $em->flush();
         $em->remove($device);
         $em->flush();
@@ -421,7 +417,7 @@ class DefaultController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
         $register = $registerRepo->find($register_id);
-        
+
         $em->remove($register);
         $em->flush();
         $em->getConnection()->exec("ALTER TABLE register AUTO_INCREMENT = 1;");
@@ -463,7 +459,7 @@ class DefaultController extends Controller {
         $session->set('comm_id', $comm_id);
         $session->set('device_id', $device_id);
         $this->setDataToSync();
-        
+
         return $this->redirectToRoute('bms_configuration_index');
     }
 
@@ -529,7 +525,6 @@ class DefaultController extends Controller {
         $sync->setStatus(1);
 
         $this->getDoctrine()->getManager()->flush();
-        
     }
 
     /**
@@ -550,29 +545,26 @@ class DefaultController extends Controller {
 
             $this->getDoctrine()->getManager()->flush();
             $ret['sync'] = $sync->getStatus();
-            
+
             return new JsonResponse($ret);
         } else {
             throw new\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
         }
     }
-    
+
     public function stopScanner(Request $request) {
-            $host = $request->getHost();
-            $h = explode(".", $host);
-            $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/stopScanner' " . $h[0]);
-            //$process->disableOutput();
-            $process->run();
+        $host = $request->getHost();
+        $h = explode(".", $host);
+        $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/stopScanner' " . $h[0]);
+        //$process->disableOutput();
+        $process->run();
 
-            $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
-            $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
+        $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
+        $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
 
-            $sync->setStatus(0);
+        $sync->setStatus(0);
 
-            $this->getDoctrine()->getManager()->flush();
-           
+        $this->getDoctrine()->getManager()->flush();
     }
-    
-    
-    
+
 }

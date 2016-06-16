@@ -108,7 +108,7 @@ $(document).ready(function () {
             success: function (ret) {
                 $(".main-row").children(".fa-spinner, div#loading").remove();
                 if (ret['sync'] === 0) {
-                    $("button#synchronizeDatabase").parent().parent().remove();
+                    $("button#synchronizeDatabase").remove();
                 }
             }
 

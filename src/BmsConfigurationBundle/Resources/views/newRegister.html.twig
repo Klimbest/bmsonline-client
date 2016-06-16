@@ -7,140 +7,123 @@
     <div class="well device text-left">
         {{ form_start(form)}}
         <div class="row enabled">
-            <div class="col-md-5">
-                <div class="row">
-                    <div class="col-md-12">
-                        {{form_label(form.name)}}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-7">
-                        {{form_widget(form.name)}}
-                    </div>
-                </div>
+            <div class="col-md-3">
+                {{form_row(form.name)}}
             </div>
-            <div class="col-md-7">
+            <div class="col-md-4 col-md-offset-1">
                 {{form_row(form.description)}}
             </div>
         </div>
         <div class="row enabled">
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="row">
                     <div class="col-md-6">
-                        {{form_label(form.register_address)}}<br />
-                        (format szesnastkowy)
+                        {{form_label(form.register_address)}} (HEX)
                     </div>
                     <div class="col-md-6">
-                        {{form_label(form.register_address)}}<br />
-                        (format dziesiętny)
+                        {{form_label(form.register_address)}} (DEC)
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-5 register_address_hex">
+                    <div class="col-md-4 register_address_hex">
                         {{form_widget(form.register_address)}}
                     </div>
-                    <div class="col-md-5 col-md-offset-1 register_address_dec">
+                    <div class="col-md-4 col-md-offset-2 register_address_dec">
                         <input type="text" disabled class="form-control" maxlength="5"></input>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="row">
-                    <div class="col-md-12">
-                        {{form_label(form.function)}}<br /><br />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-10">
-                        {{form_widget(form.function)}}
-                    </div>
-                </div>
+            <div class="col-md-2">
+                {{form_row(form.register_size)}}
+            </div>
+            <div class="col-md-2">             
+                {{form_row(form.active_register)}}   
+                {{form_row(form.archive_register)}}   
             </div>     
+            <div class="col-md-2">
+                {{form_row(form.bit_register)}}          
+                {{form_row(form.alarm_register)}}    
+            </div>    
+            <div class="col-md-2">     
+                {{form_row(form.write_register)}}   
+            </div>         
+        </div>
+        {# Odczyt #}
+        <div class="row enabled">
+            <div class="col-md-4">
+                {{form_row(form.read_function)}}
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">-</label>
+                    <input type="text" class="form-control" value="wartość rzeczywista = wartość odczytana" disabled="disabled"></input>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <label class="control-label">Operator</label>
+                <select id="read_mod_operator" class="form-control" disabled="disabled">
+                    <option value="*">*</option>
+                    <option value="/">/</option>
+                </select>
+            </div>
+            <div  class="col-md-2">
+                <label class="control-label">Współczynnik</label>
+                <input id="read_mod_val" type="text" class="form-control" value="" disabled="disabled"></input>
+            </div>
+            <div class="hidden">
+                {{form_widget(form.modificator_read)}}
+            </div>
+        </div>
+        {# Zapis #}
+        <div class="row enabled">
+            <div class="col-md-4">
+                {{form_row(form.write_function)}}
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">-</label>
+                    <input type="text" class="form-control" value="wartość zapisana = wartość wysłana" disabled="disabled"></input>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <label class="control-label">Operator</label>
+                <select id="write_mod_operator"  class="form-control" disabled="disabled">
+                    <option value="*">*</option>
+                    <option value="/">/</option>
+                </select>
+            </div>
+            <div  class="col-md-2">
+                <label class="control-label">Współczynnik</label>
+                <input id="write_mod_val" type="text" class="form-control" value="" disabled="disabled"></input>
+            </div>
+            <div class="hidden">
+                {{form_widget(form.modificator_write)}}
+            </div>
         </div>
         <div class="row enabled">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-6">
-                        {{form_label(form.modificator_read)}}
-                    </div>
-                    <div class="col-md-6">
-                        {{form_label(form.register_size)}}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <input type="text" class="form-control" value="wartość rzeczywista = wartość odczytana" disabled="disabled" />
-                        </div>
-                        <div class="col-md-1">
-                            <select class="form-control" disabled="disabled">
-                                <option value="*">*</option>
-                                <option value="/">/</option>
-                            </select>
-                        </div>
-                        <div  class="col-md-2">
-                            <input id="read_mod_val" type="text" class="form-control" value="" disabled="disabled"></input>
-                        </div>
-                        <div class="col-md-2 hidden">
-                            {{form_widget(form.modificator_read)}}
-                        </div>
-                        <div class="col-md-2">
-                            {{form_widget(form.register_size)}}
-                        </div>
-                        <div class="col-md-2">
-                            {{form_row(form.bit_register)}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row hidden enabled">
-            <div class="col-md-3 col-md-offset-1">
-                <div class="row">
-                    <div class="col-md-12">
-                        {{form_label(form.modificator_write)}}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        {{form_widget(form.modificator_write)}}
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-md-12">
-                        {{form_label(form.scan_queue)}}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        {{form_widget(form.scan_queue)}}
-                    </div>
-                </div>
+            <div class="col-md-3 col-md-offset-3">
+                <label class="control-label">Dopuszczalne wartości do zapisu</label>
+                <select id="write_limit_type"  class="form-control" disabled="disabled">
+                    <option value="interval">Przedział</option>
+                    <option value="set">Zbiór</option>
+                </select>
             </div>
             <div class="col-md-2">
-                <div class="row">
-                    <div class="col-md-12">
-                        {{form_label(form.display_suffix)}}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        {{form_widget(form.display_suffix)}}
-                    </div>
-                </div>
+                <label class="control-label">Limit min</label>
+                <input id="write_limit_min" type="number" class="form-control" value="" disabled="disabled"></input>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">Limit max</label>
+                <input id="write_limit_max" type="number" class="form-control" value="" disabled="disabled"></input>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">Krok</label>
+                <input id="write_limit_step" type="number" class="form-control" value="" disabled="disabled"></input>
             </div>
         </div>
         <div class="row enabled">
-            <div class="col-md-4">
-                {{form_row(form.archive)}}                
-                {{form_row(form.active)}}              
-                {{form_row(form.alarm)}}                
-            </div>
-            <div class="col-md-8">
-                {{form_row(form.description2)}}                
-                {{form_row(form.description2)}}
+            <div class="col-md-7">
+                {{form_row(form.description2)}} 
             </div>
         </div>
         <div class="row bits-label hidden-item">
@@ -156,21 +139,21 @@
         </div>
         <div class="row bits" data-prototype="{{ form_widget(form.bit_registers.vars.prototype)|e }}">
             <div class="col-md-12">   
-                {% for bitRegister in form.bit_registers %}                        
+                {% for bit_register in form.bit_registers %}                        
                     <div class="row bit_registers">
                         <div class="col-md-2 text-center">
                             <span class="bitName"></span>
                         </div> 
                         <div class="col-md-5 text-center">
-                            {{form_row(bitRegister.description)}}
+                            {{form_row(bit_register.description)}}
                         </div> 
                         <div class="col-md-1 text-center">
                             <span class="bitValue"></span>
                         </div> 
-                        {{form_row(bitRegister.bitPosition)}}
-                        {{form_row(bitRegister.register)}}
-                        {{form_row(bitRegister.name)}}
-                        {{form_row(bitRegister.bitValue)}}
+                        {{form_row(bit_register.bitPosition)}}
+                        {{form_row(bit_register.register)}}
+                        {{form_row(bit_register.name)}}
+                        {{form_row(bit_register.bitValue)}}
                     </div>
                 {% endfor %}
             </div>

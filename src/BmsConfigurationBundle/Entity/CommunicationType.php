@@ -65,9 +65,9 @@ class CommunicationType
     private $stopBits;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="ip_address", type="integer", nullable=true)
+     * @ORM\Column(name="ip_address", type="string", length=10, nullable=true)
      */
     private $ipAddress;
 
