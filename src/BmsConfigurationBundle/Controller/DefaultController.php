@@ -243,19 +243,6 @@ class DefaultController extends Controller {
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $name = $form['name']->getData();
-            $description = $form['description']->getData();
-            $modbus_address = $form['modbusAddress']->getData();
-            $active = $form['active']->getData();
-            $localization = $form['localization']->getData();
-
-            $device->setName($name)
-                    ->setCommunicationType($comm)
-                    ->setDescription($description)
-                    ->setModbusAddress($modbus_address)
-                    ->setActive($active)
-                    ->setLocalization($localization);
-
             $em = $this->getDoctrine()->getManager();
             $em->persist($device);
             $em->flush();
@@ -308,39 +295,11 @@ class DefaultController extends Controller {
             'method' => 'POST'
         ));
 
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
 
-            $registerAddress = $form['register_address']->getData();
-            $function = $form['function']->getData();
-            $scanQueue = $form['scan_queue']->getData();
-            $register_size = $form['register_size']->getData();
-            $name = $form['name']->getData();
-            $description = $form['description']->getData();
-            $description2 = $form['description2']->getData();
-            $displaySuffix = $form['display_suffix']->getData();
-            $modificatorRead = $form['modificator_read']->getData();
-            $modificatorWrite = $form['modificator_write']->getData();
-            $archive = $form['archive']->getData();
-            $active = $form['active']->getData();
-
-
-            $register->setRegisterAddress($registerAddress)
-                    ->setFunction($function)
-                    ->setScanQueue($scanQueue)
-                    ->setRegisterSize($register_size)
-                    ->setName($name)
-                    ->setDescription($description)
-                    ->setDescription2($description2)
-                    ->setDisplaySuffix($displaySuffix)
-                    ->setModificatorRead($modificatorRead)
-                    ->setModificatorWrite($modificatorWrite)
-                    ->setArchive($archive)
-                    ->setActive($active)
-                    ->setDevice($device);
-
+            $register->setDevice($device);
             $em->persist($register);
 
             if ($register->getBitRegister() == 1) {

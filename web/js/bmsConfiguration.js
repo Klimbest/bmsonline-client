@@ -222,22 +222,26 @@ function formEvents() {
     if ($("div.new-item").hasClass("active")) {
         $("select#bmsconfigurationbundle_register_register_size").val(16);
         $("input#bmsconfigurationbundle_register_modificator_read").val(1);
+        
+        $("input#bmsconfigurationbundle_register_modificator_write").val(1);
         $("textarea#bmsconfigurationbundle_register_description2").val("Dodatkowe informacje");
         $("input#bmsconfigurationbundle_register_active").attr("checked", true);
-        $("select#bmsconfigurationbundle_register_function").val("03");
+        $("select#bmsconfigurationbundle_register_read_function").val("03");
+        $("select#bmsconfigurationbundle_register_write_function").val("06");
     }
     //chowanie pokazywanie main-row
     $(".main-row span.hide-mainrow-label").click(function () {
         $(this).parent().parent().next("div.well").toggle();
         $(this).children("i.fa").toggleClass('fa-angle-down');
     });
-    $("input#bmsconfigurationbundle_register_bit_register").unbind("change");
+    //zmiana rozmiaru rejestru = zmiana pól bitów
     $("select#bmsconfigurationbundle_register_register_size").change(function () {
         if ($("input#bmsconfigurationbundle_register_bit_register").is(':checked')) {
             setBits();
         }
     });
-    $("input#bmsconfigurationbundle_register_bit_register").change(function () {
+    
+    $("input#bmsconfigurationbundle_register_bit_register").unbind("change").change(function () {
         if ($(this).is(':checked')) {
             $('div.bits-label').removeClass("hidden-item");
             $('div.bits').empty().append("<div class='col-md-12'></div>");
@@ -297,10 +301,14 @@ function formEvents() {
 
     $("input#read_mod_val").val($("input#bmsconfigurationbundle_register_modificator_read").val());
     $("input#write_mod_val").val($("input#bmsconfigurationbundle_register_modificator_write").val());
+    $("input#write_limit_min").val($("input#bmsconfigurationbundle_register_write_limit_min").val());
+    $("input#write_limit_max").val($("input#bmsconfigurationbundle_register_write_limit_max").val());
+    $("input#step").val($("input#bmsconfigurationbundle_register_write_step").val());
     
     $("select#read_mod_operator, input#read_mod_val").change(function () {
         var oper = $("select#read_mod_operator").val();
         var mod = $("input#read_mod_val").val();
+        console.log(oper + "   "+ mod);
         if (oper === "*") {
             $("#bmsconfigurationbundle_register_modificator_read").val(mod);
         } else if (oper === "/") {

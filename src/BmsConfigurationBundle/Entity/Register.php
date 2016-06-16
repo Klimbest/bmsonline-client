@@ -102,21 +102,21 @@ class Register {
     /**
      * @var decimal
      *
-     * @ORM\Column(name="write_limit_min", type="decimal", precision=9, scale=2, nullable=false)
+     * @ORM\Column(name="write_limit_min", type="decimal", precision=9, scale=2, nullable=true)
      */
     private $writeLimitMin;
     
     /**
      * @var decimal
      *
-     * @ORM\Column(name="write_limit_max", type="decimal", precision=9, scale=2, nullable=false)
+     * @ORM\Column(name="write_limit_max", type="decimal", precision=9, scale=2, nullable=true)
      */
     private $writeLimitMax;
     
     /**
      * @var decimal
      *
-     * @ORM\Column(name="write_step", type="decimal", precision=9, scale=2, nullable=false)
+     * @ORM\Column(name="write_step", type="decimal", precision=9, scale=2, nullable=true)
      */
     private $writeStep;
     
@@ -744,5 +744,29 @@ class Register {
     public function getWriteLimitMax()
     {
         return $this->writeLimitMax;
+    }
+
+    /**
+     * Set writeStep
+     *
+     * @param string $writeStep
+     *
+     * @return Register
+     */
+    public function setWriteStep($writeStep)
+    {
+        $this->writeStep = $writeStep;
+
+        return $this;
+    }
+
+    /**
+     * Get writeStep
+     *
+     * @return string
+     */
+    public function getWriteStep()
+    {
+        return $this->writeStep;
     }
 }

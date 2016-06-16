@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -83,6 +83,9 @@ class RegisterType extends AbstractType {
                     'label' => 'Rejestr alarmowy?',
                     'required' => false
                 ))
+                ->add('write_limit_min', HiddenType::class)
+                ->add('write_limit_max', HiddenType::class)
+                ->add('write_step', HiddenType::class)
                 ->add('write_register', CheckboxType::class, [
                     'attr' => array('disabled' => 'disabled'),
                     'label' => 'Rejestr do zapisu?',
