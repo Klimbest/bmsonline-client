@@ -447,7 +447,7 @@ function tableEvents() {
                             data: data,
                             success: function () {
                                 $(".main-row").children(".fa-spinner").remove();
-                                
+                                refreshPage();
                             }
                         });
                         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
