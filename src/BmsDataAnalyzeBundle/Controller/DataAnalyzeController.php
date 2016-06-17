@@ -223,7 +223,7 @@ class DataAnalyzeController extends Controller {
             }
             $series = [
                 'id' => $register->getId(),
-                'name' => $register->getDescription(),
+                'name' => $register->getName(),
                 'data' => $arrayToChart,
                 'yAxis' => $yAxis,
                 'suffix' => '°C'
