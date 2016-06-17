@@ -8,7 +8,7 @@ $(document).ready(function () {
     setErrorMessage();
     ajaxChangePage(1);
     setInterval(clock, 1000);
-    setInterval(counter, 800);
+    setInterval(counter, 400);
 
 });
 
@@ -37,7 +37,7 @@ function ajaxChangePage(page_id) {
             ajaxRefreshPage(terms);
             interval = setInterval(function () {
                 ajaxRefreshPage(terms);
-            }, 5 * 1000);
+            }, 2 * 1000);
 
             $(window).resize(minBrowserSizeGuard);
         }
@@ -226,7 +226,7 @@ function counter() {
 
     countToRefresh++;
     if ($("div.well.page").length > 0) {
-        $("div.timer div.progress-bar").css({width: countToRefresh * 800 / 100 + "%"});
+        $("div.timer div.progress-bar").css({width: countToRefresh * 400 / 100 + "%"});
     } else {
         $("div.timer div.progress-bar").css({width: "0%"});
     }
