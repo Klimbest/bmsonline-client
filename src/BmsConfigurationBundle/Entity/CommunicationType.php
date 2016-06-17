@@ -93,6 +93,13 @@ class CommunicationType
     private $timeoutBetweenSend;
         
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="debug", type="boolean", nullable=false, options={"default"=false})
+     */
+    private $debug;
+    
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="updated", type="datetime", nullable=false)
@@ -451,4 +458,28 @@ class CommunicationType
     }
 
     
+
+    /**
+     * Set debug
+     *
+     * @param boolean $debug
+     *
+     * @return CommunicationType
+     */
+    public function setDebug($debug)
+    {
+        $this->debug = $debug;
+
+        return $this;
+    }
+
+    /**
+     * Get debug
+     *
+     * @return boolean
+     */
+    public function getDebug()
+    {
+        return $this->debug;
+    }
 }
