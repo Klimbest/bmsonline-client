@@ -37,7 +37,7 @@ function ajaxChangePage(page_id) {
             ajaxRefreshPage(terms);
             interval = setInterval(function () {
                 ajaxRefreshPage(terms);
-            }, 10000);
+            }, 2 * 1000);
 
             $(window).resize(minBrowserSizeGuard);
         }
