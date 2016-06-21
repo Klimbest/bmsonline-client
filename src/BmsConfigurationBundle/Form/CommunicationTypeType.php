@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class CommunicationTypeType extends AbstractType {
 
@@ -42,10 +43,10 @@ class CommunicationTypeType extends AbstractType {
                     'label' => 'Bity Stopu',
                     'attr' => array('disabled' => 'disabled'),
                 ))->add('timeoutResponse', IntegerType::class, array(
-                    'attr' => array('disabled' => 'disabled', 'step' => 1, 'max' => 10000, 'min' => 300),
+                    'attr' => array('disabled' => 'disabled', 'step' => 1, 'max' => 5000, 'min' => 300),
                     'label' => 'Response timeout (ms)'
                 ))->add('timeoutBetweenSend', IntegerType::class, array(
-                    'attr' => array('disabled' => 'disabled', 'step' => 1, 'max' => 10000, 'min' => 25),
+                    'attr' => array('disabled' => 'disabled', 'step' => 1, 'max' => 500, 'min' => 0),
                     'label' => 'RTS delay (ms)'
                 ))->add('ipAddress', TextType::class, array(
                     'attr' => array('disabled' => 'disabled'),
@@ -53,6 +54,10 @@ class CommunicationTypeType extends AbstractType {
                 ))->add('port', TextType::class, array(
                     'attr' => array('disabled' => 'disabled'),
                     'required' => false
+                ))->add('debug', CheckboxType::class, array(
+                    'attr' => array('disabled' => 'disabled'),
+                    'required' => false,
+                    'label' => 'Zapis szczegółów odczytu do logów'
                 ));
     }
 
