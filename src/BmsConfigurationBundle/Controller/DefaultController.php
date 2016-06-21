@@ -493,8 +493,7 @@ class DefaultController extends Controller {
         if ($request->isXmlHttpRequest()) {
             $host = $request->getHost();
             $h = explode(".", $host);
-            $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync' " . $h[0]);
-            //$process->disableOutput();
+            $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync' " . $h[0]);            
             $process->run();
 
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
@@ -504,6 +503,7 @@ class DefaultController extends Controller {
 
             $this->getDoctrine()->getManager()->flush();
             $ret['sync'] = $sync->getStatus();
+            $ret['output'] = $process->getOutput();
 
             return new JsonResponse($ret);
         } else {
