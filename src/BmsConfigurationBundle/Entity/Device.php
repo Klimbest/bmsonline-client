@@ -78,6 +78,13 @@ class Device
     private $scanState;
     
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="report", type="boolean", nullable=false, options={"default"=false})
+     */
+    private $report;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="localization", type="string", length=255, nullable=true)
@@ -309,5 +316,29 @@ class Device
     public function getRegisters()
     {
         return $this->registers;
+    }
+
+    /**
+     * Set report
+     *
+     * @param boolean $report
+     *
+     * @return Device
+     */
+    public function setReport($report)
+    {
+        $this->report = $report;
+
+        return $this;
+    }
+
+    /**
+     * Get report
+     *
+     * @return boolean
+     */
+    public function getReport()
+    {
+        return $this->report;
     }
 }

@@ -57,7 +57,7 @@ class CommunicationTypeType extends AbstractType {
                 ))->add('debug', CheckboxType::class, array(
                     'attr' => array('disabled' => 'disabled'),
                     'required' => false,
-                    'label' => 'Zapis szczegółów odczytu do logów'
+                    'label' => 'Logi'
                 ));
     }
 
