@@ -98,21 +98,26 @@ $(document).ready(function () {
     });
 
     $("button#synchronizeDatabase").click(function () {
-
         $(".main-row").addClass("text-center").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-        $.ajax({
-            type: "POST",
-            datatype: "application/json",
-            async: false,
-            url: Routing.generate('bms_configuration_synchronize_database'),
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner, div#loading").remove();
-                if (ret['sync'] === 0) {
-                    $("button#synchronizeDatabase").remove();
+        var internetStatus = $("span#noInternetConnection img").attr("src");
+        console.log(internetStatus);
+        var x = 0;
+        if(x == 1){
+            $.ajax({
+                type: "POST",
+                datatype: "application/json",
+                async: false,
+                url: Routing.generate('bms_configuration_synchronize_database'),
+                success: function (ret) {
+                    $(".main-row").children(".fa-spinner, div#loading").remove();
+                    if (ret['sync'] === 0) {
+                        $("button#synchronizeDatabase").remove();
+                    }
                 }
-            }
-
-        });
+            });
+        }else{
+            alert("Urządzenie nie ma dostępu do internetu");
+        }
     });
 });
 
@@ -709,6 +714,7 @@ function refreshPage() {
                 }
                 $(this).parent().parent().children("td.fixed_value").text(ret[id]);
             });
+            setState(ret['state'], ret['devicesStatus']);
             $("i.fa-pulse").remove();
 
         }
