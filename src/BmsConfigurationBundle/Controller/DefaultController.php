@@ -436,9 +436,10 @@ class DefaultController extends Controller {
      */
     public function refreshPageAction($comm_id, $device_id, $register_id, Request $request) {
         if ($request->isXmlHttpRequest()) {
-
-            $registerDevice = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
-            $devices = $registerDevice->findAll();
+            
+            $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
+            $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
+            $devices = $deviceRepo->findAll();
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $registers = $registerRepo->findAll();
             $ret = array();
@@ -465,6 +466,20 @@ class DefaultController extends Controller {
                     $times[$did] = 0;
                 }
             }
+            
+            $devicesStatus = $technicalInformationRepo->getDevicesStatus();
+
+            foreach ($devicesStatus as &$ds) {
+                $devices_id = explode("_", $ds['name']);
+                $device = $deviceRepo->find((int) $devices_id[1]);
+                $ds['name'] = $device->getName();
+            }
+
+            //get last hello from RPi      
+            $time = $technicalInformationRepo->getRpiStatus();
+
+            $ret['devicesStatus'] = $devicesStatus;
+            $ret['state'] = $time[0]["time"]->getTimestamp();
 
             $ret["times_of_update"] = $times;
 
