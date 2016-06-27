@@ -47,8 +47,12 @@ class PanelController extends Controller {
                 }
             }
             $lastPanel = $panelRepo->findLastPanel();
-            $newId = $lastPanel->getId();
-            $options['newId'] = (int)($newId + 1);
+            if($lastPanel){
+                $newId = $lastPanel->getId();
+                $options['newId'] = (int)($newId + 1);            
+            }else{
+                $options['newId'] = 1;
+            }
             
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $pages = $pageRepo->findAll();
