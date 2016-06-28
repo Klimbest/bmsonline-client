@@ -8,7 +8,7 @@ Number.prototype.pad = function (size) {
 };
 
 $(document).ready(function () {
-
+    refreshPage();
     setInterval(function () {
         refreshPage();
     }, 1000 * 60);
@@ -98,11 +98,10 @@ $(document).ready(function () {
     });
 
     $("button#synchronizeDatabase").click(function () {
-        $(".main-row").addClass("text-center").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-        var internetStatus = $("span#noInternetConnection img").attr("src");
-        console.log(internetStatus);
-        var x = 0;
-        if(x == 1){
+        var internetStatus = $("span#noInternetConnection img").attr("src").split("/");
+
+        if (internetStatus[internetStatus.length - 1].split(".")[0] === "ethernetOn") {
+            $(".main-row").addClass("text-center").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
             $.ajax({
                 type: "POST",
                 datatype: "application/json",
@@ -115,7 +114,7 @@ $(document).ready(function () {
                     }
                 }
             });
-        }else{
+        } else {
             alert("Urządzenie nie ma dostępu do internetu");
         }
     });
@@ -227,7 +226,7 @@ function formEvents() {
     if ($("div.new-item").hasClass("active")) {
         $("select#bmsconfigurationbundle_register_register_size").val(16);
         $("input#bmsconfigurationbundle_register_modificator_read").val(1);
-        
+
         $("input#bmsconfigurationbundle_register_modificator_write").val(1);
         $("textarea#bmsconfigurationbundle_register_description2").val("Dodatkowe informacje");
         $("input#bmsconfigurationbundle_register_active").attr("checked", true);
@@ -245,7 +244,7 @@ function formEvents() {
             setBits();
         }
     });
-    
+
     $("input#bmsconfigurationbundle_register_bit_register").unbind("change").change(function () {
         if ($(this).is(':checked')) {
             $('div.bits-label').removeClass("hidden-item");
@@ -309,11 +308,11 @@ function formEvents() {
     $("input#write_limit_min").val($("input#bmsconfigurationbundle_register_write_limit_min").val());
     $("input#write_limit_max").val($("input#bmsconfigurationbundle_register_write_limit_max").val());
     $("input#step").val($("input#bmsconfigurationbundle_register_write_step").val());
-    
+
     $("select#read_mod_operator, input#read_mod_val").change(function () {
         var oper = $("select#read_mod_operator").val();
         var mod = $("input#read_mod_val").val();
-        console.log(oper + "   "+ mod);
+        console.log(oper + "   " + mod);
         if (oper === "*") {
             $("#bmsconfigurationbundle_register_modificator_read").val(mod);
         } else if (oper === "/") {
@@ -321,7 +320,7 @@ function formEvents() {
             $("input#bmsconfigurationbundle_register_modificator_read").val(mod);
         }
     });
-    
+
     $("select#write_mod_operator, input#write_mod_val").change(function () {
         var oper = $("select#write_mod_operator").val();
         var mod = $("input#write_mod_val").val();
@@ -332,7 +331,7 @@ function formEvents() {
             $("input#bmsconfigurationbundle_register_modificator_write").val(mod);
         }
     });
-    
+
 
 }
 
@@ -675,7 +674,6 @@ function updateLastRead(lastRead, did) {
 }
 
 function refreshPage() {
-
 
     var cid = $(".communicationType-level div.active").attr("id");
     var did = $(".device-level div.active").attr("id");
