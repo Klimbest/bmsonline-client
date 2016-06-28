@@ -34,6 +34,11 @@ class DeviceType extends AbstractType {
                     'label' => 'Aktywny',
                     'required' => false
                 ))
+                ->add('report', CheckboxType::class, array(
+                    'attr' => array('disabled' => 'disabled'),
+                    'label' => 'Report Slave',
+                    'required' => false
+                ))
                 ->add('localization', TextareaType::class, array(
                     'attr' => array('disabled' => 'disabled'),
                     'label' => 'Lokalizacja (max 255 znaków)',

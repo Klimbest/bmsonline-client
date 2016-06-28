@@ -243,6 +243,8 @@ class DefaultController extends Controller {
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $device->setCommunicationType($comm);
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($device);
             $em->flush();
