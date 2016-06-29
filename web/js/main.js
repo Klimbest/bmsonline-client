@@ -1,4 +1,4 @@
-var fire;
+var fire, errorClosed;
 
 $(document).ready(function () {
     
