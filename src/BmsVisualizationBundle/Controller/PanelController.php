@@ -98,6 +98,7 @@ class PanelController extends Controller {
                     ->setBorderRadius("new")
                     ->setZIndex(0)
                     ->setVisibility(0)
+                    ->setTooltip(0)
                     ->setContentSource("new")
                     ->setDisplayPrecision(0)
                     ->setHref(NULL);
@@ -199,6 +200,11 @@ class PanelController extends Controller {
             } else {
                 $visibility = 0;
             }
+            if ($request->request->get("tooltip") == "true") {
+                $tooltip = 1;
+            } else {
+                $tooltip = 0;
+            }
             
             $panel = $panelRepo->find($panel_id);
             $panel->setName($name)
@@ -219,6 +225,7 @@ class PanelController extends Controller {
                     ->setBorderRadius($borderRadius)
                     ->setZIndex($zIndex)
                     ->setVisibility($visibility)
+                    ->setTooltip($tooltip)
                     ->setContentSource($contentSource)
                     ->setDisplayPrecision($displayPrecision)
                     ->setHref($href);

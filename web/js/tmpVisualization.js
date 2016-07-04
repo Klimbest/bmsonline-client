@@ -109,6 +109,7 @@ function createPanelDialog() {
                     data.append("borderRadius", $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px");
                     data.append("zIndex", 5);
                     data.append("visibility", $("form#panel input#visibility").is(':checked'));
+                    data.append("tooltip", $("form#panel input#tooltip").is(':checked'));
                     data.append("contentSource", $("input#panel-source-content").val());
                     data.append("displayPrecision", $("form#panel select#displayPrecision").val());
                     data.append("href", $("div.dialog-panel-navigation select.pages").val());
@@ -262,6 +263,7 @@ function editPanel(panel_id, register) {
                         data.append("borderRadius", $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px");
                         data.append("zIndex", 5);
                         data.append("visibility", $("form#panel input#visibility").is(':checked'));
+                        data.append("tooltip", $("form#panel input#tooltip").is(':checked'));
                         data.append("contentSource", $("input#panel-source-content").val());
                         data.append("displayPrecision", $("form#panel select#displayPrecision").val());
                         data.append("href", $("div.dialog-panel-navigation select.pages").val());
@@ -331,7 +333,10 @@ function editPanel(panel_id, register) {
     }
     function setGeneral() {
         var panel = $("div#" + panel_id + ".bms-panel");
-        $("form#panel input#panel-name").val(panel.attr("title"));
+        $("form#panel input#panel-name").val(panel.attr("name"));
+        if(panel.attr("title")){
+            console.log("Tytuł");
+        }            
         $("form#panel input#panel_id").val(panel_id);
         $("form#panel input#topPosition").val(parseInt(panel.css("top")));
         $("form#panel input#leftPosition").val(parseInt(panel.css("left")));

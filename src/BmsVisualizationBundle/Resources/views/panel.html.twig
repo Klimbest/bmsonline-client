@@ -2,7 +2,11 @@
     {% if (panel.href is not null) and (panel.href != "") %}
         onclick="ajaxChangePage( {{panel.href}} );"
     {% endif %}
-    title="{{panel.name}}" id="{{panel.id}}" class="bms-panel text-{{panel.textAlign}} bms-panel-{{panel.type}}" 
+    {% if panel.tooltip %}
+        title="{{panel.name}}" 
+    {% endif%}
+    name="{{panel.name}}"
+    id="{{panel.id}}" class="bms-panel text-{{panel.textAlign}} bms-panel-{{panel.type}}" 
     style="
     top: {{panel.topPosition}}px; 
     left: {{panel.leftPosition}}px; 

@@ -41,6 +41,13 @@ class Panel {
      * @ORM\Column(name="visibility", type="boolean", nullable=false)
      */
     private $visibility;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="tooltip", type="boolean", nullable=false, options={"default"=false})
+     */
+    private $tooltip;    
             
     /**
      * @var integer
@@ -676,5 +683,29 @@ class Panel {
     public function __construct()
     {
         $this->terms = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set tooltip
+     *
+     * @param boolean $tooltip
+     *
+     * @return Panel
+     */
+    public function setTooltip($tooltip)
+    {
+        $this->tooltip = $tooltip;
+
+        return $this;
+    }
+
+    /**
+     * Get tooltip
+     *
+     * @return boolean
+     */
+    public function getTooltip()
+    {
+        return $this->tooltip;
     }
 }
