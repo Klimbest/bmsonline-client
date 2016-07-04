@@ -139,6 +139,10 @@ class DefaultController extends Controller {
                 $technical_info = $technicalInformationRepo->findOneBy(['name' => "d_" . $device->getId() . "_errors"]);
                 $technical_info->setStatus(-1);
                 $device->setScanState(-1);
+                $regs = $device->getRegisters();
+                foreach ($regs as $r) {
+                    $r->getRegisterCurrentData()->setRealValueHex(NULL)->setRealValue(NULL)->setFixedValue(NULL);                    
+                }
             }
 
             $em->flush();
@@ -197,8 +201,6 @@ class DefaultController extends Controller {
                     $em->remove($br);
                 }
             }
-
-
             $em->flush();
             $session = $request->getSession();
             $session->set('comm_id', $comm_id);
@@ -503,6 +505,9 @@ class DefaultController extends Controller {
         $this->getDoctrine()->getManager()->flush();
     }
 
+    
+    
+    
     /**
      * @Route("/synchronize", name="bms_configuration_synchronize_database", options={"expose"=true})
      */
