@@ -335,7 +335,7 @@ function editPanel(panel_id, register) {
         var panel = $("div#" + panel_id + ".bms-panel");
         $("form#panel input#panel-name").val(panel.attr("name"));
         if(panel.attr("title")){
-            console.log("Tytuł");
+            $("form#panel input#tooltip").prop('checked', true);
         }            
         $("form#panel input#panel_id").val(panel_id);
         $("form#panel input#topPosition").val(parseInt(panel.css("top")));
