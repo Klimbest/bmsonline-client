@@ -664,13 +664,6 @@ function updateLastRead(lastRead, did) {
         $("span#" + did + ".label-last-read").css("background-color", "#337AB7");
     }
 
-    if (elapseUTC > 15) {
-        $("ul.device-level div#" + did + " i.fa-gear.fa-green").removeClass("fa-gear fa-spin fa-green").addClass("fa-exclamation fa-red");
-    } else {
-        $("ul.device-level div#" + did + " i.fa-exclamation").removeClass("fa-exclamation fa-red").addClass("fa-gear fa-spin fa-green");
-    }
-
-
 }
 
 function refreshPage() {
@@ -704,7 +697,10 @@ function refreshPage() {
                     $("span#" + key + ".label-last-read span").text("-");
                 }
                 updateLastRead(time, key);
+
+
             });
+
             $("i.fa-refresh[id]").each(function () {
                 var id = $(this).attr("id");
                 if (ret[id] === null) {
@@ -713,6 +709,14 @@ function refreshPage() {
                 $(this).parent().parent().children("td.fixed_value").text(ret[id]);
             });
             setState(ret['state'], ret['devicesStatus']);
+            $.each(ret['devicesStatus'], function () {
+                if (this.status > 0) {
+                    $("ul.device-level div#" + this.device_id + " i.fa-gear.fa-green").removeClass("fa-gear fa-spin fa-green").addClass("fa-exclamation fa-red");
+                } else if (this.status === 0) {
+                    $("ul.device-level div#" + this.device_id + " i.fa-exclamation").removeClass("fa-exclamation fa-red").addClass("fa-gear fa-spin fa-green");
+                }
+
+            });
             $("i.fa-pulse").remove();
 
         }

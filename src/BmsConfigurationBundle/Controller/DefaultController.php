@@ -141,7 +141,7 @@ class DefaultController extends Controller {
                 $device->setScanState(-1);
                 $regs = $device->getRegisters();
                 foreach ($regs as $r) {
-                    $r->getRegisterCurrentData()->setRealValueHex(NULL)->setRealValue(NULL)->setFixedValue(NULL);                    
+                    $r->getRegisterCurrentData()->setRealValueHex(null)->setRealValue(null)->setFixedValue(null);                    
                 }
             }
 
@@ -477,6 +477,7 @@ class DefaultController extends Controller {
                 $devices_id = explode("_", $ds['name']);
                 $device = $deviceRepo->find((int) $devices_id[1]);
                 $ds['name'] = $device->getName();
+                $ds['device_id']=(int)$devices_id[1];
             }
 
             //get last hello from RPi      
