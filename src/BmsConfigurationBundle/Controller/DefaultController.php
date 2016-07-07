@@ -484,7 +484,7 @@ class DefaultController extends Controller {
             $time = $technicalInformationRepo->getRpiStatus();
 
             $ret['devicesStatus'] = $devicesStatus;
-            $ret['state'] = $time[0]["time"]->getTimestamp();
+            $time ? $ret['state'] = $time[0]["time"]->getTimestamp() : $ret['state'] = null;
 
             $ret["times_of_update"] = $times;
 
