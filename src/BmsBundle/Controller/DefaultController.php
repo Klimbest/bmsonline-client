@@ -98,7 +98,7 @@ class DefaultController extends Controller {
 
             $ret['devicesStatus'] = $devicesStatus;
             $time ? $ret['state'] = $time[0]["time"]->getTimestamp() : $ret['state'] = null;
-            $ret['registers'] = $registers;
+            $registers ? $ret['registers'] = $registers : $ret['registers'] = null;
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
