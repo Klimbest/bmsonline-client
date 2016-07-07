@@ -44,17 +44,18 @@ function ajaxChangePage(page_id) {
     });
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     clearInterval(interval);
+    
     function minBrowserSizeGuard() {
         if ($(window).width() < parseInt($(".page").css("width")) + 45) {
-            var label = "<div class='text-center error-label'><h3><span class='label label-primary'>Za mała szerokość przeglądarki</span></h3></div>";
+            /*var label = "<div class='text-center error-label'><h3><span class='label label-primary'>Za mała szerokość przeglądarki</span></h3></div>";
 
             $("div.content-container").children("div:not('.footer-well')").hide();
             $("div.content-container").append(label);
-            fire = true;
+            fire = true;*/
         }
         if (fire && $(window).width() >= parseInt($(".page").css("width")) + 45) {
-            $("div.content-container").children("div:not('.footer-well')").show();
-            $("div.error-label").remove();
+           /* $("div.content-container").children("div:not('.footer-well')").show();
+            $("div.error-label").remove();*/
         }
     }
 }
