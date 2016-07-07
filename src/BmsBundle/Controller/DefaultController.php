@@ -97,7 +97,7 @@ class DefaultController extends Controller {
             $time = $technicalInformationRepo->getRpiStatus();
 
             $ret['devicesStatus'] = $devicesStatus;
-            isset($time) ? $ret['state'] = $time[0]["time"]->getTimestamp() : $ret['state'] = null;
+            $time ? $ret['state'] = $time[0]["time"]->getTimestamp() : $ret['state'] = null;
             isset($registers) ? $ret['registers'] = $registers : $ret['registers'] = null;
             return new JsonResponse($ret);
         } else {
