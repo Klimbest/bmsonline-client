@@ -20,3 +20,5 @@
 app/config/security.yml
 app/config/security.yml
 composer.lock
+composer.lock
+app/config/security.yml
