@@ -53,7 +53,7 @@ class BitRegister {
      * 
      * @var \BmsConfigurationBundle\Entity\Register
      * 
-     * @ORM\ManyToOne(targetEntity="BmsConfigurationBundle\Entity\Register", inversedBy="bit_registers")
+     * @ORM\ManyToOne(targetEntity="BmsConfigurationBundle\Entity\Register", inversedBy="bitRegisters")
      * @ORM\JoinColumn(name="register", referencedColumnName="id")
      */
     private $register;

@@ -31,7 +31,7 @@ class AlarmHistory {
     /**
      * @var \BmsConfigurationBundle\Entity\Register
      *
-     * @ORM\ManyToOne(targetEntity="BmsConfigurationBundle\Entity\Register")
+     * @ORM\ManyToOne(targetEntity="BmsConfigurationBundle\Entity\Register", inversedBy="alarmHistory")
      * @ORM\JoinColumn(name="register_id", referencedColumnName="id")
      * 
      */

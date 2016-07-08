@@ -6,7 +6,7 @@
 {% block body %}
     {% if app.user %}
         <div class="row">
-            <div class="col-xs-3 col-xs-offset-2 text-center error">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4 text-center error">
                 <h3>Jesteś już zalogowany jako {{ app.user }}</h3>
             </div>
         </div>
@@ -14,34 +14,34 @@
         {% block fos_user_content %}
             {% trans_default_domain 'FOSUserBundle' %}
             {% if error %}
-                <div class="col-xs-6 col-xs-offset-3 text-center error">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4 text-center error">
                     <h3><label class="label label-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</label></h3>
                 </div>
             {% endif %}
             {% if app.session.flashBag.has('success') %}
-                <div class="col-xs-6 col-xs-offset-3 text-center error">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 text-center error">
                     {% for msg in app.session.flashBag.get('success') %}
                         <h3><label class="label label-success">{{ msg }}</label></h3>
                     {% endfor %}
                 </div>
             {% endif %}
-            <div class="col-xs-4 col-xs-offset-4 text-center" id="user_control_window">
+            <div class="col-xs-12 text-center" id="user_control_window">
                 <div>
                     <h3>Logowanie do systemu BMS</h3>
                 </div>
                 <form action="{{ path("fos_user_security_check") }}" method="post">
                     {{ form_errors(form) }}
-                    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+                    <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
                         {{ form_row(form._username) }}
                     </div>
-                    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+                    <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
                         {{ form_row(form._password) }}
                     </div>
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-                    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+                    <div class="col-xs-12">
                         <a href={{ path('fos_user_resetting_request') }}>Zapomniane hasło?</a>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-12">
                         <button type="submit" id="_submit" name="_submit" class="btn btn-default navbar-btn"><i class="fa fa-sign-in"></i> {{ 'security.login.submit'|trans }}</button>
                         <a href="{{path('fos_user_registration_register')}}">
                             <button type="button" class="btn btn-default navbar-btn"><i class="fa fa-user-plus"></i> Załóż konto</button>

@@ -207,8 +207,12 @@ div.dialog-panel-settings .well .row{
 .input-group-btn button{
     font-size: 14px;
 }
-form#data-source div#panel-type{
-    margin-right: -16px;
+div#panel_type div.form-group{
+    margin-right: -1px;
+}
+button#manager{
+    margin-bottom: 15px;
+    margin-left: 14px;
 }
 
 input#panel-source-content{
@@ -216,7 +220,7 @@ input#panel-source-content{
     border-top-left-radius: 0;
 }
 
-select#panel-type{   
+select#panel_type{   
     border-radius: 4px 0px 0px 4px;
 }
 .panel-preview,

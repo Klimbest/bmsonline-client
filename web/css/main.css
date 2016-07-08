@@ -6,7 +6,6 @@ and open the template in the editor.
 /* 
     Created on : 2015-07-31, 12:49:50
     Author     : Marcin
-    #337AB7
 */
 
 .fa-red{color: #FF0000;}
@@ -16,8 +15,7 @@ and open the template in the editor.
 .fa-yellow{color: #FFFF00;}
 .fa-orange{color: #f26522;}
 .hidden{display: none;}
-.fa-spinner,
-div#loading{
+.fa-spinner, div#loading{
     color: #337AB7;
     position: absolute;
     top: 35%;
@@ -25,24 +23,13 @@ div#loading{
     z-index:999;
 }
 body {
-    background-color: #f8f8f8;
+    background-color: #FFF;
     margin:0;
-    padding:0;
+    padding-top: 50px;
 }
 
 .content-container{
-    background-color: #FFF;  
-    padding-top: 0px;
-/*    box-shadow: inset 0px -20px 60px #000;*/
-    min-height: 100vh;
-}
-
-p, h2,a, a:hover, a:active{
-    color: #000;
-    text-decoration: none;
-}
-a button{
-    color: #337AB7;
+    padding: 40px 15px;
 }
 .cookie{
     width: 100vw;
@@ -54,41 +41,8 @@ a button{
     z-index: 1;
     margin: 0 auto;
 }
-
-.navbar{
-    margin-bottom: -1px;
-    border-radius: 0px;
-    border-color: #337AB7;
-    border-top: none;
-    height: 82px;
-}
-.navbar-right{
-    margin-right: 0px;
-}
-
-.navbar-btn,
-.btn-default,
-.btn-default:active,
-.navbar-btn:active,
-.open > .dropdown-toggle.btn-default:active{
-    border-color: #337AB7;
-    color: #337AB7;
-    background-color: #FFF;
-}
-.btn-default:hover,
-.btn-default:focus,
-.navbar-btn:hover,
-.navbar-btn:focus,
-.btn-default:active:focus,
-.open > .dropdown-toggle.btn-default,
-.open > .dropdown-toggle.btn-default:hover,
-.open > .dropdown-toggle.btn-default:focus{
-    border-color: #337ADE;
-    color: #FFF;
-    background-color: #337AB7;
-}
 .navbar-brand { 
-    padding: 15px 15px;
+    padding: 6px 15px;
 }
 
 .well{
@@ -107,34 +61,10 @@ a button{
     -webkit-box-shadow: 0 0 8px #337AB7;
     box-shadow: 0 0 8px #337AB7;
 }
-
-.footer-well{
-    padding-top: 3px;
-    padding-bottom: 2px;
-    margin-bottom: 0px;
-    border-bottom: none;
-    border-left: none;
-    border-right: none;
-    width: 100%;
-    margin: 0 auto;
-    font-size: 65%;
-    box-shadow: none;
-    z-index: 100;
-}
-input.form-control{
-    border-color: #337AB7;
-}
-
-embed{
-    width: 100%;
-    height: 80vh;
-}
-
 .progress{
     background-color: #aaaaaa;
     height: 10px;
 }
-
 .error-message{
     display: none;
     position: absolute;
