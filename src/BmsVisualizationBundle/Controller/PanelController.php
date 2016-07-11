@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use BmsVisualizationBundle\Entity\Panel;
 use BmsVisualizationBundle\Entity\WidgetBar;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use BmsVisualizationBundle\Form\PanelType;
 
 class PanelController extends Controller {
 
@@ -18,46 +19,25 @@ class PanelController extends Controller {
     public function loadPanelDialogAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
             $options = array();
-            
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $panel_id = $request->get("panel_id");
-            if (isset($panel_id)) {                
-                $panel = $panelRepo->findOneById($panel_id);
-                $options['panel'] = $panel;                
-                
-                $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
-                $terms = $termRepo->findAllForPanelAsObject($panel_id);
-                $options['terms'] = $terms;
-                
-                if($panel->getType() === "variable"){
-                    $reg_id = $panel->getContentSource();
-                    if(substr($reg_id, 0, 3) == "bit"){
-                        $bitRegisterRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:BitRegister');
-                        $register = $bitRegisterRepo->findOneById(substr($reg_id, 3));
-                        $r["value"] = $register->getBitValue();
-                        
-                    }else{                    
-                        $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-                        $register = $registerRepo->findOneById($reg_id);
-                        $r["value"] = $register->getRegisterCurrentData()->getFixedValue();
-                    }
-                    $options['register'] = $register;
-                    $r["name"] = $register->getName();
-                    $ret["register"] = $r;
-                }
-            }
-            $lastPanel = $panelRepo->findLastPanel();
-            if($lastPanel){
-                $newId = $lastPanel->getId();
-                $options['newId'] = (int)($newId + 1);            
-            }else{
-                $options['newId'] = 1;
-            }
+            isset($panel_id) ? $panel = $panelRepo->find($panel_id) : $panel = new Panel();            
             
-            $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
-            $pages = $pageRepo->findAll();
-            $options['pages'] = $pages;
-            
+            $form = $this->createForm(PanelType::class, $panel, array(
+                'action' => $this->generateUrl('bms_visualization_load_panel_dialog'),
+                'method' => 'POST'
+            ));
+            $options['form'] = $form->createView();
+
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($panel);
+                $em->flush();
+
+                return new JsonResponse(array('message' => 'Success!'), 200);
+            }
+
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelDialog.html.twig', $options);
 
             return new JsonResponse($ret);
@@ -66,183 +46,6 @@ class PanelController extends Controller {
         }
     }
 
-    /**
-     * @Route("/add_panel", name="bms_visualization_add_panel", options={"expose"=true})
-     */
-    public function addPanelAction(Request $request) {
-        if ($request->isXmlHttpRequest()) {
-            $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
-            $page_id = $request->request->get("page_id");
-            
-            $em = $this->getDoctrine()->getManager();
-            
-            $panel = new Panel();
-            $page = $pageRepo->find($page_id);
-            $panel->setPage($page)
-                    ->setName("new")
-                    ->setType("new")
-                    ->setTopPosition(0)
-                    ->setLeftPosition(0)
-                    ->setWidth(0)
-                    ->setHeight(0)
-                    ->setBorder("new")
-                    ->setBackgroundColor("new")
-                    ->setTextAlign("new")
-                    ->setFontWeight("new")
-                    ->setTextDecoration("new")
-                    ->setFontStyle("new")
-                    ->setFontFamily("new")
-                    ->setFontSize(0)
-                    ->setFontColor("new")
-                    ->setBorderRadius("new")
-                    ->setZIndex(0)
-                    ->setVisibility(0)
-                    ->setTooltip(0)
-                    ->setContentSource("new")
-                    ->setDisplayPrecision(0)
-                    ->setHref(NULL);
-
-            $em->persist($panel);
-            $em->flush();
-
-            $ret["panel_id"] = $panel->getId();
-            $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
-            $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
-            
-            return new JsonResponse($ret);
-        } else {
-            throw new AccessDeniedHttpException();
-        }
-    }
-
-    /**
-     * @Route("/edit_panel", name="bms_visualization_edit_panel", options={"expose"=true})
-     */
-    public function editPanelAction(Request $request) {
-        if ($request->isXmlHttpRequest()) {
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
-            $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-            $bitRegisterRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:BitRegister');
-            $progressBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
-            //get data
-            $panel_id = $request->request->get("panel_id");
-            $type = $request->request->get("type");
-            $name = $request->request->get("name");
-            $topPosition = $request->request->get("topPosition");
-            $leftPosition = $request->request->get("leftPosition");
-            $width = $request->request->get("width");
-            $height = $request->request->get("height");
-            $border = $request->request->get("border");
-            $backgroundColor = $request->request->get("backgroundColor");
-            $textAlign = $request->request->get("textAlign");
-            $fontWeight = $request->request->get("fontWeight");
-            $textDecoration = $request->request->get("textDecoration");
-            $fontStyle = $request->request->get("fontStyle");
-            $fontFamily = $request->request->get("fontFamily");
-            $fontSize = $request->request->get("fontSize");
-            $fontColor = $request->request->get("fontColor");
-            $borderRadius = $request->request->get("borderRadius");
-            $zIndex = $request->request->get("zIndex");
-            $displayPrecision = $request->request->get("displayPrecision");            
-            $href = $request->request->get("href");
-            
-            $em = $this->getDoctrine()->getManager();
-            $widgetArray = array();
-            if ($type == "variable") {
-                $registerName = $request->request->get("contentSource");
-                $register = $registerRepo->findOneBy(array('name' => $registerName));
-                if(isset($register)){
-                    $reg["id"] = $register->getId();
-                    $reg["value"] = $register->getRegisterCurrentData()->getFixedValue();
-                    $contentSource = $register->getId();
-                }else{
-                    $register = $bitRegisterRepo->findOneBy(array('name' => $registerName));
-                    $reg["id"] = $register->getId();
-                    $reg["value"] = $register->getBitValue();
-                    $contentSource = "bit". $register->getId();
-                }
-            } elseif( $type == "widget") {
-                $progressBar = new WidgetBar();
-                $setRegisterName = $request->request->get("pbRegSet");
-                if($setRegisterName != NULL){
-                    $setRegister = $registerRepo->findOneBy(array('name' => $setRegisterName));
-                    $progressBar->setSetRegisterId($setRegister);
-                }
-                $valueRegister = $registerRepo->findOneBy(array('name' => $request->request->get("pbRegVal")));
-                
-                $rangeMin = $request->request->get("pbMin");
-                $rangeMax = $request->request->get("pbMax");
-                $optimumMin = $request->request->get("pbOptimumMin");
-                $optimumMax = $request->request->get("pbOptimumMax");
-                $color1 = $request->request->get("pbColor1");
-                $color2 = $request->request->get("pbColor2");
-                $color3 = $request->request->get("pbColor3");
-                $progressBar->setValueRegisterId($valueRegister)
-                        ->setRangeMin($rangeMin)
-                        ->setRangeMax($rangeMax)
-                        ->setOptimumMin($optimumMin)
-                        ->setOptimumMax($optimumMax)
-                        ->setColor1($color1)
-                        ->setColor2($color2)
-                        ->setColor3($color3);
-                $em->persist($progressBar);
-                $em->flush();
-                array_push($widgetArray, $progressBar);
-                $contentSource = $progressBar->getId();
-            } else {
-                $contentSource = $request->request->get("contentSource");
-                $reg = null;
-            }
-
-            if ($request->request->get("visibility") == "true") {
-                $visibility = 1;
-            } else {
-                $visibility = 0;
-            }
-            if ($request->request->get("tooltip") == "true") {
-                $tooltip = 1;
-            } else {
-                $tooltip = 0;
-            }
-            
-            $panel = $panelRepo->find($panel_id);
-            $panel->setName($name)
-                    ->setType($type)
-                    ->setTopPosition($topPosition)
-                    ->setLeftPosition($leftPosition)
-                    ->setWidth($width)
-                    ->setHeight($height)
-                    ->setBorder($border)
-                    ->setBackgroundColor($backgroundColor)
-                    ->setTextAlign($textAlign)
-                    ->setFontWeight($fontWeight)
-                    ->setTextDecoration($textDecoration)
-                    ->setFontStyle($fontStyle)
-                    ->setFontFamily($fontFamily)
-                    ->setFontSize($fontSize)
-                    ->setFontColor($fontColor)
-                    ->setBorderRadius($borderRadius)
-                    ->setZIndex($zIndex)
-                    ->setVisibility($visibility)
-                    ->setTooltip($tooltip)
-                    ->setContentSource($contentSource)
-                    ->setDisplayPrecision($displayPrecision)
-                    ->setHref($href);
-
-            $em->flush();
-            $ret["panel_id"] = $panel_id;
-            $ret["register"] = $reg;
-            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel, 'widgets' => $widgetArray]);
-            $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
-            $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
-            
-            
-            return new JsonResponse($ret);
-        } else {
-            throw new AccessDeniedHttpException();
-        }
-    }
 
     /**
      * @Route("/move_panel", name="bms_visualization_move_panel", options={"expose"=true})
@@ -269,7 +72,7 @@ class PanelController extends Controller {
 
             $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
             $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
-            
+
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -280,55 +83,55 @@ class PanelController extends Controller {
      * @Route("/copy_panel", name="bms_visualization_copy_panel", options={"expose"=true})
      */
     public function copyPanelAction(Request $request) {
-        if ($request->isXmlHttpRequest()) {            
+        if ($request->isXmlHttpRequest()) {
             $options = array();
-            
+
             $panel_id = $request->get("panel_id");
 
             $em = $this->getDoctrine()->getManager();
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $panel = $panelRepo->find($panel_id);
-            
-            if($panel->getType() === "variable"){
+
+            if ($panel->getType() === "variable") {
                 $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
                 $bitRegisterRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:BitRegister');
                 $rid = $panel->getContentSource();
-                if(substr($rid, 0, 3) == "bit"){
+                if (substr($rid, 0, 3) == "bit") {
                     $register = $bitRegisterRepo->find(substr($rid, 3));
                     $r["value"] = $register->getBitValue();
-                }else{
+                } else {
                     $register = $registerRepo->find($rid);
                     $r["value"] = $register->getRegisterCurrentData()->getFixedValue();
                 }
 
                 $options['register'] = $register;
-                $r["name"] = $register->getName();                
+                $r["name"] = $register->getName();
                 $ret["register"] = $r;
             }
-            
+
             $newPanel = clone $panel;
 
             $newPanel->setTopPosition(0)->setLeftPosition(0);
 
             $em->persist($newPanel);
             $em->flush();
-            
+
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $pages = $pageRepo->findAll();
             $options['pages'] = $pages;
-            
+
             $lastPanel = $panelRepo->findLastPanel();
             $newId = $lastPanel->getId();
-            $options['newId'] = (int)($newId + 1);
-            
+            $options['newId'] = (int) ($newId + 1);
+
             $ret["dialog"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelDialog.html.twig', $options);
-            
+
             $ret["panel_id"] = $newPanel->getId();
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $newPanel]);
-            
+
             $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
             $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
-            
+
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -345,23 +148,27 @@ class PanelController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
-            
+
             $panel = $panelRepo->find($panel_id);
             $terms = $termRepo->findAllForPanelAsObject($panel_id);
-            
-            foreach($terms as $term){
+            foreach ($terms as $term) {
                 $em->remove($term);
-                
+            }
+            if($panel->getType() == "widget"){
+                $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
+                $widgetBar_id = $panel->getContentSource();
+                $widgetBar = $widgetBarRepo->find($widgetBar_id);
+                $em->remove($widgetBar);
             }
             $em->remove($panel);
             $em->flush();
 
             $em->getConnection()->exec("ALTER TABLE panel AUTO_INCREMENT = 1;");
             $em->getConnection()->exec("ALTER TABLE term AUTO_INCREMENT = 1;");
-            
+
             $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
             $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
-            
+
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -369,4 +176,3 @@ class PanelController extends Controller {
     }
 
 }
-

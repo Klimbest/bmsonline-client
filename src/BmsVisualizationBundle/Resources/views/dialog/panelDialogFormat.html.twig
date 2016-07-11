@@ -1,70 +1,23 @@
 <div class="well well-lg">
     <form id="panel" class="form-horizontal" role="form">
         <div class="row">
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-md-9 col-md-offset-3 text-center">
-                        <span>Podgląd:</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-9 col-md-offset-3 text-center">
-                        <small><span>(pozycja i rozmiar nie uwzględniane)</span></small>
-                    </div>
-                </div>
-            </div>
             <div class="col-md-2 col-md-offset-1">
                 <div class="row text-center">
-                    <div class="col-md-6 col-md-offset-6">
+                    <div class="col-md-10 col-md-offset-2">
                         <span class="label label-dialog-panel">Pozycja:</span>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label class="control-label col-md-6" for="topPosition">Od góry:</label>
-                    <div class="col-md-6 input-group-sm">
-                        <input id="topPosition" type="number" class="form-control" value="50"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-6" for="leftPosition">Od lewej:</label>
-                    <div class="col-md-6 input-group-sm">
-                        <input id="leftPosition" type="number" class="form-control" value="50"/>
-                    </div>
-                </div>  
+                {{form_row(form.topPosition)}}
+                {{form_row(form.leftPosition)}}
             </div>  
             <div class="col-md-2">
-                <div class="row text-center">
-                    <div class="col-md-6 col-md-offset-6">
-                        <span class="label label-dialog-panel">Rozmiar:</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label col-md-6" for="width">Szerokość:</label>
-                    <div class="col-md-6 input-group-sm">
-                        <input id="width" type="number" class="form-control" value="200"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-6" for="height">Wysokość:</label>
-                    <div class="col-md-6 input-group-sm">
-                        <input id="height" type="number" class="form-control" value="50"/>
-                    </div>
-                </div>  
+                <span class="label label-dialog-panel">Rozmiar:</span>                    
+                {{form_row(form.width)}}
+                {{form_row(form.height)}}
             </div>  
             <div class="col-md-3">
-                <div class="row text-center">
-                    <div class="col-md-5 col-md-offset-4">
-                        <span class="label label-dialog-panel">Tło:</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-4" for="backgroundColor">Kolor:</label>
-                    <div class="col-md-5 input-group-sm">
-                        <input id="backgroundColor" type="color" class="form-control" value="#000000" />
-                    </div>
-                </div>
+                <span class="label label-dialog-panel">Tło:</span>
+                {{form_row(form.backgroundColor)}}
                 <div class="form-group">
                     <label class="control-label col-md-4" for="opacity">Przezroczystość:</label>
                     <div class="col-md-5 input-group-sm">
@@ -77,11 +30,6 @@
             </div>  
         </div>
         <div class="row">
-            <div class="col-md-3 col-md-offset-1">
-                <div class="panel-preview">
-                    <span></span>
-                </div>
-            </div>
             <div class="col-md-2 col-md-offset-1">
                 <div class="row text-center">
                     <div class="col-md-6 col-md-offset-6">
@@ -130,80 +78,22 @@
                         <button type="button" class="btn btn-default btn-xs disabled"><i class="fa fa-question fa-fw"></i></button>
                     </div>                    
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-md-4" for="fontFamily">Styl:</label>
-                    <div class="col-md-5 input-group-sm">
-                        <select id="fontFamily" class="form-control font-family">
-                            {% set fonts = ["Arial",
-                            "Black",
-                            "Century Gothic",
-                            "Cochin",
-                            "Comic Sans MS",
-                            "Courier",
-                            "Courier New",
-                            "Garamond",
-                            "Geneva",
-                            "Georgia",
-                            "Helvetica",
-                            "Lucida",
-                            "Lucida Grande",
-                            "Lucida Sans",
-                            "Lucida Sans Unicode",
-                            "Monotype Corsiva",
-                            "MS Serif",
-                            "Tahoma",
-                            "Times",
-                            "Times New Roman", 
-                            "Trebuchet MS",                                       
-                            "Verdana"
-                            ]%}
-                            {% for font in fonts %}
-                                <option value="{{font}}">{{font}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>  
-                <div class="form-group"> 
-                    <label class="control-label col-md-4" for="fontSize">Rozmiar:</label>
-                    <div class="col-md-4 input-group-sm">
-                        <select id="fontSize" class="form-control font-size">
-                            {% for i in 6..96 %}
-                                {% if i == 14 %}
-                                    <option value="{{i}}" selected>{{i}}</option>
-                                {% else %}
-                                    <option value="{{i}}">{{i}}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group"> 
-                    <label class="control-label col-md-4" for="fontColor">Kolor:</label>
-                    <div class="col-md-3 input-group-sm">
-                        <input id="fontColor" type="color" class="form-control" value="#000000" />
-                    </div>
-                </div>
+                
+                {{form_row(form.fontFamily)}}
+                {{form_row(form.fontSize)}}
+                {{form_row(form.fontColor)}}
             </div>
             <div class="col-md-2 precision-group">
                 <div class="row text-center">
                     <div class="col-md-12">
                         <span class="label label-dialog-panel">Precyzja wyświetlania:</span>
                     </div>
-                </div>    
-                <div class="form-group"> 
-                    <div class="col-md-6 col-md-offset-3 input-group-sm">
-                        <select id="displayPrecision" class="form-control">
-                            <option value="0">0</option>
-                            <option value="1">0,0</option>
-                            <option value="2" selected>0,00</option>
-                            <option value="3">0,000</option>
-                        </select>
-                    </div>
                 </div>
+                {{form_row(form.displayPrecision)}}
             </div>
         </div>
         <div class="row">
-            <div class="col-md-7 col-md-offset-5">
+            <div class="col-md-7">
                 <div class="row text-center">
                     <div class="col-md-12">
                         <span class="label label-dialog-panel">Zaokrąglenie narożników:</span>

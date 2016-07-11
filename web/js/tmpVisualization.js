@@ -1,5 +1,3 @@
-/* global parseInt, parseFloat */
-//w przyszłości pobrać z bazy 
 var defaultPatternNetSize = 50;
 
 $(document).ready(function () {
@@ -27,6 +25,7 @@ function setSidebarEvents() {
             success: function (ret) {
                 $(".main-row").append(ret["template"]);
                 createPanelDialog().dialog("open");
+                $(".main-row").children(".fa-spinner").remove();
             }
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -76,609 +75,259 @@ function createPanelDialog() {
         buttons: [{
                 text: "Zapisz",
                 click: function () {
-                    var data = new FormData();
-                    if ($("select#panel-type").val() === "widget") {
-                        var pbForm = $("form#progress-bar");
-                        data.append("pbRegVal", pbForm.find("input#progress-bar-value").val());
-                        data.append("pbRegSet", pbForm.find("input#progress-bar-set").val());
-                        data.append("pbMin", pbForm.find("div#rangeMin input").val());
-                        data.append("pbMax", pbForm.find("div#rangeMax input").val());
-                        data.append("pbOptimumMin", pbForm.find("div#optimumMin input").val());
-                        data.append("pbOptimumMax", pbForm.find("div#optimumMax input").val());
-                        data.append("pbColor1", pbForm.find("input#color1").val());
-                        data.append("pbColor2", pbForm.find("input#color2").val());
-                        data.append("pbColor3", pbForm.find("input#color3").val());
-                    }
-                    data.append("panel_id", $("input#panel_id").val());
-                    data.append("page_id", $("div.label-page.active").attr("id"));
-                    data.append("type", $("select#panel-type").val());
-                    data.append("name", $("form#panel input#panel-name").val());
-                    data.append("topPosition", $("form#panel input#topPosition").val());
-                    data.append("leftPosition", $("form#panel input#leftPosition").val());
-                    data.append("width", $("form#panel input#width").val());
-                    data.append("height", $("form#panel input#height").val());
-                    data.append("border", $("form#panel input#borderWidth").val() + "px " + $("form#panel select#borderStyle").val() + " " + $("form#panel input#borderColor").val());
-                    data.append("backgroundColor", hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($("form#panel input#opacity").val())));
-                    data.append("textAlign", $("form#panel div.panel-preview").css("textAlign"));
-                    data.append("fontWeight", $("form#panel div.panel-preview").css("fontWeight"));
-                    data.append("textDecoration", $("form#panel div.panel-preview").css("textDecoration"));
-                    data.append("fontStyle", $("form#panel div.panel-preview").css("fontStyle"));
-                    data.append("fontFamily", $("form#panel select#fontFamily").val());
-                    data.append("fontSize", $("form#panel select#fontSize").val());
-                    data.append("fontColor", $("form#panel input#fontColor").val());
-                    data.append("borderRadius", $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px");
-                    data.append("zIndex", 5);
-                    data.append("visibility", $("form#panel input#visibility").is(':checked'));
-                    data.append("tooltip", $("form#panel input#tooltip").is(':checked'));
-                    data.append("contentSource", $("input#panel-source-content").val());
-                    data.append("displayPrecision", $("form#panel select#displayPrecision").val());
-                    data.append("href", $("div.dialog-panel-navigation select.pages").val());
-                    saveData(data);
-
+                    saveData();
                     $(this).dialog('destroy').remove();
                 }
             },
             {
                 text: "Anuluj",
                 click: function () {
-                    var data = {
-                        panel_id: $("input#panel_id").val()
-                    };
-                    $("div#" + $("input#panel_id").val() + ".bms-panel").remove();
-                    ajaxDeletePanel(data);
                     $(this).dialog('destroy').remove();
                 }
             }],
         open: function () {
-            createPanelAjax();
-        },
-        close: function () {
-            var data = {
-                panel_id: $("input#panel_id").val()
-            };
-            $("div#" + $("input#panel_id").val() + ".bms-panel").remove();
-            ajaxDeletePanel(data);
-            $(this).dialog('destroy').remove();
-        }
-    });
-
-    function setDialog() {
-        var panel = $("div.panel-preview");
-        var br = $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px";
-
-        var css = {
-            //ramka
-            borderWidth: $("form#panel input#borderWidth").val() + "px",
-            borderColor: $("form#panel input#borderColor").val(),
-            borderStyle: $("form#panel select#borderStyle").val(),
-            //narożniki
-            borderRadius: br,
-            //tło
-            backgroundColor: hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($("form#panel input#opacity").val())),
-            //czcionka
-            fontFamily: $("form#panel select#fontFamily").val(),
-            fontSize: $("form#panel select#fontSize").val() + "px",
-            color: $("form#panel input#fontColor").val(),
-            textAlign: "center"
-        };
-        panel.css(css);
-    }
-    function createPanelAjax() {
-        var data = new FormData();
-        data.append("page_id", $("div.label-page.active").attr("id"));
-        $.ajax({
-            type: "POST",
-            url: Routing.generate('bms_visualization_add_panel'),
-            data: data,
-            contentType: false,
-            processData: false,
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $("div.main-row div.well").append(ret['template']);
-                $("input#panel_id").val(ret["panel_id"]);
-                setDialog();
-                setDialogButtonsData();
-                setDialogButtonsFormat();
-                setDialogButtonEvent(ret["panel_id"]);
-                setDialogButtonProgressBar();
-            }
-        });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    }
-
-    function saveData(data) {
-        var fail = false;
-        var fail_log = '';
-        $("input").each(function () {
-            if (!$(this).prop('required')) {
-
-            } else {
-                if (!$(this).val()) {
-                    fail = true;
-                    var name = $(this).attr('name');
-                    fail_log += name + " jest wymagane \n";
-                }
-            }
-        });
-        if (!fail) {
-            $.ajax({
-                type: "POST",
-                url: Routing.generate('bms_visualization_edit_panel'),
-                data: data,
-                contentType: false,
-                processData: false,
-                success: function (ret) {
-                    $(".main-row").children(".fa-spinner").remove();
-                    $("div.main-row div.well").append(ret['template']);
-                    loadPanelList(ret["panelList"]);
-                    setPanelEvents();
-                }
-            });
-            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-        } else {
-            alert(fail_log);
-
-        }
-    }
-}
-function editPanel(panel_id, register) {
-    return $("div.dialog-panel-settings").dialog({
-        autoOpen: false,
-        width: $(window).width(),
-        height: $(window).height(),
-        modal: true,
-        buttons: [{
-                text: "Zapisz",
-                click: function () {
-                    var data = new FormData();
-                    if ($("select#panel-type").val() === "widget") {
-                        var pbForm = $("form#progress-bar");
-//                        data.append("pbRegVal", pbForm.find("input#progress-bar-value").val());
-//                        data.append("pbRegSet", pbForm.find("input#progress-bar-set").val());
-//                        data.append("pbMin", pbForm.find("div#rangeMin input").val());
-//                        data.append("pbMax", pbForm.find("div#rangeMax input").val());
-//                        data.append("pbOptimumMin", pbForm.find("div#optimumMin input").val());
-//                        data.append("pbOptimumMax", pbForm.find("div#optimumMax input").val());
-//                        data.append("pbColor1", pbForm.find("input#color1").val());
-//                        data.append("pbColor2", pbForm.find("input#color2").val());
-//                        data.append("pbColor3", pbForm.find("input#color3").val());
-                        alert("Jeszcze nie działa");
-                    } else {
-                        data.append("panel_id", panel_id);
-                        data.append("name", $("form#panel input#panel-name").val());
-                        data.append("type", $("select#panel-type").val());
-                        data.append("topPosition", $("form#panel input#topPosition").val());
-                        data.append("leftPosition", $("form#panel input#leftPosition").val());
-                        data.append("width", $("form#panel input#width").val());
-                        data.append("height", $("form#panel input#height").val());
-                        data.append("border", $("form#panel input#borderWidth").val() + "px " + $("form#panel select#borderStyle").val() + " " + $("form#panel input#borderColor").val());
-                        data.append("backgroundColor", hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($("form#panel input#opacity").val())));
-                        data.append("textAlign", $("form#panel div.panel-preview").css("textAlign"));
-                        data.append("fontWeight", $("form#panel div.panel-preview").css("fontWeight"));
-                        data.append("textDecoration", $("form#panel div.panel-preview").css("textDecoration"));
-                        data.append("fontStyle", $("form#panel div.panel-preview").css("fontStyle"));
-                        data.append("fontFamily", $("form#panel select#fontFamily").val());
-                        data.append("fontSize", $("form#panel select#fontSize").val());
-                        data.append("fontColor", $("form#panel input#fontColor").val());
-                        data.append("borderRadius", $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px");
-                        data.append("zIndex", 5);
-                        data.append("visibility", $("form#panel input#visibility").is(':checked'));
-                        data.append("tooltip", $("form#panel input#tooltip").is(':checked'));
-                        data.append("contentSource", $("input#panel-source-content").val());
-                        data.append("displayPrecision", $("form#panel select#displayPrecision").val());
-                        data.append("href", $("div.dialog-panel-navigation select.pages").val());
-                        saveData(data);
-                        $(this).dialog('destroy').remove();
-                    }
-                }
-            }, {
-                text: "Anuluj",
-                click: function () {
-                    $(this).dialog('destroy').remove();
-                }
-            }],
-        open: function () {
-
-
-            setGeneral();
-            setBorder();
-            setFont();
-            setPreview();
             setDialogButtonsData();
-            setDialogButtonsFormat();
-            setDialogButtonEvent(panel_id);
-            setDialogButtonProgressBar();
-            setSource();
         },
         close: function () {
             $(this).dialog('destroy').remove();
         }
     });
 
-    function setSource() {
-        var panel = $("div#" + panel_id + ".bms-panel");
-        if (panel.hasClass("bms-panel-text")) {
-            var c = panel.children("span.bms-panel-content").text();
-            $("div.dialog-panel-data select#panel-type").val("text");
-            $("div.panel-preview span").empty().append(c);
-            $(".input-group-btn button#manager").addClass("disabled");
-            $("div.dialog-panel-data input#panel-source-content").val(c).removeAttr("disabled", false);
-            $(".precision-group").hide();
-            $(".font-group").show();
-            $(".input-group-btn button#manager").unbind("click");
-        } else if (panel.hasClass("bms-panel-image")) {
-            var imgSource = panel.children("img").attr("src");
-            $("div.dialog-panel-data select#panel-type").val("image");
-            $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + imgSource + "\" class=\"img-responsive\">");
-            $("div.dialog-panel-settings input#panel-source-content").val(imgSource).prop("disabled", true).prop("required", false);
-            $(".precision-group, .font-group").hide();
-            $(".input-group-btn button#manager").unbind("click");
-            setOpenImageManager();
-        } else if (panel.hasClass("bms-panel-variable")) {
-            $("div.dialog-panel-settings input#panel-source-content").val(register.name);
-            $("div.dialog-panel-settings div.panel-preview span").empty().append(register.value);
-            $("div.dialog-panel-settings input#panel-source-value").val(register.value);
-            var displayPrecision = panel.children("span.bms-panel-content").attr("value");
-            $("form#panel select#displayPrecision").val(displayPrecision);
-            var value = parseFloat($("input#panel-source-value").val());
-            value = value.toFixed(displayPrecision);
-            $("div.panel-preview").children("span").empty().append(value);
-        } else if (panel.hasClass("bms-panel-widget")) {
-            $("div.dialog-panel-data select#panel-type").val("widget");
-            $("li#dialog-panel-progress-bar").show();
-            $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
-            $("input#panel-source-content").val("").prop("required", false).hide();
-            $(".input-group-btn button#manager").hide();
-        }
-    }
-    function setGeneral() {
-        var panel = $("div#" + panel_id + ".bms-panel");
-        $("form#panel input#panel-name").val(panel.attr("name"));
-        if(panel.attr("title")){
-            $("form#panel input#tooltip").prop('checked', true);
-        }            
-        $("form#panel input#panel_id").val(panel_id);
-        $("form#panel input#topPosition").val(parseInt(panel.css("top")));
-        $("form#panel input#leftPosition").val(parseInt(panel.css("left")));
-        $("form#panel input#width").val(parseInt(panel.css("width")));
-        $("form#panel input#height").val(parseInt(panel.css("height")));
-        if (panel.css("backgroundColor") === "transparent") {
-            $("form#panel input#backgroundColor").val("#ffffff");
-            $("form#panel input#opacity").val(0);
-        } else {
-            var bc = getColorValues(panel.css("backgroundColor"));
-            $("form#panel input#backgroundColor").val(rgb2hex("rgba(" + bc.red + ", " + bc.green + ", " + bc.blue + ", " + bc.alpha + ")"));
-            $("form#panel input#opacity").val(bc.alpha);
-        }
-    }
-    function setBorder() {
-        var panel = $("div#" + panel_id + ".bms-panel");
-        $("form#panel input#borderWidth").val(parseInt(panel.css("borderTopWidth")));
-        $("form#panel input#borderColor").val(rgb2hex(panel.css("borderTopColor")));
-        $("form#panel select#borderStyle").val(panel.css("borderTopStyle"));
-        $("form#panel input#borderRadiusTL").val(parseInt(panel.css("borderTopLeftRadius")));
-        $("form#panel input#borderRadiusTR").val(parseInt(panel.css("borderTopRightRadius")));
-        $("form#panel input#borderRadiusBL").val(parseInt(panel.css("borderBottomLeftRadius")));
-        $("form#panel input#borderRadiusBR").val(parseInt(panel.css("borderBottomRightRadius")));
-    }
-    function setFont() {
-        var panel = $("div#" + panel_id + ".bms-panel");
-        $("form#panel select#fontFamily").val(panel.css("fontFamily"));
-        $("form#panel select#fontSize").val(parseInt(panel.css("fontSize")));
-        $("form#panel input#fontColor").val(rgb2hex(panel.css("color")));
-        if (panel.hasClass("text-left")) {
-            $(".btn-align-center, .btn-align-right").removeClass("active");
-            $(".btn-align-left").addClass("active");
-        } else if (panel.hasClass("text-center")) {
-            $(".btn-align-left, .btn-align-right").removeClass("active");
-            $(".btn-align-center").addClass("active");
-        } else if (panel.hasClass("text-right")) {
-            $(".btn-align-center, .btn-align-left").removeClass("active");
-            $(".btn-align-right").addClass("active");
-        }
-        panel.css("fontWeight") === "700" ? $(".btn-bold").addClass("active") : $(".btn-bold").removeClass("active");
-        panel.css("textDecoration") === "underline" ? $(".btn-underline").addClass("active") : $(".btn-underline").removeClass("active");
-        panel.css("fontStyle") === "italic" ? $(".btn-italic").addClass("active") : $(".btn-italic").removeClass("active");
-
-    }
-    function setPreview() {
-        var br = $("form#panel input#borderRadiusTL").val() + "px " + $("form#panel input#borderRadiusTR").val() + "px " + $("form#panel input#borderRadiusBR").val() + "px " + $("form#panel input#borderRadiusBL").val() + "px";
-        var panel = $("div#" + panel_id + ".bms-panel");
-        if ($("button.btn-align-left").hasClass("active")) {
-            var ta = "left";
-        } else if ($("button.btn-align-center").hasClass("active")) {
-            var ta = "center";
-        } else if ($("button.btn-align-right").hasClass("active")) {
-            var ta = "right";
-        }
-        var css = {
-            //ramka
-            borderWidth: $("form#panel input#borderWidth").val() + "px",
-            borderColor: $("form#panel input#borderColor").val(),
-            borderStyle: $("form#panel select#borderStyle").val(),
-            //narożniki
-            borderRadius: br,
-            //tło
-            backgroundColor: hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($("form#panel input#opacity").val())),
-            //czcionka
-            fontFamily: $("form#panel select#fontFamily").val(),
-            fontSize: $("form#panel select#fontSize").val() + "px",
-            color: $("form#panel input#fontColor").val(),
-            textAlign: ta,
-            fontWeight: panel.css("fontWeight"),
-            textDecoration: panel.css("textDecoration"),
-            fontStyle: panel.css("fontStyle")
-        };
-
-        $("div.panel-preview").css(css);
-    }
-    function saveData(data) {
-        var fail = false;
-        var fail_log = '';
-        $("input").each(function () {
-            if (!$(this).prop('required')) {
-
-            } else {
-                if (!$(this).val()) {
-                    fail = true;
-                    var name = $(this).attr('name');
-                    fail_log += name + " jest wymagane \n";
-                }
+    function saveData() {
+        var form = $("form[name='panel']");
+        $.ajax({
+            type: form.attr('method'),
+            url: form.attr('action'),
+            data: form.serialize(),
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                console.log("Success!!");
+                //$("div.main-row div.well").append(ret['template']);
+                //loadPanelList(ret["panelList"]);
+                //setPanelEvents();
             }
         });
-        if (!fail) {
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    }
+
+    function setDialogButtonsData() {
+        //zmiana zakładek
+        $("div.dialog-panel-settings form li a").click(function () {
+            $("div.dialog-panel-settings form li").removeClass("active");
+            $("div.row.dialog-panel-data, div.row.dialog-panel-format, div.row.dialog-panel-navigation, div.row.dialog-panel-event, div.row.dialog-panel-progress-bar").hide();
+            var id = $(this).parent().attr("id");
+            $(this).parent().addClass("active");
+            $("div.row." + id).show();
+        });
+        //panel type
+        $("select#panel_type").change(function () {
+            var value = $(this).val();
+            var buttonManager = $("button#manager");
+            switch (value) {
+                case "variable":
+                    $("input#panel-source-content").val("").prop("disabled", true).prop("required", true).show();
+                    buttonManager.removeClass("disabled").show().unbind("click");
+                    $("li#dialog-panel-progress-bar").show();
+                    $(".precision-group, .font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
+                    setOpenVariableManager();
+                    break;
+                case "image":
+                    $("input#panel-source-content").val("").prop("disabled", true).prop("required", false).show();
+                    buttonManager.removeClass("disabled").show().unbind("click");
+                    $(".precision-group, .font-group, li#dialog-panel-progress-bar").hide();
+                    $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
+                    setOpenImageManager();
+                    break;
+                case "text":
+                    $("input#panel-source-content").val("").removeAttr("disabled required").show();
+                    buttonManager.addClass("disabled").show().unbind("click");
+                    $(".precision-group, li#dialog-panel-progress-bar").hide();
+                    $(".font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
+                    break;
+                case "widget":
+                    $("input#panel-source-content").val("").prop("required", false).hide();
+                    buttonManager.addClass("disabled").hide().unbind("click");
+                    $("li#dialog-panel-progress-bar").show();
+                    $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
+                    break;
+            }
+        });
+        //zmiana zawartości źródła powoduje wyświetlenie na podglądzie aktualną zawartość
+        $("input#panel-source-content").change(function () {
+            $("div.panel-preview span").empty().append($(this).val());
+        });
+        setOpenVariableManager();
+    }
+    function setDialogButtonsFormat() {
+        var panel = $("div.panel-preview");
+        //tło
+        $("form#panel input#backgroundColor").on('input', function () {
+            var backgroundColor = hex2rgba($(this).val(), parseFloat($("form#panel input#opacity").val()));
+            panel.css({backgroundColor: backgroundColor});
+        });
+        $("form#panel input#opacity").change(changeOpacity).mousemove(changeOpacity);
+        function changeOpacity() {
+            var backgroundColor = hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($(this).val()));
+            panel.css({backgroundColor: backgroundColor});
+        }
+        //ramka
+        $("form#panel input#borderWidth").change(function () {
+            var value = $(this).val();
+            panel.css({borderWidth: value + "px", lineHeight: (100 - value * 2) + "px"});
+        });
+        $("form#panel select#borderStyle").change(function () {
+            var value = $(this).val();
+            panel.css({borderStyle: value});
+        });
+        $("form#panel input#borderColor").on('input', function () {
+            var value = $(this).val();
+            panel.css({borderColor: value});
+        });
+        $("form#panel input#borderRadiusTL").change(changeTL).mousemove(changeTL);
+        $("form#panel input#borderRadiusTR").change(changeTR).mousemove(changeTR);
+        $("form#panel input#borderRadiusBL").change(changeBL).mousemove(changeBL);
+        $("form#panel input#borderRadiusBR").change(changeBR).mousemove(changeBR);
+        function changeTL() {
+            panel.css({borderTopLeftRadius: $(this).val() + "px"});
+        }
+        function changeTR() {
+            panel.css({borderTopRightRadius: $(this).val() + "px"});
+        }
+        function changeBL() {
+            panel.css({borderBottomLeftRadius: $(this).val() + "px"});
+        }
+        function changeBR() {
+            panel.css({borderBottomRightRadius: $(this).val() + "px"});
+        }
+        //pogrubienie
+        $("form#panel .btn-bold").click(function () {
+            $(this).hasClass("active") ? panel.css({fontWeight: "initial"}) : panel.css({fontWeight: "bold"});
+            $(this).toggleClass("active");
+        });
+        //podkreślenie
+        $("form#panel .btn-underline").click(function () {
+            $(this).hasClass("active") ? panel.css({textDecoration: "initial"}) : panel.css({textDecoration: "underline"});
+            $(this).toggleClass("active");
+        });
+        //pochylenie
+        $("form#panel .btn-italic").click(function () {
+            $(this).hasClass("active") ? panel.css({fontStyle: "initial"}) : panel.css({fontStyle: "italic"});
+            $(this).toggleClass("active");
+        });
+        //wyrównanie
+        $("form#panel .btn-align-left").click(function () {
+            $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "left"});
+            setAlign("left");
+        });
+        $("form#panel .btn-align-center").click(function () {
+            $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "center"});
+            setAlign("center");
+        });
+        $("form#panel .btn-align-right").click(function () {
+            $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "right"});
+            setAlign("right");
+        });
+        function setAlign(align) {
+            switch (align) {
+                case "left":
+                    $(".btn-align-center, .btn-align-right").removeClass("active");
+                    $(".btn-align-left").addClass("active");
+                    break;
+                case "center":
+                    $(".btn-align-left, .btn-align-right").removeClass("active");
+                    $(".btn-align-center").addClass("active");
+                    break;
+                case "right":
+                    $(".btn-align-center, .btn-align-left").removeClass("active");
+                    $(".btn-align-right").addClass("active");
+                    break;
+            }
+        }
+        //styl czcionki
+        $("form#panel select.font-family").change(function () {
+
+            panel.css({fontFamily: $(this).val()});
+        });
+        //rozmiar czcionki
+        $("form#panel select.font-size").change(function () {
+            panel.css({fontSize: $(this).val() + "px"});
+        });
+        //Kolor
+        $("form#panel input#fontColor").on('input', function () {
+            panel.css({color: hex2rgba($(this).val(), 1)});
+        });
+        //precyzja wyświetlania
+        $("form#panel select#displayPrecision").change(function () {
+            if ($("select#panel-type").val() === "variable") {
+                var displayPrecision = $(this).val();
+                var value = parseFloat($("div.dialog-panel-settings input#panel-source-value").val());
+                value = value.toFixed(displayPrecision);
+                panel.children("span").empty().append(value);
+            }
+        });
+
+    }
+    /*
+    function setDialogButtonEvent(panel_id) {
+        //add term
+        $("button.add-term").click(function () {
             $.ajax({
                 type: "POST",
-                url: Routing.generate('bms_visualization_edit_panel'),
-                data: data,
-                contentType: false,
-                processData: false,
+                datatype: "application/json",
+                url: Routing.generate('bms_visualization_load_event_manager'),
                 success: function (ret) {
                     $(".main-row").children(".fa-spinner").remove();
-                    $("div#" + ret["panel_id"] + ".bms-panel").remove();
-                    $("div.main-row div.well").append(ret['template']);
-                    loadPanelList(ret["panelList"]);
-                    setPanelEvents();
-                    setValue($("div#" + ret["panel_id"] + ".bms-panel"), ret['register']);
+                    $(".main-row").append(ret['template']);
+                    createCondition(panel_id).dialog("open");
                 }
             });
             $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-        } else {
-            alert(fail_log);
-        }
-
-        function setValue(panel, register) {
-            if (panel.hasClass("bms-panel-variable")) {
-                var displayPrecision = panel.children("span").attr("value");
-                var value = parseFloat(register.value).toFixed(parseInt(displayPrecision));
-                panel.children("span").text(value);
-            }
-        }
-    }
-}
-function setDialogButtonsData() {
-    //zmiana zakładek
-    $("div.dialog-panel-settings li a").click(function () {
-        $("div.dialog-panel-settings li").removeClass("active");
-        $("div.row.dialog-panel-data, div.row.dialog-panel-format, div.row.dialog-panel-navigation, div.row.dialog-panel-event, div.row.dialog-panel-progress-bar").hide();
-        var id = $(this).parent().attr("id");
-        $(this).parent().addClass("active");
-        $("div.row." + id).show();
-    });
-    //panel type
-    $("select#panel-type").change(function () {
-        var value = $(this).val();
-        switch (value) {
-            case "variable":
-                $("input#panel-source-content").val("").prop("disabled", true).prop("required", true).show();
-                $(".input-group-btn button#manager").removeClass("disabled").show();
-                $(".precision-group, .font-group").show();
-                $(".input-group-btn button#manager").unbind("click");
-                $("li#dialog-panel-progress-bar").hide();
-                $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
-                setOpenVariableManager();
-                break;
-            case "image":
-                $("input#panel-source-content").val("").prop("disabled", true).prop("required", false).show();
-                $(".input-group-btn button#manager").removeClass("disabled").show();
-                $(".precision-group, .font-group").hide();
-                $(".input-group-btn button#manager").unbind("click");
-                $("li#dialog-panel-progress-bar").hide();
-                $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
-                setOpenImageManager();
-                break;
-            case "text":
-                $("input#panel-source-content").val("").removeAttr("disabled required").show();
-                $(".input-group-btn button#manager").addClass("disabled").show();
-                $(".precision-group").hide();
-                $(".font-group").show();
-                $(".input-group-btn button#manager").unbind("click");
-                $("li#dialog-panel-progress-bar").hide();
-                $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
-                break;
-            case "widget":
-                $("li#dialog-panel-progress-bar").show();
-                $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
-                $("input#panel-source-content").val("").prop("required", false).hide();
-                $(".input-group-btn button#manager").hide();
-                break;
-        }
-    });
-    //zmiana zawartości źródła powoduje wyświetlenie na podglądzie aktualną zawartość
-    $("input#panel-source-content").change(function () {
-        $("div.panel-preview span").empty().append($(this).val());
-    });
-    setOpenVariableManager();
-}
-function setDialogButtonsFormat() {
-    var panel = $("div.panel-preview");
-    //tło
-    $("form#panel input#backgroundColor").on('input', function () {
-        var backgroundColor = hex2rgba($(this).val(), parseFloat($("form#panel input#opacity").val()));
-        panel.css({backgroundColor: backgroundColor});
-    });
-    $("form#panel input#opacity").change(changeOpacity).mousemove(changeOpacity);
-    function changeOpacity() {
-        var backgroundColor = hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($(this).val()));
-        panel.css({backgroundColor: backgroundColor});
-    }
-    //ramka
-    $("form#panel input#borderWidth").change(function () {
-        var value = $(this).val();
-        panel.css({borderWidth: value + "px", lineHeight: (100 - value * 2) + "px"});
-    });
-    $("form#panel select#borderStyle").change(function () {
-        var value = $(this).val();
-        panel.css({borderStyle: value});
-    });
-    $("form#panel input#borderColor").on('input', function () {
-        var value = $(this).val();
-        panel.css({borderColor: value});
-    });
-    $("form#panel input#borderRadiusTL").change(changeTL).mousemove(changeTL);
-    $("form#panel input#borderRadiusTR").change(changeTR).mousemove(changeTR);
-    $("form#panel input#borderRadiusBL").change(changeBL).mousemove(changeBL);
-    $("form#panel input#borderRadiusBR").change(changeBR).mousemove(changeBR);
-    function changeTL() {
-        panel.css({borderTopLeftRadius: $(this).val() + "px"});
-    }
-    function changeTR() {
-        panel.css({borderTopRightRadius: $(this).val() + "px"});
-    }
-    function changeBL() {
-        panel.css({borderBottomLeftRadius: $(this).val() + "px"});
-    }
-    function changeBR() {
-        panel.css({borderBottomRightRadius: $(this).val() + "px"});
-    }
-    //pogrubienie
-    $("form#panel .btn-bold").click(function () {
-        $(this).hasClass("active") ? panel.css({fontWeight: "initial"}) : panel.css({fontWeight: "bold"});
-        $(this).toggleClass("active");
-    });
-    //podkreślenie
-    $("form#panel .btn-underline").click(function () {
-        $(this).hasClass("active") ? panel.css({textDecoration: "initial"}) : panel.css({textDecoration: "underline"});
-        $(this).toggleClass("active");
-    });
-    //pochylenie
-    $("form#panel .btn-italic").click(function () {
-        $(this).hasClass("active") ? panel.css({fontStyle: "initial"}) : panel.css({fontStyle: "italic"});
-        $(this).toggleClass("active");
-    });
-    //wyrównanie
-    $("form#panel .btn-align-left").click(function () {
-        $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "left"});
-        setAlign("left");
-    });
-    $("form#panel .btn-align-center").click(function () {
-        $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "center"});
-        setAlign("center");
-    });
-    $("form#panel .btn-align-right").click(function () {
-        $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "right"});
-        setAlign("right");
-    });
-    function setAlign(align) {
-        switch (align) {
-            case "left":
-                $(".btn-align-center, .btn-align-right").removeClass("active");
-                $(".btn-align-left").addClass("active");
-                break;
-            case "center":
-                $(".btn-align-left, .btn-align-right").removeClass("active");
-                $(".btn-align-center").addClass("active");
-                break;
-            case "right":
-                $(".btn-align-center, .btn-align-left").removeClass("active");
-                $(".btn-align-right").addClass("active");
-                break;
-        }
-    }
-    //styl czcionki
-    $("form#panel select.font-family").change(function () {
-
-        panel.css({fontFamily: $(this).val()});
-    });
-    //rozmiar czcionki
-    $("form#panel select.font-size").change(function () {
-        panel.css({fontSize: $(this).val() + "px"});
-    });
-    //Kolor
-    $("form#panel input#fontColor").on('input', function () {
-        panel.css({color: hex2rgba($(this).val(), 1)});
-    });
-    //precyzja wyświetlania
-    $("form#panel select#displayPrecision").change(function () {
-        if ($("select#panel-type").val() === "variable") {
-            var displayPrecision = $(this).val();
-            var value = parseFloat($("div.dialog-panel-settings input#panel-source-value").val());
-            value = value.toFixed(displayPrecision);
-            panel.children("span").empty().append(value);
-        }
-    });
-
-}
-function setDialogButtonEvent(panel_id) {
-    //add term
-    $("button.add-term").click(function () {
-        $.ajax({
-            type: "POST",
-            datatype: "application/json",
-            url: Routing.generate('bms_visualization_load_event_manager'),
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $(".main-row").append(ret['template']);
-                createCondition(panel_id).dialog("open");
-            }
         });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    });
-    //delete term
-    setDeleteTerm();
-}
-function setDialogButtonProgressBar() {
-    //zmiana kolorów
-    $("input#color1").on('input', function () {
-        $("div#pb1").css({backgroundColor: $(this).val()});
-    });
-    $("input#color2").on('input', function () {
-        $("div#pb2").css({backgroundColor: $(this).val()});
-    });
-    $("input#color3").on('input', function () {
-        $("div#pb3").css({backgroundColor: $(this).val()});
-    });
-    //dodanie zmiennych
-    $("button#progress-bar-manager-value").click(function () {
-        $.ajax({
-            type: "POST",
-            datatype: "application/json",
-            url: Routing.generate('bms_visualization_load_variable_manager'),
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $(".main-row").append(ret["template"]);
-                createVariableManager("progress-bar-value").dialog("open");
-            }
+        //delete term
+        setDeleteTerm();
+    }
+    function setDialogButtonProgressBar() {
+        //zmiana kolorów
+        $("input#color1").on('input', function () {
+            $("div#pb1").css({backgroundColor: $(this).val()});
         });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    });
-    $("button#progress-bar-manager-set").click(function () {
-        $.ajax({
-            type: "POST",
-            datatype: "application/json",
-            url: Routing.generate('bms_visualization_load_variable_manager'),
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $(".main-row").append(ret["template"]);
-                createVariableManager("progress-bar-set").dialog("open");
-            }
+        $("input#color2").on('input', function () {
+            $("div#pb2").css({backgroundColor: $(this).val()});
         });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    });
+        $("input#color3").on('input', function () {
+            $("div#pb3").css({backgroundColor: $(this).val()});
+        });
+        //dodanie zmiennych
+        $("button#progress-bar-manager-value").click(function () {
+            $.ajax({
+                type: "POST",
+                datatype: "application/json",
+                url: Routing.generate('bms_visualization_load_variable_manager'),
+                success: function (ret) {
+                    $(".main-row").children(".fa-spinner").remove();
+                    $(".main-row").append(ret["template"]);
+                    createVariableManager("progress-bar-value").dialog("open");
+                }
+            });
+            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+        });
+        $("button#progress-bar-manager-set").click(function () {
+            $.ajax({
+                type: "POST",
+                datatype: "application/json",
+                url: Routing.generate('bms_visualization_load_variable_manager'),
+                success: function (ret) {
+                    $(".main-row").children(".fa-spinner").remove();
+                    $(".main-row").append(ret["template"]);
+                    createVariableManager("progress-bar-set").dialog("open");
+                }
+            });
+            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+        });
+    }*/
 }
-
 function setOpenVariableManager() {
-    $(".input-group-btn button#manager").click(function () {
+    $("button#manager").click(function () {
         $.ajax({
             type: "POST",
             datatype: "application/json",
@@ -721,9 +370,9 @@ function createVariableManager(fw) {
                     if (fw === "data-source") {
                         var value = $("div.variable-manager input#register").val();
                         var res = value.split("&");
-                        $("div.dialog-panel-settings input#panel-source-content").val(res[0]);
+                        $("div.dialog-panel-settings form[name=panel] input#panel-source-content").val(res[0]);
                         $("div.dialog-panel-settings div.panel-preview span").empty().append(res[1]);
-                        $("div.dialog-panel-settings input#panel-source-value").val(res[1]);
+                        $("div.dialog-panel-settings input#panel-term-register-value").val(res[1]);
                         $(this).dialog('destroy').remove();
                     } else if (fw === "term-register") {
                         var value = $("div.variable-manager input#register").val();
@@ -859,7 +508,8 @@ function createVariableManager(fw) {
         $("div.register-choice").click(function () {
             var registerName = $(this).children("div#registerName").text();
             var registerValue = $(this).children("div#value").text();
-            $("input#register").val(registerName + "&" + registerValue);
+            var registerId = $(this).attr('id');
+            $("input#register").val(registerName + "&" + registerValue + "&" + registerId);
             $("div.register-choice").removeClass("selected");
             $(this).addClass("selected");
         });
@@ -1090,7 +740,7 @@ function setDeleteTerm() {
                 $(".main-row").children(".fa-spinner").remove();
                 var id = parseInt(ret['term_id']);
                 $("table i#" + id + ".fa-trash-o").parent().parent().remove();
-                if( $("div.dialog-panel-event table tbody tr").length == 1 ){
+                if ($("div.dialog-panel-event table tbody tr").length == 1) {
                     $("div.dialog-panel-event table tbody tr").remove().append(
                             "<tr id='no-data'>\n\
                                 <td colspan='11' class='text-center'>\n\
@@ -1328,7 +978,7 @@ function copyPanel(data) {
             loadPanelList(ret["panelList"]);
 
             setPanelEvents();
-            editPanel(ret["panel_id"], ret["register"]).dialog("open");
+            createPanelDialog(ret["panel_id"]).dialog("open");
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -1505,7 +1155,8 @@ function setPanelEvents() {
                     $(".main-row").children(".fa-spinner").remove();
                     $(".main-row").append(ret["template"]);
 
-                    editPanel(id, ret["register"]).dialog("open");
+
+                    createPanelDialog(id, ret["register"]).dialog("open");
 
                 }
             });
@@ -1902,7 +1553,7 @@ function loadPanelList(panelList) {
                 $(".main-row").children(".fa-spinner").remove();
                 $(".main-row").append(ret["template"]);
 
-                editPanel(id, ret["register"]).dialog("open");
+                createPanelDialog(id, ret["register"]).dialog("open");
 
             }
         });
@@ -1935,55 +1586,4 @@ function hex2rgba(hex, opacity) {
     b = parseInt(hex.substring(4, 6), 16);
     result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
     return result;
-}
-function getColorValues(color) {
-    var values = {red: null, green: null, blue: null, alpha: null};
-    if (typeof color === 'string') {
-        /* hex */
-        if (color.indexOf('#') === 0) {
-            color = color.substr(1)
-            if (color.length == 3)
-                values = {
-                    red: parseInt(color[0] + color[0], 16),
-                    green: parseInt(color[1] + color[1], 16),
-                    blue: parseInt(color[2] + color[2], 16),
-                    alpha: 1
-                }
-            else
-                values = {
-                    red: parseInt(color.substr(0, 2), 16),
-                    green: parseInt(color.substr(2, 2), 16),
-                    blue: parseInt(color.substr(4, 2), 16),
-                    alpha: 1
-                }
-            /* rgb */
-        } else if (color.indexOf('rgb(') === 0) {
-            var pars = color.indexOf(',');
-            values = {
-                red: parseInt(color.substr(4, pars)),
-                green: parseInt(color.substr(pars + 1, color.indexOf(',', pars))),
-                blue: parseInt(color.substr(color.indexOf(',', pars + 1) + 1, color.indexOf(')'))),
-                alpha: 1
-            }
-            /* rgba */
-        } else if (color.indexOf('rgba(') === 0) {
-            var pars = color.indexOf(','),
-                    repars = color.indexOf(',', pars + 1);
-            values = {
-                red: parseInt(color.substr(5, pars)),
-                green: parseInt(color.substr(pars + 1, repars)),
-                blue: parseInt(color.substr(color.indexOf(',', pars + 1) + 1, color.indexOf(',', repars))),
-                alpha: parseFloat(color.substr(color.indexOf(',', repars + 1) + 1, color.indexOf(')')))
-            }
-            /* verbous */
-        } else {
-            var stdCol = {acqua: '#0ff', teal: '#008080', blue: '#00f', navy: '#000080',
-                yellow: '#ff0', olive: '#808000', lime: '#0f0', green: '#008000',
-                fuchsia: '#f0f', purple: '#800080', red: '#f00', maroon: '#800000',
-                white: '#fff', gray: '#808080', silver: '#c0c0c0', black: '#000'};
-            if (stdCol[color] !== undefined)
-                values = getColorValues(stdCol[color]);
-        }
-    }
-    return values;
 }

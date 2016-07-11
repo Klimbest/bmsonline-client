@@ -13,12 +13,10 @@ div.dialog-panel-settings div.dialog-panel-progress-bar{
     background: linear-gradient(rgba(51, 122, 183, 0.88), #FFF);
     width: 210px;
     padding: 5px 10px;
-    margin-left: -16px;
     font-size: 12px;
     height: 80vh;
     z-index: 1;
     position: absolute;
-    margin-top: 82px;
 }
 ul.dropdown-menu{
     background-color: rgba(0,0,0,0);

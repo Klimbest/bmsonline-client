@@ -23,7 +23,7 @@ form div.row{
     position: absolute;
     width: 210px;
     margin-top: 0px;
-    margin-left: 15px;
+    margin-left: 0px;
 }
 
 .navbar-top-links .dropdown-messages,
@@ -136,9 +136,10 @@ form div.row{
 
 /*end sidebar*/
 
-@media screen and (min-width: 768px){
+@media screen and (min-width: 910px){
     .main-row{
-        margin-left: 225px;
+        margin-left: 210px;
+        margin-right: 15px;
     }
 }
 .table{

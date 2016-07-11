@@ -22,14 +22,11 @@ and open the template in the editor.
     left: 50%;
     z-index:999;
 }
-body {
-    background-color: #FFF;
-    margin:0;
-    padding-top: 50px;
+.navbar{
+    margin-bottom: 0px;
 }
-
-.content-container{
-    padding: 40px 15px;
+nav.row{
+    margin: 0px;
 }
 .cookie{
     width: 100vw;
@@ -41,10 +38,6 @@ body {
     z-index: 1;
     margin: 0 auto;
 }
-.navbar-brand { 
-    padding: 6px 15px;
-}
-
 .well{
     border-radius: 0px;
     border: solid 1px #337AB7;
@@ -67,7 +60,6 @@ body {
 }
 .error-message{
     display: none;
-    position: absolute;
     z-index:999;
     background-color: rgba(255,255,255,0.75);
     border: 2px solid black;

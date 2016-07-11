@@ -1,41 +1,18 @@
+
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
 <div class="dialog-panel-settings " title="Kreator paneli">
-    <form id="panel" class="form-horizontal" role="form">
-        <div class="row dialog-panel-general">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label class="control-label col-md-4" for="panel-name">Nazwa panelu:</label>
-                    <div class="col-md-8 input-group-sm">
-                        <input id="panel-name" type="text" name="Nazwa panelu" class="form-control" required value="panel{{newId}}"/>
-                        <input id="panel_id" type="hidden" class="form-control" required value=""/>
-                    </div>
-                </div>
-            </div>       
-            <div class="col-md-3">
-                <div class="form-group">
-                    <div class="col-sm-6">
-                        <div class="checkbox">
-                            <label>
-                                <input id="visibility" type="checkbox"                                           
-                                          {% if (terms is defined) and (terms is not empty) %}
-                                              disabled 
-                                          {% else %} 
-                                              checked
-                                          {% endif %}
-                                          >
-                                <span class="label label-dialog-panel"> Widoczny?</span>
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input id="tooltip" type="checkbox">
-                                <span class="label label-dialog-panel"> Wyświetlać podpowiedź?</span>
-                            </label>
-                        </div>
-                    </div>  
-                </div>
-            </div>
+    {{form_start(form)}}
+
+    <div class="row dialog-panel-general">
+        <div class="col-md-3">
+            {{form_row(form.name)}}
+        </div>       
+        <div class="col-md-4">
+            {{form_row(form.visibility)}}
+            {{form_row(form.tooltip)}}
         </div>
-    </form>
+    </div>
+
     <ul class="nav nav-tabs">
         <li id="dialog-panel-data" class="active"><a>Typ danych</a></li>
         <li id="dialog-panel-format" class=""><a>Format</a></li>
@@ -46,7 +23,24 @@
 
     <div class="row dialog-panel-data">
         <div class="col-md-12">
-            {% include 'BmsVisualizationBundle:dialog:panelDialogData.html.twig' %}
+            <div class="well well-lg">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="panel_type" class="form-group col-md-2">
+                            {{form_row(form.type)}}
+                        </div>
+                        <div class="input-group col-md-5">
+                            <div class="form-group">
+                                <input id="panel-source-content" name="Źródło danych" type="text" class="form-control" disabled required/>
+                                <input id="panel-source-value" type="hidden" class="form-control" />
+                            </div>
+                            <span class="input-group-btn">                    
+                                <button id="manager" class="btn btn-default" type="button"><i class="fa fa-plus fa-fw"></i></button>
+                            </span>                    
+                        </div>            
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row dialog-panel-format">
@@ -56,7 +50,13 @@
     </div>
     <div class="row dialog-panel-navigation">
         <div class="col-md-12">
-            {% include 'BmsVisualizationBundle:dialog:panelDialogHref.html.twig' %}
+            <div class="well well-lg">
+                <div class="row">
+                    <div class="col-md-6">
+                        {{form_row(form.page)}}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row dialog-panel-event">
@@ -69,4 +69,7 @@
             {% include 'BmsVisualizationBundle:dialog:progresBarManager.html.twig' %}
         </div>
     </div>
+    {{form_rest(form)}}
+    {{form_end(form)}}
+
 </div>

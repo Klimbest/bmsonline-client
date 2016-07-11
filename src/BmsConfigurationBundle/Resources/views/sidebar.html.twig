@@ -1,10 +1,9 @@
-<div class="navbar-default sidebar" role="navigation">
+<div class="navbar-default sidebar collapse navbar-collapse" role="navigation">
     <div class="sidebar-nav navbar-collapse active">
         <ul class="nav target-level">
             <li>
                 <div class="row active">
                     <strong>
-{#                        <i class="fa fa-building fa-fw"></i> {{ target.name|length > 27 ? target.name|slice(0, 27) ~ '...' : target.name }}#}
                         Interfejs komunikacyjny <i class="fa fa-angle-down fa-fw"></i>
                     </strong>
                 </div>
@@ -76,8 +75,6 @@
             {% endif %}
         </ul>
     </div>
-    <div class="device_id hidden-item">{{device_id}}</div>
-    <div class="comm_id hidden-item">{{comm_id}}</div>
     <div id="write-form" title="Zapis rejestru">
         <form class="form-horizontal">
             <input id="value" type="number" class="form-control" min="0" max="100" reqiured="required">

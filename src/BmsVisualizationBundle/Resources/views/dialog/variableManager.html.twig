@@ -67,7 +67,7 @@
                 {% for register in registers %}
                     <div id="{{register.id}}" class="row register-choice {{register.device.id}} "
                          style="
-                         {% if register.alarm == 1 %}
+                         {% if register.alarmRegister == 1 %}
                              color: #FF0000;
                          {% endif %}
                          {% if register.bitRegister == 1 %}
@@ -75,7 +75,7 @@
                          {% endif %}
                          ">
                         <div id="deviceName" class="col-md-2">{{ register.device.name }}</div>
-                        <div id="function" class="col-md-2">{{ register.function }}</div>
+                        <div id="function" class="col-md-2">{{ register.readFunction }}</div>
                         <div id="address" class="col-md-2">{{ register.registerAddress }}</div>
                         <div id="registerName" class="col-md-2 register_name">{{ register.name }}</div>
                         <div id="description" class="col-md-4">{{ register.description}}</div>

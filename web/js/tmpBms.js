@@ -2,7 +2,6 @@
 
 var terms, interval;
 var countToRefresh = 0;
-var errorClosed = 0;
 
 $(document).ready(function () {
     setErrorMessage();
@@ -11,14 +10,6 @@ $(document).ready(function () {
     setInterval(counter, 400);
 
 });
-
-function setErrorMessage() {
-    $("div.error-message").draggable();
-    $("div.error-message i.fa-remove").click(function () {
-        errorClosed = 1;
-        $("div.error-message").hide();
-    });
-}
 
 function ajaxChangePage(page_id) {
     var data = {
