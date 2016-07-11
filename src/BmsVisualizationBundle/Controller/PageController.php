@@ -150,5 +150,17 @@ class PageController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
-
+    
+    /**
+     * @Route("/generate", name="bms_visualization_generate", options={"expose"=true})
+     */
+    public function generateAction(Request $request){
+        if ($request->isXmlHttpRequest()) {
+            $ret['message'] = 'Success';
+            
+            return new JsonResponse($ret);
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
 }

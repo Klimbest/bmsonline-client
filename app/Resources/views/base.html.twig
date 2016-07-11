@@ -36,22 +36,22 @@
                         {% if app.user %}
                             {% if is_granted("ROLE_BMS") %}
                                 <li class="active"><a href="{{path('bms_index')}}"><i class="fa fa-building fa-fw"></i> BMS</a></li>
-                            {% endif %}
-                            {% if is_granted("ROLE_DATA_ANALYZE") %}
+                                {% endif %}
+                                {% if is_granted("ROLE_DATA_ANALYZE") %}
                                 <li class="active"><a href="{{path('bms_data_analyze_index')}}"><i class="fa fa-line-chart"></i> Analiza</a></li>
-                            {% endif %}
-                            {% if is_granted("ROLE_ALARM_HISTORY") %}
+                                {% endif %}
+                                {% if is_granted("ROLE_ALARM_HISTORY") %}
                                 <li class="active"><a href="{{path('bms_alarm_index')}}"><i class="fa fa-bell-o"></i> Alarmy</a></li>
-                            {% endif %}
+                                {% endif %}
                             <li class="dropdown active">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i> Ustwienia <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     {% if is_granted("ROLE_CONFIGURATION") %}
                                         <li><a href="{{path('bms_configuration_index')}}"><i class="fa fa-wrench"></i> Konfiguracja</a></li>
-                                    {% endif %}
-                                    {% if is_granted("ROLE_VISUALIZATION") %}
+                                        {% endif %}
+                                        {% if is_granted("ROLE_VISUALIZATION") %}
                                         <li><a href="{{path('bms_visualization_index')}}"><i class="fa fa-paint-brush"></i> Wizualizacja</a></li>
-                                    {% endif %}
+                                        {% endif %}
                                 </ul>
                             </li>
                         {% endif %}
@@ -59,10 +59,10 @@
                     <ul class="nav navbar-nav navbar-right">
                         {% if is_granted("ROLE_ADMIN") %}
                             <li class="active"><a href="{{path('sonata_admin_dashboard')}}"><i class="fa fa-users"></i> Panel administratora</a></li>
-                        {% endif %}
-                        {% if app.user %}
+                            {% endif %}
+                            {% if app.user %}
                             <li class="active"><a href="{{path('fos_user_security_logout')}}"><i class="fa fa-sign-out"></i> Wyloguj</a></li>
-                        {% endif %}
+                            {% endif %}
                     </ul>
                 </div>
             </div>
@@ -75,15 +75,22 @@
                 </div>
             </nav>
             <nav class="row navbar-default">
-                <div class="col-xs-6 col-xs-offset-3 text-center col-md-2 col-md-offset-2">
+                <div class="col-xs-12 col-md-11 text-right"> 
+                    {% block nav %}
+                    {% endblock %}
+                    {% if app.user %}
+                        <small><strong>{{ app.user.username }}</strong></small>                                
+                    {% endif %}
+                </div>
+                <div class="col-xs-12 text-left col-md-3 col-md-offset-1">
                     <span class="label label-primary">Czas: </span><span class="label label-primary clock">{{"now"|date("H:i:s")}}</span>
-                </div>         
-                <div class="col-xs-8 col-xs-offset-2 col-md-2 col-md-offset-1">
-                    <div class="progress timer" style="margin-bottom: 1px;">
+                </div>                 
+                <div class="col-xs-12 text-center col-md-4">
+                    <div class="progress timer" style="margin-bottom: 1px; width: 150px; display: inline-block;">
                         <div class="progress-bar progress-bar-success" role="progressbar" style="width: 0%;"></div>
                     </div>
-                </div>
-                <div class="col-xs-6 col-xs-offset-3 text-center col-md-2 col-md-offset-1">
+                </div> 
+                <div class="col-xs-12 text-right col-md-3">                    
                     <span id="errorModbusConnection" class="fa-stack">
                         <img src="/images/system/connected.png" class="img-responsive" />
                     </span>                            

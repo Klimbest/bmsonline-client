@@ -9,10 +9,12 @@ Number.prototype.pad = function (size) {
 
 $(document).ready(function () {
     refreshPage();
-    setInterval(function () {
+    interval = setInterval(function () {
         refreshPage();
-    }, 1000 * 60);
+    }, 1000 * 10);
 
+    setInterval(clock, 1000);
+    setInterval(counter, 400);
     tableEvents();
 
     setActiveLevel($("div.active"));
@@ -721,5 +723,6 @@ function refreshPage() {
 
         }
     });
+    countToRefresh = 0;
     $(".main-row").addClass("text-center").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }

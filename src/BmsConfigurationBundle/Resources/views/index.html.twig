@@ -5,8 +5,10 @@
     <link rel="stylesheet" href="{{ asset('css/bmsConfiguration.css')}}">
 {% endblock %}
 
+
 {% block nav %}
     {{ parent() }}
+    <button id="generateVisualization" class="btn btn-xs btn-success">Generuj wizualizacje</button>
     {% if sync == 1 %}
         <button id="synchronizeDatabase" class="btn btn-xs btn-danger">Generuj konfigurację</button>
     {% endif %}
@@ -27,3 +29,5 @@
     {{ parent() }}
     <script src="{{ asset('js/bmsConfiguration.js') }}"></script>
 {% endblock %}
+
+

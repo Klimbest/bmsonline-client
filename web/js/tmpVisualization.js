@@ -1587,3 +1587,5 @@ function hex2rgba(hex, opacity) {
     result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
     return result;
 }
+
+

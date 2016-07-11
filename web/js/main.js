@@ -1,5 +1,7 @@
 var fire;
-var errorClosed = 0;
+var errorClosed = 0; 
+var interval;
+var countToRefresh = 0;
 
 $(document).ready(function () {
 
@@ -12,6 +14,7 @@ $(document).ready(function () {
             $.cookie('noShowWelcome', true);
         });
     }
+    setGenerateVisualization();
 });
 
 function fitFooter() {
@@ -39,15 +42,15 @@ function setState(time, devicesStatus) {
         }
     });
 
-    if (networkConnectionDelay >= 300) {
-        $("div.variable-panel span").empty();
-        $("span#noInternetConnection img").attr("src", "/images/system/ethernetOff.png").addClass("blink");
-        $(".error-message").show().append("<div class='row'><div class='col-xs-12'><span class='label label-danger'>Brak połączenia internetowego</span></div></div>");
-        $("span#errorModbusConnection").hide();
-    } else {
-        $("span#noInternetConnection img").attr("src", "/images/system/ethernetOn.png").removeClass("blink");
-        $("span#errorModbusConnection").show();
-    }
+    /* if (networkConnectionDelay >= 300) {
+     $("div.variable-panel span").empty();
+     $("span#noInternetConnection img").attr("src", "/images/system/ethernetOff.png").addClass("blink");
+     $(".error-message").show().append("<div class='row'><div class='col-xs-12'><span class='label label-danger'>Brak połączenia internetowego</span></div></div>");
+     $("span#errorModbusConnection").hide();
+     } else {
+     $("span#noInternetConnection img").attr("src", "/images/system/ethernetOn.png").removeClass("blink");
+     $("span#errorModbusConnection").show();
+     }*/
 
     if (error !== 0) {
         $("div.variable-panel span").empty();
@@ -66,4 +69,44 @@ function setErrorMessage() {
         errorClosed = 1;
         $("div.error-message").hide();
     });
+}
+
+function setGenerateVisualization() {
+    $('button#generateVisualization').click(function () {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_generate'),
+            success: function (ret) {
+                $(".content-container").children(".fa-spinner").remove();
+                alert(ret['message']);
+            }
+        });
+        $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    });
+}
+
+
+function counter() {
+    console.log('start');
+    countToRefresh++;
+    if ($("div.well").length > 0) {
+        $("div.timer div.progress-bar").css({width: countToRefresh * 400 / 100 + "%"});
+    } else {
+        $("div.timer div.progress-bar").css({width: "0%"});
+    }
+}
+
+function clock() {
+    var currentTime = new Date( );
+    var currentHours = currentTime.getHours( );
+    var currentMinutes = currentTime.getMinutes( );
+    var currentSeconds = currentTime.getSeconds( );
+
+    currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
+    currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+
+    var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds;
+
+    $("span.clock").empty().append(currentTimeString);
 }
