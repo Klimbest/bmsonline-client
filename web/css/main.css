@@ -28,16 +28,12 @@ and open the template in the editor.
 nav.row{
     margin: 0px;
 }
-.cookie{
-    width: 100vw;
-    height: 50px;
-    border-bottom: 1px solid #dd4351;
-    background-color: rgba(247, 225, 181, 0.75);
-    position: absolute;
-    overflow: visible;
-    z-index: 1;
-    margin: 0 auto;
+
+div.content-container{
+    margin-left: 15px;
+    margin-right: 15px;
 }
+
 .well{
     border-radius: 0px;
     border: solid 1px #337AB7;
