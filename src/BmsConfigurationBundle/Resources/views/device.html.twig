@@ -3,12 +3,8 @@
 {% form_theme form 'bootstrap_3_layout.html.twig' %}
 <div class="col-md-12 text-left">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <span class="label label-primary hide-mainrow-label">{{device.communicationType.name}} > {{ device.name}} - konfiguracja <i class="fa fa-angle-left fa-angle-down fa-fw"></i></span>
-        </div>
-        
-        <div class="col-md-6">
-            <span class="label label-primary import-registers-from_csv"> <i class="fa fa-angle-left fa-angle-down fa-fw"></i></span>
         </div>
     </div>
     <div class="well text-left hidden-item">
@@ -31,7 +27,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-5 address_modbus_hex">
-                        <input type="text" disabled class="form-control" maxlength="2"></input>
+                        <input type="text" disabled class="form-control" maxlength="2" />
                     </div>
                     <div class="col-md-5 col-md-offset-1 address_modbus_dec">
                         {{form_widget(form.modbusAddress)}}
@@ -109,27 +105,27 @@
             </div>
             <div class="row">
                 <div class="col-md-8 hide-button-container hidden-item">
-                    <input id="register_address_hex" type="button" class="btn btn-default btn-xs hidding" value="Adres(HEX)"></input>
-                    <input id="register_address_dec" type="button" class="btn btn-default btn-xs hidding" value="Adres(DEC)"></input>
-                    <input id="name" type="button" class="btn btn-default btn-xs hidding" value="Nazwa"></input>
-                    <input id="read_function" type="button" class="btn btn-default btn-xs hidding " value="Funkcja odczytu"></input>
-                    <input id="write_function" type="button" class="btn btn-default btn-xs hidding " value="Funkcja zapisu"></input>
-                    <input id="description" type="button" class="btn btn-default btn-xs hidding " value="Opis"></input>
-                    <input id="active_register" type="button" class="btn btn-default btn-xs hidding" value="Odczytywać?"></input>
-                    <input id="archive_register" type="button" class="btn btn-default btn-xs hidding" value="Archiwizować?"></input>
-                    <input id="alarm_register" type="button" class="btn btn-default btn-xs hidding" value="Alarmowy?"></input>
-                    <input id="bit_register" type="button" class="btn btn-default btn-xs hidding" value="Bitowy?"></input>
-                    <input id="write_register" type="button" class="btn btn-default btn-xs hidding" value="Zapis?"></input>
-                    <input id="modificator_read" type="button" class="btn btn-default btn-xs hidding" value="Przelicznik odczyt"></input>
-                    <input id="modificator_write" type="button" class="btn btn-default btn-xs hidding" value="Przelicznik zapis"></input>
-                    <input id="fixed_value" type="button" class="btn btn-default btn-xs hidding" value="Aktualna wartość"></input>
-                    <input id="description2" type="button" class="btn btn-default btn-xs hidding " value="Dodatkowy opis"></input>
-                    <input id="manage" type="button" class="btn btn-default btn-xs hidding" value="Zarządzaj"></input>
+                    <input id="register_address_hex" type="button" class="btn btn-default btn-xs hidding" value="Adres(HEX)"/>
+                    <input id="register_address_dec" type="button" class="btn btn-default btn-xs hidding" value="Adres(DEC)"/>
+                    < id="name" type="button" class="btn btn-default btn-xs hidding" value="Nazwa"/>
+                    <input id="read_function" type="button" class="btn btn-default btn-xs hidding " value="Funkcja odczytu"/>
+                    <input id="write_function" type="button" class="btn btn-default btn-xs hidding " value="Funkcja zapisu"/>
+                    <input id="description" type="button" class="btn btn-default btn-xs hidding " value="Opis"/>
+                    <input id="active_register" type="button" class="btn btn-default btn-xs hidding" value="Odczytywać?"/>
+                    <input id="archive_register" type="button" class="btn btn-default btn-xs hidding" value="Archiwizować?"/>
+                    <input id="alarm_register" type="button" class="btn btn-default btn-xs hidding" value="Alarmowy?"/>
+                    <input id="bit_register" type="button" class="btn btn-default btn-xs hidding" value="Bitowy?"/>
+                    <input id="write_register" type="button" class="btn btn-default btn-xs hidding" value="Zapis?"/>
+                    <input id="modificator_read" type="button" class="btn btn-default btn-xs hidding" value="Przelicznik odczyt"/>
+                    <input id="modificator_write" type="button" class="btn btn-default btn-xs hidding" value="Przelicznik zapis"/>
+                    <input id="fixed_value" type="button" class="btn btn-default btn-xs hidding" value="Aktualna wartość"/>
+                    <input id="description2" type="button" class="btn btn-default btn-xs hidding " value="Dodatkowy opis"/>
+                    <input id="manage" type="button" class="btn btn-default btn-xs hidding" value="Zarządzaj"/>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 text-right">
-                    <input type="button" class="btn btn-default btn-xs checkAll" value="Zaznacz wszystkie"></input>
+                    <input type="button" class="btn btn-default btn-xs checkAll" value="Zaznacz wszystkie"/>
                     <button type="button" class="btn btn-default btn-xs refresh"><i class="fa fa-refresh fa-fw fa-blue"></i></button>
                     <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-remove fa-fw fa-red remove-many"></i></button>
                 </div>
