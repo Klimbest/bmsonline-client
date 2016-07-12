@@ -10,10 +10,23 @@ namespace BmsVisualizationBundle\Entity;
  */
 class WidgetBarRepository extends \Doctrine\ORM\EntityRepository {
 
-    public function findWidgetsForPage($page_id) {
+    public function findWidgetValueRegistersForPage($page_id) {
         return $this->getEntityManager()
-                        ->createQuery('SELECT w FROM BmsVisualizationBundle:WidgetBar w JOIN w.panel p WHERE p.type = \'widget\' AND p.page = ' . $page_id)
+                        ->createQuery('SELECT r.id, rcd.fixedValue FROM BmsVisualizationBundle:WidgetBar w '
+                                . '             JOIN w.valueRegisterId r '
+                                . '             JOIN r.registerCurrentData rcd'
+                                . '             JOIN w.panel p'
+                                . '             WHERE p.type = \'widget\' AND p.page = ' . $page_id)
                         ->getResult();
     }
-
+    
+    public function findWidgetSetRegistersForPage($page_id) {
+        return $this->getEntityManager()
+                        ->createQuery('SELECT r.id, rcd.fixedValue FROM BmsVisualizationBundle:WidgetBar w '
+                                . '             JOIN w.setRegisterId r '
+                                . '             JOIN r.registerCurrentData rcd'
+                                . '             JOIN w.panel p'
+                                . '             WHERE p.type = \'widget\' AND p.page = ' . $page_id)
+                        ->getResult();
+    }
 }

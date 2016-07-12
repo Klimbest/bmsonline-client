@@ -60,7 +60,7 @@ function ajaxRefreshPage(terms) {
             $("span.timer").removeClass("label-danger").addClass("label-primary");
             setState(ret['state'], ret['devicesStatus']);
             setVariables(ret['registers']);
-            makeTerms(terms, ret['registers']);
+            //makeTerms(terms, ret['registers']);
         }
     });
     countToRefresh = 0;
@@ -68,7 +68,10 @@ function ajaxRefreshPage(terms) {
 
     function setVariables(registers) {
         if(registers){
-            $.each(registers, function (key, value) {
+            
+            $.each(registers, function () {
+                var key = this.id;
+                var value = this.fixedValue;
                 if (value !== null) {
                     var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
                     var roundValue = parseFloat(value).toFixed(displayPrecision);

@@ -42,7 +42,6 @@ class DefaultController extends Controller {
         if ($request->isXmlHttpRequest()) {
 
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
-            $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $bitRegisterRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:BitRegister');
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
             $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
@@ -50,34 +49,19 @@ class DefaultController extends Controller {
             $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
 
             $page_id = $request->get("page_id");
-            //get all panels for page
-            $panels = $panelRepo->findVariablePanelsForPage($page_id);
-            foreach ($panels as $p) {
-                $rid = $p->getContentSource();
-                if (substr($rid, 0, 3) == "bit") {
-                    $register = $bitRegisterRepo->find(substr($rid, 3));
-                    $registers[$rid] = $register->getBitValue();
-                } else {
-                    $register = $registerRepo->find($rid);
-                    $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
-                }
-            }
-            //get all terms
-            $terms = $termRepo->findTermsForPage($page_id);
-            foreach ($terms as $t) {
-                $register = $t->getRegister();
-                $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
-            }
-            //get all bar widgets
-            $widgets = $widgetBarRepo->findWidgetsForPage($page_id);
-            foreach ($widgets as $w) {
-                if ($w->getSetRegisterId() != null) {
-                    $register = $w->getSetRegisterId();
-                    $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
-                }
-                $register = $w->getValueRegisterId();
-                $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
-            }
+            
+            $panelRegisters = $panelRepo->findVariablePanelsRegistersForPage($page_id);
+            $ret['registers'] = $panelRegisters;
+
+            $termRegisters = $termRepo->findRegisterTermsForPage($page_id);
+            $ret['registers'] = array_unique(array_merge($ret['registers'], $termRegisters ), SORT_REGULAR);
+            
+            $widgetValueRegisters = $widgetBarRepo->findWidgetValueRegistersForPage($page_id);
+            $ret['registers'] = array_unique(array_merge($ret['registers'], $widgetValueRegisters ), SORT_REGULAR);
+            
+            $widgetSetRegisters = $widgetBarRepo->findWidgetSetRegistersForPage($page_id);
+            $ret['registers'] = array_unique(array_merge($ret['registers'], $widgetSetRegisters ), SORT_REGULAR);
+            
             $devicesStatus = $technicalInformationRepo->getDevicesStatus();
             foreach ($devicesStatus as &$ds) {
                 $devices_id = explode("_", $ds['name']);
@@ -90,7 +74,6 @@ class DefaultController extends Controller {
 
             $ret['devicesStatus'] = $devicesStatus;
             $time ? $ret['state'] = $time[0]["time"]->getTimestamp() : $ret['state'] = null;
-            isset($registers) ? $ret['registers'] = $registers : $ret['registers'] = null;
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();

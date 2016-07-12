@@ -16,9 +16,12 @@ class PanelRepository extends \Doctrine\ORM\EntityRepository
                 ->getResult();
     }
     
-    public function findVariablePanelsForPage($page_id){
+    public function findVariablePanelsRegistersForPage($page_id){
         return $this->getEntityManager()
-                ->createQuery('SELECT p FROM BmsVisualizationBundle:Panel AS p WHERE p.type = \'variable\' AND p.page = '.$page_id)
+                ->createQuery('SELECT r.id, rcd.fixedValue FROM BmsConfigurationBundle:Register r'
+                        . '             JOIN r.registerCurrentData rcd'
+                        . '             JOIN BmsVisualizationBundle:Panel p'
+                        . '             WHERE p.type = \'variable\' AND p.contentSource = r.id AND p.page = '.$page_id .'ORDER BY r.id')
                 ->getResult();
     }    
     
