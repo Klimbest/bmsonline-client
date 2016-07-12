@@ -36,22 +36,24 @@
                         {% if app.user %}
                             {% if is_granted("ROLE_BMS") %}
                                 <li class="active"><a href="{{path('bms_index')}}"><i class="fa fa-building fa-fw"></i> BMS</a></li>
-                                {% endif %}
-                                {% if is_granted("ROLE_DATA_ANALYZE") %}
+                            {% endif %}
+                            {% if is_granted("ROLE_DATA_ANALYZE") %}
                                 <li class="active"><a href="{{path('bms_data_analyze_index')}}"><i class="fa fa-line-chart"></i> Analiza</a></li>
-                                {% endif %}
-                                {% if is_granted("ROLE_ALARM_HISTORY") %}
+                            {% endif %}
+                            {% if is_granted("ROLE_ALARM_HISTORY") %}
                                 <li class="active"><a href="{{path('bms_alarm_index')}}"><i class="fa fa-bell-o"></i> Alarmy</a></li>
-                                {% endif %}
+                            {% endif %}
                             <li class="dropdown active">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i> Ustwienia <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     {% if is_granted("ROLE_CONFIGURATION") %}
                                         <li><a href="{{path('bms_configuration_index')}}"><i class="fa fa-wrench"></i> Konfiguracja</a></li>
-                                        {% endif %}
-                                        {% if is_granted("ROLE_VISUALIZATION") %}
-                                        <li><a href="{{path('bms_visualization_index')}}"><i class="fa fa-paint-brush"></i> Wizualizacja</a></li>
-                                        {% endif %}
+                                    {% endif %}
+                                    {% if is_granted("ROLE_VISUALIZATION") %}
+                                        <li><a href="{{path('bms_visualization_index')}}">
+                                                <i class="fa fa-paint-brush"></i> Wizualizacja</a>
+                                        </li>
+                                    {% endif %}
                                 </ul>
                             </li>
                         {% endif %}
@@ -59,10 +61,10 @@
                     <ul class="nav navbar-nav navbar-right">
                         {% if is_granted("ROLE_ADMIN") %}
                             <li class="active"><a href="{{path('sonata_admin_dashboard')}}"><i class="fa fa-users"></i> Panel administratora</a></li>
-                            {% endif %}
-                            {% if app.user %}
+                        {% endif %}
+                        {% if app.user %}
                             <li class="active"><a href="{{path('fos_user_security_logout')}}"><i class="fa fa-sign-out"></i> Wyloguj</a></li>
-                            {% endif %}
+                        {% endif %}
                     </ul>
                 </div>
             </div>
