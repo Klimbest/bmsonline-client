@@ -25,19 +25,10 @@ class DefaultController extends Controller {
      */
     public function ajaxChangePageAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
-            $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
-            $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
-            $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
 
             $page_id = $request->get("page_id");
-            $pages = $pageRepo->findAll();
-            isset($page_id) ? $page = $pageRepo->find($page_id) : $page = $pageRepo->find(2);
 
-            $terms = $termRepo->findAllAsArray();
-
-            $widgets = $widgetBarRepo->findAll();
-            $ret["terms"] = $terms;
-            $ret['template'] = $this->container->get('templating')->render('BmsBundle::page.html.twig', ['pages' => $pages, 'page' => $page, 'terms' => $terms, 'widgets' => $widgets]);
+            $ret['template'] = $this->container->get('templating')->render('BmsBundle:Pages:' . $page_id . '.html.twig');
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -63,8 +54,10 @@ class DefaultController extends Controller {
             $panels = $panelRepo->findVariablePanelsForPage($page_id);
             foreach ($panels as $p) {
                 $rid = $p->getContentSource();
+                if (substr($rid, 0, 3) == "bit") {
                     $register = $bitRegisterRepo->find(substr($rid, 3));
                     $registers[$rid] = $register->getBitValue();
+                } else {
                     $register = $registerRepo->find($rid);
                     $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
                 }
