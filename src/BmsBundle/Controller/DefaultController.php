@@ -63,13 +63,13 @@ class DefaultController extends Controller {
                 }
             }
             //get all terms
-            $terms = $termRepo->findAll();
+            $terms = $termRepo->findTermsForPage($page_id);
             foreach ($terms as $t) {
                 $register = $t->getRegister();
                 $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
             }
             //get all bar widgets
-            $widgets = $widgetBarRepo->findAll();
+            $widgets = $widgetBarRepo->findWidgetsForPage($page_id);
             foreach ($widgets as $w) {
                 if ($w->getSetRegisterId() != null) {
                     $register = $w->getSetRegisterId();
@@ -79,7 +79,6 @@ class DefaultController extends Controller {
                 $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
             }
             $devicesStatus = $technicalInformationRepo->getDevicesStatus();
-
             foreach ($devicesStatus as &$ds) {
                 $devices_id = explode("_", $ds['name']);
                 $device = $deviceRepo->find((int) $devices_id[1]);

@@ -88,6 +88,14 @@ class WidgetBar {
      */
     private $valueRegisterId;
 
+    /**
+     * @var Panel
+     * 
+     * @ORM\ManyToOne(targetEntity="Panel")
+     * @ORM\JoinColumn(name="panel_id", referencedColumnName="id", nullable=false)
+     * 
+     */
+    private $panel;
 
     /**
      * Get id
@@ -337,5 +345,29 @@ class WidgetBar {
     public function getValueRegisterId()
     {
         return $this->valueRegisterId;
+    }
+
+    /**
+     * Set panel
+     *
+     * @param \BmsVisualizationBundle\Entity\Panel $panel
+     *
+     * @return WidgetBar
+     */
+    public function setPanel(\BmsVisualizationBundle\Entity\Panel $panel)
+    {
+        $this->panel = $panel;
+
+        return $this;
+    }
+
+    /**
+     * Get panel
+     *
+     * @return \BmsVisualizationBundle\Entity\Panel
+     */
+    public function getPanel()
+    {
+        return $this->panel;
     }
 }
