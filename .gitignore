@@ -16,7 +16,6 @@
 /vendor/
 /web/bundles/
 composer.lock
-!/src/BmsBundle/Resources/views/Pages/
 /src/BmsBundle/Resources/views/Pages/*
 .idea/copyright/
 .idea/deployment.xml
