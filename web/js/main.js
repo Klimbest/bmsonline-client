@@ -1,5 +1,5 @@
 var fire;
-var errorClosed = 0; 
+var errorClosed = 0;
 var interval;
 var countToRefresh = 0;
 
@@ -34,23 +34,21 @@ function setState(time, devicesStatus) {
     $(".error-message").hide();
 
     $.each(devicesStatus, function () {
-        if (this.status > 0) {
+        if (this.scanState > 0) {
             error = 1;
-            //var device_id = this.name.substring(2, 3);
             slaves = slaves + " " + this.name;
-            //console.log("Device: " + this.name.substring(2, 3) + " błędny odczyt o " + this.time.date.substring(0, 19) + " sprawdź połączenie modbus!");
         }
     });
 
-    /* if (networkConnectionDelay >= 300) {
-     $("div.variable-panel span").empty();
-     $("span#noInternetConnection img").attr("src", "/images/system/ethernetOff.png").addClass("blink");
-     $(".error-message").show().append("<div class='row'><div class='col-xs-12'><span class='label label-danger'>Brak połączenia internetowego</span></div></div>");
-     $("span#errorModbusConnection").hide();
-     } else {
-     $("span#noInternetConnection img").attr("src", "/images/system/ethernetOn.png").removeClass("blink");
-     $("span#errorModbusConnection").show();
-     }*/
+//    if (networkConnectionDelay >= 300) {
+//        $("div.variable-panel span").empty();
+//        $("span#noInternetConnection img").attr("src", "/images/system/ethernetOff.png").addClass("blink");
+//        $(".error-message").show().append("<div class='row'><div class='col-xs-12'><span class='label label-danger'>Brak połączenia internetowego</span></div></div>");
+//        $("span#errorModbusConnection").hide();
+//    } else {
+//        $("span#noInternetConnection img").attr("src", "/images/system/ethernetOn.png").removeClass("blink");
+//        $("span#errorModbusConnection").show();
+//    }
 
     if (error !== 0) {
         $("div.variable-panel span").empty();
@@ -88,7 +86,7 @@ function setGenerateVisualization() {
 
 
 function counter() {
-    
+
     countToRefresh++;
     if ($("div.well").length > 0) {
         $("div.timer div.progress-bar").css({width: countToRefresh * 400 / 100 + "%"});

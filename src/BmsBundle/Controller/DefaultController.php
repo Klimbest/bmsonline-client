@@ -40,39 +40,17 @@ class DefaultController extends Controller {
      */
     public function ajaxRefreshPageAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
-
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
-            $bitRegisterRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:BitRegister');
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
             $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
-            $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
-
             $page_id = $request->get("page_id");
-            
-            $panelRegisters = $panelRepo->findVariablePanelsRegistersForPage($page_id);
-            $ret['registers'] = $panelRegisters;
-
-            $termRegisters = $termRepo->findRegisterTermsForPage($page_id);
-            $ret['registers'] = array_unique(array_merge($ret['registers'], $termRegisters ), SORT_REGULAR);
-            
-            $widgetValueRegisters = $widgetBarRepo->findWidgetValueRegistersForPage($page_id);
-            $ret['registers'] = array_unique(array_merge($ret['registers'], $widgetValueRegisters ), SORT_REGULAR);
-            
-            $widgetSetRegisters = $widgetBarRepo->findWidgetSetRegistersForPage($page_id);
-            $ret['registers'] = array_unique(array_merge($ret['registers'], $widgetSetRegisters ), SORT_REGULAR);
-            
-            $devicesStatus = $technicalInformationRepo->getDevicesStatus();
-            foreach ($devicesStatus as &$ds) {
-                $devices_id = explode("_", $ds['name']);
-                $device = $deviceRepo->find((int) $devices_id[1]);
-                $ds['name'] = $device->getName();
-            }
-
-            //get last hello from RPi      
+            $ret['registers'] = $panelRepo->findVariablePanelsRegistersForPage($page_id);
+            $ret['registers'] = array_unique(array_merge($ret['registers'], $termRepo->findRegisterTermsForPage($page_id) ), SORT_REGULAR);
+            $ret['registers'] = array_unique(array_merge($ret['registers'], $widgetBarRepo->findWidgetValueRegistersForPage($page_id) ), SORT_REGULAR);
+            $ret['registers'] = array_unique(array_merge($ret['registers'], $widgetBarRepo->findWidgetSetRegistersForPage($page_id) ), SORT_REGULAR);
+            $ret['devicesStatus'] = $technicalInformationRepo->getDevicesStatus();
             $time = $technicalInformationRepo->getRpiStatus();
-
-            $ret['devicesStatus'] = $devicesStatus;
             $time ? $ret['state'] = $time[0]["time"]->getTimestamp() : $ret['state'] = null;
             return new JsonResponse($ret);
         } else {
