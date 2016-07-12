@@ -79,7 +79,7 @@ function setGenerateVisualization() {
             url: Routing.generate('bms_visualization_generate'),
             success: function (ret) {
                 $(".content-container").children(".fa-spinner").remove();
-                alert(ret['message']);
+                console.log(ret);
             }
         });
         $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -88,7 +88,7 @@ function setGenerateVisualization() {
 
 
 function counter() {
-    console.log('start');
+    
     countToRefresh++;
     if ($("div.well").length > 0) {
         $("div.timer div.progress-bar").css({width: countToRefresh * 400 / 100 + "%"});

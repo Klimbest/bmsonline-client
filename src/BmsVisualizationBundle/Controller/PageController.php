@@ -8,6 +8,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use BmsVisualizationBundle\Entity\Page;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 class PageController extends Controller {
 
@@ -39,7 +41,7 @@ class PageController extends Controller {
             $pages = $pageRepo->findAll();
 
             $ret['page'] = $this->container->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id]);
-            
+
             $panels = $panelRepo->findPanelsForPage($page_id);
             $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
             return new JsonResponse($ret);
@@ -117,31 +119,31 @@ class PageController extends Controller {
             $pages = $pageRepo->findAll();
             $panels = $panelRepo->findPanelsForPage($request->get("page_id"));
             $widgets = $widgetBarRepo->findAll();
-            
+
             $registers = array();
             foreach ($panels as $p) {
-                if($p->getType() === "variable"){
+                if ($p->getType() === "variable") {
                     $rid = $p->getContentSource();
-                    if(substr($rid, 0, 3) == "bit"){
+                    if (substr($rid, 0, 3) == "bit") {
                         $register = $bitRegisterRepo->find(substr($rid, 3));
                         $registers[$rid] = $register->getBitValue();
-                    }else{
+                    } else {
                         $register = $registerRepo->find($rid);
                         $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
                     }
                 }
             }
-                        
-            foreach ($widgets as $w){
-                if($w->getSetRegisterId() != null){
+
+            foreach ($widgets as $w) {
+                if ($w->getSetRegisterId() != null) {
                     $register = $w->getSetRegisterId();
                     $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
                 }
                 $register = $w->getValueRegisterId();
                 $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
             }
-            
-            
+
+
             $ret['registers'] = $registers;
             $ret['page'] = $this->container->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id, 'widgets' => $widgets]);
             $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
@@ -150,17 +152,31 @@ class PageController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
-    
+
     /**
      * @Route("/generate", name="bms_visualization_generate", options={"expose"=true})
      */
-    public function generateAction(Request $request){
+    public function generateAction(Request $request) {
         if ($request->isXmlHttpRequest()) {
-            $ret['message'] = 'Success';
+            $fs = new Filesystem();
+            $finder = new Finder();
+            $pages = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page')->findAll();
+            $widgets = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar')->findAll();
+            $finder->files()->in('../src/BmsBundle/Resources/views/Pages/');
             
-            return new JsonResponse($ret);
+            foreach ($finder as $file) {
+                $fs->remove($file->getRealPath());
+            }
+            foreach ($pages as $page) {
+                $content = $this->container->get('templating')->render('BmsBundle::page.html.twig', ['page' => $page, 'widgets' => $widgets]);
+                
+                $fs->dumpFile('../src/BmsBundle/Resources/views/Pages/'.$page->getId().".html.twig", $content);
+            }
+            
+            return new JsonResponse($fs);
         } else {
             throw new AccessDeniedHttpException();
         }
     }
+
 }

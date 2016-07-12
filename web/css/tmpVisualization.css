@@ -169,6 +169,7 @@ div.dialog-panel-settings .well{
     padding-top: 24px;
     border-top: none;
     box-shadow: unset;
+    background-color: #FFF;
 }
 
 div.dialog-condition-register .well{
