@@ -193,7 +193,6 @@ function formEvents() {
                                                     textarea").removeAttr('disabled');
 
     });
-    //zmiana wyświetlania pól formularza w zależności od wyboru typu połączenia
     $("select#appbundle_communicationtype_type").change(function () {
         var id = $(this).parent().parent().parent().attr("id");
         var v = $(this).val();
@@ -206,7 +205,6 @@ function formEvents() {
             $("form#" + id + " .tcpip").val(null).show();
         }
     });
-    //obsługa przycisku anuluj(zablokowanie pól formularza, zmiana przycisków obsługi)
     $(".btn-cancel").click(function () {
 
         $(this).hide().parent().children().hide();
@@ -217,7 +215,6 @@ function formEvents() {
                                                 select,\n\
                                                 textarea").attr('disabled', true);
     });
-    //obsługa przycisku usuń(wyświetlenie potwierdzenia usunięcia)
     $(".btn-delete").click(function () {
         if (confirm("Na pewno usunąć urządzenie razem z wszystkimi rejestrami do niego przypisanymi?")) {
 
@@ -225,9 +222,7 @@ function formEvents() {
             return false;
         }
     });
-    //ustawienie pól formularza jako zablokowanych
     $(".enabled input, .enabled select, .enabled textarea").removeAttr('disabled');
-    //ustawienie wartości domyślnych
     if ($("div.new-item").hasClass("active")) {
         inputRegisterSize.val(16);
         inputModificatorRead.val(1);
@@ -237,7 +232,6 @@ function formEvents() {
         $("select#bmsconfigurationbundle_register_read_function").val("03");
         $("select#bmsconfigurationbundle_register_write_function").val("06");
     }
-    //chowanie pokazywanie main-row
     $(".main-row span.hide-mainrow-label").click(function () {
         $(this).parent().parent().next("div.well").toggle();
         $(this).children("i.fa").toggleClass('fa-angle-down');
@@ -480,7 +474,7 @@ function updateAddressFormat() {
     modbusDecChange(decInput);
 
     $(".address_modbus_hex input").change(function () {
-        modbusHexChange($(this));
+        modbusHexChange($(this))
     });
 
     decInput.change(function () {
@@ -551,17 +545,14 @@ function modbusDecChange(item) {
 
 function registerHexChange(item) {
     if (item.length > 0) {
-        //pobranie wartości i przekształcenie na wielkie litery
         var hexVal = item.val().toUpperCase();
         if (hexVal === "") {
-            //zapisz zero, dodaj zera na początku
             item.val("0000");
             $(".register_address_dec input").val((0).pad(5));
         } else {
             if (!(/(^[0-9A-F]{1}$)|(^[0-9A-F]{2}$)|(^[0-9A-F]{3}$)|(^[0-9A-F]{4}$)/i.test(hexVal))) {
                 hexVal = "FFFF";
             }
-            //dopełnienie zerami do odpowiedniej długości 
             switch (hexVal.length) {
                 case 1:
                     hexVal = "000" + hexVal;
@@ -575,12 +566,8 @@ function registerHexChange(item) {
                 default:
                     break;
             }
-            //zapisanie w nowym formacie
             item.val(hexVal);
-            //wyliczenie nowej wartości dziesiętnej
             var decVal = parseInt(hexVal, 16);
-
-            //zapisz nową wartość, dodaj zera na początku
             $(".register_address_dec input").val(decVal.pad(5));
         }
     }
@@ -620,9 +607,9 @@ function registerDecChange(item) {
 
 function updateLastRead(lastRead, did) {
     lastRead = Date.parse(lastRead) / 1000 / 60;
-    var now = new Date();
-    now = Date.parse(now) / 1000 / 60;
-    var elapseUTC = now - lastRead;
+    var nowTime = new Date();
+    var now = Date.parse(nowTime) / 1000 / 60;
+    var elapseUTC = nowTime - lastRead;
     var r = parseInt("33", 16);
     var g = parseInt("7A", 16);
     var b = parseInt("B7", 16);
@@ -631,16 +618,16 @@ function updateLastRead(lastRead, did) {
         r = r + elapseUTC * 13;
         g = g - elapseUTC * 8;
         b = b - elapseUTC * 12;
-        r > 256 ? r = 255 : r = r;
-        g < 10 ? g = 0 : g = g;
-        b < 10 ? b = 0 : b = b;
+        r > 256 ? r = 255 : r;
+        g < 10 ? g = 0 : g;
+        b < 10 ? b = 0 : b;
 
         r = r.toString(16);
         g = g.toString(16);
         b = b.toString(16);
-        r.length < 2 ? r = "0" + r : r = r;
-        g.length < 2 ? g = "0" + g : g = g;
-        b.length < 2 ? b = "0" + b : b = b;
+        r.length < 2 ? r = "0" + r : r;
+        g.length < 2 ? g = "0" + g : g;
+        b.length < 2 ? b = "0" + b : b;
         $("span#" + did + ".label-last-read").css("background-color", "#" + r + g + b);
     } else {
         $("span#" + did + ".label-last-read").css("background-color", "#337AB7");
@@ -651,9 +638,9 @@ function refreshPage() {
     var cid = $(".communicationType-level div.active").attr("id");
     var did = $(".device-level div.active").attr("id");
     var rid = $(".register-level div div.active").attr("id");
-    cid === undefined ? cid = 0 : cid = cid;
-    did === undefined ? did = 0 : did = did;
-    rid === undefined ? rid = 0 : rid = rid;
+    cid === undefined ? cid = 0 : cid;
+    did === undefined ? did = 0 : did;
+    rid === undefined ? rid = 0 : rid;
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",
@@ -664,7 +651,8 @@ function refreshPage() {
             $(".fa-spinner").remove();
             $.each(ret["times_of_update"], function () {
                 var time = new Date(this.time);
-                time.getTime() !== 0 ? $("span#" + this.id + ".label-last-read span").text($.formatDateTime('yy-mm-dd hh:ii', time)) : $("span#" + this.id + ".label-last-read span").text("-");
+                var timeLabel = $("span#" + this.id + ".label-last-read span");
+                time.getTime() !== 0 ? timeLabel.text($.formatDateTime('yy-mm-dd hh:ii', time)) : timeLabel.text("-");
                 updateLastRead(time, this.id);
             });
             $("i.fa-refresh[id]").each(function () {
