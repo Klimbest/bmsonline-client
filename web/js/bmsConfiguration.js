@@ -173,7 +173,9 @@ function ajaxAppend(url) {
 }
 
 function formEvents() {
-    //obsługa przycisku edytuj(odblokowanie pól formularza, zmiana przycisków obsługi)
+    var inputRegisterSize = $("select#bmsconfigurationbundle_register_register_size");
+    var inputModificatorRead = $("input#bmsconfigurationbundle_register_modificator_read");
+    var inputModificatorWrite = $("input#bmsconfigurationbundle_register_modificator_write");
 
     $("div.bit_registers").each(function () {
         var name = $(this).children("input[name*='name']").val();
@@ -181,7 +183,6 @@ function formEvents() {
         var value = $(this).children("input[name*='bitValue']").val();
         $(this).find("span.bitValue").empty().append(value);
     });
-
     $(".btn-edit").click(function () {
         $(this).hide().parent().children().hide();
         $(this).parent().find(".btn-save, .btn-cancel").show();
@@ -228,10 +229,9 @@ function formEvents() {
     $(".enabled input, .enabled select, .enabled textarea").removeAttr('disabled');
     //ustawienie wartości domyślnych
     if ($("div.new-item").hasClass("active")) {
-        $("select#bmsconfigurationbundle_register_register_size").val(16);
-        $("input#bmsconfigurationbundle_register_modificator_read").val(1);
-
-        $("input#bmsconfigurationbundle_register_modificator_write").val(1);
+        inputRegisterSize.val(16);
+        inputModificatorRead.val(1);
+        inputModificatorWrite.val(1);
         $("textarea#bmsconfigurationbundle_register_description2").val("Dodatkowe informacje");
         $("input#bmsconfigurationbundle_register_active").attr("checked", true);
         $("select#bmsconfigurationbundle_register_read_function").val("03");
@@ -242,8 +242,7 @@ function formEvents() {
         $(this).parent().parent().next("div.well").toggle();
         $(this).children("i.fa").toggleClass('fa-angle-down');
     });
-    //zmiana rozmiaru rejestru = zmiana pól bitów
-    $("select#bmsconfigurationbundle_register_register_size").change(function () {
+    inputRegisterSize.change(function () {
         if ($("input#bmsconfigurationbundle_register_bit_register").is(':checked')) {
             setBits();
         }
@@ -260,6 +259,35 @@ function formEvents() {
         }
     });
 
+    $("input#read_mod_val").val(inputModificatorRead.val());
+    $("input#write_mod_val").val(inputModificatorWrite.val());
+    $("input#write_limit_min").val($("input#bmsconfigurationbundle_register_write_limit_min").val());
+    $("input#write_limit_max").val($("input#bmsconfigurationbundle_register_write_limit_max").val());
+    $("input#step").val($("input#bmsconfigurationbundle_register_write_step").val());
+
+    $("select#read_mod_operator, input#read_mod_val").change(function () {
+        var oper = $("select#read_mod_operator").val();
+        var mod = $("input#read_mod_val").val();
+        console.log(oper + "   " + mod);
+        if (oper === "*") {
+            inputModificatorRead.val(mod);
+        } else if (oper === "/") {
+            mod = 1 / mod;
+            inputModificatorRead.val(mod);
+        }
+    });
+
+    $("select#write_mod_operator, input#write_mod_val").change(function () {
+        var oper = $("select#write_mod_operator").val();
+        var mod = $("input#write_mod_val").val();
+        if (oper === "*") {
+            inputModificatorWrite.val(mod);
+        } else if (oper === "/") {
+            mod = 1 / mod;
+            inputModificatorWrite.val(mod);
+        }
+    });
+
     function pad(n, width, z) {
         z = z || '0';
         n = n + '';
@@ -271,11 +299,11 @@ function formEvents() {
         bit_container.empty();
         var registerValue = $("span.registerValue").text();
         var registerSize = $('select#bmsconfigurationbundle_register_register_size').val();
-
+        var registerName = $("input#bmsconfigurationbundle_register_name").val();
         for (var i = 0; i < registerSize; i++) {
             bit_container.append("<div class='row bit_registers'>\n\
                                         <div class='col-md-2 text-center'>\n\
-                                            <span class='bitName'>" + $("input#bmsconfigurationbundle_register_name").val() + "_B" + i + "</span>\n\
+                                            <span class='bitName'>" + registerName + "_B" + i + "</span>\n\
                                         </div>\n\
                                         <div class='col-md-5'>\n\
                                             <div class='form-group'>\n\
@@ -297,7 +325,7 @@ function formEvents() {
                                         </input>\n\
                                         <input id='bmsconfigurationbundle_register_bit_registers_" + i + "_name'\n\
                                                 name='bmsconfigurationbundle_register[bit_registers][" + i + "][name]' required='required'\n\
-                                                value='" + $("input#bmsconfigurationbundle_register_name").val() + "_B" + i + "' type='hidden'>\n\
+                                                value='" + registerName + "_B" + i + "' type='hidden'>\n\
                                         </input>\n\
                                         <input id='bmsconfigurationbundle_register_bit_registers_" + i + "_bitValue'\n\
                                                 name='bmsconfigurationbundle_register[bit_registers][" + i + "][bitValue]'\n\
@@ -306,37 +334,6 @@ function formEvents() {
                                       </div>");
         }
     }
-
-    $("input#read_mod_val").val($("input#bmsconfigurationbundle_register_modificator_read").val());
-    $("input#write_mod_val").val($("input#bmsconfigurationbundle_register_modificator_write").val());
-    $("input#write_limit_min").val($("input#bmsconfigurationbundle_register_write_limit_min").val());
-    $("input#write_limit_max").val($("input#bmsconfigurationbundle_register_write_limit_max").val());
-    $("input#step").val($("input#bmsconfigurationbundle_register_write_step").val());
-
-    $("select#read_mod_operator, input#read_mod_val").change(function () {
-        var oper = $("select#read_mod_operator").val();
-        var mod = $("input#read_mod_val").val();
-        console.log(oper + "   " + mod);
-        if (oper === "*") {
-            $("#bmsconfigurationbundle_register_modificator_read").val(mod);
-        } else if (oper === "/") {
-            mod = 1 / mod;
-            $("input#bmsconfigurationbundle_register_modificator_read").val(mod);
-        }
-    });
-
-    $("select#write_mod_operator, input#write_mod_val").change(function () {
-        var oper = $("select#write_mod_operator").val();
-        var mod = $("input#write_mod_val").val();
-        if (oper === "*") {
-            $("#bmsconfigurationbundle_register_modificator_write").val(mod);
-        } else if (oper === "/") {
-            mod = 1 / mod;
-            $("input#bmsconfigurationbundle_register_modificator_write").val(mod);
-        }
-    });
-
-
 }
 
 function tableEvents() {
@@ -632,52 +629,31 @@ function updateLastRead(lastRead, did) {
 
     if (elapseUTC > 1) {
         r = r + elapseUTC * 13;
-        if (r > 256) {
-            r = 255;
-        }
         g = g - elapseUTC * 8;
-        if (g < 10) {
-            g = 0;
-        }
         b = b - elapseUTC * 12;
-        if (b < 10) {
-            b = 0;
-        }
+        r > 256 ? r = 255 : r = r;
+        g < 10 ? g = 0 : g = g;
+        b < 10 ? b = 0 : b = b;
 
         r = r.toString(16);
-        if (r.length < 2) {
-            r = "0" + r;
-        }
         g = g.toString(16);
-        if (g.length < 2) {
-            g = "0" + g;
-        }
         b = b.toString(16);
-        if (b.length < 2) {
-            b = "0" + b;
-        }
-
+        r.length < 2 ? r = "0" + r : r = r;
+        g.length < 2 ? g = "0" + g : g = g;
+        b.length < 2 ? b = "0" + b : b = b;
         $("span#" + did + ".label-last-read").css("background-color", "#" + r + g + b);
     } else {
         $("span#" + did + ".label-last-read").css("background-color", "#337AB7");
     }
-
 }
 
 function refreshPage() {
-
     var cid = $(".communicationType-level div.active").attr("id");
     var did = $(".device-level div.active").attr("id");
     var rid = $(".register-level div div.active").attr("id");
-    if (cid === undefined) {
-        cid = 0;
-    }
-    if (did === undefined) {
-        did = 0;
-    }
-    if (rid === undefined) {
-        rid = 0;
-    }
+    cid === undefined ? cid = 0 : cid = cid;
+    did === undefined ? did = 0 : did = did;
+    rid === undefined ? rid = 0 : rid = rid;
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",
@@ -688,11 +664,7 @@ function refreshPage() {
             $(".fa-spinner").remove();
             $.each(ret["times_of_update"], function () {
                 var time = new Date(this.time);
-                if (time.getTime() !== 0) {
-                    $("span#" + this.id + ".label-last-read span").text($.formatDateTime('yy-mm-dd hh:ii', time));
-                } else {
-                    $("span#" + this.id + ".label-last-read span").text("-");
-                }
+                time.getTime() !== 0 ? $("span#" + this.id + ".label-last-read span").text($.formatDateTime('yy-mm-dd hh:ii', time)) : $("span#" + this.id + ".label-last-read span").text("-");
                 updateLastRead(time, this.id);
             });
             $("i.fa-refresh[id]").each(function () {

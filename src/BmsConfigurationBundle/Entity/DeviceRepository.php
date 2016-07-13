@@ -13,7 +13,7 @@ class DeviceRepository extends \Doctrine\ORM\EntityRepository
     public function getLastReadTimes()
     {
         return $this->getEntityManager()
-            ->createQuery('SELECT d.id, MIN(rcd.timeOfUpdate) time 
+            ->createQuery('SELECT d.id, MAX(rcd.timeOfUpdate) time 
                             FROM BmsConfigurationBundle:Register r 
                             JOIN r.device d 
                             JOIN r.registerCurrentData rcd
