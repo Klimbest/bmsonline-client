@@ -1,6 +1,6 @@
 <?php
 
-//src/BmsBundle/Controller/DefaultController.php
+//src/BmsBundle/Controller/BmsController.php
 
 namespace BmsConfigurationBundle\Controller;
 
@@ -18,12 +18,14 @@ use BmsConfigurationBundle\Entity\TechnicalInformation;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Process\Process;
 
-class DefaultController extends Controller {
+class ConfigurationController extends Controller
+{
 
     /**
      * @Route("/", name="bms_configuration_index", options={"expose"=true})
      */
-    public function bmsConfigurationIndexAction(Request $request) {
+    public function bmsConfigurationIndexAction(Request $request)
+    {
 
         $session = $request->getSession();
         $target = $session->get('target');
@@ -33,9 +35,9 @@ class DefaultController extends Controller {
 
         $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
         $communicationTypes = $communicationRepo->createQueryBuilder('ct')
-                        ->join('ct.hardware_id', 'h')
-                        ->where('h.active = 1')
-                        ->getQuery()->getResult();
+            ->join('ct.hardware_id', 'h')
+            ->where('h.active = 1')
+            ->getQuery()->getResult();
         $comm_id = $session->get('comm_id');
         $device_id = $session->get('device_id');
 
@@ -44,7 +46,7 @@ class DefaultController extends Controller {
 
         if ($request->isXmlHttpRequest()) {
             $template = $this->container
-                            ->get('templating')->render('BmsConfigurationBundle::target.html.twig', ['comms' => $communicationTypes, 'target' => $target, 'sync' => $sync]);
+                ->get('templating')->render('BmsConfigurationBundle::target.html.twig', ['comms' => $communicationTypes, 'target' => $target, 'sync' => $sync]);
 
             return new JsonResponse(array('ret' => $template));
         } else {
@@ -55,16 +57,17 @@ class DefaultController extends Controller {
     /**
      * @Route("/{comm_id}", name="bms_configuration_communication_type", requirements={"comm_id" = "\d+"}, options={"expose"=true})
      */
-    public function configureCommunicationTypeAction($comm_id, Request $request) {
+    public function configureCommunicationTypeAction($comm_id, Request $request)
+    {
 
         //ustawienie połączenia na bazę danego obiektu
         $em = $this->getDoctrine()->getManager();
         $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
         //pobiera aktywne porty(do menu)
         $communicationTypes = $communicationRepo->createQueryBuilder('ct')
-                        ->join('ct.hardware_id', 'h')
-                        ->where('h.active = 1')
-                        ->getQuery()->getResult();
+            ->join('ct.hardware_id', 'h')
+            ->where('h.active = 1')
+            ->getQuery()->getResult();
         //pobiera zasoby do zawartości strony
         $comm = $communicationRepo->find($comm_id);
 
@@ -86,14 +89,14 @@ class DefaultController extends Controller {
             $port = $form['port']->getData();
 
             $comm->setName($name)
-                    ->setType($type)
-                    ->setBaudRate($baudRate)
-                    ->setParity($parity)
-                    ->setDataBits($dataBits)
-                    ->setStopBits($stopBits)
-                    ->setIpAddress($ipAddress)
-                    ->setPort($port)
-                    ->setUpdated(new \DateTime());
+                ->setType($type)
+                ->setBaudRate($baudRate)
+                ->setParity($parity)
+                ->setDataBits($dataBits)
+                ->setStopBits($stopBits)
+                ->setIpAddress($ipAddress)
+                ->setPort($port)
+                ->setUpdated(new \DateTime());
 
             $em->persist($comm);
 
@@ -111,7 +114,8 @@ class DefaultController extends Controller {
     /**
      * @Route("/{comm_id}/{device_id}", name="bms_configuration_device" ,requirements={"comm_id" = "\d+", "device_id" = "\d+"}, options={"expose"=true})
      */
-    public function configureDeviceAction($comm_id, $device_id, Request $request) {
+    public function configureDeviceAction($comm_id, $device_id, Request $request)
+    {
         //ustawienie połączenia na bazę danego obiektu
         $em = $this->getDoctrine()->getManager();
         $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
@@ -119,9 +123,9 @@ class DefaultController extends Controller {
         $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
         //pobiera aktywne porty(do menu)
         $communicationTypes = $communicationRepo->createQueryBuilder('ct')
-                        ->join('ct.hardware_id', 'h')
-                        ->where('h.active = 1')
-                        ->getQuery()->getResult();
+            ->join('ct.hardware_id', 'h')
+            ->where('h.active = 1')
+            ->getQuery()->getResult();
         //pobiera zasoby do zawartości strony
         $device = $deviceRepo->find($device_id);
 
@@ -141,7 +145,7 @@ class DefaultController extends Controller {
                 $device->setScanState(-1);
                 $regs = $device->getRegisters();
                 foreach ($regs as $r) {
-                    $r->getRegisterCurrentData()->setRealValueHex(null)->setRealValue(null)->setFixedValue(null);                    
+                    $r->getRegisterCurrentData()->setRealValueHex(null)->setRealValue(null)->setFixedValue(null);
                 }
             }
 
@@ -164,7 +168,8 @@ class DefaultController extends Controller {
     /**
      * @Route("/{comm_id}/{device_id}/{register_id}", name="bms_configuration_register", requirements={"comm_id" = "\d+", "device_id" = "\d+", "register_id" = "\d+"}, options={"expose"=true})
      */
-    public function configureRegisterAction($comm_id, $device_id, $register_id, Request $request) {
+    public function configureRegisterAction($comm_id, $device_id, $register_id, Request $request)
+    {
         //ustawienie połączenia na bazę danego obiektu
         $em = $this->getDoctrine()->getManager();
         $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
@@ -172,9 +177,9 @@ class DefaultController extends Controller {
 
         //pobiera aktywne porty(do menu)
         $communicationTypes = $communicationRepo->createQueryBuilder('ct')
-                        ->join('ct.hardware_id', 'h')
-                        ->where('h.active = 1')
-                        ->getQuery()->getResult();
+            ->join('ct.hardware_id', 'h')
+            ->where('h.active = 1')
+            ->getQuery()->getResult();
 
         //pobiera zasoby do zawartości strony
         $register = $registerRepo->find($register_id);
@@ -213,7 +218,7 @@ class DefaultController extends Controller {
         } else if ($request->isXmlHttpRequest()) {
 
             $template = $this->container
-                            ->get('templating')->render('BmsConfigurationBundle::register.html.twig', ['comms' => $communicationTypes, 'register' => $register, 'form' => $form->createView()]);
+                ->get('templating')->render('BmsConfigurationBundle::register.html.twig', ['comms' => $communicationTypes, 'register' => $register, 'form' => $form->createView()]);
 
             return new JsonResponse(array('ret' => $template));
         } else {
@@ -226,14 +231,15 @@ class DefaultController extends Controller {
     /**
      * @Route("/{comm_id}/add_device", name="bms_configuration_add_device", requirements={"comm_id" = "\d+"}, options={"expose"=true})
      */
-    public function addDeviceAction($comm_id, Request $request) {
+    public function addDeviceAction($comm_id, Request $request)
+    {
 
         $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
         //pobiera aktywne porty(do menu)
         $communicationTypes = $communicationRepo->createQueryBuilder('ct')
-                        ->join('ct.hardware_id', 'h')
-                        ->where('h.active = 1')
-                        ->getQuery()->getResult();
+            ->join('ct.hardware_id', 'h')
+            ->where('h.active = 1')
+            ->getQuery()->getResult();
         //pobiera zasoby do zawartości strony
         $comm = $communicationRepo->find($comm_id);
         $device = new Device();
@@ -246,15 +252,15 @@ class DefaultController extends Controller {
         if ($form->isSubmitted() && $form->isValid()) {
 
             $device->setCommunicationType($comm);
-            
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($device);
             $em->flush();
 
             $technical_info = new TechnicalInformation();
             $technical_info->setName("d_" . $device->getId() . "_errors")
-                    ->setStatus(0)
-                    ->setTime(new \DateTime());
+                ->setStatus(0)
+                ->setTime(new \DateTime());
             $em->persist($technical_info);
             $em->flush();
 
@@ -266,7 +272,7 @@ class DefaultController extends Controller {
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
             $template = $this->container
-                            ->get('templating')->render('BmsConfigurationBundle::newDevice.html.twig', ['comms' => $communicationTypes, 'comm' => $comm, 'form' => $form->createView()]);
+                ->get('templating')->render('BmsConfigurationBundle::newDevice.html.twig', ['comms' => $communicationTypes, 'comm' => $comm, 'form' => $form->createView()]);
 
             return new JsonResponse(array('ret' => $template));
         } else {
@@ -277,7 +283,8 @@ class DefaultController extends Controller {
     /**
      * @Route("/{comm_id}/{device_id}/add_register", name="bms_configuration_add_register", requirements={"comm_id" = "\d+", "device_id" = "\d+"}, options={"expose"=true})
      */
-    public function addRegisterAction($comm_id, $device_id, Request $request) {
+    public function addRegisterAction($comm_id, $device_id, Request $request)
+    {
 
 
         //ustawienie połączenia na bazę danego obiektu
@@ -286,9 +293,9 @@ class DefaultController extends Controller {
         $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
         //pobiera aktywne porty(do menu)
         $communicationTypes = $communicationRepo->createQueryBuilder('ct')
-                        ->join('ct.hardware_id', 'h')
-                        ->where('h.active = 1')
-                        ->getQuery()->getResult();
+            ->join('ct.hardware_id', 'h')
+            ->where('h.active = 1')
+            ->getQuery()->getResult();
         //pobiera zasoby do zawartości strony
         $comm = $communicationRepo->find($comm_id);
         $device = $deviceRepo->find($device_id);
@@ -333,7 +340,7 @@ class DefaultController extends Controller {
             return $this->redirectToRoute('bms_configuration_index');
         } else if ($request->isXmlHttpRequest()) {
             $template = $this->container
-                            ->get('templating')->render('BmsConfigurationBundle::newRegister.html.twig', ['comms' => $communicationTypes, 'comm' => $comm, 'device' => $device, 'form' => $form->createView()]);
+                ->get('templating')->render('BmsConfigurationBundle::newRegister.html.twig', ['comms' => $communicationTypes, 'comm' => $comm, 'device' => $device, 'form' => $form->createView()]);
 
             return new JsonResponse(array('ret' => $template));
         } else {
@@ -344,7 +351,8 @@ class DefaultController extends Controller {
     /**
      * @Route("/{comm_id}/{device_id}/delete", name="bms_configuration_del_device", requirements={"comm_id" = "\d+", "device_id" = "\d+"}, options={"expose"=true})
      */
-    public function delDeviceAction($comm_id, $device_id, Request $request) {
+    public function delDeviceAction($comm_id, $device_id, Request $request)
+    {
 
         $em = $this->getDoctrine()->getManager();
         $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
@@ -376,7 +384,8 @@ class DefaultController extends Controller {
     /**
      * @Route("/{comm_id}/{device_id}/{register_id}/delete", name="bms_configuration_del_register", requirements={"comm_id" = "\d+", "device_id" = "\d+", "register_id" = "\d+"}, options={"expose"=true})
      */
-    public function delRegisterAction($comm_id, $device_id, $register_id, Request $request) {
+    public function delRegisterAction($comm_id, $device_id, $register_id, Request $request)
+    {
         $em = $this->getDoctrine()->getManager();
         $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
         $register = $registerRepo->find($register_id);
@@ -398,7 +407,8 @@ class DefaultController extends Controller {
     /**
      * @Route("/{comm_id}/{device_id}/registers-delete", name="bms_configuration_del_many_registers", requirements={"comm_id" = "\d+", "device_id" = "\d+"}, options={"expose"=true})
      */
-    public function delManyRegistersAction($comm_id, $device_id, Request $request) {
+    public function delManyRegistersAction($comm_id, $device_id, Request $request)
+    {
         $em = $this->getDoctrine()->getManager();
         $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
 
@@ -429,7 +439,8 @@ class DefaultController extends Controller {
     /**
      * @Route("/{comm_id}/registers-delete", name="bms_configuration_del_many_devices", requirements={"comm_id" = "\d+"}, options={"expose"=true})
      */
-    public function delManyDevicesAction($comm_id, Request $request) {
+    public function delManyDevicesAction($comm_id, Request $request)
+    {
 
         $this->setDataToSync();
         return new Response();
@@ -438,66 +449,28 @@ class DefaultController extends Controller {
     /**
      * @Route("/{comm_id}/{device_id}/{register_id}/refresh", name="bms_configuration_refresh_page", requirements={"comm_id" = "\d+", "device_id" = "\d+", "register_id" = "\d+"}, options={"expose"=true})
      */
-    public function refreshPageAction($comm_id, $device_id, $register_id, Request $request) {
+    public function refreshPageAction($comm_id, $device_id, $register_id, Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
-            
+
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
             $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
-            $devices = $deviceRepo->findAll();
-            $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-            $registers = $registerRepo->findAll();
-            $ret = array();
-            $times = array();
-            $time = 0;
-            foreach ($devices as $device) {
-                $did = $device->getId();
-                $active = $device->getActive();
-                $registers = $device->getRegisters();
-                $time = 0;
-                foreach ($registers as $register) {
-                    $lastRead = date_timestamp_get($register->getRegisterCurrentData()->getTimeOfUpdate());
+            $times = $deviceRepo->getLastReadTimes();
 
-                    if ($lastRead > $time) {
-                        $time = $lastRead;
-                    }
-                    $id = $register->getId();
-                    $val = $register->getRegisterCurrentData()->getFixedValue();
-                    $ret[$id] = $val;
-                }
-                if ($active) {
-                    $times[$did] = $time;
-                } else {
-                    $times[$did] = 0;
-                }
-            }
-            
-            $devicesStatus = $technicalInformationRepo->getDevicesStatus();
-
-            foreach ($devicesStatus as &$ds) {
-                $devices_id = explode("_", $ds['name']);
-                $device = $deviceRepo->find((int) $devices_id[1]);
-                $ds['name'] = $device->getName();
-                $ds['device_id']=(int)$devices_id[1];
-            }
-
-            //get last hello from RPi      
+            $devicesStatus = $deviceRepo->getDevicesStatus();
             $time = $technicalInformationRepo->getRpiStatus();
 
             $ret['devicesStatus'] = $devicesStatus;
             $time ? $ret['state'] = $time[0]["time"]->getTimestamp() : $ret['state'] = null;
-
             $ret["times_of_update"] = $times;
-
-            $ret["time_of_update"] = $time;
-            $ret["refresh"] = 1;
-
             return new JsonResponse($ret);
         } else {
             throw new\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
         }
     }
 
-    public function setDataToSync() {
+    public function setDataToSync()
+    {
         $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
         $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
 
@@ -506,17 +479,15 @@ class DefaultController extends Controller {
         $this->getDoctrine()->getManager()->flush();
     }
 
-    
-    
-    
     /**
      * @Route("/synchronize", name="bms_configuration_synchronize_database", options={"expose"=true})
      */
-    public function synchronizeDatabase(Request $request) {
+    public function synchronizeDatabaseAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $host = $request->getHost();
             $h = explode(".", $host);
-            $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync' " . $h[0]);            
+            $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync' " . $h[0]);
             $process->run();
 
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
@@ -534,19 +505,17 @@ class DefaultController extends Controller {
         }
     }
 
-    public function stopScanner(Request $request) {
+    /**
+     * @Route("/stopScanners", name="bms_configuration_stop_scanners", options={"expose"=true})
+     */
+    public function stopScannersAction(Request $request)
+    {
         $host = $request->getHost();
         $h = explode(".", $host);
         $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/stopScanner' " . $h[0]);
         //$process->disableOutput();
         $process->run();
 
-        $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
-        $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
-
-        $sync->setStatus(0);
-
-        $this->getDoctrine()->getManager()->flush();
     }
 
 }

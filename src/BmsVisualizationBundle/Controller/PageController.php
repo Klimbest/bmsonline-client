@@ -11,12 +11,14 @@ use BmsVisualizationBundle\Entity\Page;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
-class PageController extends Controller {
+class PageController extends Controller
+{
 
     /**
      * @Route("/add_page", name="bms_visualization_add_page", options={"expose"=true})
      */
-    public function addPageAction(Request $request) {
+    public function addPageAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
             //pobranie danych przesłanych żądaniem
@@ -27,9 +29,9 @@ class PageController extends Controller {
             //dodanie nowej strony
             $page = new Page();
             $page->setHeight($height)
-                    ->setWidth($width)
-                    ->setName($name)
-                    ->setBackgroundColor($backgroundColor);
+                ->setWidth($width)
+                ->setName($name)
+                ->setBackgroundColor($backgroundColor);
 
             $em->persist($page);
             $em->flush();
@@ -53,7 +55,8 @@ class PageController extends Controller {
     /**
      * @Route("/delete_page", name="bms_visualization_delete_page", options={"expose"=true})
      */
-    public function deletePageAction(Request $request) {
+    public function deletePageAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $page_id = $request->get("page_id");
             if ($page_id == 1) {
@@ -82,7 +85,8 @@ class PageController extends Controller {
     /**
      * @Route("/edit_page", name="bms_visualization_edit_page", options={"expose"=true})
      */
-    public function editPageAction(Request $request) {
+    public function editPageAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $page_id = $request->get("page_id");
             $em = $this->getDoctrine()->getManager();
@@ -94,8 +98,8 @@ class PageController extends Controller {
             $name = $request->get("name");
 
             $page->setHeight($height)
-                    ->setWidth($width)
-                    ->setName($name);
+                ->setWidth($width)
+                ->setName($name);
             $em->flush();
             $ret['page_id'] = $page_id;
             return new JsonResponse($ret);
@@ -107,7 +111,8 @@ class PageController extends Controller {
     /**
      * @Route("/change_page", name="bms_visualization_change_page", options={"expose"=true})
      */
-    public function changePageAction(Request $request) {
+    public function changePageAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $page_id = $request->get("page_id");
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
@@ -156,23 +161,24 @@ class PageController extends Controller {
     /**
      * @Route("/generate", name="bms_visualization_generate", options={"expose"=true})
      */
-    public function generateAction(Request $request) {
+    public function generateAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $fs = new Filesystem();
             $finder = new Finder();
             $pages = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page')->findAll();
             $widgets = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar')->findAll();
             $finder->files()->in('../src/BmsBundle/Resources/views/Pages/');
-            
+
             foreach ($finder as $file) {
                 $fs->remove($file->getRealPath());
             }
             foreach ($pages as $page) {
                 $content = $this->container->get('templating')->render('BmsBundle::page.html.twig', ['page' => $page, 'widgets' => $widgets]);
-                
-                $fs->dumpFile('../src/BmsBundle/Resources/views/Pages/'.$page->getId().".html.twig", $content);
+
+                $fs->dumpFile('../src/BmsBundle/Resources/views/Pages/' . $page->getId() . ".html.twig", $content);
             }
-            
+
             return new JsonResponse($fs);
         } else {
             throw new AccessDeniedHttpException();

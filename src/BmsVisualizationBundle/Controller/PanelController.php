@@ -11,18 +11,20 @@ use BmsVisualizationBundle\Entity\WidgetBar;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use BmsVisualizationBundle\Form\PanelType;
 
-class PanelController extends Controller {
+class PanelController extends Controller
+{
 
     /**
      * @Route("/load_panel_dialog", name="bms_visualization_load_panel_dialog", options={"expose"=true})
      */
-    public function loadPanelDialogAction(Request $request) {
+    public function loadPanelDialogAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $options = array();
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $panel_id = $request->get("panel_id");
-            isset($panel_id) ? $panel = $panelRepo->find($panel_id) : $panel = new Panel();            
-            
+            isset($panel_id) ? $panel = $panelRepo->find($panel_id) : $panel = new Panel();
+
             $form = $this->createForm(PanelType::class, $panel, array(
                 'action' => $this->generateUrl('bms_visualization_load_panel_dialog'),
                 'method' => 'POST'
@@ -50,7 +52,8 @@ class PanelController extends Controller {
     /**
      * @Route("/move_panel", name="bms_visualization_move_panel", options={"expose"=true})
      */
-    public function movePanelAction(Request $request) {
+    public function movePanelAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
@@ -63,10 +66,10 @@ class PanelController extends Controller {
             $zIndex = $request->get("zIndex");
 
             $panel->setHeight($height)
-                    ->setWidth($width)
-                    ->setLeftPosition($leftPosition)
-                    ->setTopPosition($topPosition)
-                    ->setZIndex($zIndex);
+                ->setWidth($width)
+                ->setLeftPosition($leftPosition)
+                ->setTopPosition($topPosition)
+                ->setZIndex($zIndex);
 
             $em->flush();
 
@@ -82,7 +85,8 @@ class PanelController extends Controller {
     /**
      * @Route("/copy_panel", name="bms_visualization_copy_panel", options={"expose"=true})
      */
-    public function copyPanelAction(Request $request) {
+    public function copyPanelAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $options = array();
 
@@ -122,7 +126,7 @@ class PanelController extends Controller {
 
             $lastPanel = $panelRepo->findLastPanel();
             $newId = $lastPanel->getId();
-            $options['newId'] = (int) ($newId + 1);
+            $options['newId'] = (int)($newId + 1);
 
             $ret["dialog"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelDialog.html.twig', $options);
 
@@ -141,7 +145,8 @@ class PanelController extends Controller {
     /**
      * @Route("/delete_panel", name="bms_visualization_delete_panel", options={"expose"=true})
      */
-    public function deletePanelAction(Request $request) {
+    public function deletePanelAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $panel_id = $request->get("panel_id");
 
@@ -154,7 +159,7 @@ class PanelController extends Controller {
             foreach ($terms as $term) {
                 $em->remove($term);
             }
-            if($panel->getType() == "widget"){
+            if ($panel->getType() == "widget") {
                 $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
                 $widgetBar_id = $panel->getContentSource();
                 $widgetBar = $widgetBarRepo->find($widgetBar_id);

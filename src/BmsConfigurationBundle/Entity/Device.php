@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Device
  *
  * @ORM\Table(name="device", uniqueConstraints={@ORM\UniqueConstraint(name="unique_modbus_address", columns={"communication_type_id", "modbus_address"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BmsConfigurationBundle\Entity\DeviceRepository")
  * @UniqueEntity(fields={"communicationType", "modbusAddress"})
  */
 class Device

@@ -14,13 +14,15 @@ use BmsVisualizationBundle\Entity\MyCondition;
 use BmsVisualizationBundle\Entity\Effect;
 use BmsVisualizationBundle\Entity\Term;
 
-class AjaxController extends Controller {
+class AjaxController extends Controller
+{
 
     /**
      * @Route("/load_variable_manager", name="bms_visualization_load_variable_manager", options={"expose"=true})
      */
-    public function loadVariableManagerAction(Request $request) {
-        if ($request->isXmlHttpRequest()) {            
+    public function loadVariableManagerAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
             $communicationTypeRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
             $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
@@ -32,7 +34,7 @@ class AjaxController extends Controller {
                 'devices' => $devices,
                 'communicationTypes' => $communicationTypes
             ];
-            
+
             $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:variableManager.html.twig', $options);
             return new JsonResponse($ret);
         } else {
@@ -43,7 +45,8 @@ class AjaxController extends Controller {
     /**
      * @Route("/load_image_manager", name="bms_visualization_load_image_manager", options={"expose"=true})
      */
-    public function loadImageManagerAction(Request $request) {
+    public function loadImageManagerAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $finder = new Finder();
 
@@ -104,10 +107,11 @@ class AjaxController extends Controller {
     /**
      * @Route("/load_effect_css_manager", name="bms_visualization_load_effect_css_manager", options={"expose"=true})
      */
-    public function loadEffectCssManagerAction(Request $request) {
+    public function loadEffectCssManagerAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
-            
-            
+
+
             $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:effectCssManager.html.twig');
 
             return new JsonResponse($ret);
@@ -115,11 +119,12 @@ class AjaxController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
-    
+
     /**
      * @Route("/load_event_manager", name="bms_visualization_load_event_manager", options={"expose"=true})
      */
-    public function loadEventManagerAction(Request $request) {
+    public function loadEventManagerAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
@@ -132,14 +137,14 @@ class AjaxController extends Controller {
             $devices = $deviceRepo->findAll();
             $pages = $pageRepo->findAll();
             $panels = $panelRepo->findAll();
-            
+
             $options = [
                 'registers' => $registers,
                 'devices' => $devices,
                 'panels' => $panels,
                 'pages' => $pages
             ];
-            
+
             $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:eventManager.html.twig', $options);
             return new JsonResponse($ret);
         } else {
@@ -150,7 +155,8 @@ class AjaxController extends Controller {
     /**
      * @Route("/create_term", name="bms_visualization_create_term", options={"expose"=true})
      */
-    public function createTermAction(Request $request) {
+    public function createTermAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
@@ -165,20 +171,20 @@ class AjaxController extends Controller {
 //            if(!isset($register)){
 //                $register = $bitRegisterRepo->findOneBy(array('name' => $registerName));
 //            }
-            
+
             //get PANEL data
             $panel_id = $request->request->get('panel_id');
             $panel = $panelRepo->findOneById($panel_id);
             //get CONDITION data
             $conditionType = $request->get('condition_type');
-            $conditionValue = $request->get('condition_value');            
+            $conditionValue = $request->get('condition_value');
             //set CONDITION
             $condition = $conditionRepo->findOneBy(array('type' => $conditionType, 'value' => $conditionValue));
-            if(!isset($condition)){
+            if (!isset($condition)) {
                 $condition = new MyCondition();
                 $condition->setType($conditionType)
-                            ->setValue($conditionValue)
-                            ->setName($conditionType." -> ".$conditionValue);
+                    ->setValue($conditionValue)
+                    ->setName($conditionType . " -> " . $conditionValue);
                 $em->persist($condition);
             }
             //get EFFECT data
@@ -186,41 +192,42 @@ class AjaxController extends Controller {
             $effectContent = $request->get('effect_content');
             //set EFFECT
             $effect = $effectRepo->findOneBy(array('type' => $effectType, 'content' => $effectContent));
-            if(!isset($effect)){
+            if (!isset($effect)) {
                 $effect = new Effect();
                 $effect->setType($effectType)
-                        ->setContent($effectContent)
-                        ->setName($effectType." -> ".$effectContent);
+                    ->setContent($effectContent)
+                    ->setName($effectType . " -> " . $effectContent);
                 $em->persist($effect);
             }
             //set TERM
             $term = new Term();
             $term->setRegister($register)
-                    ->setPanel($panel)
-                    ->setCondition($condition)
-                    ->setEffect($effect)
-                    ->setName("asd");            
+                ->setPanel($panel)
+                ->setCondition($condition)
+                ->setEffect($effect)
+                ->setName("asd");
             $em->persist($term);
-            
-            $em->flush();      
-            
+
+            $em->flush();
+
             $ret["term"] = $termRepo->findByIdAsArray($term->getId());
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
         }
     }
-    
+
     /**
      * @Route("/delete_term", name="bms_visualization_delete_term", options={"expose"=true})
      */
-    public function deleteTermAction(Request $request) {
+    public function deleteTermAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
             $term_id = $request->get("term_id");
             $term = $termRepo->find($term_id);
-            
+
             $em->remove($term);
             $em->flush();
             $em->getConnection()->exec("ALTER TABLE term AUTO_INCREMENT = 1;");
@@ -230,11 +237,12 @@ class AjaxController extends Controller {
             throw new AccessDeniedHttpException();
         }
     }
-    
+
     /**
      * @Route("/add_image", name="bms_visualization_add_image", options={"expose"=true})
      */
-    public function addImageAction(Request $request) {
+    public function addImageAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
 
             $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web';
@@ -266,7 +274,6 @@ class AjaxController extends Controller {
             $ret["content"] = $content = $relativePath . $fileName;
 
 
-
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -276,7 +283,8 @@ class AjaxController extends Controller {
     /**
      * @Route("/delete_image", name="bms_visualization_delete_image", options={"expose"=true})
      */
-    public function deleteImageFromServerAction(Request $request) {
+    public function deleteImageFromServerAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
 
             $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web/images/';
@@ -303,7 +311,8 @@ class AjaxController extends Controller {
     /**
      * @Route("/load_panel_list", name="bms_visualization_load_panel_list", options={"expose"=true})
      */
-    public function loadPanelListAction(Request $request) {
+    public function loadPanelListAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $panels = $panelRepo->findPanelsForPage($request->get("page_id"));

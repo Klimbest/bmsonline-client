@@ -8,6 +8,7 @@ Number.prototype.pad = function (size) {
 };
 
 $(document).ready(function () {
+    var url;
     refreshPage();
     interval = setInterval(function () {
         refreshPage();
@@ -20,7 +21,7 @@ $(document).ready(function () {
     setActiveLevel($("div.active"));
 
     $(".target-level li div").click(function () {
-        var url = Routing.generate('bms_configuration_index');
+        url = Routing.generate('bms_configuration_index');
         window.location.href = url;
     });
 
@@ -36,7 +37,7 @@ $(document).ready(function () {
         $(this).toggleClass("active").next("ul.device-level").show();
         $(this).children("i.fa").addClass("fa-angle-down");
 
-        var url = Routing.generate('bms_configuration_communication_type', {comm_id: cid});
+        url = Routing.generate('bms_configuration_communication_type', {comm_id: cid});
         ajaxAppend(url);
 
     });
@@ -53,7 +54,7 @@ $(document).ready(function () {
         $(this).toggleClass("active").next("ul.register-level").show();
         $(this).children("i.fa-angle-left").addClass("fa-angle-down");
 
-        var url = Routing.generate('bms_configuration_device', {comm_id: cid, device_id: did});
+        url = Routing.generate('bms_configuration_device', {comm_id: cid, device_id: did});
         ajaxAppend(url);
     });
 
@@ -123,7 +124,7 @@ $(document).ready(function () {
 });
 
 function setActiveLevel(item) {
-    var ctl, dl, tid, cid, did;
+    var ctl, dl, cid, did, url;
     ctl = item.parent().parent("ul.nav.communicationType-level");
     dl = item.parent().parent("ul.nav.device-level");
     if (dl.length > 0) {
@@ -135,14 +136,14 @@ function setActiveLevel(item) {
         cid = dl.prev("div.row.active").attr("id");
         did = dl.children().children("div.active").attr("id");
 
-        var url = Routing.generate('bms_configuration_device', {comm_id: cid, device_id: did});
+        url = Routing.generate('bms_configuration_device', {comm_id: cid, device_id: did});
         ajaxAppend(url);
     } else if (ctl.length > 0) {
         $(".main-row").children().remove();
         ctl.children().children("div.active").next("ul.device-level").show();
         ctl.children().children("div.active").children("i.fa").addClass("fa-angle-down");
         cid = ctl.children().children("div.active").attr("id");
-        var url = Routing.generate('bms_configuration_communication_type', {comm_id: cid});
+        url = Routing.generate('bms_configuration_communication_type', {comm_id: cid});
         ajaxAppend(url);
     } else {
         $(".target-level").next("ul").children().children("ul").hide().prev("div").removeClass("active");
@@ -158,8 +159,9 @@ function ajaxAppend(url) {
         url: url,
         cache: false,
         success: function (ret) {
-            $(".main-row").children().remove();
-            $(".main-row").hide().append(ret["ret"]).fadeIn("slow");
+            var mainRow = $(".main-row");
+            mainRow.children().remove();
+            mainRow.hide().append(ret["ret"]).fadeIn("slow");
             refreshPage();
             formEvents();
             tableEvents();
@@ -349,8 +351,9 @@ function tableEvents() {
     });
     //przycisk zaznaczający wszystkie checkboxy
     $(".checkAll:button").click(function () {
-        var state = $("td input[type='checkbox']").prop("checked");
-        $("td input[type='checkbox']").prop("checked", !state);
+        var stateCheckbox = $("td input[type='checkbox']");
+        var state = stateCheckbox.prop("checked");
+        stateCheckbox.prop("checked", !state);
         if (state) {
             $(this).val("Zaznacz wszystkie");
         } else {
@@ -369,8 +372,7 @@ function tableEvents() {
         var did = $(this).attr("id");
 
         $(".main-row").children().remove();
-        $(".device-level li div#" + did + ".row").toggleClass("active").next("ul.register-level").show();
-        $(".device-level li div#" + did + ".row").children("i.fa:last-child").addClass("fa-angle-down");
+        $(".device-level li div#" + did + ".row").toggleClass("active").next("ul.register-level").show().children("i.fa:last-child").addClass("fa-angle-down");
         var url = Routing.generate('bms_configuration_device', {comm_id: cid, device_id: did});
         ajaxAppend(url);
     });
@@ -440,26 +442,26 @@ function tableEvents() {
             autoOpen: false,
             modal: true,
             buttons: [{
-                    text: "Zapisz do urządzenia",
-                    click: function () {
-                        var data = {
-                            value: $("div#write-form form input#value").val(),
-                            register_id: rid
-                        };
-                        $.ajax({
-                            type: "POST",
-                            datatype: "application/json",
-                            url: Routing.generate('write_register'),
-                            data: data,
-                            success: function () {
-                                $(".main-row").children(".fa-spinner").remove();
-                                refreshPage();
-                            }
-                        });
-                        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-                        $(this).dialog('close');
-                    }
-                },
+                text: "Zapisz do urządzenia",
+                click: function () {
+                    var data = {
+                        value: $("div#write-form form input#value").val(),
+                        register_id: rid
+                    };
+                    $.ajax({
+                        type: "POST",
+                        datatype: "application/json",
+                        url: Routing.generate('write_register'),
+                        data: data,
+                        success: function () {
+                            $(".main-row").children(".fa-spinner").remove();
+                            refreshPage();
+                        }
+                    });
+                    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+                    $(this).dialog('close');
+                }
+            },
                 {
                     text: "Anuluj",
                     click: function () {
@@ -476,19 +478,21 @@ function tableEvents() {
 }
 
 function updateAddressFormat() {
-    modbusDecChange($(".address_modbus_dec input"));
+    var decInput = $(".address_modbus_dec input");
+    var hexInput = $(".register_address_hex input");
+    modbusDecChange(decInput);
 
     $(".address_modbus_hex input").change(function () {
         modbusHexChange($(this));
     });
 
-    $(".address_modbus_dec input").change(function () {
+    decInput.change(function () {
         modbusDecChange($(this));
     });
 
-    registerHexChange($(".register_address_hex input"));
+    registerHexChange(hexInput);
 
-    $(".register_address_hex input").change(function () {
+    hexInput.change(function () {
         registerHexChange($(this));
     });
 
@@ -499,17 +503,15 @@ function updateAddressFormat() {
 
 function modbusHexChange(item) {
     if (item.length > 0) {
-        //pobranie wartości i przekształcenie na wielkie litery
+        var decInput = $(".address_modbus_dec input");
         var hexVal = item.val().toUpperCase();
         if (hexVal === "") {
-            //zapisz zero, dodaj zera na początku
             item.val("00");
-            $(".address_modbus_dec input").val((0).pad(3));
+            decInput.val((0).pad(3));
         } else {
             if (!(/(^[0-9A-F]{1}$)|(^[0-9A-F]{2}$)/i.test(hexVal))) {
                 hexVal = "FF";
             }
-            //dopełnienie zerami do odpowiedniej długości 
             switch (hexVal.length) {
                 case 1:
                     hexVal = "0" + hexVal;
@@ -517,13 +519,9 @@ function modbusHexChange(item) {
                 default:
                     break;
             }
-            //zapisanie w nowym formacie
             item.val(hexVal);
-            //wyliczenie nowej wartości dziesiętnej
             var decVal = parseInt(hexVal, 16);
-
-            //zapisz nową wartość, dodaj zera na początku
-            $(".address_modbus_dec input").val(decVal.pad(3));
+            decInput.val(decVal.pad(3));
         }
     }
 }
@@ -632,8 +630,7 @@ function updateLastRead(lastRead, did) {
     var g = parseInt("7A", 16);
     var b = parseInt("B7", 16);
 
-    if (elapseUTC > 1)
-    {
+    if (elapseUTC > 1) {
         r = r + elapseUTC * 13;
         if (r > 256) {
             r = 255;
@@ -661,8 +658,7 @@ function updateLastRead(lastRead, did) {
         }
 
         $("span#" + did + ".label-last-read").css("background-color", "#" + r + g + b);
-    } else
-    {
+    } else {
         $("span#" + did + ".label-last-read").css("background-color", "#337AB7");
     }
 
@@ -682,27 +678,23 @@ function refreshPage() {
     if (rid === undefined) {
         rid = 0;
     }
-    var url = Routing.generate('bms_configuration_refresh_page', {comm_id: cid, device_id: did, register_id: rid});
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: url,
+        url: Routing.generate('bms_configuration_refresh_page', {comm_id: cid, device_id: did, register_id: rid}),
         cache: false,
         success: function (ret) {
-            var times = ret["times_of_update"];
-            $.each(times, function (key, value) {
-                var time = new Date(value * 1000);
-                if (value !== 0) {
-                    $("span#" + key + ".label-last-read span").text($.formatDateTime('yy-mm-dd hh:ii', time));
+            $(".fa-spinner").remove();
+            $.each(ret["times_of_update"], function () {
+                var time = new Date(this.time);
+                if (time.getTime() !== 0) {
+                    $("span#" + this.id + ".label-last-read span").text($.formatDateTime('yy-mm-dd hh:ii', time));
                 } else {
-                    $("span#" + key + ".label-last-read span").text("-");
+                    $("span#" + this.id + ".label-last-read span").text("-");
                 }
-                updateLastRead(time, key);
-
-
+                updateLastRead(time, this.id);
             });
-
             $("i.fa-refresh[id]").each(function () {
                 var id = $(this).attr("id");
                 if (ret[id] === null) {
@@ -710,7 +702,6 @@ function refreshPage() {
                 }
                 $(this).parent().parent().children("td.fixed_value").text(ret[id]);
             });
-            setState(ret['state'], ret['devicesStatus']);
             $.each(ret['devicesStatus'], function () {
                 if (this.status > 0) {
                     $("ul.device-level div#" + this.device_id + " i.fa-gear.fa-green").removeClass("fa-gear fa-spin fa-green").addClass("fa-exclamation fa-red");
@@ -719,8 +710,7 @@ function refreshPage() {
                 }
 
             });
-            $("i.fa-pulse").remove();
-
+            setState(ret['state'], ret['devicesStatus']);
         }
     });
     countToRefresh = 0;
