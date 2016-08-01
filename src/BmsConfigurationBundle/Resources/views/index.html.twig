@@ -2,9 +2,8 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/bmsConfiguration.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/bmsConfiguration.css') }}">
 {% endblock %}
-
 
 {% block nav %}
     {{ parent() }}
@@ -18,9 +17,13 @@
 {% endblock %}
 
 {% block body %}
-
-    <div class="row main-row">
+    <div class="row main-row hidden-xs hidden-sm">
         {% include 'BmsConfigurationBundle::target.html.twig' %}
+    </div>
+    <div class="row hidden-md hidden-lg">
+        <div class="col-md-12 text-center">
+            <span class="label label-danger">Opcja niedostępna dla urządzeń mobilnych</span>
+        </div>
     </div>
 {% endblock %}
 

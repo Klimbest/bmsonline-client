@@ -331,15 +331,6 @@ function formEvents() {
 }
 
 function tableEvents() {
-    //przyciski ukrywające kolumny
-    $("input.hidding").click(function () {
-        var className = $(this).attr('id');
-        $("." + className).toggle();
-        if ($(this).hasClass("clicked"))
-            $(this).removeClass("clicked");
-        else
-            $(this).addClass("clicked");
-    });
     //przycisk zaznaczający wszystkie checkboxy
     $(".checkAll:button").click(function () {
         var stateCheckbox = $("td input[type='checkbox']");
@@ -350,11 +341,6 @@ function tableEvents() {
         } else {
             $(this).val("Odznacz wszystkie");
         }
-    });
-    //chowanie pokazywanie przycisków ukrywania kolumn
-    $(".hide-button-label").click(function () {
-        $(".hide-button-container").toggle();
-        $(".hide-button-label i.fa").toggleClass('fa-angle-down');
     });
     //przekierowanie do edycji urządzenia z tabeli
     $("tr td.manage i.fa-edit.fa-device").click(function () {

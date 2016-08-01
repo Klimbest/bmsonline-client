@@ -9,6 +9,7 @@ i.fa-edit, i.fa-refresh, i.fa-pencil{
 form div.row{
     padding-bottom: 5px;
 }
+
 .tcpip, .btn-save, .btn-cancel,
 .register-level, .device-level, .hidden-item, div#write-form{
     display: none;
@@ -159,4 +160,13 @@ input.clicked{
 div.bits{
     max-height: 200px;
     overflow: auto;
+}
+
+div.regs-bordered{
+    border: 1px solid #005A78;
+    border-radius: 1px 1px 1px 1px;
+}
+
+input[type="checkbox"]{
+    margin: 2px 0 0;
 }

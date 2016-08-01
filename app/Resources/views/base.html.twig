@@ -43,7 +43,7 @@
                             {% if is_granted("ROLE_ALARM_HISTORY") %}
                                 <li class="active"><a href="{{path('bms_alarm_index')}}"><i class="fa fa-bell-o"></i> Alarmy</a></li>
                             {% endif %}
-                            <li class="dropdown active">
+                            <li class="dropdown active hidden-xs hidden-sm">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i> Ustwienia <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     {% if is_granted("ROLE_CONFIGURATION") %}
