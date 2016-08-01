@@ -178,7 +178,7 @@ class PageController extends Controller
 
                 $fs->dumpFile('../src/BmsBundle/Resources/views/Pages/' . $page->getId() . ".html.twig", $content);
             }
-
+            $fs->remove($this->container->getParameter('kernel.cache_dir'));
             return new JsonResponse($fs);
         } else {
             throw new AccessDeniedHttpException();
