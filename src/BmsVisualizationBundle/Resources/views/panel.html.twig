@@ -1,49 +1,55 @@
-<div 
-    {% if (panel.href is not null) and (panel.href != "") %}
-        onclick="ajaxChangePage( {{panel.href}} );"
-    {% endif %}
-    {% if panel.tooltip %}
-        title="{{panel.name}}" 
-    {% endif%}
-    name="{{panel.name}}"
-    id="{{panel.id}}" class="bms-panel text-{{panel.textAlign}} bms-panel-{{panel.type}}" 
-    style="
-    top: {{panel.topPosition}}px; 
-    left: {{panel.leftPosition}}px; 
-    width: {{panel.width}}px; 
-    height: {{panel.height}}px;
-    border: {{panel.border}};
-    border-radius: {{panel.borderRadius}};
-    background-color: {{panel.backgroundColor}};
-    font-weight: {{panel.fontWeight}};
-    text-decoration: {{panel.textDecoration}};
-    font-style: {{panel.fontStyle}};
-    font-family: {{panel.fontFamily}};
-    color: {{panel.fontColor}};
-    font-size: {{panel.fontSize}}px;
-    line-height: {{panel.height}}px;
-    z-index: {{panel.zIndex}};
-    {% if terms is defined %}
-        {% for term in terms %}
-            {% if term.panel_id == panel.id %}
-                display: none;
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+<div
+        {% if (panel.href is not null) and (panel.href != "") %}
+            onclick="ajaxChangePage( {{ panel.href }} );"
+        {% endif %}
+        {% if panel.tooltip %}
+            title="{{ panel.name }}"
+        {% endif %}
+        name="{{ panel.name }}"
+        id="{{ panel.id }}" class="bms-panel text-{{ panel.textAlign }} bms-panel-{{ panel.type }}"
+        style="
+                top: {{ panel.topPosition }}px;
+                left: {{ panel.leftPosition }}px;
+                width: {{ panel.width }}px;
+                height: {{ panel.height }}px;
+                border-style: {{ panel.borderStyle }};
+                border-width: {{ panel.borderWidth }}px;
+                border-color: {{ panel.borderColor }};
+                border-top-left-radius: {{ panel.borderRadiusLeftTop }}px;
+                border-bottom-left-radius: {{ panel.borderRadiusLeftBottom }}px;
+                border-top-right-radius: {{ panel.borderRadiusRightTop }}px;
+                border-bottom-right-radius: {{ panel.borderRadiusRightBottom }}px;
+                background-color: {{ panel.backgroundColor }};
+                opacity: {{ panel.opacity }};
+                font-weight: {{ panel.fontWeight }};
+                text-decoration: {{ panel.textDecoration }};
+                font-style: {{ panel.fontStyle }};
+                font-family: {{ panel.fontFamily }};
+                color: {{ panel.fontColor }};
+                font-size: {{ panel.fontSize }}px;
+                line-height: {{ panel.height }}px;
+                z-index: {{ panel.zIndex }};
+        {% if terms is defined %}
+            {% for term in terms %}
+                {% if term.panel_id == panel.id %}
+                        display: none;
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     {% if panel.visibility == 0 %}
-        display: none;
+            display: none;
     {% endif %}
     {% if (panel.href is not null) and (panel.href != "") %}
-        cursor: pointer;
+            cursor: pointer;
     {% endif %}
-    ">
+                ">
     {% if panel.type == 'text' %}
-        <span class="bms-panel-content">{{panel.contentSource}}</span>
+        <span class="bms-panel-content">{{ panel.contentSource }}</span>
     {% elseif panel.type == 'variable' %}
-        <span id="{{panel.contentSource}}" class="bms-panel-content" value="{{panel.displayPrecision}}"></span>
+        <span id="{{ panel.contentSource }}" class="bms-panel-content" value="{{ panel.displayPrecision }}"></span>
     {% elseif panel.type == 'image' %}
-        <img class="img-responsive" src="{{panel.contentSource}}"/>
-    {% elseif panel.type == 'widget'%}
+        <img class="img-responsive" src="{{ panel.contentSource }}"/>
+    {% elseif panel.type == 'widget' %}
         {% for widget in widgets %}
             {% if panel.contentSource == widget.id %}
                 {% set optimumMin = (widget.optimumMin-widget.rangeMin)/(widget.rangeMax-widget.rangeMin)*100|round(2, 'common') %}
@@ -52,34 +58,39 @@
                     {% set setPoint = (widget.setRegisterId.registerCurrentData.fixedValue-widget.rangeMin)/(widget.rangeMax-widget.rangeMin)*100|round(2, 'common') %}
                 {% endif %}
                 <div class="progress" style="margin-bottom: 0px;">
-                    <div id="value{{widget.valueRegisterId.id}}" style="position: absolute; top: -2px; left: 0%; height: 100%; z-index: 15">
-                        <img src="/images/system/line.jpg" class="img-responsive"/>                
+                    <div id="value{{ widget.valueRegisterId.id }}"
+                         style="position: absolute; top: -2px; left: 0%; height: 100%; z-index: 15">
+                        <img src="/images/system/line.jpg" class="img-responsive"/>
                         {#                <i class="fa fa-arrow-down fa-fw"></i>#}
                     </div>
                     {% if widget.setRegisterId is not null %}
-                        <div id="set{{widget.setRegisterId.id}}" style="position: absolute; top: -5px; left: {{setPoint}}%; height: 100%; z-index: 14">
+                        <div id="set{{ widget.setRegisterId.id }}"
+                             style="position: absolute; top: -5px; left: {{ setPoint }}%; height: 100%; z-index: 14">
                             <img src="/images/system/linegreen.jpg" class="img-responsive"/>
                         </div>
                     {% endif %}
-                    <div class="progress-bar" role="progressbar" style="width: {{optimumMin}}%; background-color: {{widget.color1}}">
+                    <div class="progress-bar" role="progressbar"
+                         style="width: {{ optimumMin }}%; background-color: {{ widget.color1 }}">
                     </div>
-                    <div class="progress-bar" role="progressbar" style="width: {{optimumMax - optimumMin}}%; background-color: {{widget.color2}}">
+                    <div class="progress-bar" role="progressbar"
+                         style="width: {{ optimumMax - optimumMin }}%; background-color: {{ widget.color2 }}">
                     </div>
-                    <div class="progress-bar" role="progressbar" style="width: {{100-optimumMax}}%; background-color: {{widget.color3}}">
+                    <div class="progress-bar" role="progressbar"
+                         style="width: {{ 100-optimumMax }}%; background-color: {{ widget.color3 }}">
                     </div>
                 </div>
                 <div class="progress progress-label">
                     <div id="rangeMin" class="text-right" style="width:3%; float:left">
-                        {{widget.rangeMin|round(2, 'common')}}
+                        {{ widget.rangeMin|round(2, 'common') }}
                     </div>
-                    <div class="text-right" style="width:{{optimumMin}}%; float:left">
-                        {{widget.optimumMin|round(2, 'common')}}
+                    <div class="text-right" style="width:{{ optimumMin }}%; float:left">
+                        {{ widget.optimumMin|round(2, 'common') }}
                     </div>
-                    <div class="text-right" style="width: {{optimumMax - optimumMin}}%; float:left">
-                        {{widget.optimumMax|round(2, 'common')}}
+                    <div class="text-right" style="width: {{ optimumMax - optimumMin }}%; float:left">
+                        {{ widget.optimumMax|round(2, 'common') }}
                     </div>
-                    <div id="rangeMax" class="text-right" style="width: {{100-optimumMax-3}}%; float:left">
-                        {{widget.rangeMax|round(2, 'common')}}
+                    <div id="rangeMax" class="text-right" style="width: {{ 100-optimumMax-3 }}%; float:left">
+                        {{ widget.rangeMax|round(2, 'common') }}
                     </div>
                 </div>
             {% endif %}

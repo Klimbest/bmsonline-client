@@ -17,19 +17,7 @@ function setSidebarEvents() {
         createDialogPageAddSettings().dialog("open");
     });
     //przycisk dodający panel
-    $("button.btn-add-panel").click(function () {
-        $.ajax({
-            type: "POST",
-            datatype: "application/json",
-            url: Routing.generate('bms_visualization_load_panel_dialog'),
-            success: function (ret) {
-                $(".main-row").append(ret["template"]);
-                createPanelDialog().dialog("open");
-                $(".main-row").children(".fa-spinner").remove();
-            }
-        });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    });
+    $("button.btn-add-panel").click(addPanel);
     //ON/OFF siatka pomocnicza
     $("button.btn-pattern-net").click(function () {
         $(this).children("span").toggleClass('off');
@@ -65,267 +53,302 @@ function setSidebarEvents() {
     });
 }
 
-//*****PANEL START*****
-function createPanelDialog() {
-    return $("div.dialog-panel-settings").dialog({
-        autoOpen: false,
-        width: $(window).width(),
-        height: $(window).height(),
-        modal: true,
-        buttons: [{
-                text: "Zapisz",
-                click: function () {
-                    saveData();
-                    $(this).dialog('destroy').remove();
-                }
-            },
-            {
-                text: "Anuluj",
-                click: function () {
-                    $(this).dialog('destroy').remove();
-                }
-            }],
-        open: function () {
-            setDialogButtonsData();
-        },
-        close: function () {
-            $(this).dialog('destroy').remove();
+function addPanel() {
+    $.ajax({
+        type: "POST",
+        datatype: "application/json",
+        url: Routing.generate('bms_visualization_add_panel'),
+        success: function (ret) {
+            $(".main-row div#page").hide();
+            $(".main-row div#panel-form").remove();
+            $(".main-row").append(ret["template"]);
+            setPanelForm();
+            $(".main-row").children(".fa-spinner").remove();
         }
     });
-
-    function saveData() {
-        var form = $("form[name='panel']");
-        $.ajax({
-            type: form.attr('method'),
-            url: form.attr('action'),
-            data: form.serialize(),
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                console.log("Success!!");
-                //$("div.main-row div.well").append(ret['template']);
-                //loadPanelList(ret["panelList"]);
-                //setPanelEvents();
-            }
-        });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    }
-
-    function setDialogButtonsData() {
-        //zmiana zakładek
-        $("div.dialog-panel-settings form li a").click(function () {
-            $("div.dialog-panel-settings form li").removeClass("active");
-            $("div.row.dialog-panel-data, div.row.dialog-panel-format, div.row.dialog-panel-navigation, div.row.dialog-panel-event, div.row.dialog-panel-progress-bar").hide();
-            var id = $(this).parent().attr("id");
-            $(this).parent().addClass("active");
-            $("div.row." + id).show();
-        });
-        //panel type
-        $("select#panel_type").change(function () {
-            var value = $(this).val();
-            var buttonManager = $("button#manager");
-            switch (value) {
-                case "variable":
-                    $("input#panel-source-content").val("").prop("disabled", true).prop("required", true).show();
-                    buttonManager.removeClass("disabled").show().unbind("click");
-                    $("li#dialog-panel-progress-bar").show();
-                    $(".precision-group, .font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
-                    setOpenVariableManager();
-                    break;
-                case "image":
-                    $("input#panel-source-content").val("").prop("disabled", true).prop("required", false).show();
-                    buttonManager.removeClass("disabled").show().unbind("click");
-                    $(".precision-group, .font-group, li#dialog-panel-progress-bar").hide();
-                    $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
-                    setOpenImageManager();
-                    break;
-                case "text":
-                    $("input#panel-source-content").val("").removeAttr("disabled required").show();
-                    buttonManager.addClass("disabled").show().unbind("click");
-                    $(".precision-group, li#dialog-panel-progress-bar").hide();
-                    $(".font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
-                    break;
-                case "widget":
-                    $("input#panel-source-content").val("").prop("required", false).hide();
-                    buttonManager.addClass("disabled").hide().unbind("click");
-                    $("li#dialog-panel-progress-bar").show();
-                    $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
-                    break;
-            }
-        });
-        //zmiana zawartości źródła powoduje wyświetlenie na podglądzie aktualną zawartość
-        $("input#panel-source-content").change(function () {
-            $("div.panel-preview span").empty().append($(this).val());
-        });
-        setOpenVariableManager();
-    }
-    function setDialogButtonsFormat() {
-        var panel = $("div.panel-preview");
-        //tło
-        $("form#panel input#backgroundColor").on('input', function () {
-            var backgroundColor = hex2rgba($(this).val(), parseFloat($("form#panel input#opacity").val()));
-            panel.css({backgroundColor: backgroundColor});
-        });
-        $("form#panel input#opacity").change(changeOpacity).mousemove(changeOpacity);
-        function changeOpacity() {
-            var backgroundColor = hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($(this).val()));
-            panel.css({backgroundColor: backgroundColor});
-        }
-        //ramka
-        $("form#panel input#borderWidth").change(function () {
-            var value = $(this).val();
-            panel.css({borderWidth: value + "px", lineHeight: (100 - value * 2) + "px"});
-        });
-        $("form#panel select#borderStyle").change(function () {
-            var value = $(this).val();
-            panel.css({borderStyle: value});
-        });
-        $("form#panel input#borderColor").on('input', function () {
-            var value = $(this).val();
-            panel.css({borderColor: value});
-        });
-        $("form#panel input#borderRadiusTL").change(changeTL).mousemove(changeTL);
-        $("form#panel input#borderRadiusTR").change(changeTR).mousemove(changeTR);
-        $("form#panel input#borderRadiusBL").change(changeBL).mousemove(changeBL);
-        $("form#panel input#borderRadiusBR").change(changeBR).mousemove(changeBR);
-        function changeTL() {
-            panel.css({borderTopLeftRadius: $(this).val() + "px"});
-        }
-        function changeTR() {
-            panel.css({borderTopRightRadius: $(this).val() + "px"});
-        }
-        function changeBL() {
-            panel.css({borderBottomLeftRadius: $(this).val() + "px"});
-        }
-        function changeBR() {
-            panel.css({borderBottomRightRadius: $(this).val() + "px"});
-        }
-        //pogrubienie
-        $("form#panel .btn-bold").click(function () {
-            $(this).hasClass("active") ? panel.css({fontWeight: "initial"}) : panel.css({fontWeight: "bold"});
-            $(this).toggleClass("active");
-        });
-        //podkreślenie
-        $("form#panel .btn-underline").click(function () {
-            $(this).hasClass("active") ? panel.css({textDecoration: "initial"}) : panel.css({textDecoration: "underline"});
-            $(this).toggleClass("active");
-        });
-        //pochylenie
-        $("form#panel .btn-italic").click(function () {
-            $(this).hasClass("active") ? panel.css({fontStyle: "initial"}) : panel.css({fontStyle: "italic"});
-            $(this).toggleClass("active");
-        });
-        //wyrównanie
-        $("form#panel .btn-align-left").click(function () {
-            $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "left"});
-            setAlign("left");
-        });
-        $("form#panel .btn-align-center").click(function () {
-            $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "center"});
-            setAlign("center");
-        });
-        $("form#panel .btn-align-right").click(function () {
-            $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "right"});
-            setAlign("right");
-        });
-        function setAlign(align) {
-            switch (align) {
-                case "left":
-                    $(".btn-align-center, .btn-align-right").removeClass("active");
-                    $(".btn-align-left").addClass("active");
-                    break;
-                case "center":
-                    $(".btn-align-left, .btn-align-right").removeClass("active");
-                    $(".btn-align-center").addClass("active");
-                    break;
-                case "right":
-                    $(".btn-align-center, .btn-align-left").removeClass("active");
-                    $(".btn-align-right").addClass("active");
-                    break;
-            }
-        }
-        //styl czcionki
-        $("form#panel select.font-family").change(function () {
-
-            panel.css({fontFamily: $(this).val()});
-        });
-        //rozmiar czcionki
-        $("form#panel select.font-size").change(function () {
-            panel.css({fontSize: $(this).val() + "px"});
-        });
-        //Kolor
-        $("form#panel input#fontColor").on('input', function () {
-            panel.css({color: hex2rgba($(this).val(), 1)});
-        });
-        //precyzja wyświetlania
-        $("form#panel select#displayPrecision").change(function () {
-            if ($("select#panel-type").val() === "variable") {
-                var displayPrecision = $(this).val();
-                var value = parseFloat($("div.dialog-panel-settings input#panel-source-value").val());
-                value = value.toFixed(displayPrecision);
-                panel.children("span").empty().append(value);
-            }
-        });
-
-    }
-    /*
-    function setDialogButtonEvent(panel_id) {
-        //add term
-        $("button.add-term").click(function () {
-            $.ajax({
-                type: "POST",
-                datatype: "application/json",
-                url: Routing.generate('bms_visualization_load_event_manager'),
-                success: function (ret) {
-                    $(".main-row").children(".fa-spinner").remove();
-                    $(".main-row").append(ret['template']);
-                    createCondition(panel_id).dialog("open");
-                }
-            });
-            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-        });
-        //delete term
-        setDeleteTerm();
-    }
-    function setDialogButtonProgressBar() {
-        //zmiana kolorów
-        $("input#color1").on('input', function () {
-            $("div#pb1").css({backgroundColor: $(this).val()});
-        });
-        $("input#color2").on('input', function () {
-            $("div#pb2").css({backgroundColor: $(this).val()});
-        });
-        $("input#color3").on('input', function () {
-            $("div#pb3").css({backgroundColor: $(this).val()});
-        });
-        //dodanie zmiennych
-        $("button#progress-bar-manager-value").click(function () {
-            $.ajax({
-                type: "POST",
-                datatype: "application/json",
-                url: Routing.generate('bms_visualization_load_variable_manager'),
-                success: function (ret) {
-                    $(".main-row").children(".fa-spinner").remove();
-                    $(".main-row").append(ret["template"]);
-                    createVariableManager("progress-bar-value").dialog("open");
-                }
-            });
-            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-        });
-        $("button#progress-bar-manager-set").click(function () {
-            $.ajax({
-                type: "POST",
-                datatype: "application/json",
-                url: Routing.generate('bms_visualization_load_variable_manager'),
-                success: function (ret) {
-                    $(".main-row").children(".fa-spinner").remove();
-                    $(".main-row").append(ret["template"]);
-                    createVariableManager("progress-bar-set").dialog("open");
-                }
-            });
-            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-        });
-    }*/
+    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
+
+function setPanelForm() {
+    //zmiana zakładek
+    $("div#panel-form form li a").click(function () {
+        $("div#panel-form form li").removeClass("active");
+        $("div.well").hide();
+        var id = $(this).parent().attr("id");
+        $(this).parent().addClass("active");
+        $("div.well." + id).show();
+    });
+}
+
+function editPanel(data) {
+    $.ajax({
+        type: "POST",
+        datatype: "application/json",
+        url: Routing.generate('bms_visualization_edit_panel'),
+        data: data,
+        success: function (ret) {
+            $(".main-row div#page").hide();
+            $(".main-row div#panel-form").remove();
+            $(".main-row").append(ret["template"]);
+
+            $(".main-row").children(".fa-spinner").remove();
+        }
+    });
+    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+}
+
+
+function savePanel() {
+    var form = $("form[name='panel']");
+    //todo: validowanie formularza przed wysłaniem
+    $.ajax({
+        type: form.attr('method'),
+        url: form.attr('action'),
+        data: form.serialize(),
+        success: function (ret) {
+            $(".main-row").children(".fa-spinner").remove();
+            console.log(ret);
+            $("div.main-row div#panel-form").remove();
+            $(".main-row div#page").show().children("div.well").show().append(ret['panel']);
+            loadPanelList(ret["panelList"]);
+            setPanelEvents();
+        }
+    });
+    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+}
+
+function closePanelForm() {
+    if (confirm("Na pewno anulować dodawanie obiektu?")) {
+        $("div.main-row div#panel-form").remove();
+        $(".main-row div#page").show();
+    }
+}
+
+/*
+ function setDialogButtonsData() {
+ //zmiana zakładek
+ $("div.dialog-panel-settings form li a").click(function () {
+ $("div.dialog-panel-settings form li").removeClass("active");
+ $("div.row.dialog-panel-data, div.row.dialog-panel-format, div.row.dialog-panel-navigation, div.row.dialog-panel-event, div.row.dialog-panel-progress-bar").hide();
+ var id = $(this).parent().attr("id");
+ $(this).parent().addClass("active");
+ $("div.row." + id).show();
+ });
+ //panel type
+ $("select#panel_type").change(function () {
+ var value = $(this).val();
+ var buttonManager = $("button#manager");
+ switch (value) {
+ case "variable":
+ $("input#panel-source-content").val("").prop("disabled", true).prop("required", true).show();
+ buttonManager.removeClass("disabled").show().unbind("click");
+ $("li#dialog-panel-progress-bar").show();
+ $(".precision-group, .font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
+ setOpenVariableManager();
+ break;
+ case "image":
+ $("input#panel-source-content").val("").prop("disabled", true).prop("required", false).show();
+ buttonManager.removeClass("disabled").show().unbind("click");
+ $(".precision-group, .font-group, li#dialog-panel-progress-bar").hide();
+ $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
+ setOpenImageManager();
+ break;
+ case "text":
+ $("input#panel-source-content").val("").prop("required", false).prop("disabled", false).show();
+ buttonManager.addClass("disabled").show().unbind("click");
+ $(".precision-group, li#dialog-panel-progress-bar").hide();
+ $(".font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
+ break;
+ case "widget":
+ $("input#panel-source-content").val("").prop("required", false).hide();
+ buttonManager.addClass("disabled").hide().unbind("click");
+ $("li#dialog-panel-progress-bar").show();
+ $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
+ break;
+ }
+ });
+ //zmiana zawartości źródła powoduje wyświetlenie na podglądzie aktualną zawartość
+ $("input#panel-source-content").change(function () {
+ $("div.panel-preview span").empty().append($(this).val());
+ });
+ setOpenVariableManager();
+ $("input#panel-source-content").val($("input#panel_contentSource").val());
+ }
+
+ function setDialogButtonsFormat() {
+ var panel = $("div.panel-preview");
+ //tło
+ $("form#panel input#backgroundColor").on('input', function () {
+ var backgroundColor = hex2rgba($(this).val(), parseFloat($("form#panel input#opacity").val()));
+ panel.css({backgroundColor: backgroundColor});
+ });
+ $("form#panel input#opacity").change(changeOpacity).mousemove(changeOpacity);
+ function changeOpacity() {
+ var backgroundColor = hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($(this).val()));
+ panel.css({backgroundColor: backgroundColor});
+ }
+
+ //ramka
+ $("form#panel input#borderWidth").change(function () {
+ var value = $(this).val();
+ panel.css({borderWidth: value + "px", lineHeight: (100 - value * 2) + "px"});
+ });
+ $("form#panel select#borderStyle").change(function () {
+ var value = $(this).val();
+ panel.css({borderStyle: value});
+ });
+ $("form#panel input#borderColor").on('input', function () {
+ var value = $(this).val();
+ panel.css({borderColor: value});
+ });
+ $("form#panel input#borderRadiusTL").change(changeTL).mousemove(changeTL);
+ $("form#panel input#borderRadiusTR").change(changeTR).mousemove(changeTR);
+ $("form#panel input#borderRadiusBL").change(changeBL).mousemove(changeBL);
+ $("form#panel input#borderRadiusBR").change(changeBR).mousemove(changeBR);
+ function changeTL() {
+ panel.css({borderTopLeftRadius: $(this).val() + "px"});
+ }
+
+ function changeTR() {
+ panel.css({borderTopRightRadius: $(this).val() + "px"});
+ }
+
+ function changeBL() {
+ panel.css({borderBottomLeftRadius: $(this).val() + "px"});
+ }
+
+ function changeBR() {
+ panel.css({borderBottomRightRadius: $(this).val() + "px"});
+ }
+
+ //pogrubienie
+ $("form#panel .btn-bold").click(function () {
+ $(this).hasClass("active") ? panel.css({fontWeight: "initial"}) : panel.css({fontWeight: "bold"});
+ $(this).toggleClass("active");
+ });
+ //podkreślenie
+ $("form#panel .btn-underline").click(function () {
+ $(this).hasClass("active") ? panel.css({textDecoration: "initial"}) : panel.css({textDecoration: "underline"});
+ $(this).toggleClass("active");
+ });
+ //pochylenie
+ $("form#panel .btn-italic").click(function () {
+ $(this).hasClass("active") ? panel.css({fontStyle: "initial"}) : panel.css({fontStyle: "italic"});
+ $(this).toggleClass("active");
+ });
+ //wyrównanie
+ $("form#panel .btn-align-left").click(function () {
+ $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "left"});
+ setAlign("left");
+ });
+ $("form#panel .btn-align-center").click(function () {
+ $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "center"});
+ setAlign("center");
+ });
+ $("form#panel .btn-align-right").click(function () {
+ $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "right"});
+ setAlign("right");
+ });
+ function setAlign(align) {
+ switch (align) {
+ case "left":
+ $(".btn-align-center, .btn-align-right").removeClass("active");
+ $(".btn-align-left").addClass("active");
+ break;
+ case "center":
+ $(".btn-align-left, .btn-align-right").removeClass("active");
+ $(".btn-align-center").addClass("active");
+ break;
+ case "right":
+ $(".btn-align-center, .btn-align-left").removeClass("active");
+ $(".btn-align-right").addClass("active");
+ break;
+ }
+ }
+
+ //styl czcionki
+ $("form#panel select.font-family").change(function () {
+
+ panel.css({fontFamily: $(this).val()});
+ });
+ //rozmiar czcionki
+ $("form#panel select.font-size").change(function () {
+ panel.css({fontSize: $(this).val() + "px"});
+ });
+ //Kolor
+ $("form#panel input#fontColor").on('input', function () {
+ panel.css({color: hex2rgba($(this).val(), 1)});
+ });
+ //precyzja wyświetlania
+ $("form#panel select#displayPrecision").change(function () {
+ if ($("select#panel-type").val() === "variable") {
+ var displayPrecision = $(this).val();
+ var value = parseFloat($("div.dialog-panel-settings input#panel-source-value").val());
+ value = value.toFixed(displayPrecision);
+ panel.children("span").empty().append(value);
+ }
+ });
+
+ }
+
+
+ function setDialogButtonEvent(panel_id) {
+ //add term
+ $("button.add-term").click(function () {
+ $.ajax({
+ type: "POST",
+ datatype: "application/json",
+ url: Routing.generate('bms_visualization_load_event_manager'),
+ success: function (ret) {
+ $(".main-row").children(".fa-spinner").remove();
+ $(".main-row").append(ret['template']);
+ createCondition(panel_id).dialog("open");
+ }
+ });
+ $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+ });
+ //delete term
+ setDeleteTerm();
+ }
+ function setDialogButtonProgressBar() {
+ //zmiana kolorów
+ $("input#color1").on('input', function () {
+ $("div#pb1").css({backgroundColor: $(this).val()});
+ });
+ $("input#color2").on('input', function () {
+ $("div#pb2").css({backgroundColor: $(this).val()});
+ });
+ $("input#color3").on('input', function () {
+ $("div#pb3").css({backgroundColor: $(this).val()});
+ });
+ //dodanie zmiennych
+ $("button#progress-bar-manager-value").click(function () {
+ $.ajax({
+ type: "POST",
+ datatype: "application/json",
+ url: Routing.generate('bms_visualization_load_variable_manager'),
+ success: function (ret) {
+ $(".main-row").children(".fa-spinner").remove();
+ $(".main-row").append(ret["template"]);
+ createVariableManager("progress-bar-value").dialog("open");
+ }
+ });
+ $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+ });
+ $("button#progress-bar-manager-set").click(function () {
+ $.ajax({
+ type: "POST",
+ datatype: "application/json",
+ url: Routing.generate('bms_visualization_load_variable_manager'),
+ success: function (ret) {
+ $(".main-row").children(".fa-spinner").remove();
+ $(".main-row").append(ret["template"]);
+ createVariableManager("progress-bar-set").dialog("open");
+ }
+ });
+ $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+ });
+ }*/
 function setOpenVariableManager() {
     $("button#manager").click(function () {
         $.ajax({
@@ -674,6 +697,7 @@ function createImageManager(fw) {
             });
         });
     }
+
     function saveData(data) {
         $.ajax({
             type: "POST",
@@ -721,6 +745,7 @@ function createEffectCssManager() {
     function setDialog() {
 
     }
+
     function setDialogButtons() {
 
     }
@@ -742,11 +767,11 @@ function setDeleteTerm() {
                 $("table i#" + id + ".fa-trash-o").parent().parent().remove();
                 if ($("div.dialog-panel-event table tbody tr").length == 1) {
                     $("div.dialog-panel-event table tbody tr").remove().append(
-                            "<tr id='no-data'>\n\
-                                <td colspan='11' class='text-center'>\n\
-                                    <h2><span class='label label-primary'> Brak warunków</span></h2>\n\
-                                </td>\n\
-                            </tr>");
+                        "<tr id='no-data'>\n\
+                            <td colspan='11' class='text-center'>\n\
+                                <h2><span class='label label-primary'> Brak warunków</span></h2>\n\
+                            </td>\n\
+                        </tr>");
                 }
             }
         });
@@ -810,6 +835,7 @@ function createCondition(panel_id) {
 
     function setDialog() {
     }
+
     function setDialogButtons() {
         //open variable manager
         $(".input-group-btn button#variableManager").click(function () {
@@ -873,6 +899,7 @@ function createCondition(panel_id) {
                 $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
             });
         }
+
         function setOpenEffectSrc() {
             $(".input-group-btn button#effectManager").click(function () {
                 $.ajax({
@@ -888,6 +915,7 @@ function createCondition(panel_id) {
                 $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
             });
         }
+
         function setOpenEffectAnimation() {
             $(".input-group-btn button#effectManager").click(function () {
                 alert("Otwieranie Animacja");
@@ -895,6 +923,7 @@ function createCondition(panel_id) {
         }
 
     }
+
     function saveData(data) {
         $.ajax({
             type: "POST",
@@ -929,8 +958,8 @@ function createCondition(panel_id) {
                     </tr>");
                 }
                 $("table tbody").append(
-                        "<tr>\n\
-                            <td>" + term.register_name + "</td>\n\
+                    "<tr>\n\
+                        <td>" + term.register_name + "</td>\n\
                             <td class='text-center'>" + term.fixedValue + "</td>\n\
                             <td class='text-center'>" + term.condition_type + "</td>\n\
                             <td class='text-center'>" + term.condition_value + "</td>\n\
@@ -964,39 +993,39 @@ function ajaxMovePanel(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
+/*
+ function copyPanel(data) {
+ $.ajax({
+ type: "POST",
+ datatype: "application/json",
+ url: Routing.generate('bms_visualization_copy_panel'),
+ data: data,
+ success: function (ret) {
+ $(".main-row").children(".fa-spinner").remove();
+ $("div.main-row div.well").append(ret["template"]);
+ $(".main-row").append(ret["dialog"]);
+ loadPanelList(ret["panelList"]);
 
-function copyPanel(data) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_copy_panel'),
-        data: data,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            $("div.main-row div.well").append(ret["template"]);
-            $(".main-row").append(ret["dialog"]);
-            loadPanelList(ret["panelList"]);
-
-            setPanelEvents();
-            createPanelDialog(ret["panel_id"]).dialog("open");
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-function ajaxDeletePanel(data) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_delete_panel'),
-        data: data,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            loadPanelList(ret["panelList"]);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-
+ setPanelEvents();
+ createPanelDialog(ret["panel_id"]).dialog("open");
+ }
+ });
+ $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+ }
+ function ajaxDeletePanel(data) {
+ $.ajax({
+ type: "POST",
+ datatype: "application/json",
+ url: Routing.generate('bms_visualization_delete_panel'),
+ data: data,
+ success: function (ret) {
+ $(".main-row").children(".fa-spinner").remove();
+ loadPanelList(ret["panelList"]);
+ }
+ });
+ $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+ }
+ */
 //dodanie obsługi zdarzeń na każdym panelu na stronie
 function setPanelEvents() {
     var panels = $(".bms-panel");
@@ -1005,15 +1034,8 @@ function setPanelEvents() {
         //pobranie id panelu 
         var id = $(this).attr("id");
         var aR;
-        if ($(this).children("img").length > 0) {
-            aR = true;
-        } else {
-            aR = false;
-        }
-        $(this).show();
-        //usunięcie starych eventów
-        $(this).removeAttr("onclick");
-        $(this).unbind("mouseenter mouseleave");
+        $(this).children("img").length > 0 ? aR = true : aR = false;
+        $(this).show().removeAttr("onclick").unbind("mouseenter mouseleave");
         //draggable and resizable
         $(this).draggable({
             containment: "parent",
@@ -1088,10 +1110,11 @@ function setPanelEvents() {
             }
         });
         $(this).click(function (e) {
+            var panelLabel = $("span.label-bms-panel");
             $(this).css({zIndex: 100});
-            if ($("span.label-bms-panel").length > 0) {
-                var relX = parseInt($("span.label-bms-panel").css("left"));
-                var relY = parseInt($("span.label-bms-panel").css("top"));
+            if (panelLabel.length > 0) {
+                var relX = parseInt(panelLabel.css("left"));
+                var relY = parseInt(panelLabel.css("top"));
             } else {
                 var relX = e.pageX - $(this).offset().left;
                 var relY = e.pageY - $(this).offset().top;
@@ -1106,7 +1129,7 @@ function setPanelEvents() {
                     relY = relY - 4;
                 }
             }
-            $("span.label-bms-panel").remove();
+            panelLabel.remove();
             var label = "<span id=" + id + " class='label label-bms-panel' \n\
                                style='top: " + relY + "px; \n\
                                       left: " + relX + "px;\n\
@@ -1146,21 +1169,7 @@ function setPanelEvents() {
             var data = {
                 panel_id: id
             };
-            $.ajax({
-                type: "POST",
-                datatype: "application/json",
-                url: Routing.generate('bms_visualization_load_panel_dialog'),
-                data: data,
-                success: function (ret) {
-                    $(".main-row").children(".fa-spinner").remove();
-                    $(".main-row").append(ret["template"]);
-
-
-                    createPanelDialog(id, ret["register"]).dialog("open");
-
-                }
-            });
-            $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+            editPanel(data);
         });
         //usuwanie
         $(label + " i.fa-trash-o").click(function () {
@@ -1390,6 +1399,7 @@ function createPage(page, panelList) {
                 $("div.main-row div.well").remove();
             });
         }
+
         //edycja strony
         function editPageEvent(label, page_id) {
             label.children("i.fa-cogs").click(function () {
@@ -1417,7 +1427,7 @@ function setPatternNet(x) {
         }
         var mainWell = $("div.main-row div.well");
         var nx = mainWell.width() / x,
-                ny = mainWell.height() / x;
+            ny = mainWell.height() / x;
         for (var i = 0; i < Math.floor(nx) * Math.floor(ny) + Math.floor(nx); i++) {
             divItem = "<div id=" + i + " class='pattern-net'></div>";
             mainWell.append(divItem);
@@ -1475,17 +1485,13 @@ function loadPanelList(panelList) {
     }, function () {
         var id = $(this).attr("id");
         $(this).find("span").css({backgroundColor: "", width: ""});
-
         $(this).find("div.panel-list-label").css({overflow: ""});
-        if ($(this).hasClass("active")) {
-
-        } else {
+        if (!$(this).hasClass("active")) {
             $(this).find("div.panel-list-label").removeClass("col-md-5").addClass("col-md-12");
             $(this).find("i.icon-type").show();
             $(this).find("div.panel-list-controls").hide();
             $("div#" + id + ".bms-panel").removeClass("active");
         }
-
     });
     //obsługa zaznaczania paneli na liście
     $("div.panel-list").click(function () {
@@ -1497,7 +1503,7 @@ function loadPanelList(panelList) {
         var panel = $("div#" + id + ".bms-panel");
         var zIndex = $(this).parent().parent().parent().find("span").attr("value");
         zIndex++;
-        $("div#" + id + ".bms-panel").css({zIndex: zIndex});
+        panel.css({zIndex: zIndex});
         $(this).parent().parent().parent().find("span").attr("value", zIndex);
         var data = {
             panel_id: id,
@@ -1518,7 +1524,7 @@ function loadPanelList(panelList) {
         if (zIndex < 0) {
             zIndex = 0;
         }
-        $("div#" + id + ".bms-panel").css({zIndex: zIndex});
+        panel.css({zIndex: zIndex});
         var data = {
             panel_id: id,
             topPosition: panel.css("top"),
@@ -1530,62 +1536,31 @@ function loadPanelList(panelList) {
         ajaxMovePanel(data);
     });
     //kopiowanie
-    $("div.panel-list i.fa-clone").click(function () {
-        var id = $(this).parent().parent().parent().attr("id");
-        var data = {
-            panel_id: id
-        };
-        copyPanel(data);
-    });
+    // $("div.panel-list i.fa-clone").click(function () {
+    //     var id = $(this).parent().parent().parent().attr("id");
+    //     var data = {
+    //         panel_id: id
+    //     };
+    //     copyPanel(data);
+    // });
     //ustawienia
-    $("div.panel-list i.fa-cogs").click(function () {
-        var id = $(this).parent().parent().parent().attr("id");
-        var panel = $("div#" + id + ".bms-panel");
-        var data = {
-            panel_id: id
-        };
-        $.ajax({
-            type: "POST",
-            datatype: "application/json",
-            url: Routing.generate('bms_visualization_load_panel_dialog'),
-            data: data,
-            success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $(".main-row").append(ret["template"]);
-
-                createPanelDialog(id, ret["register"]).dialog("open");
-
-            }
-        });
-        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-    });
+    // $("div.panel-list i.fa-cogs").click(function () {
+    //     var id = $(this).parent().parent().parent().attr("id");
+    //     var panel = $("div#" + id + ".bms-panel");
+    //     var data = {
+    //         panel_id: id
+    //     };
+    //     editPanel(data);
+    // });
     //usuwanie
-    $("div.panel-list i.fa-trash-o").click(function () {
-        var id = $(this).parent().parent().parent().attr("id");
-        if (confirm("Na pewno chcesz to usunąć?")) {
-            $("div#" + id + ".bms-panel").remove();
-            var data = {
-                panel_id: id
-            };
-            ajaxDeletePanel(data);
-        }
-    });
+    // $("div.panel-list i.fa-trash-o").click(function () {
+    //     var id = $(this).parent().parent().parent().attr("id");
+    //     if (confirm("Na pewno chcesz to usunąć?")) {
+    //         $("div#" + id + ".bms-panel").remove();
+    //         var data = {
+    //             panel_id: id
+    //         };
+    //         ajaxDeletePanel(data);
+    //     }
+    // });
 }
-
-function rgb2hex(orig) {
-    var rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+)/i);
-    return (rgb && rgb.length === 4) ? "#" +
-            ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
-            ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
-            ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : orig;
-}
-function hex2rgba(hex, opacity) {
-    hex = hex.replace('#', '');
-    r = parseInt(hex.substring(0, 2), 16);
-    g = parseInt(hex.substring(2, 4), 16);
-    b = parseInt(hex.substring(4, 6), 16);
-    result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
-    return result;
-}
-
-

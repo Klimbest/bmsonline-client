@@ -2,14 +2,25 @@
 .dialog-page-edit-settings,
 div.panel-list-controls,
 li#dialog-panel-progress-bar,
-div.dialog-panel-settings div.dialog-panel-format,
-div.dialog-panel-settings div.dialog-panel-navigation,
-div.dialog-panel-settings div.dialog-panel-event,
-div.dialog-panel-settings div.dialog-panel-progress-bar{
+div#panel-form div.dialog-panel-format,
+div#panel-form div.dialog-panel-navigation,
+div#panel-form div.dialog-panel-event,
+div#panel-form div.dialog-panel-progress-bar {
     display: none;
 }
+
+i.fa-plus-circle:hover,
+.btn-add-condition:hover,
+i.fa-trash-o:hover,
+div.image-container span.label:hover,
+div.panel-list:hover,
+div#panel-form ul.nav-tabs li:hover,
+div#panel-form i {
+    cursor: pointer;
+}
+
 /*SIDEBAR*/
-.sidebar{
+.sidebar {
     background: linear-gradient(rgba(58, 63, 68, 1), rgba(39, 43, 48, 1));
     width: 210px;
     padding: 5px 10px;
@@ -18,6 +29,7 @@ div.dialog-panel-settings div.dialog-panel-progress-bar{
     z-index: 1;
     position: absolute;
 }
+
 span.toggler {
     background: green;
     cursor: pointer;
@@ -28,38 +40,35 @@ span.toggler {
     text-decoration: none;
     transition: all .2s ease;
 }
+
 span.toggler.off {
     background: red;
     border-right-width: 2px;
     border-left-width: 15px;
 }
-.btn-preview-off{
-    position: absolute;
-    z-index: 999;
-}
 
-div.panel-list.active span{
+div.panel-list.active span {
     background-color: #FF0000;
 }
 
-div.panel-list.active div i.icon-type{
+div.panel-list.active div i.icon-type {
     display: none;
 }
 
-div.panel-list.active div.panel-list-controls{
+div.panel-list.active div.panel-list-controls {
     display: inline-block;
 }
 
-div.panel-list.active div.panel-list-label{
+div.panel-list.active div.panel-list-label {
     overflow: hidden;
 }
 
-div.panel-list i:not(.icon-type):hover{
+div.panel-list i:not(.icon-type):hover {
     color: #FF0000;
     font-size: 120%;
 }
 
-div.panel-list-container{
+div.panel-list-container {
     max-height: 300px;
     overflow-y: auto;
     background-color: rgb(255, 255, 255);
@@ -69,36 +78,41 @@ div.panel-list-container{
 }
 
 /*BODY*/
-.main-row{
-    /*max-height: 79vh;*/
+.main-row {
     max-width: 80%;
     margin-right: 0px;
     margin-left: 210px;
+    margin-top: 15px;
 }
-.main-row div.well{
+
+.main-row div.well {
     position: relative;
     padding: 0px;
     overflow: hidden;
 }
-/*PAGE*/
 
-div.label-page{
+/*PAGE*/
+div.label-page {
     margin-right: 2px;
 }
-div.label-page.active{
+
+div.label-page.active {
     font-size: 90%;
 }
-div.label-page:hover{
+
+div.label-page:hover {
     background-color: #337AB7;
     cursor: pointer;
 }
+
 /*Siatka pomocnicza*/
-.label-pattern-net{
+.label-pattern-net {
     background-color: #FFF;
     color: #337AB7;
     z-index: 999;
 }
-.pattern-net{
+
+.pattern-net {
     outline: 1px solid rgba(0, 0, 0, 0.2);
     float: left;
     overflow: auto;
@@ -108,7 +122,8 @@ div.label-page:hover{
     position: relative;
     pointer-events: none;
 }
-.pattern-net-right{
+
+.pattern-net-right {
     outline: 1px solid rgba(0, 0, 0, 0.2);
     overflow: auto;
     box-sizing: content-box;
@@ -116,15 +131,16 @@ div.label-page:hover{
     position: relative;
     pointer-events: none;
 }
+
 /*PANELE*/
-.bms-panel{
+.bms-panel {
     position: absolute;
     cursor: pointer;
 }
 
 .bms-panel:hover,
 .bms-panel.hover,
-.bms-panel.active{
+.bms-panel.active {
     z-index: 100;
     box-shadow: 0px 0px 20px #000;
 }
@@ -136,10 +152,12 @@ div.label-page:hover{
     width: 120px;
     height: 25px;
 }
+
 .btn-file {
     position: relative;
     overflow: hidden;
 }
+
 .btn-file input[type=file] {
     position: absolute;
     top: 0;
@@ -156,81 +174,56 @@ div.label-page:hover{
     display: block;
 }
 
-i.fa-plus-circle:hover,
-.btn-add-condition:hover,
-i.fa-trash-o:hover,
-div.image-container span.label:hover,
-div.panel-list:hover,
-div.dialog-panel-settings ul.nav-tabs li:hover{
-    cursor: pointer;
+div.progress-label {
+    height: 15px;
+    margin-bottom: 0px;
+    overflow: visible;
+    line-height: 15px;
+    background-color: rgba(0, 0, 0, 0);
 }
 
-div.dialog-panel-settings .well{
+/*Formularz paneli*/
+div#panel-form div.well {
     padding-top: 24px;
-    border-top: none;
     box-shadow: unset;
-    background-color: #FFF;
+    border: 1px solid rgb(174, 174, 174);
 }
 
-div.dialog-condition-register .well{
-    padding-top: 24px;
-    border-top: none;
-    box-shadow: unset;
+div#panel-form div#panel_type {
+    margin-right: 0px;
 }
 
-div.dialog-condition .row{
-    padding: 5px 0px;
+div#panel-form button#manager {
+    margin-left: 15px;
+    margin-top: -15px;
 }
 
-div.dialog-panel-settings .well .row{
-    margin-bottom: 5px;
+div#panel-form select#panel_type {
+    border-radius: 4px 0px 0px 4px;
 }
 
-
-.label-dialog-panel{
-    background-color: #f6a828;
-    border: 1px solid #e78f08;
-} 
-.panel-preview{
-    height: 100px;    
-    line-height: 100px;
-}
-
-.input-group-btn button{
-    font-size: 14px;
-}
-div#panel_type div.form-group{
-    margin-right: -1px;
-}
-button#manager{
-    margin-bottom: 15px;
-    margin-left: 14px;
-}
-
-input#panel-source-content{
+div#panel-form input#panel-source-content {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
 }
 
-select#panel_type{   
-    border-radius: 4px 0px 0px 4px;
+div#panel-form div.row-label {
+    margin-bottom: 15px;
 }
+
+div#panel-form ul.nav-tabs li a {
+    border: 1px solid rgb(174, 174, 174);
+    border-bottom: unset;
+}
+
+/*
 .panel-preview,
 .panel-preview img{
     max-width: 500px;
     max-height: 300px;
 }
-ul.nav-tabs li a{
-    border: 1px solid rgb(174, 174, 174);
-    border-radius: 5px 5px 0px 0px;
-}
-ul.nav-tabs li a:hover{
-    background-color: rgb(51, 122, 183);
-    color: rgb(255, 255, 255);
-    border-color: rgb(0,0,0);
-}
 
-/* DIALOG EVENT */
+
 .table, 
 .table-bordered tbody tr td,
 .table-bordered thead tr th{
@@ -253,7 +246,7 @@ input.clicked{
     font-weight: bold;
     background-color: #adadad;
 }
-/*condition*/
+/*condition
 div.row.body{
     height: 85%;
     overflow-y: auto;
@@ -277,13 +270,6 @@ div.row.register-choice:hover{
     color: #FFF;
 }
 
-div.progress-label{
-    height: 15px;
-    margin-bottom: 0px;
-    overflow: visible;
-    line-height: 15px;
-    background-color: rgba(0,0,0,0);
-}
 div.thumbnail-list{
     margin-top: 8px;
 }
@@ -304,4 +290,4 @@ div.thumbnail-list div.selected{
 div.thumbnail-list div img{
     max-height: 100%;
     max-width: 100%;
-}
+}*/

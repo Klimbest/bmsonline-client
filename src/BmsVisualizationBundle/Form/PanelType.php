@@ -3,7 +3,9 @@
 namespace BmsVisualizationBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -12,135 +14,175 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use BmsVisualizationBundle\Form\ColorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
-class PanelType extends AbstractType {
+class PanelType extends AbstractType
+{
 
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('name', TextType::class, array(
-                    'label' => 'Nazwa panelu',
-                    'required' => true
-                ))
-                ->add('type', ChoiceType::class, array(
-                    'choices' => array(
-                        'Zmienna' => 'variable',
-                        'Tekst' => 'text',
-                        'Obraz' => 'image',
-                        'Progress bar' => 'widget',
-                    ),
-                    'label' => false,
-                    'required' => true
-                ))
-                ->add('visibility', CheckboxType::class, array(
-                    'label' => 'Wyświetlać panel?',
-                    'required' => false
-                ))
-                ->add('tooltip', CheckboxType::class, array(
-                    'label' => 'Wyświetlać podpowiedź?',
-                    'required' => false
-                ))
-                ->add('topPosition', IntegerType::class, array(
-                    'label' => 'Od góry',
-                    'required' => true
-                ))
-                ->add('leftPosition', IntegerType::class, array(
-                    'label' => 'Od lewej',
-                    'required' => true
-                ))
-                ->add('width', IntegerType::class, array(
-                    'label' => 'Wysokość',
-                    'required' => true
-                ))
-                ->add('height', IntegerType::class, array(
-                    'label' => 'Szerokość',
-                    'required' => true
-                ))
-                ->add('zIndex', HiddenType::class, array(
-                    'required' => true
-                ))
-                ->add('displayPrecision', ChoiceType::class, array(
-                    'choices' => array(
-                        '0' => 0,
-                        '0,0' => 1,
-                        '0,00' => 2,
-                        '0,000' => 3,
-                    ),
-                    'label' => false,
-                    'required' => true
-                ))
-                ->add('backgroundColor', ColorType::class, array(
-                    'label' => 'Kolor tła',
-                    'required' => false
-                ))
-                ->add('border', HiddenType::class)
-                ->add('borderRadius', HiddenType::class)
-                ->add('textAlign', HiddenType::class)
-                ->add('fontWeight', HiddenType::class)
-                ->add('textDecoration', HiddenType::class)
-                ->add('fontStyle', HiddenType::class)                
-                ->add('fontFamily', ChoiceType::class, array(
-                    'choices' => array(
-                        "Arial" => "Arial",
-                        "Black" => "Black",
-                        "Century Gothic" => "Century Gothic",
-                        "Cochin" => "Cochin",
-                        "Comic Sans MS" => "Comic Sans MS",
-                        "Courier" => "Courier",
-                        "Courier New" => "Courier New",
-                        "Garamond" => "Garamond",
-                        "Geneva" => "Geneva",
-                        "Georgia" => "Georgia",
-                        "Helvetica" => "Helvetica",
-                        "Lucida" => "Lucida",
-                        "Lucida Grande" => "Lucida Grande",
-                        "Lucida Sans" => "Lucida Sans",
-                        "Lucida Sans Unicode" => "Lucida Sans Unicode",
-                        "Monotype Corsiva" => "Monotype Corsiva",
-                        "MS Serif" => "MS Serif",
-                        "Tahoma" => "Tahoma",
-                        "Times New Roman" => "Times New Roman", 
-                        "Trebuchet MS" => "Trebuchet MS",                                       
-                        "Verdana" => "Verdana"
-                    ),
-                    'label' => 'Styl',
-                    'required' => false
-                ))
-                ->add('fontColor', ColorType::class, array(
-                    'label' => 'Kolor czcionki',
-                    'required' => false
-                ))
-                ->add('fontSize', IntegerType::class, array(
-                    'label' => 'Rozmiar czcionki',
-                    'required' => false,
-                    'attr' => array( 'min' => 6,
-                                     'max' => 96
-                            )
-                ))
-                ->add('contentSource', HiddenType::class)
-                ->add('page', EntityType::class, array(
-                    'class' => 'BmsVisualizationBundle:Page',
-                    'choice_label' => 'name',
-                    'required' => false,
-                    'label' => 'Strona'
-                ));
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->add('name', TextType::class, [
+            'label' => 'Nazwa panelu',
+            'required' => true,
+            'constraints' => [
+                new NotBlank()
+            ]
+        ])
+            ->add('type', ChoiceType::class, [
+                'choices' => [
+                    'Zmienna' => 'variable',
+                    'Tekst' => 'text',
+                    'Obraz' => 'image',
+                    'Progress bar' => 'widget',
+                ],
+                'label' => false,
+                'required' => true
+            ])
+            ->add('visibility', CheckboxType::class, [
+                'label' => 'Wyświetlać panel?',
+                'required' => false
+            ])
+            ->add('tooltip', CheckboxType::class, [
+                'label' => 'Wyświetlać podpowiedź?',
+                'required' => false
+            ])
+            ->add('topPosition', IntegerType::class, [
+                'label' => 'Od góry'
+            ])
+            ->add('leftPosition', IntegerType::class, [
+                'label' => 'Od lewej'
+            ])
+            ->add('width', IntegerType::class, [
+                'label' => 'Wysokość'
+            ])
+            ->add('height', IntegerType::class, [
+                'label' => 'Szerokość'
+            ])
+            ->add('zIndex', IntegerType::class, [
+                'label' => 'Z-index'
+            ])
+            ->add('displayPrecision', ChoiceType::class, [
+                'choices' => [
+                    '0' => 0,
+                    '0,0' => 1,
+                    '0,00' => 2,
+                    '0,000' => 3,
+                ],
+                'label' => false,
+                'required' => true
+            ])
+            ->add('backgroundColor', ColorType::class, [
+                'label' => 'Kolor',
+                'required' => true
+            ])
+            ->add('opacity', RangeType::class, [
+                'label' => 'Przezroczystość',
+                'required' => true
+            ])
+            ->add('borderWidth', IntegerType::class, [
+                'label' => 'Grubość ramki',
+                'required' => true
+            ])
+            ->add('borderStyle', ChoiceType::class, [
+                'choices' => [
+                    "Ciągła" => "solid",
+                    "Wykropkowana" => "dotted",
+                    "Wykreskowana" => "dashed"
+                ],
+                'label' => 'Styl ramki',
+                'required' => true
+            ])
+            ->add('borderColor', ColorType::class, [
+                'label' => 'Kolor ramki',
+                'required' => true
+            ])
+            ->add('borderRadiusLeftTop', RangeType::class, [
+                'label' => "Lewy górny",
+                'required' => true
+            ])
+            ->add('borderRadiusLeftBottom', RangeType::class, [
+                'label' => "Lewy dolny",
+                'required' => true
+            ])
+            ->add('borderRadiusRightTop', RangeType::class, [
+                'label' => "Prawy górny",
+                'required' => true
+            ])
+            ->add('borderRadiusRightBottom', RangeType::class, [
+                'label' => "Prawy dolny",
+                'required' => true
+            ])
+            ->add('textAlign', HiddenType::class, [
+                'required' => false])
+            ->add('fontWeight', HiddenType::class)
+            ->add('textDecoration', HiddenType::class)
+            ->add('fontStyle', HiddenType::class)
+            ->add('fontFamily', ChoiceType::class, [
+                'choices' => [
+                    "Arial" => "Arial",
+                    "Black" => "Black",
+                    "Century Gothic" => "Century Gothic",
+                    "Cochin" => "Cochin",
+                    "Comic Sans MS" => "Comic Sans MS",
+                    "Courier" => "Courier",
+                    "Courier New" => "Courier New",
+                    "Garamond" => "Garamond",
+                    "Geneva" => "Geneva",
+                    "Georgia" => "Georgia",
+                    "Helvetica" => "Helvetica",
+                    "Lucida" => "Lucida",
+                    "Lucida Grande" => "Lucida Grande",
+                    "Lucida Sans" => "Lucida Sans",
+                    "Lucida Sans Unicode" => "Lucida Sans Unicode",
+                    "Monotype Corsiva" => "Monotype Corsiva",
+                    "MS Serif" => "MS Serif",
+                    "Tahoma" => "Tahoma",
+                    "Times New Roman" => "Times New Roman",
+                    "Trebuchet MS" => "Trebuchet MS",
+                    "Verdana" => "Verdana"
+                ],
+                'label' => 'Styl czcionki',
+                'required' => false
+            ])
+            ->add('fontColor', ColorType::class, [
+                'label' => 'Kolor czcionki',
+                'required' => false
+            ])
+            ->add('fontSize', IntegerType::class, [
+                'label' => 'Rozmiar czcionki',
+                'required' => false,
+                'attr' => ['min' => 6,
+                    'max' => 96
+                ]
+            ])
+            ->add('contentSource', HiddenType::class)
+            ->add('page', EntityType::class, [
+                'class' => 'BmsVisualizationBundle:Page',
+                'choice_label' => 'name',
+                'required' => false,
+                'label' => false
+            ]);
     }
 
     /**
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver) {
-        $resolver->setDefaults(array(
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
             'data_class' => 'BmsVisualizationBundle\Entity\Panel'
-        ));
+        ]);
     }
 
     /**
      * @return string
      */
-    public function getBlockPrefix() {
+    public function getBlockPrefix()
+    {
         return 'panel';
     }
 

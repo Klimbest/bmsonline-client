@@ -10,29 +10,39 @@ namespace BmsVisualizationBundle\Entity;
  */
 class PanelRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findPanelsForPage($page_id){
+    public function findPanelsForPage($page_id)
+    {
         return $this->getEntityManager()
-                ->createQuery('SELECT p FROM BmsVisualizationBundle:Panel AS p WHERE p.page = '.$page_id)
-                ->getResult();
+            ->createQuery('SELECT p FROM BmsVisualizationBundle:Panel AS p WHERE p.page = ' . $page_id)
+            ->getResult();
     }
-    
-    public function findVariablePanelsRegistersForPage($page_id){
+
+    public function findVariablePanelsRegistersForPage($page_id)
+    {
         return $this->getEntityManager()
-                ->createQuery('SELECT r.id, rcd.fixedValue FROM BmsConfigurationBundle:Register r'
-                        . '             JOIN r.registerCurrentData rcd'
-                        . '             JOIN BmsVisualizationBundle:Panel p'
-                        . '             WHERE p.type = \'variable\' AND p.contentSource = r.id AND p.page = '.$page_id .'ORDER BY r.id')
-                ->getResult();
-    }    
-    
-    public function findLastPanel(){
+            ->createQuery('SELECT r.id, rcd.fixedValue FROM BmsConfigurationBundle:Register r'
+                . '             JOIN r.registerCurrentData rcd'
+                . '             JOIN BmsVisualizationBundle:Panel p'
+                . '             WHERE p.type = \'variable\' AND p.contentSource = r.id AND p.page = ' . $page_id . 'ORDER BY r.id')
+            ->getResult();
+    }
+
+    public function getNewPanelName()
+    {
+        $lastPanel = $this->findLastPanel();
+        $id = $lastPanel->getId() + 1;
+        return 'panel' . $id;
+    }
+
+    public function findLastPanel()
+    {
         return $this->getEntityManager()
-                ->createQueryBuilder()
-                ->select('p')
-                ->from('BmsVisualizationBundle:Panel', 'p')
-                ->orderBy('p.id', 'DESC')
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getOneOrNullResult();
+            ->createQueryBuilder()
+            ->select('p')
+            ->from('BmsVisualizationBundle:Panel', 'p')
+            ->orderBy('p.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

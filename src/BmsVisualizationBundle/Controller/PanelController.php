@@ -10,39 +10,40 @@ use BmsVisualizationBundle\Entity\Panel;
 use BmsVisualizationBundle\Entity\WidgetBar;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use BmsVisualizationBundle\Form\PanelType;
+use Zend\Json\Json;
 
 class PanelController extends Controller
 {
 
     /**
-     * @Route("/load_panel_dialog", name="bms_visualization_load_panel_dialog", options={"expose"=true})
+     * @Route("/add_panel", name="bms_visualization_add_panel", options={"expose"=true})
      */
-    public function loadPanelDialogAction(Request $request)
+    public function addPanelAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
             $options = array();
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
-            $panel_id = $request->get("panel_id");
-            isset($panel_id) ? $panel = $panelRepo->find($panel_id) : $panel = new Panel();
+            $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
+            $panel = new Panel($pageRepo->find(1));
+            $panel->setName($panelRepo->getNewPanelName());
 
             $form = $this->createForm(PanelType::class, $panel, array(
-                'action' => $this->generateUrl('bms_visualization_load_panel_dialog'),
+                'action' => $this->generateUrl('bms_visualization_add_panel'),
                 'method' => 'POST'
             ));
             $options['form'] = $form->createView();
 
             $form->handleRequest($request);
-            if ($form->isValid()) {
+            if ($form->isSubmitted()) {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($panel);
                 $em->flush();
-
-                return new JsonResponse(array('message' => 'Success!'), 200);
+                $ret["panel"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
+                return new JsonResponse($ret);
+            } else {
+                $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelManager.html.twig', $options);
+                return new JsonResponse($ret);
             }
-
-            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelDialog.html.twig', $options);
-
-            return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
         }

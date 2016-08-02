@@ -1,7 +1,14 @@
 {# empty Twig template #}
 {% block color_widget %}
-{% spaceless %}
-    {% set type = 'color' %}
-    {{ block('form_widget_simple') }}
-{% endspaceless %}
+    {% spaceless %}
+        {% set type = 'color' %}
+        {{ block('form_widget_simple') }}
+    {% endspaceless %}
+{% endblock %}
+
+{% block my_range %}
+    {% spaceless %}
+        {% set type = 'color' %}
+        {{ block('form_widget_simple') }}
+    {% endspaceless %}
 {% endblock %}

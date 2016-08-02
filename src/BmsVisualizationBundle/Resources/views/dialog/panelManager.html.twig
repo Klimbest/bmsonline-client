@@ -1,0 +1,63 @@
+{% form_theme form 'BmsVisualizationBundle::bootstrap_3_horizontal_layout.html.twig' %}
+
+<div class="col-md-12" id="panel-form">
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_row(form.name) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.visibility) }}
+            {{ form_row(form.tooltip) }}
+        </div>
+        <div class="col-md-4 text-center">
+            <button class="btn btn-success" type="button" onclick="savePanel()">Zapisz</button>
+            <button class="btn btn-default" type="button" onclick="closePanelForm()">Anuluj</button>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs">
+        <li id="dialog-panel-data" class="active"><a>Typ danych</a></li>
+        <li id="dialog-panel-format" class=""><a>Format</a></li>
+        <li id="dialog-panel-navigation" class=""><a>Nawigacja</a></li>
+        <li id="dialog-panel-event" class=""><a>Zdarzenia</a></li>
+        <li id="dialog-panel-progress-bar" class=""><a>Ustawienia</a></li>
+    </ul>
+    {# Data section #}
+    <div class="well well-lg dialog-panel-data">
+        <div id="panel_type" class="form-group col-md-2">
+            {{ form_row(form.type) }}
+        </div>
+        <div class="input-group col-md-5">
+            <div class="form-group">
+                <input id="panel-source-content" name="Źródło danych" type="text" class="form-control" disabled
+                       required/>
+            </div>
+            <span class="input-group-btn">
+                <button id="manager" class="btn btn-default" type="button"><i class="fa fa-plus fa-fw"></i></button>
+            </span>
+        </div>
+    </div>
+    {# Format section #}
+    <div class="well well-lg dialog-panel-format">
+        {% include 'BmsVisualizationBundle:dialog:panelDialogFormat.html.twig' %}
+    </div>
+    {# Navigation section #}
+    <div class="well well-lg dialog-panel-navigation">
+        <div class="col-md-6">
+            {{ form_row(form.page) }}
+        </div>
+    </div>
+    {# Event section #}
+    <div class="well well-lg dialog-panel-event">
+        {% include 'BmsVisualizationBundle:dialog:panelDialogEvent.html.twig' %}
+    </div>
+    {# Progress bar section #}
+    <div class="well well-lg dialog-panel-progress-bar">
+        {% include 'BmsVisualizationBundle:dialog:progresBarManager.html.twig' %}
+    </div>
+
+    {{ form_row(form.contentSource) }}
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+</div>

@@ -75,249 +75,175 @@
     </div>
     <div class="well text-left">
 
-            <div class="row">
-                <div class="col-md-12">
-                    <span class="label label-default label-title">{{ device.description }}</span>
-                </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="label label-default label-title">{{ device.description }}</span>
             </div>
-            <div class="row">
-                <div class="col-md-4 col-md-offset-4 text-center">
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4 text-center">
                     <span id="{{ device.id }}" class="label label-primary label-last-read">Ostatnia aktualizacja danych:
                             <span>-</span>
                     </span>
+            </div>
+            <div class="col-md-4 text-right">
+                <span class="label label-primary">Liczba rejestrów: {{ device.registers|length }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <input type="button" class="btn btn-default btn-xs checkAll" value="Zaznacz wszystkie"/>
+                <button type="button" class="btn btn-default btn-xs refresh"><i
+                            class="fa fa-refresh fa-fw fa-blue"></i></button>
+                <button type="submit" class="btn btn-default btn-xs"><i
+                            class="fa fa-remove fa-fw fa-red remove-many"></i></button>
+            </div>
+        </div>
+        {% if device.registers|length > 0 %}
+            <div class="row text-center">
+                <div class="col-md-3 regs-bordered">
+                    <div class="row">
+                        <div class="col-md-7 name">
+                            <small>Nazwa</small>
+                        </div>
+                        <div class="col-md-5 register_address_hex">
+                            <small>Adres (HEX)</small>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-4 text-right">
-                    <span class="label label-primary">Liczba rejestrów: {{ device.registers|length }}</span>
+                <div class="col-md-2 regs-bordered">
+                    <div class="row">
+                        <div class="col-md-12 read">
+                            <small>Odczyt</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 regs-bordered">
+                    <div class="row">
+                        <div class="col-md-12 write">
+                            <small>Zapis</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 regs-bordered">
+                    <div class="row">
+                        <div class="col-md-4 archive_register">
+                            <small>Arch</small>
+                        </div>
+                        <div class="col-md-4 alarm_register">
+                            <small>Alarm</small>
+                        </div>
+                        <div class="col-md-4 bit_register">
+                            <small>Bitowy</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 fixed_value regs-bordered">
+                    <div class="row">
+                        <div class="col-md-12 write">
+                            <small>Wartość</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 manage regs-bordered">
+                    <div class="row">
+                        <div class="col-md-12 write">
+                            <small>Zarządzaj</small>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12 text-right">
-                    <input type="button" class="btn btn-default btn-xs checkAll" value="Zaznacz wszystkie"/>
-                    <button type="button" class="btn btn-default btn-xs refresh"><i
-                                class="fa fa-refresh fa-fw fa-blue"></i></button>
-                    <button type="submit" class="btn btn-default btn-xs"><i
-                                class="fa fa-remove fa-fw fa-red remove-many"></i></button>
-                </div>
-            </div>
-            {% if device.registers|length > 0 %}
+            {% for register in registers %}
                 <div class="row text-center">
-                    <div class="col-md-3 regs-bordered">
+                    <div class="col-md-3">
                         <div class="row">
-                            <div class="col-md-7 name">
-                                <small>Nazwa</small>
+                            <div class="col-md-7 name regs-bordered">
+                                {{ register.name }}
                             </div>
-                            <div class="col-md-5 register_address_hex">
-                                <small>Adres (HEX)</small>
+                            <div class="col-md-5 register_address_hex regs-bordered">
+                                {{ register.registerAddress }}
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2 regs-bordered">
+                    <div class="col-md-2 read">
                         <div class="row">
-                            <div class="col-md-12 read">
-                                <small>Odczyt</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2 regs-bordered">
-                        <div class="row">
-                            <div class="col-md-12 write">
-                                <small>Zapis</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2 regs-bordered">
-                        <div class="row">
-                            <div class="col-md-4 archive_register">
-                                <small>Arch</small>
-                            </div>
-                            <div class="col-md-4 alarm_register">
-                                <small>Alarm</small>
-                            </div>
-                            <div class="col-md-4 bit_register">
-                                <small>Bitowy</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-1 fixed_value regs-bordered">
-                        <div class="row">
-                            <div class="col-md-12 write">
-                                <small>Wartość</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2 manage regs-bordered">
-                        <div class="row">
-                            <div class="col-md-12 write">
-                                <small>Zarządzaj</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% for register in registers %}
-                    <div class="row text-center">
-                        <div class="col-md-3">
-                            <div class="row">
-                                <div class="col-md-7 name regs-bordered">
-                                    {{ register.name }}
-                                </div>
-                                <div class="col-md-5 register_address_hex regs-bordered">
-                                    {{ register.registerAddress }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 read">
-                            <div class="row">
-                                {% if register.activeRegister == 1 %}
-                                    <div class="col-md-3 regs-bordered">
-                                        <i class="fa fa-check-square-o fa-fw fa-green"></i>
-                                    </div>
-                                    <div class="col-md-3 regs-bordered">
-                                        {{ register.readFunction }}
-                                    </div>
-                                    <div class="col-md-6 regs-bordered">
-                                        {% set readMod = 0 + register.modificatorRead %}
-                                        {{ readMod }}
-                                    </div>
-                                {% else %}
-                                    <div class="col-md-12 regs-bordered">
-                                        <i class="fa fa-square-o fa-fw fa-red"></i>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="col-md-2 write">
-                            <div class="row">
-                                {% if register.writeRegister == 1 %}
-                                    <div class="col-md-3 regs-bordered">
-                                        <i class="fa fa-check-square-o fa-fw fa-green"></i>
-                                    </div>
-                                    <div class="col-md-3 regs-bordered">
-                                        {{ register.writeFunction }}
-                                    </div>
-                                    <div class="col-md-6 regs-bordered">
-                                        {% set writeMod = 0 + register.modificatorWrite %}
-                                        {{ writeMod }}
-                                    </div>
-                                {% else %}
-                                    <div class="col-md-12 regs-bordered">
-                                        <i class="fa fa-square-o fa-fw fa-red"></i>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="row">
-                                <div class="col-md-4 archive_register regs-bordered">
-                                    {% if register.archiveRegister == 1 %}
-                                        <i class="fa fa-check-square-o fa-fw fa-green"></i>
-                                    {% else %}
-                                        <i class="fa fa-square-o fa-fw fa-red"></i>
-                                    {% endif %}
-                                </div>
-                                <div class="col-md-4 alarm_register regs-bordered">
-                                    {% if register.alarmRegister == 1 %}
-                                        <i class="fa fa-check-square-o fa-fw fa-green"></i>
-                                    {% else %}
-                                        <i class="fa fa-square-o fa-fw fa-red"></i>
-                                    {% endif %}
-                                </div>
-                                <div class="col-md-4 bit_register regs-bordered">
-                                    {% if register.bitRegister == 1 %}
-                                        <i class="fa fa-check-square-o fa-fw fa-green"></i>
-                                    {% else %}
-                                        <i class="fa fa-square-o fa-fw fa-red"></i>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <div class="row">
-                                <div class="col-md-12 fixed_value regs-bordered">
-                                    {% if register.activeRegister == 1 %}
-                                        {{ register.registerCurrentData.fixedValue }}
-                                    {% else %}
-                                        <i class="fa fa-minus fa-fw"></i>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="row">
-                                <div class="col-md-10 manage regs-bordered">
-                                    <i id="{{ register.id }}" class="fa fa-refresh fa-fw fa-blue"></i>
-                                    <i id="{{ register.id }}" class="fa fa-edit fa-fw fa-green fa-register"></i>
-                                    <a href="{{ path('bms_configuration_del_register', {'comm_id': device.communicationType.id, 'device_id': device.id, 'register_id': register.id}) }}">
-                                        <i class="fa fa-remove fa-fw fa-red"></i>
-                                    </a>
-                                    {% if register.writeRegister == 1 %}
-                                        <i id="{{ register.id }}" class="fa fa-pencil fa-fw"></i>
-                                    {% endif %}
-                                </div>
-                                <div class="col-md-2 regs-bordered text-right">
-                                    <input type="checkbox" name="checkedRegId[]" value="{{ register.id }}"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="row text-center">
-                    <div class="col-md-12">
-                        <h2><span class="label label-primary"> Brak rejestrów</span></h2>
-                    </div>
-                </div>
-            {% endif %}
-            {#
-            <table class="table table-bordered table-condensed small">
-                {% if device.registers|length > 0 %}
-                    {% for register in registers %}
-                        <tr>
-                            <td class="register_address_hex">{{ register.registerAddress }}</td>
-                            <td class="register_address_dec">{{ register.registerAddress }}</td>
-                            <td class="name"></td>
-                            <td class="read_function">{{ register.readFunction }}</td>
-                            <td class="write_function">{{ register.writeFunction }}</td>
-                            <td class="description">{{ register.description }}</td>
-                            <td class="active_read text-center">
-                                {% if register.activeRegister == 1 %}
+                            {% if register.activeRegister == 1 %}
+                                <div class="col-md-3 regs-bordered">
                                     <i class="fa fa-check-square-o fa-fw fa-green"></i>
-                                {% else %}
+                                </div>
+                                <div class="col-md-3 regs-bordered">
+                                    {{ register.readFunction }}
+                                </div>
+                                <div class="col-md-6 regs-bordered">
+                                    {% set readMod = 0 + register.modificatorRead %}
+                                    {{ readMod }}
+                                </div>
+                            {% else %}
+                                <div class="col-md-12 regs-bordered">
                                     <i class="fa fa-square-o fa-fw fa-red"></i>
-                                {% endif %}
-                            </td>
-                            <td class="archive_register text-center">
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-2 write">
+                        <div class="row">
+                            {% if register.writeRegister == 1 %}
+                                <div class="col-md-3 regs-bordered">
+                                    <i class="fa fa-check-square-o fa-fw fa-green"></i>
+                                </div>
+                                <div class="col-md-3 regs-bordered">
+                                    {{ register.writeFunction }}
+                                </div>
+                                <div class="col-md-6 regs-bordered">
+                                    {% set writeMod = 0 + register.modificatorWrite %}
+                                    {{ writeMod }}
+                                </div>
+                            {% else %}
+                                <div class="col-md-12 regs-bordered">
+                                    <i class="fa fa-square-o fa-fw fa-red"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="row">
+                            <div class="col-md-4 archive_register regs-bordered">
                                 {% if register.archiveRegister == 1 %}
                                     <i class="fa fa-check-square-o fa-fw fa-green"></i>
                                 {% else %}
                                     <i class="fa fa-square-o fa-fw fa-red"></i>
                                 {% endif %}
-                            </td>
-                            <td class="alarm_register text-center">
+                            </div>
+                            <div class="col-md-4 alarm_register regs-bordered">
                                 {% if register.alarmRegister == 1 %}
                                     <i class="fa fa-check-square-o fa-fw fa-green"></i>
                                 {% else %}
                                     <i class="fa fa-square-o fa-fw fa-red"></i>
                                 {% endif %}
-                            </td>
-                            <td class="bit_register text-center">
+                            </div>
+                            <div class="col-md-4 bit_register regs-bordered">
                                 {% if register.bitRegister == 1 %}
                                     <i class="fa fa-check-square-o fa-fw fa-green"></i>
                                 {% else %}
                                     <i class="fa fa-square-o fa-fw fa-red"></i>
                                 {% endif %}
-                            </td>
-                            <td class="write_register text-center">
-                                {% if register.writeRegister == 1 %}
-                                    <i class="fa fa-check-square-o fa-fw fa-green"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="row">
+                            <div class="col-md-12 fixed_value regs-bordered">
+                                {% if register.activeRegister == 1 %}
+                                    {{ register.registerCurrentData.fixedValue }}
                                 {% else %}
-                                    <i class="fa fa-square-o fa-fw fa-red"></i>
+                                    <i class="fa fa-minus fa-fw"></i>
                                 {% endif %}
-                            </td>
-                            <td class="modificator_read">{{ register.modificatorRead }}</td>
-                            <td class="modificator_write">{{ register.modificatorWrite }}</td>
-                            <td class="fixed_value">{{ register.registerCurrentData.fixedValue }}</td>
-                            <td class="description2">{{ register.description2 }}</td>
-                            <td class="manage text-center">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="row">
+                            <div class="col-md-10 manage regs-bordered">
                                 <i id="{{ register.id }}" class="fa fa-refresh fa-fw fa-blue"></i>
                                 <i id="{{ register.id }}" class="fa fa-edit fa-fw fa-green fa-register"></i>
                                 <a href="{{ path('bms_configuration_del_register', {'comm_id': device.communicationType.id, 'device_id': device.id, 'register_id': register.id}) }}">
@@ -326,22 +252,21 @@
                                 {% if register.writeRegister == 1 %}
                                     <i id="{{ register.id }}" class="fa fa-pencil fa-fw"></i>
                                 {% endif %}
-                            </td>
-                            <td><input type="checkbox" name="checkedRegId[]" value="{{ register.id }}"/></td>
-
-                        </tr>
-                    {% endfor %}
-                {% else %}
-                    <tr>
-                        <td colspan="16" class="text-center">
-                            <h2><span class="label label-primary"> Brak rejestrów</span></h2>
-                        </td>
-                    </tr>
-                {% endif %}
-                </tbody>
-            </table>
-            #}
-
+                            </div>
+                            <div class="col-md-2 regs-bordered text-right">
+                                <input type="checkbox" name="checkedRegId[]" value="{{ register.id }}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="row text-center">
+                <div class="col-md-12">
+                    <h2><span class="label label-primary"> Brak rejestrów</span></h2>
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>
 
