@@ -3,14 +3,14 @@
 <div class="col-md-12" id="panel-form">
     {{ form_start(form) }}
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6 col-lg-4">
             {{ form_row(form.name) }}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-lg-4">
             {{ form_row(form.visibility) }}
             {{ form_row(form.tooltip) }}
         </div>
-        <div class="col-md-4 text-center">
+        <div class="col-md-2 col-lg-4 text-center">
             <button class="btn btn-success" type="button" onclick="savePanel()">Zapisz</button>
             <button class="btn btn-default" type="button" onclick="closePanelForm()">Anuluj</button>
         </div>
@@ -25,16 +25,17 @@
     </ul>
     {# Data section #}
     <div class="well well-lg dialog-panel-data">
-        <div id="panel_type" class="form-group col-md-2">
+        <div id="panel_type" class="form-group col-md-4 col-lg-2">
             {{ form_row(form.type) }}
         </div>
-        <div class="input-group col-md-5">
+        <div class="input-group col-md-6 col-lg-5">
             <div class="form-group">
-                <input id="panel-source-content" name="Źródło danych" type="text" class="form-control" disabled
-                       required/>
+                <input id="panel-source-content" name="Źródło danych" type="text" class="form-control"
+                       oninput="updateContentSource()" required/>
             </div>
             <span class="input-group-btn">
-                <button id="manager" class="btn btn-default" type="button"><i class="fa fa-plus fa-fw"></i></button>
+                <button id="manager" class="btn btn-default disabled" type="button"><i
+                            class="fa fa-plus fa-fw"></i></button>
             </span>
         </div>
     </div>
@@ -45,7 +46,16 @@
     {# Navigation section #}
     <div class="well well-lg dialog-panel-navigation">
         <div class="col-md-6">
-            {{ form_row(form.page) }}
+            <div class="form-group">
+                <div class="col-md-8 col-sm-9">
+                    <select id="href" class="form-control" name="txt_href" onchange="updateHref()">
+                        <option value="" selected></option>
+                        {% for page in pages %}
+                            <option value="{{ page.id }}">{{ page.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
     {# Event section #}
@@ -56,7 +66,8 @@
     <div class="well well-lg dialog-panel-progress-bar">
         {% include 'BmsVisualizationBundle:dialog:progresBarManager.html.twig' %}
     </div>
-
+    <input id="page_id" type="hidden" name="panel[page_id]"/>
+    <input id="panel_id" type="hidden" name="panel_id"/>
     {{ form_row(form.contentSource) }}
     {{ form_rest(form) }}
     {{ form_end(form) }}

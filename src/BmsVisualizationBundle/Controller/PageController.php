@@ -133,7 +133,7 @@ class PageController extends Controller
                         $register = $bitRegisterRepo->find(substr($rid, 3));
                         $registers[$rid] = $register->getBitValue();
                     } else {
-                        $register = $registerRepo->find($rid);
+                        $register = $registerRepo->findOneBy(['name' => $rid]);
                         $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
                     }
                 }

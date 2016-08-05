@@ -77,7 +77,6 @@ function setGenerateVisualization() {
             url: Routing.generate('bms_visualization_generate'),
             success: function (ret) {
                 $(".content-container").children(".fa-spinner").remove();
-                console.log(ret);
             }
         });
         $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();

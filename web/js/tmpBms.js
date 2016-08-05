@@ -68,9 +68,8 @@ function ajaxRefreshPage(terms) {
 
     function setVariables(registers) {
         if(registers){
-            
             $.each(registers, function () {
-                var key = this.id;
+                var key = this.name;
                 var value = this.fixedValue;
                 if (value !== null) {
                     var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));

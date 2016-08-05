@@ -56,28 +56,84 @@ function setSidebarEvents() {
 function addPanel() {
     $.ajax({
         type: "POST",
-        datatype: "application/json",
         url: Routing.generate('bms_visualization_add_panel'),
         success: function (ret) {
             $(".main-row div#page").hide();
             $(".main-row div#panel-form").remove();
-            $(".main-row").append(ret["template"]);
+            $(".main-row").append(ret["template"]).children(".fa-spinner").remove();
             setPanelForm();
-            $(".main-row").children(".fa-spinner").remove();
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
 
 function setPanelForm() {
+    var panelForm = $("div#panel-form");
     //zmiana zakładek
-    $("div#panel-form form li a").click(function () {
-        $("div#panel-form form li").removeClass("active");
+    panelForm.find("form li a").click(function () {
+        panelForm.find("form li").removeClass("active");
         $("div.well").hide();
         var id = $(this).parent().attr("id");
         $(this).parent().addClass("active");
         $("div.well." + id).show();
     });
+    //ustawienie numeru strony
+    panelForm.find("input#page_id").val($("div.label-page.active").attr("id"));
+    //zmiana border radius LT
+    panelForm.find("input#panel_borderRadiusLeftTop").bind("input", function () {
+        panelForm.find("input#borderRadiusTL").val($(this).val());
+    });
+    //zmiana border radius LB
+    panelForm.find("input#panel_borderRadiusLeftBottom").bind("input", function () {
+        panelForm.find("input#borderRadiusBL").val($(this).val());
+    });
+    //zmiana border radius BT
+    panelForm.find("input#panel_borderRadiusRightTop").bind("input", function () {
+        panelForm.find("input#borderRadiusTR").val($(this).val());
+    });
+    //zmiana border radius BR
+    panelForm.find("input#panel_borderRadiusRightBottom").bind("input", function () {
+        panelForm.find("input#borderRadiusBR").val($(this).val());
+    });
+    //zmiana opacity
+    panelForm.find("input#panel_opacity").bind("input", function () {
+        panelForm.find("input#opacity").val($(this).val());
+    });
+    //zmiana typu panela
+    panelForm.find("select#panel_type").change(function () {
+        var value = $(this).val();
+        var buttonManager = panelForm.find("button#manager");
+        var inputSourceContent = panelForm.find("input#panel-source-content");
+        switch (value) {
+            case "variable":
+                inputSourceContent.val("").prop({"disabled": true, "required": true}).show();
+                buttonManager.removeClass("disabled").show().unbind("click");
+                $("li#dialog-panel-progress-bar").hide();
+                $(".precision-group, .font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
+                setOpenVariableManager();
+                break;
+            case "image":
+                inputSourceContent.val("").prop({"disabled": true, "required": true}).show();
+                buttonManager.removeClass("disabled").show().unbind("click");
+                $(".precision-group, .font-group, li#dialog-panel-progress-bar").hide();
+                $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
+                setOpenImageManager();
+                break;
+            case "text":
+                inputSourceContent.val("").prop({"disabled": false, "required": false}).show();
+                buttonManager.addClass("disabled").show().unbind("click");
+                $(".precision-group, li#dialog-panel-progress-bar").hide();
+                $(".font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
+                break;
+            case "widget":
+                inputSourceContent.val("").prop({"disabled": true, "required": true}).hide();
+                buttonManager.addClass("disabled").hide().unbind("click");
+                $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
+                $("li#dialog-panel-progress-bar").show();
+                break;
+        }
+    });
+
 }
 
 function editPanel(data) {
@@ -89,14 +145,68 @@ function editPanel(data) {
         success: function (ret) {
             $(".main-row div#page").hide();
             $(".main-row div#panel-form").remove();
-            $(".main-row").append(ret["template"]);
+            $(".main-row").append(ret["template"]).children(".fa-spinner").remove();
+            setPanelForm();
+            setEdit(ret["panel_type"], ret["panel_id"]);
 
-            $(".main-row").children(".fa-spinner").remove();
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
 
+function setEdit(type, id) {
+    var panelForm = $("div#panel-form");
+    var buttonManager = panelForm.find("button#manager");
+    var inputSourceContent = panelForm.find("input#panel-source-content");
+    switch (type) {
+        case "variable":
+            inputSourceContent.val("").prop({"disabled": true, "required": true}).show();
+            buttonManager.removeClass("disabled").show().unbind("click");
+            $("li#dialog-panel-progress-bar").hide();
+            $(".precision-group, .font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
+            setOpenVariableManager();
+            break;
+        case "image":
+            inputSourceContent.val("").prop({"disabled": true, "required": true}).show();
+            buttonManager.removeClass("disabled").show().unbind("click");
+            $(".precision-group, .font-group, li#dialog-panel-progress-bar").hide();
+            $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
+            setOpenImageManager();
+            break;
+        case "text":
+            inputSourceContent.val("").prop({"disabled": false, "required": false}).show();
+            buttonManager.addClass("disabled").show().unbind("click");
+            $(".precision-group, li#dialog-panel-progress-bar").hide();
+            $(".font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
+            break;
+        case "widget":
+            inputSourceContent.val("").prop({"disabled": true, "required": true}).hide();
+            buttonManager.addClass("disabled").hide().unbind("click");
+            $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
+            $("li#dialog-panel-progress-bar").show();
+            break;
+    }
+    //set input for hidden form fields
+    panelForm.find("input#panel_id").val(id);
+    panelForm.find("select#href").val(panelForm.find("input#panel_href").val());
+    panelForm.find("input#borderRadiusTL").val(panelForm.find("input#panel_borderRadiusLeftTop").val());
+    panelForm.find("input#borderRadiusBL").val(panelForm.find("input#panel_borderRadiusLeftBottom").val());
+    panelForm.find("input#borderRadiusTR").val(panelForm.find("input#panel_borderRadiusRightTop").val());
+    panelForm.find("input#borderRadiusBR").val(panelForm.find("input#panel_borderRadiusRightBottom").val());
+    panelForm.find("input#opacity").val(panelForm.find("input#panel_opacity").val());
+    if (panelForm.find("input#panel_fontWeight").val() == "bold") {
+        panelForm.find("button#panel_fontWeight").addClass("active");
+    }
+    if (panelForm.find("input#panel_textDecoration").val() == "underline") {
+        panelForm.find("button#panel_textDecoration").addClass("active");
+    }
+    if (panelForm.find("input#panel_fontStyle").val() == "italic") {
+        panelForm.find("button#panel_fontStyle").addClass("active");
+    }
+    var align = panelForm.find("input#panel_textAlign").val();
+    updateTextAlign(align);
+    panelForm.find("input#panel-source-content").val($("div#panel-form input#panel_contentSource").val());
+}
 
 function savePanel() {
     var form = $("form[name='panel']");
@@ -106,10 +216,9 @@ function savePanel() {
         url: form.attr('action'),
         data: form.serialize(),
         success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            console.log(ret);
+            $("div.main-row .fa-spinner").remove();
             $("div.main-row div#panel-form").remove();
-            $(".main-row div#page").show().children("div.well").show().append(ret['panel']);
+            $("div.main-row div#page").show().children("div.well").show().append(ret['panel']);
             loadPanelList(ret["panelList"]);
             setPanelEvents();
         }
@@ -120,235 +229,134 @@ function savePanel() {
 function closePanelForm() {
     if (confirm("Na pewno anulować dodawanie obiektu?")) {
         $("div.main-row div#panel-form").remove();
-        $(".main-row div#page").show();
+        $(".main-row div").show();
     }
 }
+function updateHref() {
+    var panelForm = $("div#panel-form");
+    panelForm.find("input#panel_href").val(panelForm.find("select#href").val());
+}
+function updateBorderRadius() {
+    var panelForm = $("div#panel-form");
+    panelForm.find("input#panel_borderRadiusLeftTop").val(panelForm.find("input#borderRadiusTL").val());
+    panelForm.find("input#panel_borderRadiusLeftBottom").val(panelForm.find("input#borderRadiusBL").val());
+    panelForm.find("input#panel_borderRadiusRightTop").val(panelForm.find("input#borderRadiusTR").val());
+    panelForm.find("input#panel_borderRadiusRightBottom").val(panelForm.find("input#borderRadiusBR").val());
+}
+function updateOpacity() {
+    var panelForm = $("div#panel-form");
+    panelForm.find("input#panel_opacity").val(panelForm.find("input#opacity").val());
+}
+function updateFontWeight() {
+    var panelForm = $("div#panel-form");
+    var panelFormButton = panelForm.find("button#panel_fontWeight");
+    var panelFormInput = panelForm.find("input#panel_fontWeight");
+    panelFormButton.toggleClass("active");
+    panelFormButton.hasClass("active") ? panelFormInput.val("bold") : panelFormInput.val("normal");
+}
+function updateTextDecoration() {
+    var panelForm = $("div#panel-form");
+    var panelFormButton = panelForm.find("button#panel_textDecoration");
+    var panelFormInput = panelForm.find("input#panel_textDecoration");
+    panelFormButton.toggleClass("active");
+    panelFormButton.hasClass("active") ? panelFormInput.val("underline") : panelFormInput.val("none");
+}
+function updateFontStyle() {
+    var panelForm = $("div#panel-form");
+    var panelFormButton = panelForm.find("button#panel_fontStyle");
+    var panelFormInput = panelForm.find("input#panel_fontStyle");
+    panelFormButton.toggleClass("active");
+    panelFormButton.hasClass("active") ? panelFormInput.val("italic") : panelFormInput.val("normal");
 
-/*
- function setDialogButtonsData() {
- //zmiana zakładek
- $("div.dialog-panel-settings form li a").click(function () {
- $("div.dialog-panel-settings form li").removeClass("active");
- $("div.row.dialog-panel-data, div.row.dialog-panel-format, div.row.dialog-panel-navigation, div.row.dialog-panel-event, div.row.dialog-panel-progress-bar").hide();
- var id = $(this).parent().attr("id");
- $(this).parent().addClass("active");
- $("div.row." + id).show();
- });
- //panel type
- $("select#panel_type").change(function () {
- var value = $(this).val();
- var buttonManager = $("button#manager");
- switch (value) {
- case "variable":
- $("input#panel-source-content").val("").prop("disabled", true).prop("required", true).show();
- buttonManager.removeClass("disabled").show().unbind("click");
- $("li#dialog-panel-progress-bar").show();
- $(".precision-group, .font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
- setOpenVariableManager();
- break;
- case "image":
- $("input#panel-source-content").val("").prop("disabled", true).prop("required", false).show();
- buttonManager.removeClass("disabled").show().unbind("click");
- $(".precision-group, .font-group, li#dialog-panel-progress-bar").hide();
- $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
- setOpenImageManager();
- break;
- case "text":
- $("input#panel-source-content").val("").prop("required", false).prop("disabled", false).show();
- buttonManager.addClass("disabled").show().unbind("click");
- $(".precision-group, li#dialog-panel-progress-bar").hide();
- $(".font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
- break;
- case "widget":
- $("input#panel-source-content").val("").prop("required", false).hide();
- buttonManager.addClass("disabled").hide().unbind("click");
- $("li#dialog-panel-progress-bar").show();
- $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
- break;
- }
- });
- //zmiana zawartości źródła powoduje wyświetlenie na podglądzie aktualną zawartość
- $("input#panel-source-content").change(function () {
- $("div.panel-preview span").empty().append($(this).val());
- });
- setOpenVariableManager();
- $("input#panel-source-content").val($("input#panel_contentSource").val());
- }
+}
+function updateTextAlign(align) {
+    var panelForm = $("div#panel-form");
+    var panelFormBtnCenter = panelForm.find(".btn-align-center");
+    var panelFormBtnLeft = panelForm.find(".btn-align-left");
+    var panelFormBtnRight = panelForm.find(".btn-align-right");
+    panelForm.find("input#panel_textAlign").val(align);
+    switch (align) {
+        case "left":
+            panelFormBtnCenter.removeClass("active");
+            panelFormBtnRight.removeClass("active");
+            panelFormBtnLeft.addClass("active");
+            break;
+        case "center":
+            panelFormBtnLeft.removeClass("active");
+            panelFormBtnRight.removeClass("active");
+            panelFormBtnCenter.addClass("active");
+            break;
+        case "right":
+            panelFormBtnCenter.removeClass("active");
+            panelFormBtnLeft.removeClass("active");
+            panelFormBtnRight.addClass("active");
+            break;
+    }
 
- function setDialogButtonsFormat() {
- var panel = $("div.panel-preview");
- //tło
- $("form#panel input#backgroundColor").on('input', function () {
- var backgroundColor = hex2rgba($(this).val(), parseFloat($("form#panel input#opacity").val()));
- panel.css({backgroundColor: backgroundColor});
- });
- $("form#panel input#opacity").change(changeOpacity).mousemove(changeOpacity);
- function changeOpacity() {
- var backgroundColor = hex2rgba($("form#panel input#backgroundColor").val(), parseFloat($(this).val()));
- panel.css({backgroundColor: backgroundColor});
- }
+}
+function updateContentSource() {
+    $("div#panel-form input#panel_contentSource").val($("div#panel-form input#panel-source-content").val());
+}
 
- //ramka
- $("form#panel input#borderWidth").change(function () {
- var value = $(this).val();
- panel.css({borderWidth: value + "px", lineHeight: (100 - value * 2) + "px"});
- });
- $("form#panel select#borderStyle").change(function () {
- var value = $(this).val();
- panel.css({borderStyle: value});
- });
- $("form#panel input#borderColor").on('input', function () {
- var value = $(this).val();
- panel.css({borderColor: value});
- });
- $("form#panel input#borderRadiusTL").change(changeTL).mousemove(changeTL);
- $("form#panel input#borderRadiusTR").change(changeTR).mousemove(changeTR);
- $("form#panel input#borderRadiusBL").change(changeBL).mousemove(changeBL);
- $("form#panel input#borderRadiusBR").change(changeBR).mousemove(changeBR);
- function changeTL() {
- panel.css({borderTopLeftRadius: $(this).val() + "px"});
- }
+//dodawanie warunku
+function setDialogButtonEvent(panel_id) {
+    //add term
+    $("button.add-term").click(function () {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_load_event_manager'),
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $(".main-row").append(ret['template']);
+                createCondition(panel_id).dialog("open");
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    });
+    //delete term
+    setDeleteTerm();
+}
+function setDialogButtonProgressBar() {
+    //zmiana kolorów
+    $("input#color1").on('input', function () {
+        $("div#pb1").css({backgroundColor: $(this).val()});
+    });
+    $("input#color2").on('input', function () {
+        $("div#pb2").css({backgroundColor: $(this).val()});
+    });
+    $("input#color3").on('input', function () {
+        $("div#pb3").css({backgroundColor: $(this).val()});
+    });
+    //dodanie zmiennych
+    $("button#progress-bar-manager-value").click(function () {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_load_variable_manager'),
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $(".main-row").append(ret["template"]);
+                createVariableManager("progress-bar-value").dialog("open");
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    });
+    $("button#progress-bar-manager-set").click(function () {
+        $.ajax({
+            type: "POST",
+            datatype: "application/json",
+            url: Routing.generate('bms_visualization_load_variable_manager'),
+            success: function (ret) {
+                $(".main-row").children(".fa-spinner").remove();
+                $(".main-row").append(ret["template"]);
+                createVariableManager("progress-bar-set").dialog("open");
+            }
+        });
+        $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    });
+}
 
- function changeTR() {
- panel.css({borderTopRightRadius: $(this).val() + "px"});
- }
-
- function changeBL() {
- panel.css({borderBottomLeftRadius: $(this).val() + "px"});
- }
-
- function changeBR() {
- panel.css({borderBottomRightRadius: $(this).val() + "px"});
- }
-
- //pogrubienie
- $("form#panel .btn-bold").click(function () {
- $(this).hasClass("active") ? panel.css({fontWeight: "initial"}) : panel.css({fontWeight: "bold"});
- $(this).toggleClass("active");
- });
- //podkreślenie
- $("form#panel .btn-underline").click(function () {
- $(this).hasClass("active") ? panel.css({textDecoration: "initial"}) : panel.css({textDecoration: "underline"});
- $(this).toggleClass("active");
- });
- //pochylenie
- $("form#panel .btn-italic").click(function () {
- $(this).hasClass("active") ? panel.css({fontStyle: "initial"}) : panel.css({fontStyle: "italic"});
- $(this).toggleClass("active");
- });
- //wyrównanie
- $("form#panel .btn-align-left").click(function () {
- $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "left"});
- setAlign("left");
- });
- $("form#panel .btn-align-center").click(function () {
- $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "center"});
- setAlign("center");
- });
- $("form#panel .btn-align-right").click(function () {
- $(this).hasClass("active") ? panel.css({textAlign: "auto"}) : panel.css({textAlign: "right"});
- setAlign("right");
- });
- function setAlign(align) {
- switch (align) {
- case "left":
- $(".btn-align-center, .btn-align-right").removeClass("active");
- $(".btn-align-left").addClass("active");
- break;
- case "center":
- $(".btn-align-left, .btn-align-right").removeClass("active");
- $(".btn-align-center").addClass("active");
- break;
- case "right":
- $(".btn-align-center, .btn-align-left").removeClass("active");
- $(".btn-align-right").addClass("active");
- break;
- }
- }
-
- //styl czcionki
- $("form#panel select.font-family").change(function () {
-
- panel.css({fontFamily: $(this).val()});
- });
- //rozmiar czcionki
- $("form#panel select.font-size").change(function () {
- panel.css({fontSize: $(this).val() + "px"});
- });
- //Kolor
- $("form#panel input#fontColor").on('input', function () {
- panel.css({color: hex2rgba($(this).val(), 1)});
- });
- //precyzja wyświetlania
- $("form#panel select#displayPrecision").change(function () {
- if ($("select#panel-type").val() === "variable") {
- var displayPrecision = $(this).val();
- var value = parseFloat($("div.dialog-panel-settings input#panel-source-value").val());
- value = value.toFixed(displayPrecision);
- panel.children("span").empty().append(value);
- }
- });
-
- }
-
-
- function setDialogButtonEvent(panel_id) {
- //add term
- $("button.add-term").click(function () {
- $.ajax({
- type: "POST",
- datatype: "application/json",
- url: Routing.generate('bms_visualization_load_event_manager'),
- success: function (ret) {
- $(".main-row").children(".fa-spinner").remove();
- $(".main-row").append(ret['template']);
- createCondition(panel_id).dialog("open");
- }
- });
- $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
- });
- //delete term
- setDeleteTerm();
- }
- function setDialogButtonProgressBar() {
- //zmiana kolorów
- $("input#color1").on('input', function () {
- $("div#pb1").css({backgroundColor: $(this).val()});
- });
- $("input#color2").on('input', function () {
- $("div#pb2").css({backgroundColor: $(this).val()});
- });
- $("input#color3").on('input', function () {
- $("div#pb3").css({backgroundColor: $(this).val()});
- });
- //dodanie zmiennych
- $("button#progress-bar-manager-value").click(function () {
- $.ajax({
- type: "POST",
- datatype: "application/json",
- url: Routing.generate('bms_visualization_load_variable_manager'),
- success: function (ret) {
- $(".main-row").children(".fa-spinner").remove();
- $(".main-row").append(ret["template"]);
- createVariableManager("progress-bar-value").dialog("open");
- }
- });
- $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
- });
- $("button#progress-bar-manager-set").click(function () {
- $.ajax({
- type: "POST",
- datatype: "application/json",
- url: Routing.generate('bms_visualization_load_variable_manager'),
- success: function (ret) {
- $(".main-row").children(".fa-spinner").remove();
- $(".main-row").append(ret["template"]);
- createVariableManager("progress-bar-set").dialog("open");
- }
- });
- $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
- });
- }*/
 function setOpenVariableManager() {
     $("button#manager").click(function () {
         $.ajax({
@@ -364,6 +372,7 @@ function setOpenVariableManager() {
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     });
 }
+
 function setOpenImageManager() {
     $(".input-group-btn button#manager").click(function () {
         $.ajax({
@@ -393,9 +402,9 @@ function createVariableManager(fw) {
                     if (fw === "data-source") {
                         var value = $("div.variable-manager input#register").val();
                         var res = value.split("&");
-                        $("div.dialog-panel-settings form[name=panel] input#panel-source-content").val(res[0]);
-                        $("div.dialog-panel-settings div.panel-preview span").empty().append(res[1]);
-                        $("div.dialog-panel-settings input#panel-term-register-value").val(res[1]);
+                        $("div#panel-form input#panel-source-content").val(res[0]);
+                        $("div#panel-form input#panel_contentSource").val(res[0]);
+                        // $("div#panel-form input#panel_variableValue").val(res[1]);
                         $(this).dialog('destroy').remove();
                     } else if (fw === "term-register") {
                         var value = $("div.variable-manager input#register").val();
@@ -423,7 +432,6 @@ function createVariableManager(fw) {
                 }
             }],
         open: function () {
-
             setDialogButtons();
         },
         close: function () {
@@ -539,6 +547,7 @@ function createVariableManager(fw) {
 
     }
 }
+
 function createImageManager(fw) {
     var input;
     return $("div.image-manager").dialog({
@@ -553,12 +562,7 @@ function createImageManager(fw) {
                     if (fw === "data-source") {
                         var w = $("div.image-manager input#resolutionX").val();
                         var h = $("div.image-manager input#resolutionY").val();
-                        $("div.dialog-panel-settings div.panel-preview").css({
-                            width: w + "px",
-                            height: h + "px",
-                            backgroundColor: "rgba(0,0,0,0)",
-                            borderWidth: "0px"
-                        });
+
                         $("form#panel input#width").val(w);
                         $("form#panel input#height").val(h);
                         $("form#panel input#opacity").val(0);
@@ -715,6 +719,7 @@ function createImageManager(fw) {
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     }
 }
+
 function createEffectCssManager() {
     return $("div.effect-css-manager").dialog({
         autoOpen: false,
@@ -751,6 +756,7 @@ function createEffectCssManager() {
     }
 
 }
+
 function setDeleteTerm() {
     $("table .fa-trash-o").unbind("click").click(function () {
         var data = {
@@ -778,6 +784,7 @@ function setDeleteTerm() {
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     });
 }
+
 function createCondition(panel_id) {
 
     return $("div.dialog-condition").dialog({
@@ -993,6 +1000,7 @@ function ajaxMovePanel(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
+
 /*
  function copyPanel(data) {
  $.ajax({
@@ -1012,26 +1020,27 @@ function ajaxMovePanel(data) {
  });
  $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
  }
- function ajaxDeletePanel(data) {
- $.ajax({
- type: "POST",
- datatype: "application/json",
- url: Routing.generate('bms_visualization_delete_panel'),
- data: data,
- success: function (ret) {
- $(".main-row").children(".fa-spinner").remove();
- loadPanelList(ret["panelList"]);
- }
- });
- $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
- }
  */
+function ajaxDeletePanel(data) {
+    $.ajax({
+        type: "POST",
+        datatype: "application/json",
+        url: Routing.generate('bms_visualization_delete_panel'),
+        data: data,
+        success: function (ret) {
+            $(".main-row").children(".fa-spinner").remove();
+            loadPanelList(ret["panelList"]);
+        }
+    });
+    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+}
+
 //dodanie obsługi zdarzeń na każdym panelu na stronie
 function setPanelEvents() {
     var panels = $(".bms-panel");
 
     panels.each(function () {
-        //pobranie id panelu 
+        //pobranie id panelu
         var id = $(this).attr("id");
         var aR;
         $(this).children("img").length > 0 ? aR = true : aR = false;
@@ -1166,10 +1175,10 @@ function setPanelEvents() {
         });
         //ustawienia
         $(label + " i.fa-cogs").click(function () {
-            var data = {
-                panel_id: id
-            };
+            var panel = $("div#" + id + ".bms-panel");
+            var data = {panel_id: id};
             editPanel(data);
+            panel.remove();
         });
         //usuwanie
         $(label + " i.fa-trash-o").click(function () {
@@ -1182,10 +1191,8 @@ function setPanelEvents() {
             }
         });
     }
-
 }
 
-//*****PAGE START*****
 function createDialogPageAddSettings() {
 
     return $("div.dialog-page-add-settings").dialog({
@@ -1221,6 +1228,7 @@ function createDialogPageAddSettings() {
         }
     });
 }
+
 function createDialogPageEditSettings(page_id) {
 
     return $("div.dialog-page-edit-settings").dialog({
@@ -1280,6 +1288,7 @@ function ajaxAddPage(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
+
 function ajaxDeletePage(data) {
     $.ajax({
         type: "POST",
@@ -1295,6 +1304,7 @@ function ajaxDeletePage(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
+
 function ajaxEditPage(data) {
     $.ajax({
         type: "POST",
@@ -1310,6 +1320,7 @@ function ajaxEditPage(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
+
 function ajaxChangePage(data) {
     $.ajax({
         type: "POST",
@@ -1362,6 +1373,7 @@ function ajaxChangePage(data) {
     }
 
 }
+
 //utworzenie nowej strony
 function createPage(page, panelList) {
     $(".main-row div.col-md-12").children().remove();
@@ -1390,7 +1402,7 @@ function createPage(page, panelList) {
         });
         //usuwanie strony
         function deletePageEvent(label, page_id) {
-            label.children("i.fa-trash-o").click(function () {
+            label.children("i.fa-remove").click(function () {
                 var data = {
                     page_id: page_id
                 };
@@ -1411,8 +1423,7 @@ function createPage(page, panelList) {
     }
 
 }
-//*****PAGE END*****
-//****TOOLS START*****
+
 //ustaw siatkę pomocniczą
 function setPatternNet(x) {
 
@@ -1440,6 +1451,7 @@ function setPatternNet(x) {
         }
     }
 }
+
 //usuń obrazek z serwera
 function ajaxDeleteImage(data) {
     $.ajax({
@@ -1452,6 +1464,7 @@ function ajaxDeleteImage(data) {
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
+
 //załaduj listę paneli
 function loadPanelList(panelList) {
     $("input#panel-list-text, input#panel-list-image, input#panel-list-variable").prop("checked", true).unbind("click, change");
@@ -1543,24 +1556,23 @@ function loadPanelList(panelList) {
     //     };
     //     copyPanel(data);
     // });
-    //ustawienia
-    // $("div.panel-list i.fa-cogs").click(function () {
-    //     var id = $(this).parent().parent().parent().attr("id");
-    //     var panel = $("div#" + id + ".bms-panel");
-    //     var data = {
-    //         panel_id: id
-    //     };
-    //     editPanel(data);
-    // });
-    //usuwanie
-    // $("div.panel-list i.fa-trash-o").click(function () {
-    //     var id = $(this).parent().parent().parent().attr("id");
-    //     if (confirm("Na pewno chcesz to usunąć?")) {
-    //         $("div#" + id + ".bms-panel").remove();
-    //         var data = {
-    //             panel_id: id
-    //         };
-    //         ajaxDeletePanel(data);
-    //     }
-    // });
+    // ustawienia
+    $("div.panel-list i.fa-cogs").click(function () {
+        var id = $(this).parent().parent().parent().attr("id");
+        var panel = $("div#" + id + ".bms-panel");
+        var data = {panel_id: id};
+        editPanel(data);
+        panel.remove();
+    });
+    // usuwanie
+    $("div.panel-list i.fa-trash-o").click(function () {
+        var id = $(this).parent().parent().parent().attr("id");
+        if (confirm("Na pewno chcesz to usunąć?")) {
+            $("div#" + id + ".bms-panel").remove();
+            var data = {
+                panel_id: id
+            };
+            ajaxDeletePanel(data);
+        }
+    });
 }

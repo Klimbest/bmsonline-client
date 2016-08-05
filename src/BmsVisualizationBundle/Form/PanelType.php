@@ -57,10 +57,10 @@ class PanelType extends AbstractType
                 'label' => 'Od lewej'
             ])
             ->add('width', IntegerType::class, [
-                'label' => 'Wysokość'
+                'label' => 'Szerokość'
             ])
             ->add('height', IntegerType::class, [
-                'label' => 'Szerokość'
+                'label' => 'Wysokość'
             ])
             ->add('zIndex', IntegerType::class, [
                 'label' => 'Z-index'
@@ -81,10 +81,15 @@ class PanelType extends AbstractType
             ])
             ->add('opacity', RangeType::class, [
                 'label' => 'Przezroczystość',
-                'required' => true
+                'required' => true,
+                'attr' => [
+                    'min' => 0,
+                    'max' => 1,
+                    'step' => 0.1
+                ]
             ])
             ->add('borderWidth', IntegerType::class, [
-                'label' => 'Grubość ramki',
+                'label' => 'Grubość',
                 'required' => true
             ])
             ->add('borderStyle', ChoiceType::class, [
@@ -93,34 +98,55 @@ class PanelType extends AbstractType
                     "Wykropkowana" => "dotted",
                     "Wykreskowana" => "dashed"
                 ],
-                'label' => 'Styl ramki',
+                'label' => 'Styl',
                 'required' => true
             ])
             ->add('borderColor', ColorType::class, [
-                'label' => 'Kolor ramki',
+                'label' => 'Kolor',
                 'required' => true
             ])
             ->add('borderRadiusLeftTop', RangeType::class, [
                 'label' => "Lewy górny",
-                'required' => true
+                'required' => true,
+                'attr' => [
+                    'min' => 0,
+                    'max' => 200,
+                    'step' => 1
+                ]
             ])
             ->add('borderRadiusLeftBottom', RangeType::class, [
                 'label' => "Lewy dolny",
-                'required' => true
+                'required' => true,
+                'attr' => [
+                    'min' => 0,
+                    'max' => 200,
+                    'step' => 1
+                ]
             ])
             ->add('borderRadiusRightTop', RangeType::class, [
                 'label' => "Prawy górny",
-                'required' => true
+                'required' => true,
+                'attr' => [
+                    'min' => 0,
+                    'max' => 200,
+                    'step' => 1
+                ]
             ])
             ->add('borderRadiusRightBottom', RangeType::class, [
                 'label' => "Prawy dolny",
-                'required' => true
+                'required' => true,
+                'attr' => [
+                    'min' => 0,
+                    'max' => 200,
+                    'step' => 1
+                ]
             ])
             ->add('textAlign', HiddenType::class, [
                 'required' => false])
             ->add('fontWeight', HiddenType::class)
             ->add('textDecoration', HiddenType::class)
             ->add('fontStyle', HiddenType::class)
+            ->add('href', HiddenType::class)
             ->add('fontFamily', ChoiceType::class, [
                 'choices' => [
                     "Arial" => "Arial",
@@ -145,27 +171,21 @@ class PanelType extends AbstractType
                     "Trebuchet MS" => "Trebuchet MS",
                     "Verdana" => "Verdana"
                 ],
-                'label' => 'Styl czcionki',
+                'label' => 'Styl',
                 'required' => false
             ])
             ->add('fontColor', ColorType::class, [
-                'label' => 'Kolor czcionki',
+                'label' => 'Kolor',
                 'required' => false
             ])
             ->add('fontSize', IntegerType::class, [
-                'label' => 'Rozmiar czcionki',
+                'label' => 'Rozmiar',
                 'required' => false,
                 'attr' => ['min' => 6,
                     'max' => 96
                 ]
             ])
-            ->add('contentSource', HiddenType::class)
-            ->add('page', EntityType::class, [
-                'class' => 'BmsVisualizationBundle:Page',
-                'choice_label' => 'name',
-                'required' => false,
-                'label' => false
-            ]);
+            ->add('contentSource', HiddenType::class);
     }
 
     /**

@@ -754,10 +754,9 @@ class Panel
     /**
      * Constructor
      */
-    public function __construct(Page $page)
+    public function __construct()
     {
         $this->terms = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->page = $page;
         $this->type = "text";
         $this->visibility = true;
         $this->tooltip = false;
@@ -776,7 +775,7 @@ class Panel
         $this->borderRadiusRightBottom = 0;
         $this->borderRadiusRightTop = 0;
         $this->textAlign = 'left';
-        $this->fontWeight = '400';
+        $this->fontWeight = 'normal';
         $this->textDecoration = 'none';
         $this->fontStyle = 'normal';
         $this->fontFamily = 'Arial';
@@ -784,6 +783,7 @@ class Panel
         $this->fontSize = 14;
         $this->opacity = 1;
         $this->contentSource = "";
+        $this->href = null;
     }
 
     /**

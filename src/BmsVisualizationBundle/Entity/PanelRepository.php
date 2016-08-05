@@ -20,18 +20,21 @@ class PanelRepository extends \Doctrine\ORM\EntityRepository
     public function findVariablePanelsRegistersForPage($page_id)
     {
         return $this->getEntityManager()
-            ->createQuery('SELECT r.id, rcd.fixedValue FROM BmsConfigurationBundle:Register r'
+            ->createQuery('SELECT r.name, rcd.fixedValue FROM BmsConfigurationBundle:Register r'
                 . '             JOIN r.registerCurrentData rcd'
                 . '             JOIN BmsVisualizationBundle:Panel p'
-                . '             WHERE p.type = \'variable\' AND p.contentSource = r.id AND p.page = ' . $page_id . 'ORDER BY r.id')
+                . '             WHERE p.type = \'variable\' AND p.contentSource LIKE r.name AND p.page = ' . $page_id . 'ORDER BY r.name')
             ->getResult();
     }
 
     public function getNewPanelName()
     {
         $lastPanel = $this->findLastPanel();
-        $id = $lastPanel->getId() + 1;
-        return 'panel' . $id;
+        if (!empty($lastPanel)) {
+            return 'panel' . ($lastPanel->getId() + 1);
+        } else {
+            return 'panel1';
+        }
     }
 
     public function findLastPanel()

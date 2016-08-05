@@ -5,7 +5,8 @@ li#dialog-panel-progress-bar,
 div#panel-form div.dialog-panel-format,
 div#panel-form div.dialog-panel-navigation,
 div#panel-form div.dialog-panel-event,
-div#panel-form div.dialog-panel-progress-bar {
+div#panel-form div.dialog-panel-progress-bar,
+div#panel-form div.precision-group {
     display: none;
 }
 
@@ -216,12 +217,6 @@ div#panel-form ul.nav-tabs li a {
     border-bottom: unset;
 }
 
-/*
-.panel-preview,
-.panel-preview img{
-    max-width: 500px;
-    max-height: 300px;
-}
 
 
 .table, 
@@ -246,7 +241,7 @@ input.clicked{
     font-weight: bold;
     background-color: #adadad;
 }
-/*condition
+/*condition*/
 div.row.body{
     height: 85%;
     overflow-y: auto;
@@ -290,4 +285,4 @@ div.thumbnail-list div.selected{
 div.thumbnail-list div img{
     max-height: 100%;
     max-width: 100%;
-}*/
+}

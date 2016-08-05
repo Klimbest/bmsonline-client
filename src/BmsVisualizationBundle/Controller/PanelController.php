@@ -2,6 +2,7 @@
 
 namespace BmsVisualizationBundle\Controller;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -24,7 +25,8 @@ class PanelController extends Controller
             $options = array();
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
-            $panel = new Panel($pageRepo->find(1));
+            $templating = $this->container->get('templating');
+            $panel = new Panel();
             $panel->setName($panelRepo->getNewPanelName());
 
             $form = $this->createForm(PanelType::class, $panel, array(
@@ -32,7 +34,44 @@ class PanelController extends Controller
                 'method' => 'POST'
             ));
             $options['form'] = $form->createView();
+            $options['pages'] = $pageRepo->findAll();
+            $form->handleRequest($request);
+            if ($form->isSubmitted()) {
+                $em = $this->getDoctrine()->getManager();
+                $page_id = (int)$request->request->get('panel')['page_id'];
+                $page = $pageRepo->find($page_id);
+                $panel->setPage($page);
+                $em->persist($panel);
+                $em->flush();
+                $ret["panel"] = $templating->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
+                $panels = $panelRepo->findPanelsForPage($page->getId());
+                $ret['panelList'] = $templating->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
+            } else {
+                $ret["template"] = $templating->render('BmsVisualizationBundle:dialog:panelManager.html.twig', $options);
+            }
+            return new JsonResponse($ret);
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
 
+    /**
+     * @Route("/edit_panel", name="bms_visualization_edit_panel", options={"expose"=true})
+     */
+    public function editPanelAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $options = array();
+            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
+            $panel_id = (int)$request->request->get('panel_id');
+            $panel = $panelRepo->find($panel_id);
+            $form = $this->createForm(PanelType::class, $panel, array(
+                'action' => $this->generateUrl('bms_visualization_edit_panel'),
+                'method' => 'POST'
+            ));
+            $options['form'] = $form->createView();
+            $options['pages'] = $pageRepo->findAll();
             $form->handleRequest($request);
             if ($form->isSubmitted()) {
                 $em = $this->getDoctrine()->getManager();
@@ -41,6 +80,8 @@ class PanelController extends Controller
                 $ret["panel"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
                 return new JsonResponse($ret);
             } else {
+                $ret["panel_type"] = $panel->getType();
+                $ret["panel_id"] = $panel->getId();
                 $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelManager.html.twig', $options);
                 return new JsonResponse($ret);
             }
@@ -48,7 +89,6 @@ class PanelController extends Controller
             throw new AccessDeniedHttpException();
         }
     }
-
 
     /**
      * @Route("/move_panel", name="bms_visualization_move_panel", options={"expose"=true})
