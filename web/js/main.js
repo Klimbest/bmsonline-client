@@ -83,7 +83,6 @@ function setGenerateVisualization() {
     });
 }
 
-
 function counter() {
 
     countToRefresh++;

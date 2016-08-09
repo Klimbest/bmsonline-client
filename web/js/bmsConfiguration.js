@@ -595,7 +595,7 @@ function updateLastRead(lastRead, did) {
     lastRead = Date.parse(lastRead) / 1000 / 60;
     var nowTime = new Date();
     var now = Date.parse(nowTime) / 1000 / 60;
-    var elapseUTC = nowTime - lastRead;
+    var elapseUTC = now - lastRead;
     var r = parseInt("33", 16);
     var g = parseInt("7A", 16);
     var b = parseInt("B7", 16);
@@ -638,8 +638,10 @@ function refreshPage() {
             $.each(ret["times_of_update"], function () {
                 var time = new Date(this.time);
                 var timeLabel = $("span#" + this.id + ".label-last-read span");
-                time.getTime() !== 0 ? timeLabel.text($.formatDateTime('yy-mm-dd hh:ii', time)) : timeLabel.text("-");
+                console.log(time);
+                timeLabel.text($.formatDateTime('yy-mm-dd hh:ii', time));
                 updateLastRead(time, this.id);
+
             });
             $("i.fa-refresh[id]").each(function () {
                 var id = $(this).attr("id");
