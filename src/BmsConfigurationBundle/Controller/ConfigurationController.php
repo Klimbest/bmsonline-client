@@ -139,9 +139,6 @@ class ConfigurationController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             if ($device->getActive() == 0) {
-                $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
-                $technical_info = $technicalInformationRepo->findOneBy(['name' => "d_" . $device->getId() . "_errors"]);
-                $technical_info->setStatus(-1);
                 $device->setScanState(-1);
                 $regs = $device->getRegisters();
                 foreach ($regs as $r) {
@@ -252,16 +249,8 @@ class ConfigurationController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             $device->setCommunicationType($comm);
-
             $em = $this->getDoctrine()->getManager();
             $em->persist($device);
-            $em->flush();
-
-            $technical_info = new TechnicalInformation();
-            $technical_info->setName("d_" . $device->getId() . "_errors")
-                ->setStatus(0)
-                ->setTime(new \DateTime());
-            $em->persist($technical_info);
             $em->flush();
 
             $session = $request->getSession();
@@ -356,7 +345,6 @@ class ConfigurationController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
-        $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
 
         $device = $deviceRepo->find($device_id);
         $registers = $device->getRegisters();
@@ -365,8 +353,6 @@ class ConfigurationController extends Controller
             $em->remove($rCD);
             $em->remove($r);
         }
-        $technical_info = $technicalInformationRepo->findOneBy(['name' => "d_" . $device->getId() . "_errors"]);
-        $em->remove($technical_info);
 
         $em->flush();
         $em->remove($device);

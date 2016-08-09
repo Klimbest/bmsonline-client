@@ -262,7 +262,6 @@ function formEvents() {
     $("select#read_mod_operator, input#read_mod_val").change(function () {
         var oper = $("select#read_mod_operator").val();
         var mod = $("input#read_mod_val").val();
-        console.log(oper + "   " + mod);
         if (oper === "*") {
             inputModificatorRead.val(mod);
         } else if (oper === "/") {
