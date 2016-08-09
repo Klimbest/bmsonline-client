@@ -273,7 +273,9 @@ div.thumbnail-list div{
     height: 50px;
     width: 50px;
     display: inline-block;
+    background-color: #FFFFFF;
 }
+
 div.thumbnail-list div:hover{
     border: solid 4px red;
     cursor: pointer;

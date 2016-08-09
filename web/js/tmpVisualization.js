@@ -392,8 +392,8 @@ function setOpenImageManager() {
 function createVariableManager(fw) {
     return $("div.variable-manager").dialog({
         autoOpen: false,
-        width: $(window).width(),
-        height: $(window).height(),
+        width: $(window).width() * 0.8,
+        height: $(window).height() * 0.8,
         modal: true,
         buttons: [
             {
@@ -544,7 +544,6 @@ function createVariableManager(fw) {
             $("div.register-choice").removeClass("selected");
             $(this).addClass("selected");
         });
-
     }
 }
 
@@ -552,22 +551,25 @@ function createImageManager(fw) {
     var input;
     return $("div.image-manager").dialog({
         autoOpen: false,
-        width: $(window).width(),
-        height: $(window).height(),
+        width: $(window).width() * 0.8,
+        height: $(window).height() * 0.8,
         modal: true,
         buttons: [
             {
                 text: "Zapisz",
                 click: function () {
+                    var imgSource;
+                    var panelForm = $("div#panel-form");
+                    var imageManager = $("div.image-manager");
                     if (fw === "data-source") {
-                        var w = $("div.image-manager input#resolutionX").val();
-                        var h = $("div.image-manager input#resolutionY").val();
+                        var w = imageManager.find("input#resolutionX").val();
+                        var h = imageManager.find("input#resolutionY").val();
 
-                        $("form#panel input#width").val(w);
-                        $("form#panel input#height").val(h);
-                        $("form#panel input#opacity").val(0);
-                        $("form#panel input#borderWidth").val(0);
-                        var imgSource = $("div.image-manager div.thumbnail-list div.selected img").attr("src");
+                        panelForm.find("input#width").val(w);
+                        panelForm.find("input#height").val(h);
+                        panelForm.find("input#opacity").val(0);
+                        panelForm.find("input#borderWidth").val(0);
+                        imgSource = imageManager.find("div.thumbnail-list div.selected img").attr("src");
                         if (imgSource.length > 200) {
                             var data = new FormData();
                             data.append('file', input.files[0]);
@@ -580,7 +582,7 @@ function createImageManager(fw) {
                             $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + imgSource + "\" class=\"img-responsive\">");
                         }
                     } else if (fw === "effect") {
-                        var imgSource = $("div.image-manager div.thumbnail-list div.selected img").attr("src");
+                        imgSource = $("div.image-manager div.thumbnail-list div.selected img").attr("src");
                         $("form#condition input#effect-value").val(imgSource);
                     }
 
@@ -602,69 +604,37 @@ function createImageManager(fw) {
     });
 
     function setDialogButtons() {
-        var dp = $("div.image-manager div#new-image");
         var img = new Image();
-        if ($("input#panel-source-content").val()) {
-            var src = $("input#panel-source-content").val();
-            $("div.image-manager input#imageName").val(src);
-
-            dp.children("img").attr("src", src);
-        }
+        var imageManager = $("div.image-manager");
         //loading image from disk
-        $("div.image-manager input#image").change(function (event) {
-            dp.empty().append("<img class='img-responsive' src='' />");
+        imageManager.find("input#image").change(function (event) {
+            var src;
             input = event.target;
             if (this.files && this.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
                     img.onload = function () {
-                        dp.children("img").attr("src", e.target.result);
-                        $("div.image-manager input#resolutionX").val(this.width);
-                        $("div.image-manager input#resolutionY").val(this.height);
+                        src = e.target.result;
+                        imageManager.find("input#resolutionX").val(this.width);
+                        imageManager.find("input#resolutionY").val(this.height);
+                        var data = new FormData();
+                        data.append('file', input.files[0]);
+                        data.append("fileName", input.files[0].name);
+                        data.append("resolutionX", this.width);
+                        data.append("resolutionY", this.height);
+                        saveData(data);
                     };
                     img.src = e.target.result;
-
+                    $("div.image-manager").find("div.thumbnail-list").append("<div id='" + imgName + "' class='text-center'>" +
+                        "<img class='img-responsive' src='" + img.src + "' />" +
+                        "</div>");
                 };
                 reader.readAsDataURL(input.files[0]);
             }
             var imgName = input.files[0].name;
-            dp.attr("id", imgName);
-            $("div.image-manager input#imageName").val(imgName);
 
-        });
-        //load image from server
-        $("div.image-manager div.image-list span.label").click(function () {
-            var name = $(this).text();
-            //var dir = [];
-            var url = name;
-            $(this).parents(".images").each(function () {
-                //dir.push($(this).attr("id"));
-                url = $(this).attr("id") + "/" + url;
-            });
-            url = "/images/" + url;
+            imageManager.find("input#imageName").val(imgName);
 
-            var img = new Image();
-            img.onload = function () {
-                dp.css({
-                    width: this.width,
-                    height: this.height
-                }).children("img").attr("src", url);
-                $("div.image-manager input#resolutionX").val(parseInt(dp.css("width")));
-                $("div.image-manager input#resolutionY").val(parseInt(dp.css("height")));
-            };
-            img.src = url;
-            dp.children("img").attr("src", url);
-            $("div.image-manager input#imageName").val(name);
-
-        });
-        //removing image from server
-        $("div.image-manager div.image-list i.fa-trash-o").click(function () {
-            var name = $(this).parent().children("span.label").text();
-            var data = {
-                image_name: name.replace(" ", "")
-            };
-            ajaxDeleteImage(data);
-            $(this).parent().remove();
         });
         //choose image
         $("div.thumbnail-list div").click(function () {
@@ -681,24 +651,16 @@ function createImageManager(fw) {
             $("div.image-manager input#imageName").val(name);
         });
         //change size of image
-        $("div.image-manager input#resolutionX").change(function () {
+        imageManager.find("input#resolutionX").change(function () {
             var ar = img.width / img.height;
             var h = $(this).val() / ar;
             $("div.image-manager input#resolutionY").val(Math.round(h));
 
         });
-        $("div.image-manager input#resolutionY").change(function () {
+        imageManager.find("input#resolutionY").change(function () {
             var ar = img.width / img.height;
             var w = $(this).val() * ar;
             $("div.image-manager input#resolutionX").val(Math.round(w));
-        });
-        //sidebar
-        var imageListItems = $("div.image-manager div.row.image-container i.fa-plus-circle");
-        imageListItems.each(function () {
-            $(this).click(function () {
-                $(this).parent().children('.images').toggleClass('hidden');
-                $(this).toggleClass("fa-minus-circle");
-            });
         });
     }
 

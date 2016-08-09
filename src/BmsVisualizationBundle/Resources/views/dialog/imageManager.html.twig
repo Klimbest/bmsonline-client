@@ -1,93 +1,23 @@
 <div class="image-manager" title="Manager obrazów:">
     <div class="row form-group-sm">
-        <div class="col-md-2">
+        <div class="col-md-12">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="control-label">Wybierz nowy obraz..</label>
-                        </div> 
-                        <div class="col-md-12">
-                            <div class="btn btn-sm btn-default btn-file">Browse <input class="" id="image" type="file" accept='image/*'></div>
-                        </div>                    
-                    </div>
+                <div class="col-md-3">
+                    <label for="imageManager[image_name]" class="control-label">Nazwa:</label>
+                    <input id="imageName" type="text" class="form-control" name="imageManager[image_name]"/>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 image-list">
-                    <h6><label class="control-label">...lub któryś z dodanych wcześniej.</label></h6>
-                    {% for k,dir in images %}
-                        <div class="row image-container text-left">
-                            <div class="col-xs-12">
-                                <i class="fa fa-folder fa-blue"></i><span class="small"> {{k}}</span> <i class="fa fa-plus-circle fa-blue"></i>
-                                <div id="{{k}}" class="images hidden">
-                                    {% for key,subdir in dir %}
-                                        {% if subdir is iterable %}
-                                            <div class="col-xs-12">
-                                                <i class="fa fa-folder fa-green"></i><span class="small"> {{key}}</span> <i class="fa fa-plus-circle fa-blue"></i>
-                                                <div id="{{key}}" class="images hidden">
-                                                    {% for key,subsubdir in subdir %}
-                                                        {% if subsubdir is iterable %}
-                                                            <div class="col-xs-12">
-                                                                <i class="fa fa-folder fa-red"></i><span class="small"> {{key}}</span> <i class="fa fa-plus-circle fa-blue"></i>
-                                                                <div id="{{key}}" class="images hidden">
-                                                                    {% for image in subsubdir %}
-                                                                        <div class="col-xs-12">
-                                                                            <span class="label label-warning">{{image}}</span> <span class="small">{{sizeOfImage[image]}} KB</span>
-                                                                        </div>
-                                                                    {% endfor %}
-                                                                </div> 
-                                                            </div>
-                                                        {% else %}
-                                                            <div class="col-xs-12">
-                                                                <span class="label label-danger">{{subsubdir}}</span> <span class="small">{{sizeOfImage[subsubdir]}} KB</span>
-                                                            </div>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </div> 
-                                            </div>
-                                        {% else %}
-                                            <div class="col-xs-12">
-                                                <span class="label label-success">{{subdir}}</span> <span class="small">{{sizeOfImage[subdir]}} KB</span>
-                                                {% if k == 'user' %}
-                                                    <i class="fa fa-trash-o fa-red"></i>
-                                                {% endif %}
-                                            </div>
-                                        {% endif %}
-                                    {% endfor %}
-                                </div> 
-                            </div>
-                        </div>
-                    {% endfor %}
+                <div class="col-md-2">
+                    <label for="imageManager[image_resolution_x]" class="control-label">Rozdzielczość X:</label>
+                    <input id="resolutionX" type="number" class="form-control" name="imageManager[image_resolution_x]"/>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-10">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span class="label label-primary">Obraz:</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label">Nazwa:</label>
-                        </div>                    
-                        <div class="col-md-6">
-                            <label>Rozdzielczość:</label>
-                        </div>
-                    </div>
-                    <div class="row">                        
-                        <div class="col-md-6">
-                            <input id="imageName" type="text" class="form-control" />
-                        </div>
-                        <div class="col-md-3">
-                            <input id="resolutionX" type="number" class="form-control"/>
-                        </div>
-                        <div class="col-md-3">
-                            <input id="resolutionY" type="number" class="form-control"/>
-                        </div>                    
+                <div class="col-md-2">
+                    <label for="imageManager[image_resolution_x]" class="control-label">Rozdzielczość Y:</label>
+                    <input id="resolutionY" type="number" class="form-control" name="imageManager[image_resolution_y]"/>
+                </div>
+                <div class="col-md-5 text-right">
+                    <div class="btn btn-sm btn-info btn-file">
+                        <i class="fa fa-plus fa-fw"/>Dodaj nowy
+                        <input class="" id="image" type="file" accept='image/*'>
                     </div>
                 </div>
             </div>
@@ -98,30 +28,25 @@
                             {% for keykey,subsubdir in subdir %}
                                 {% if subsubdir is iterable %}
                                     {% for image in subsubdir %}
-                                        <div id="{{image}}" class="text-center">
-                                            <img class='img-responsive' src='/images/{{k}}/{{key}}/{{keykey}}/{{image}}' />
+                                        <div id="{{ image }}" class="text-center">
+                                            <img class='img-responsive'
+                                                 src='/images/{{ k }}/{{ key }}/{{ keykey }}/{{ image }}'/>
                                         </div>
                                     {% endfor %}
-                                {% else %}    
-                                    <div id="{{subsubdir}}" class="text-center">
-                                        <img class='img-responsive' src='/images/{{k}}/{{key}}/{{subsubdir}}' />
+                                {% else %}
+                                    <div id="{{ subsubdir }}" class="text-center">
+                                        <img class='img-responsive' src='/images/{{ k }}/{{ key }}/{{ subsubdir }}'/>
                                     </div>
                                 {% endif %}
                             {% endfor %}
                         {% else %}
-                            <div id="{{subdir}}" class="text-center">
-                                <img class='img-responsive' src='/images/{{k}}/{{subdir}}' />
+                            <div id="{{ subdir }}" class="text-center">
+                                <img class='img-responsive' src='/images/{{ k }}/{{ subdir }}'/>
                             </div>
                         {% endif %}
                     {% endfor %}
                 {% endfor %}
-                <div id="new-image" class="text-center">
-                    
-                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-
     </div>
 </div>
