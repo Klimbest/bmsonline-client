@@ -638,7 +638,6 @@ function refreshPage() {
             $.each(ret["times_of_update"], function () {
                 var time = new Date(this.time);
                 var timeLabel = $("span#" + this.id + ".label-last-read span");
-                console.log(time);
                 timeLabel.text($.formatDateTime('yy-mm-dd hh:ii', time));
                 updateLastRead(time, this.id);
 
