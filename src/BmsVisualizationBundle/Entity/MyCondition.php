@@ -37,13 +37,15 @@ class MyCondition {
 
     
     /**
-     * @var decimal
+     * @var float
      *
      * @ORM\Column(name="value", type="decimal", precision=9, scale=2, nullable=true)
      */
     private $value;
 
     
+
+
 
     /**
      * Get id
@@ -60,7 +62,7 @@ class MyCondition {
      *
      * @param string $name
      *
-     * @return Condition
+     * @return MyCondition
      */
     public function setName($name)
     {
@@ -84,7 +86,7 @@ class MyCondition {
      *
      * @param string $type
      *
-     * @return Condition
+     * @return MyCondition
      */
     public function setType($type)
     {
@@ -108,7 +110,7 @@ class MyCondition {
      *
      * @param string $value
      *
-     * @return Condition
+     * @return MyCondition
      */
     public function setValue($value)
     {

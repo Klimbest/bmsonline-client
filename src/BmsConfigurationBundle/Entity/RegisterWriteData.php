@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * RegisterWriteData
  *
  * @ORM\Table(name="register_write_data")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="RegisterWriteDataRepository")
  */
 class RegisterWriteData
 {

@@ -33,10 +33,8 @@ function setSidebarEvents() {
             }
         }
     });
-    //ustaw domyślny rozmiar siatki
-    $("input#pattern-net-size").val(defaultPatternNetSize);
-    //zmiana rozmiaru siatki
-    $("input#pattern-net-size").change(function () {
+    //ustaw domyślny rozmiar siatki i zmianę rozmiaru
+    $("input#pattern-net-size").val(defaultPatternNetSize).change(function () {
 
         var x = $(this).val();
         setPatternNet(x);
@@ -158,24 +156,28 @@ function setEdit(type, id) {
     var panelForm = $("div#panel-form");
     var buttonManager = panelForm.find("button#manager");
     var inputSourceContent = panelForm.find("input#panel-source-content");
+    var progressBarLi = $("li#dialog-panel-progress-bar");
+
     switch (type) {
         case "variable":
             inputSourceContent.val("").prop({"disabled": true, "required": true}).show();
             buttonManager.removeClass("disabled").show().unbind("click");
-            $("li#dialog-panel-progress-bar").hide();
+            progressBarLi.hide();
             $(".precision-group, .font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
             setOpenVariableManager();
             break;
         case "image":
             inputSourceContent.val("").prop({"disabled": true, "required": true}).show();
             buttonManager.removeClass("disabled").show().unbind("click");
-            $(".precision-group, .font-group, li#dialog-panel-progress-bar").hide();
+            progressBarLi.hide();
+            $(".precision-group, .font-group").hide();
             $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
             setOpenImageManager();
             break;
         case "text":
             inputSourceContent.val("").prop({"disabled": false, "required": false}).show();
             buttonManager.addClass("disabled").show().unbind("click");
+            progressBarLi.hide();
             $(".precision-group, li#dialog-panel-progress-bar").hide();
             $(".font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
             break;
@@ -183,7 +185,7 @@ function setEdit(type, id) {
             inputSourceContent.val("").prop({"disabled": true, "required": true}).hide();
             buttonManager.addClass("disabled").hide().unbind("click");
             $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
-            $("li#dialog-panel-progress-bar").show();
+            progressBarLi.show();
             break;
     }
     //set input for hidden form fields
@@ -219,6 +221,7 @@ function savePanel() {
             $("div.main-row .fa-spinner").remove();
             $("div.main-row div#panel-form").remove();
             $("div.main-row div#page").show().children("div.well").show().append(ret['panel']);
+
             loadPanelList(ret["panelList"]);
             setPanelEvents();
         }
@@ -307,8 +310,9 @@ function setDialogButtonEvent(panel_id) {
             datatype: "application/json",
             url: Routing.generate('bms_visualization_load_event_manager'),
             success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $(".main-row").append(ret['template']);
+                var mr = $(".main-row");
+                mr.children(".fa-spinner").remove();
+                mr.append(ret['template']);
                 createCondition(panel_id).dialog("open");
             }
         });
@@ -335,8 +339,9 @@ function setDialogButtonProgressBar() {
             datatype: "application/json",
             url: Routing.generate('bms_visualization_load_variable_manager'),
             success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $(".main-row").append(ret["template"]);
+                var mr = $(".main-row");
+                mr.children(".fa-spinner").remove();
+                mr.append(ret["template"]);
                 createVariableManager("progress-bar-value").dialog("open");
             }
         });
@@ -348,8 +353,9 @@ function setDialogButtonProgressBar() {
             datatype: "application/json",
             url: Routing.generate('bms_visualization_load_variable_manager'),
             success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $(".main-row").append(ret["template"]);
+                var mr = $(".main-row");
+                mr.children(".fa-spinner").remove();
+                mr.append(ret["template"]);
                 createVariableManager("progress-bar-set").dialog("open");
             }
         });
@@ -364,8 +370,9 @@ function setOpenVariableManager() {
             datatype: "application/json",
             url: Routing.generate('bms_visualization_load_variable_manager'),
             success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $(".main-row").append(ret["template"]);
+                var mr = $(".main-row");
+                mr.children(".fa-spinner").remove();
+                mr.append(ret["template"]);
                 createVariableManager("data-source").dialog("open");
             }
         });
@@ -380,8 +387,9 @@ function setOpenImageManager() {
             datatype: "application/json",
             url: Routing.generate('bms_visualization_load_image_manager'),
             success: function (ret) {
-                $(".main-row").children(".fa-spinner").remove();
-                $(".main-row").append(ret["template"]);
+                var mr = $(".main-row");
+                mr.children(".fa-spinner").remove();
+                mr.append(ret["template"]);
                 createImageManager("data-source").dialog("open");
             }
         });
@@ -399,30 +407,23 @@ function createVariableManager(fw) {
             {
                 text: "Zapisz",
                 click: function () {
+                    var panelForm = $("div#panel-form");
+                    var value = $("div.variable-manager input#register").val();
+                    var res = value.split("&");
+                    var dialogCondition = $("div.dialog-condition");
                     if (fw === "data-source") {
-                        var value = $("div.variable-manager input#register").val();
-                        var res = value.split("&");
-                        $("div#panel-form input#panel-source-content").val(res[0]);
-                        $("div#panel-form input#panel_contentSource").val(res[0]);
+                        panelForm.find("input#panel-source-content").val(res[0]);
+                        panelForm.find("input#panel_contentSource").val(res[0]);
                         // $("div#panel-form input#panel_variableValue").val(res[1]);
-                        $(this).dialog('destroy').remove();
                     } else if (fw === "term-register") {
-                        var value = $("div.variable-manager input#register").val();
-                        var res = value.split("&");
-                        $("div.dialog-condition input#panel-term-register").val(res[0]);
-                        $("div.dialog-condition input#panel-term-register-value").val(res[1]);
-                        $(this).dialog('destroy').remove();
+                        dialogCondition.find("input#panel-term-register").val(res[0]);
+                        dialogCondition.find("input#panel-term-register-value").val(res[1]);
                     } else if (fw === "progress-bar-value") {
-                        var value = $("div.variable-manager input#register").val();
-                        var res = value.split("&");
                         $("input#progress-bar-value").val(res[0]);
-                        $(this).dialog('destroy').remove();
                     } else if (fw === "progress-bar-set") {
-                        var value = $("div.variable-manager input#register").val();
-                        var res = value.split("&");
                         $("input#progress-bar-set").val(res[0]);
-                        $(this).dialog('destroy').remove();
                     }
+                    $(this).dialog('destroy').remove();
                 }
             },
             {
@@ -449,7 +450,7 @@ function createVariableManager(fw) {
                 return;
             }
             rows.parent().hide();
-            rows.filter(function (i, v) {
+            rows.filter(function () {
                 var $t = $(this);
                 for (var d = 0; d < data.length; ++d) {
                     if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
@@ -468,7 +469,7 @@ function createVariableManager(fw) {
                 return;
             }
             rows.parent().hide();
-            rows.filter(function (i, v) {
+            rows.filter(function () {
                 var $t = $(this);
                 for (var d = 0; d < data.length; ++d) {
                     if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
@@ -487,7 +488,7 @@ function createVariableManager(fw) {
                 return;
             }
             rows.parent().hide();
-            rows.filter(function (i, v) {
+            rows.filter(function () {
                 var $t = $(this);
                 for (var d = 0; d < data.length; ++d) {
                     if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
@@ -506,7 +507,7 @@ function createVariableManager(fw) {
                 return;
             }
             rows.parent().hide();
-            rows.filter(function (i, v) {
+            rows.filter(function () {
                 var $t = $(this);
                 for (var d = 0; d < data.length; ++d) {
                     if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
@@ -525,7 +526,7 @@ function createVariableManager(fw) {
                 return;
             }
             rows.parent().hide();
-            rows.filter(function (i, v) {
+            rows.filter(function () {
                 var $t = $(this);
                 for (var d = 0; d < data.length; ++d) {
                     if ($t.text().toUpperCase().indexOf(data[d]) > -1) {
@@ -535,7 +536,6 @@ function createVariableManager(fw) {
                 return false;
             }).parent().show();
         });
-
         $("div.register-choice").click(function () {
             var registerName = $(this).children("div#registerName").text();
             var registerValue = $(this).children("div#value").text();
@@ -558,34 +558,19 @@ function createImageManager(fw) {
             {
                 text: "Zapisz",
                 click: function () {
-                    var imgSource;
                     var panelForm = $("div#panel-form");
                     var imageManager = $("div.image-manager");
+                    var imgSource = imageManager.find("div.thumbnail-list div.selected img").attr("src");
                     if (fw === "data-source") {
-                        var w = imageManager.find("input#resolutionX").val();
-                        var h = imageManager.find("input#resolutionY").val();
-
-                        panelForm.find("input#width").val(w);
-                        panelForm.find("input#height").val(h);
+                        panelForm.find("input#width").val(imageManager.find("input#resolutionX").val());
+                        panelForm.find("input#height").val(imageManager.find("input#resolutionY").val());
                         panelForm.find("input#opacity").val(0);
                         panelForm.find("input#borderWidth").val(0);
-                        imgSource = imageManager.find("div.thumbnail-list div.selected img").attr("src");
-                        if (imgSource.length > 200) {
-                            var data = new FormData();
-                            data.append('file', input.files[0]);
-                            data.append("fileName", $("div.image-manager input#imageName").val());
-                            data.append("resolutionX", $("div.image-manager input#resolutionX").val());
-                            data.append("resolutionY", $("div.image-manager input#resolutionY").val());
-                            saveData(data);
-                        } else {
-                            $("div.dialog-panel-settings input#panel-source-content").val(imgSource);
-                            $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + imgSource + "\" class=\"img-responsive\">");
-                        }
+                        panelForm.find("input#panel_contentSource").val(imgSource);
+                        panelForm.find("input#panel-source-content").val(imgSource);
                     } else if (fw === "effect") {
-                        imgSource = $("div.image-manager div.thumbnail-list div.selected img").attr("src");
                         $("form#condition input#effect-value").val(imgSource);
                     }
-
                     $(this).dialog('destroy').remove();
                 }
             },
@@ -615,8 +600,6 @@ function createImageManager(fw) {
                 reader.onload = function (e) {
                     img.onload = function () {
                         src = e.target.result;
-                        imageManager.find("input#resolutionX").val(this.width);
-                        imageManager.find("input#resolutionY").val(this.height);
                         var data = new FormData();
                         data.append('file', input.files[0]);
                         data.append("fileName", input.files[0].name);
@@ -625,30 +608,13 @@ function createImageManager(fw) {
                         saveData(data);
                     };
                     img.src = e.target.result;
-                    $("div.image-manager").find("div.thumbnail-list").append("<div id='" + imgName + "' class='text-center'>" +
-                        "<img class='img-responsive' src='" + img.src + "' />" +
-                        "</div>");
                 };
                 reader.readAsDataURL(input.files[0]);
             }
-            var imgName = input.files[0].name;
-
-            imageManager.find("input#imageName").val(imgName);
-
         });
         //choose image
         $("div.thumbnail-list div").click(function () {
-            $("div.thumbnail-list div").removeClass("selected");
-            $(this).addClass("selected");
-            var url = $(this).children("img").attr("src");
-            var img = new Image();
-            img.onload = function () {
-                $("div.image-manager input#resolutionX").val(this.width);
-                $("div.image-manager input#resolutionY").val(this.height);
-            };
-            img.src = url;
-            var name = $(this).attr("id");
-            $("div.image-manager input#imageName").val(name);
+            setClickableImage(this);
         });
         //change size of image
         imageManager.find("input#resolutionX").change(function () {
@@ -664,6 +630,15 @@ function createImageManager(fw) {
         });
     }
 
+    function setClickableImage(i) {
+        $("div.thumbnail-list div").removeClass("selected");
+        $(i).addClass("selected");
+        $("div.image-manager input#imageName").val($(i).attr("id"));
+        var img = new Image();
+        img.src = $(i).children("img").attr("src");
+        console.log(img);
+    }
+
     function saveData(data) {
         $.ajax({
             type: "POST",
@@ -673,9 +648,17 @@ function createImageManager(fw) {
             processData: false,
             success: function (ret) {
                 $(".main-row").children(".fa-spinner").remove();
-
-                $("div.dialog-panel-settings input#panel-source-content").val(ret["content"]);
-                $("div.dialog-panel-settings div.panel-preview").empty().append("<img src=\"" + ret["content"] + "\" class=\"img-responsive\">");
+                var imageManager = $("div.image-manager");
+                var imageName = ret["fileName"];
+                imageManager.find("input#imageName").val(imageName);
+                imageManager.find("input#resolutionX").val(ret['imageWidth']);
+                imageManager.find("input#resolutionY").val(ret['imageHeight']);
+                imageManager.find("div.thumbnail-list").append("<div id='" + imageName + "' class='text-center'>" +
+                    "<img class='img-responsive' src='" + ret['url'] + "' />" +
+                    "</div>");
+                imageManager.find("div.thumbnail-list div").last().click(function () {
+                    setClickableImage(this);
+                });
             }
         });
         $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -733,8 +716,9 @@ function setDeleteTerm() {
                 $(".main-row").children(".fa-spinner").remove();
                 var id = parseInt(ret['term_id']);
                 $("table i#" + id + ".fa-trash-o").parent().parent().remove();
-                if ($("div.dialog-panel-event table tbody tr").length == 1) {
-                    $("div.dialog-panel-event table tbody tr").remove().append(
+                var tr = $("div.dialog-panel-event table tbody tr");
+                if (tr.length == 1) {
+                    tr.remove().append(
                         "<tr id='no-data'>\n\
                             <td colspan='11' class='text-center'>\n\
                                 <h2><span class='label label-primary'> Brak warunków</span></h2>\n\
@@ -813,8 +797,9 @@ function createCondition(panel_id) {
                 datatype: "application/json",
                 url: Routing.generate('bms_visualization_load_variable_manager'),
                 success: function (ret) {
-                    $(".main-row").children(".fa-spinner").remove();
-                    $(".main-row").append(ret["template"]);
+                    var mr = $(".main-row");
+                    mr.children(".fa-spinner").remove();
+                    mr.append(ret["template"]);
                     createVariableManager("term-register").dialog("open");
                 }
             });
@@ -824,35 +809,36 @@ function createCondition(panel_id) {
         //zmiana typu efektu == zmiana przycisku managera efektów
         $("select#effect_type").change(function () {
             var effect_type = $(this).val();
-            $(".input-group-btn button#effectManager").unbind("click");
-            $("form#condition input#effect-value").val("");
+            var effectButton = $(".input-group-btn button#effectManager");
+            var effectValue = $("form#condition input#effect-value");
+            effectButton.unbind("click");
+            effectValue.val("");
             switch (effect_type) {
                 case "css":
-                    $(".input-group-btn button#effectManager").prop('disabled', false);
-                    $("form#condition input#effect-value").prop('disabled', true);
+                    effectButton.prop('disabled', false);
+                    effectValue.prop('disabled', true);
                     setOpenEffectCss();
                     break;
                 case "src":
-                    $(".input-group-btn button#effectManager").prop('disabled', false);
-                    $("form#condition input#effect-value").prop('disabled', true);
+                    effectButton.prop('disabled', false);
+                    effectValue.prop('disabled', true);
                     setOpenEffectSrc();
                     break;
                 case "animation":
-                    $(".input-group-btn button#effectManager").prop('disabled', true);
-                    $("form#condition input#effect-value").prop('disabled', false);
+                    effectButton.prop('disabled', true);
+                    effectValue.prop('disabled', false);
                     setOpenEffectAnimation();
                     break;
                 case "text":
-                    $(".input-group-btn button#effectManager").prop('disabled', true);
-                    $("form#condition input#effect-value").prop('disabled', false);
+                    effectButton.prop('disabled', true);
+                    effectValue.prop('disabled', false);
                     break;
                 case "popup":
-                    $(".input-group-btn button#effectManager").prop('disabled', true);
-                    $("form#condition input#effect-value").prop('disabled', false);
+                    effectButton.prop('disabled', true);
+                    effectValue.prop('disabled', false);
                     break;
             }
         });
-
         function setOpenEffectCss() {
             $(".input-group-btn button#effectManager").click(function () {
                 $.ajax({
@@ -860,8 +846,9 @@ function createCondition(panel_id) {
                     datatype: "application/json",
                     url: Routing.generate('bms_visualization_load_effect_css_manager'),
                     success: function (ret) {
-                        $(".main-row").children(".fa-spinner").remove();
-                        $(".main-row").append(ret["template"]);
+                        var mr = $(".main-row");
+                        mr.children(".fa-spinner").remove();
+                        mr.append(ret["template"]);
                         createEffectCssManager().dialog("open");
                     }
                 });
@@ -876,8 +863,9 @@ function createCondition(panel_id) {
                     datatype: "application/json",
                     url: Routing.generate('bms_visualization_load_image_manager'),
                     success: function (ret) {
-                        $(".main-row").children(".fa-spinner").remove();
-                        $(".main-row").append(ret["template"]);
+                        var mr = $(".main-row");
+                        mr.children(".fa-spinner").remove();
+                        mr.append(ret["template"]);
                         createImageManager("effect").dialog("open");
                     }
                 });
@@ -890,7 +878,6 @@ function createCondition(panel_id) {
                 alert("Otwieranie Animacja");
             });
         }
-
     }
 
     function saveData(data) {
@@ -938,7 +925,7 @@ function createCondition(panel_id) {
                                 <i id='" + term.id + "' class='fa fa-trash-o fa-fw fa-red'></i>\n\
                             </td>\n\
                             <td>\n\
-                                <input name='checkedTermId[]' value='" + term.id + "' type='checkbox'></input>\n\
+                                <input name='checkedTermId[]' value='" + term.id + "' type='checkbox'/>\n\
                             </td>\n\
                         </tr>");
                 setDeleteTerm();
@@ -1004,8 +991,7 @@ function setPanelEvents() {
     panels.each(function () {
         //pobranie id panelu
         var id = $(this).attr("id");
-        var aR;
-        $(this).children("img").length > 0 ? aR = true : aR = false;
+        var aR = $(this).children("img").length > 0;
         $(this).show().removeAttr("onclick").unbind("mouseenter mouseleave");
         //draggable and resizable
         $(this).draggable({
@@ -1130,10 +1116,10 @@ function setPanelEvents() {
         $(label).unbind("click");
         //kopiowania
         $(label + " i.fa-clone").click(function () {
-            var data = {
-                panel_id: id
-            };
-            copyPanel(data);
+            // var data = {
+            //     panel_id: id
+            // };
+            // copyPanel(data);
         });
         //ustawienia
         $(label + " i.fa-cogs").click(function () {
@@ -1228,12 +1214,14 @@ function createDialogPageEditSettings(page_id) {
         }
     });
     function setFormField() {
-        var width = parseInt($('div.main-row div.well').css("width"));
-        var height = parseInt($('div.main-row div.well').css("height"));
+        var mailWell = $('div.main-row div.well');
+        var width = parseInt(mailWell.css("width"));
+        var height = parseInt(mailWell.css("height"));
         var name = $('div.label-page.active span#name').text();
-        $("div.dialog-page-edit-settings input#width").val(width);
-        $("div.dialog-page-edit-settings input#height").val(height);
-        $("div.dialog-page-edit-settings input#name").val(name);
+        var editSettings = $("div.dialog-page-edit-settings");
+        editSettings.find("input#width").val(width);
+        editSettings.find("input#height").val(height);
+        editSettings.find("input#name").val(name);
     }
 }
 
@@ -1299,37 +1287,38 @@ function ajaxChangePage(data) {
 
     function setVariables(registers) {
         $.each(registers, function (key, value) {
-            if (value !== null) {
-                var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
-                var roundValue = parseFloat(value).toFixed(displayPrecision);
-            }
-            $("div.bms-panel").children("span#" + key).empty().append(roundValue);
-
-            if ($("div.bms-panel-widget").find("div#value" + key).length > 0) {
-                var rangeMin = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
-                var rangeMax = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
-
-                var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
-                if (widgetValue < 0) {
-                    widgetValue = 0;
-                    $("div.bms-panel-widget").find("div#value" + key).hide();
-                }
-                $("div.bms-panel-widget").find("div#value" + key).show().animate({
-                    left: widgetValue + "%"
-                }, 2000);
-            }
-            if ($("div.bms-panel-widget").find("div#set" + key).length > 0) {
-                var rangeMin = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMin").text().trim());
-                var rangeMax = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMax").text().trim());
-                var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
-                if (widgetValue < 0) {
-                    widgetValue = 0;
-                    $("div.bms-panel-widget").find("div#set" + key).hide();
-                }
-                $("div.bms-panel-widget").find("div#set" + key).show().animate({
-                    left: widgetValue + "%"
-                }, 2000);
-            }
+            $("div.bms-panel").children("span#" + key).empty().append((Math.floor(Math.random() * 10000) + 1) / 100);
+            // if (value !== null) {
+            //     var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
+            //     var roundValue = parseFloat(value).toFixed(displayPrecision);
+            // }
+            // $("div.bms-panel").children("span#" + key).empty().append(roundValue);
+            //
+            // if ($("div.bms-panel-widget").find("div#value" + key).length > 0) {
+            //     var rangeMin = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
+            //     var rangeMax = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
+            //
+            //     var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
+            //     if (widgetValue < 0) {
+            //         widgetValue = 0;
+            //         $("div.bms-panel-widget").find("div#value" + key).hide();
+            //     }
+            //     $("div.bms-panel-widget").find("div#value" + key).show().animate({
+            //         left: widgetValue + "%"
+            //     }, 2000);
+            // }
+            // if ($("div.bms-panel-widget").find("div#set" + key).length > 0) {
+            //     var rangeMin = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMin").text().trim());
+            //     var rangeMax = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMax").text().trim());
+            //     var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
+            //     if (widgetValue < 0) {
+            //         widgetValue = 0;
+            //         $("div.bms-panel-widget").find("div#set" + key).hide();
+            //     }
+            //     $("div.bms-panel-widget").find("div#set" + key).show().animate({
+            //         left: widgetValue + "%"
+            //     }, 2000);
+            // }
 
         });
     }

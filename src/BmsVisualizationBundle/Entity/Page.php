@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 
+
 /**
  * Page
  *
@@ -141,10 +142,10 @@ class Page {
     /**
      * Add panels
      *
-     * @param \BmsVisualizationBundle\Entity\Panel $panels
+     * @param Panel $panels
      * @return Page
      */
-    public function addPanel(\BmsVisualizationBundle\Entity\Panel $panels)
+    public function addPanel(Panel $panels)
     {
         $this->panels[] = $panels;
 
@@ -154,9 +155,9 @@ class Page {
     /**
      * Remove panels
      *
-     * @param \BmsVisualizationBundle\Entity\Panel $panels
+     * @param Panel $panels
      */
-    public function removePanel(\BmsVisualizationBundle\Entity\Panel $panels)
+    public function removePanel(Panel $panels)
     {
         $this->panels->removeElement($panels);
     }

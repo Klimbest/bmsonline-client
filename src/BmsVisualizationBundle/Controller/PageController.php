@@ -16,6 +16,8 @@ class PageController extends Controller
 
     /**
      * @Route("/add_page", name="bms_visualization_add_page", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function addPageAction(Request $request)
     {
@@ -42,10 +44,10 @@ class PageController extends Controller
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $pages = $pageRepo->findAll();
 
-            $ret['page'] = $this->container->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id]);
+            $ret['page'] = $this->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id]);
 
             $panels = $panelRepo->findPanelsForPage($page_id);
-            $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
+            $ret['panelList'] = $this->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -54,6 +56,8 @@ class PageController extends Controller
 
     /**
      * @Route("/delete_page", name="bms_visualization_delete_page", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function deletePageAction(Request $request)
     {
@@ -84,6 +88,8 @@ class PageController extends Controller
 
     /**
      * @Route("/edit_page", name="bms_visualization_edit_page", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function editPageAction(Request $request)
     {
@@ -110,6 +116,8 @@ class PageController extends Controller
 
     /**
      * @Route("/change_page", name="bms_visualization_change_page", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function changePageAction(Request $request)
     {
@@ -150,8 +158,8 @@ class PageController extends Controller
 
 
             $ret['registers'] = $registers;
-            $ret['page'] = $this->container->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id, 'widgets' => $widgets]);
-            $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
+            $ret['page'] = $this->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id, 'widgets' => $widgets]);
+            $ret['panelList'] = $this->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -160,6 +168,8 @@ class PageController extends Controller
 
     /**
      * @Route("/generate", name="bms_visualization_generate", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function generateAction(Request $request)
     {
@@ -174,11 +184,11 @@ class PageController extends Controller
                 $fs->remove($file->getRealPath());
             }
             foreach ($pages as $page) {
-                $content = $this->container->get('templating')->render('BmsBundle::page.html.twig', ['page' => $page, 'widgets' => $widgets]);
+                $content = $this->get('templating')->render('BmsBundle::page.html.twig', ['page' => $page, 'widgets' => $widgets]);
 
                 $fs->dumpFile('../src/BmsBundle/Resources/views/Pages/' . $page->getId() . ".html.twig", $content);
             }
-            $fs->remove($this->container->getParameter('kernel.cache_dir'));
+            $fs->remove($this->getParameter('kernel.cache_dir'));
             return new JsonResponse($fs);
         } else {
             throw new AccessDeniedHttpException();

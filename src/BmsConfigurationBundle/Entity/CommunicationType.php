@@ -8,8 +8,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * CommunicationType
  *
- * @ORM\Table(name="communication_type", uniqueConstraints={@ORM\UniqueConstraint(name="unique_name", columns={"name"}), @ORM\UniqueConstraint(name="hardware", columns={"hardware_id"})})
- * @ORM\Entity
+ * @ORM\Table(name="communication_type", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="unique_name", columns={"name"}),
+ *     @ORM\UniqueConstraint(name="hardware", columns={"hardware_id"})
+ * })
+ * @ORM\Entity(repositoryClass="CommunicationTypeRepository")
  */
 class CommunicationType
 {

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * RegisterCurrentData
  *
  * @ORM\Table(name="register_current_data")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="RegisterCurrentDataRepository")
  */
 class RegisterCurrentData
 {

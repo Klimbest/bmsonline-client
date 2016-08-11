@@ -19,6 +19,8 @@ class AjaxController extends Controller
 
     /**
      * @Route("/load_variable_manager", name="bms_visualization_load_variable_manager", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function loadVariableManagerAction(Request $request)
     {
@@ -35,7 +37,7 @@ class AjaxController extends Controller
                 'communicationTypes' => $communicationTypes
             ];
 
-            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:variableManager.html.twig', $options);
+            $ret["template"] = $this->get('templating')->render('BmsVisualizationBundle:dialog:variableManager.html.twig', $options);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -44,22 +46,28 @@ class AjaxController extends Controller
 
     /**
      * @Route("/load_image_manager", name="bms_visualization_load_image_manager", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function loadImageManagerAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
             $finder = new Finder();
 
-            $finder->directories()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
-            $images = array();
-            $sizeOfImage = array();
+            $finder->directories()->in($this->getParameter('kernel.root_dir') . '/../web/images/');
+            $images = [];
+            $sizeOfImage = [];
             foreach ($finder as $dir) {
                 $finder2 = new Finder();
                 $dirDet = explode("/", $dir->getRelativePathname());
                 switch (sizeof($dirDet)) {
                     case 1 :
-                        !isset($images[$dirDet[0]]) ? $images[$dirDet[0]] = array() : null;
-                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                        if (!empty($images[$dirDet[0]])) {
+                            $images[$dirDet[0]] = [];
+                        } else {
+                            null;
+                        }
+                        $finder2->depth('== 0')->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
                         foreach ($finder2 as $file) {
                             $fn = $file->getFilename();
                             $images[$dirDet[0]][$fn] = $fn;
@@ -67,8 +75,12 @@ class AjaxController extends Controller
                         }
                         break;
                     case 2 :
-                        !isset($images[$dirDet[0]][$dirDet[1]]) ? $images[$dirDet[0]][$dirDet[1]] = array() : null;
-                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                        if (!empty($images[$dirDet[0]][$dirDet[1]])) {
+                            $images[$dirDet[0]][$dirDet[1]] = [];
+                        } else {
+                            null;
+                        }
+                        $finder2->depth('== 0')->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
                         foreach ($finder2 as $file) {
                             $fn = $file->getFilename();
                             $images[$dirDet[0]][$dirDet[1]][$fn] = $fn;
@@ -76,8 +88,12 @@ class AjaxController extends Controller
                         }
                         break;
                     case 3 :
-                        !isset($images[$dirDet[0]][$dirDet[1]][$dirDet[2]]) ? $images[$dirDet[0]][$dirDet[1]][$dirDet[2]] = array() : null;
-                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                        if (!empty($images[$dirDet[0]][$dirDet[1]][$dirDet[2]])) {
+                            $images[$dirDet[0]][$dirDet[1]][$dirDet[2]] = [];
+                        } else {
+                            null;
+                        }
+                        $finder2->depth('== 0')->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
                         foreach ($finder2 as $file) {
                             $fn = $file->getFilename();
                             $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$fn] = $fn;
@@ -85,8 +101,12 @@ class AjaxController extends Controller
                         }
                         break;
                     case 4 :
-                        !isset($images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]]) ? $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]] = array() : null;
-                        $finder2->depth('== 0')->files()->in($this->container->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                        if (!empty($images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]])) {
+                            $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]] = [];
+                        } else {
+                            null;
+                        }
+                        $finder2->depth('== 0')->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
                         foreach ($finder2 as $file) {
                             $fn = $file->getFilename();
                             $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]][$fn] = $fn;
@@ -96,7 +116,7 @@ class AjaxController extends Controller
                 }
             }
 
-            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:imageManager.html.twig', ['images' => $images, 'sizeOfImage' => $sizeOfImage]);
+            $ret['template'] = $this->get('templating')->render('BmsVisualizationBundle:dialog:imageManager.html.twig', ['images' => $images, 'sizeOfImage' => $sizeOfImage]);
 
             return new JsonResponse($ret);
         } else {
@@ -106,13 +126,15 @@ class AjaxController extends Controller
 
     /**
      * @Route("/load_effect_css_manager", name="bms_visualization_load_effect_css_manager", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function loadEffectCssManagerAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
 
 
-            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:effectCssManager.html.twig');
+            $ret['template'] = $this->get('templating')->render('BmsVisualizationBundle:dialog:effectCssManager.html.twig');
 
             return new JsonResponse($ret);
         } else {
@@ -122,6 +144,8 @@ class AjaxController extends Controller
 
     /**
      * @Route("/load_event_manager", name="bms_visualization_load_event_manager", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function loadEventManagerAction(Request $request)
     {
@@ -130,8 +154,8 @@ class AjaxController extends Controller
             $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
-            $effectRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Effect');
-            $myConditionRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:MyCondition');
+//            $effectRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Effect');
+//            $myConditionRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:MyCondition');
 
             $registers = $registerRepo->getAllOrderByName();
             $devices = $deviceRepo->findAll();
@@ -145,7 +169,7 @@ class AjaxController extends Controller
                 'pages' => $pages
             ];
 
-            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:eventManager.html.twig', $options);
+            $ret['template'] = $this->get('templating')->render('BmsVisualizationBundle:dialog:eventManager.html.twig', $options);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
@@ -154,6 +178,8 @@ class AjaxController extends Controller
 
     /**
      * @Route("/create_term", name="bms_visualization_create_term", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function createTermAction(Request $request)
     {
@@ -167,20 +193,20 @@ class AjaxController extends Controller
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
             //get REGISER data
             $registerName = $request->request->get('register_name');
-            $register = $registerRepo->findOneBy(array('name' => $registerName));
-//            if(!isset($register)){
-//                $register = $bitRegisterRepo->findOneBy(array('name' => $registerName));
-//            }
+            $register = $registerRepo->findOneBy(['name' => $registerName]);
+            if(!isset($register)){
+                $register = $bitRegisterRepo->findOneBy(['name' => $registerName]);
+            }
 
             //get PANEL data
             $panel_id = $request->request->get('panel_id');
-            $panel = $panelRepo->findOneById($panel_id);
+            $panel = $panelRepo->find($panel_id);
             //get CONDITION data
             $conditionType = $request->get('condition_type');
             $conditionValue = $request->get('condition_value');
             //set CONDITION
-            $condition = $conditionRepo->findOneBy(array('type' => $conditionType, 'value' => $conditionValue));
-            if (!isset($condition)) {
+            $condition = $conditionRepo->findOneBy(['type' => $conditionType, 'value' => $conditionValue]);
+            if (!empty($condition)) {
                 $condition = new MyCondition();
                 $condition->setType($conditionType)
                     ->setValue($conditionValue)
@@ -191,8 +217,8 @@ class AjaxController extends Controller
             $effectType = $request->get('effect_type');
             $effectContent = $request->get('effect_content');
             //set EFFECT
-            $effect = $effectRepo->findOneBy(array('type' => $effectType, 'content' => $effectContent));
-            if (!isset($effect)) {
+            $effect = $effectRepo->findOneBy(['type' => $effectType, 'content' => $effectContent]);
+            if (!empty($effect)) {
                 $effect = new Effect();
                 $effect->setType($effectType)
                     ->setContent($effectContent)
@@ -219,6 +245,8 @@ class AjaxController extends Controller
 
     /**
      * @Route("/delete_term", name="bms_visualization_delete_term", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function deleteTermAction(Request $request)
     {
@@ -240,12 +268,13 @@ class AjaxController extends Controller
 
     /**
      * @Route("/add_image", name="bms_visualization_add_image", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function addImageAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-
-            $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web';
+             $imagesDir = $this->getParameter('kernel.root_dir') . '/../web';
             //get data
             $fileName = $request->get("fileName");
             //save original file
@@ -256,23 +285,24 @@ class AjaxController extends Controller
             $resolutionY = $request->request->get("resolutionY");
             $img->move($imagesDir . $relativePath, $fileName);
             //setFilter
-            $filterConfiguration = $this->container->get('liip_imagine.filter.configuration');
+            $filterConfiguration = $this->get('liip_imagine.filter.configuration');
             $configuration = $filterConfiguration->get('resize');
-            $configuration['filters']['resize']['size'] = array($resolutionX, $resolutionY);
+            $configuration['filters']['resize']['size'] = [$resolutionX, $resolutionY];
             $filterConfiguration->set('resize', $configuration);
 
             //filter image
             $imagePath = $relativePath . $fileName;
 
-            $processedImage = $this->container->get('liip_imagine.data.manager')->find('resize', $imagePath);
-            $filteredImage = $this->container->get('liip_imagine.filter.manager')->applyFilter($processedImage, 'resize')->getContent();
+            $processedImage = $this->get('liip_imagine.data.manager')->find('resize', $imagePath);
+            $filteredImage = $this->get('liip_imagine.filter.manager')->applyFilter($processedImage, 'resize')->getContent();
             //update file
             $f = fopen($imagesDir . $relativePath . $fileName, 'w+');
             fwrite($f, $filteredImage);
             fclose($f);
-
-            $ret["content"] = $content = $relativePath . $fileName;
-
+            $ret["imageWidth"] = $img;
+            //$ret["imageHeight"] = getimagesize($imagePath)[0];
+            $ret["fileName"] = $fileName;
+            $ret["url"] = $imagePath;
 
             return new JsonResponse($ret);
         } else {
@@ -282,16 +312,18 @@ class AjaxController extends Controller
 
     /**
      * @Route("/delete_image", name="bms_visualization_delete_image", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function deleteImageFromServerAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
 
-            $imagesDir = $this->container->getParameter('kernel.root_dir') . '/../web/images/';
+            $imagesDir = $this->getParameter('kernel.root_dir') . '/../web/images/';
             $imageName = $request->get("image_name");
 
             $finder = new Finder();
-            $finder->files()->name($imageName)->in($this->container->getParameter('kernel.root_dir') . '/../web/images/');
+            $finder->files()->name($imageName)->in($this->getParameter('kernel.root_dir') . '/../web/images/');
             foreach ($finder as $file) {
                 $relativePath = $file->getRelativePathname();
             }
@@ -310,6 +342,8 @@ class AjaxController extends Controller
 
     /**
      * @Route("/load_panel_list", name="bms_visualization_load_panel_list", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function loadPanelListAction(Request $request)
     {
@@ -317,7 +351,7 @@ class AjaxController extends Controller
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $panels = $panelRepo->findPanelsForPage($request->get("page_id"));
 
-            $ret['template'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
+            $ret['template'] = $this->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();

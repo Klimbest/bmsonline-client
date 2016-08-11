@@ -2,7 +2,6 @@
 
 namespace BmsVisualizationBundle\Controller;
 
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -11,13 +10,14 @@ use BmsVisualizationBundle\Entity\Panel;
 use BmsVisualizationBundle\Entity\WidgetBar;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use BmsVisualizationBundle\Form\PanelType;
-use Zend\Json\Json;
 
 class PanelController extends Controller
 {
 
     /**
      * @Route("/add_panel", name="bms_visualization_add_panel", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function addPanelAction(Request $request)
     {
@@ -25,7 +25,7 @@ class PanelController extends Controller
             $options = array();
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
-            $templating = $this->container->get('templating');
+            $template = $this->get('templating');
             $panel = new Panel();
             $panel->setName($panelRepo->getNewPanelName());
 
@@ -43,11 +43,11 @@ class PanelController extends Controller
                 $panel->setPage($page);
                 $em->persist($panel);
                 $em->flush();
-                $ret["panel"] = $templating->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
+                $ret["panel"] = $template->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
                 $panels = $panelRepo->findPanelsForPage($page->getId());
-                $ret['panelList'] = $templating->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
+                $ret['panelList'] = $template->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
             } else {
-                $ret["template"] = $templating->render('BmsVisualizationBundle:dialog:panelManager.html.twig', $options);
+                $ret["template"] = $template->render('BmsVisualizationBundle:dialog:panelManager.html.twig', $options);
             }
             return new JsonResponse($ret);
         } else {
@@ -57,6 +57,8 @@ class PanelController extends Controller
 
     /**
      * @Route("/edit_panel", name="bms_visualization_edit_panel", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function editPanelAction(Request $request)
     {
@@ -77,12 +79,12 @@ class PanelController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($panel);
                 $em->flush();
-                $ret["panel"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
+                $ret["panel"] = $this->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
                 return new JsonResponse($ret);
             } else {
                 $ret["panel_type"] = $panel->getType();
                 $ret["panel_id"] = $panel->getId();
-                $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelManager.html.twig', $options);
+                $ret["template"] = $this->get('templating')->render('BmsVisualizationBundle:dialog:panelManager.html.twig', $options);
                 return new JsonResponse($ret);
             }
         } else {
@@ -92,6 +94,8 @@ class PanelController extends Controller
 
     /**
      * @Route("/move_panel", name="bms_visualization_move_panel", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function movePanelAction(Request $request)
     {
@@ -115,7 +119,7 @@ class PanelController extends Controller
             $em->flush();
 
             $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
-            $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
+            $ret['panelList'] = $this->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
 
             return new JsonResponse($ret);
         } else {
@@ -125,6 +129,8 @@ class PanelController extends Controller
 
     /**
      * @Route("/copy_panel", name="bms_visualization_copy_panel", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function copyPanelAction(Request $request)
     {
@@ -169,13 +175,13 @@ class PanelController extends Controller
             $newId = $lastPanel->getId();
             $options['newId'] = (int)($newId + 1);
 
-            $ret["dialog"] = $this->container->get('templating')->render('BmsVisualizationBundle:dialog:panelDialog.html.twig', $options);
+            $ret["dialog"] = $this->get('templating')->render('BmsVisualizationBundle:dialog:panelManager.html.twig', $options);
 
             $ret["panel_id"] = $newPanel->getId();
-            $ret["template"] = $this->container->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $newPanel]);
+            $ret["template"] = $this->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $newPanel]);
 
             $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
-            $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
+            $ret['panelList'] = $this->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
 
             return new JsonResponse($ret);
         } else {
@@ -185,6 +191,8 @@ class PanelController extends Controller
 
     /**
      * @Route("/delete_panel", name="bms_visualization_delete_panel", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function deletePanelAction(Request $request)
     {
@@ -213,7 +221,7 @@ class PanelController extends Controller
             $em->getConnection()->exec("ALTER TABLE term AUTO_INCREMENT = 1;");
 
             $panels = $panelRepo->findPanelsForPage($panel->getPage()->getId());
-            $ret['panelList'] = $this->container->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
+            $ret['panelList'] = $this->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
 
             return new JsonResponse($ret);
         } else {

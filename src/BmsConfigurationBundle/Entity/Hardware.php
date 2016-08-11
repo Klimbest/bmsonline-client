@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Hardware
  *
  * @ORM\Table(name="hardware")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HardwareRepository")
  */
 class Hardware
 {
