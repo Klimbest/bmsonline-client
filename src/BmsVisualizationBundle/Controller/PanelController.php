@@ -2,6 +2,7 @@
 
 namespace BmsVisualizationBundle\Controller;
 
+use BmsConfigurationBundle\BmsConfigurationBundle;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -43,6 +44,14 @@ class PanelController extends Controller
                 $panel->setPage($page);
                 $em->persist($panel);
                 $em->flush();
+                if ($panel->getType() === 'variable') {
+                    $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+                    $ret["registers"] = ["id" => $panel->getId(),
+                        "name" => $panel->getContentSource()];
+                    $ret["registers"] = array_merge($ret["registers"], $registerRepo->getFixedValueByRegisterName($panel->getContentSource()));
+                } else {
+                    $ret["registers"] = null;
+                }
                 $ret["panel"] = $template->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
                 $panels = $panelRepo->findPanelsForPage($page->getId());
                 $ret['panelList'] = $template->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
@@ -79,6 +88,14 @@ class PanelController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($panel);
                 $em->flush();
+                if ($panel->getType() === 'variable') {
+                    $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
+                    $ret["registers"] = ["id" => $panel->getId(),
+                        "name" => $panel->getContentSource()];
+                    $ret["registers"] = array_merge($ret["registers"], $registerRepo->getFixedValueByRegisterName($panel->getContentSource()));
+                } else {
+                    $ret["registers"] = null;
+                }
                 $ret["panel"] = $this->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
                 return new JsonResponse($ret);
             } else {

@@ -16,7 +16,7 @@ class DataAnalyzeController extends Controller {
      */
     public function indexAction() {
         $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-        $registers = $registerRepo->getArchivatedRegisters();
+        $registers = $registerRepo->getArchivedRegisters();
         $detailChart = new Highchart();
         $masterChart = new Highchart();
 

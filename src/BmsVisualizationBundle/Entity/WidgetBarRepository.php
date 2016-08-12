@@ -12,7 +12,7 @@ class WidgetBarRepository extends \Doctrine\ORM\EntityRepository {
 
     public function findWidgetValueRegistersForPage($page_id) {
         return $this->getEntityManager()
-                        ->createQuery('SELECT r.id, rcd.fixedValue FROM BmsVisualizationBundle:WidgetBar w '
+                        ->createQuery('SELECT r.id, rcd.fixedValue, p.id as panel_id FROM BmsVisualizationBundle:WidgetBar w '
                                 . '             JOIN w.valueRegisterId r '
                                 . '             JOIN r.registerCurrentData rcd'
                                 . '             JOIN w.panel p'
@@ -22,7 +22,7 @@ class WidgetBarRepository extends \Doctrine\ORM\EntityRepository {
     
     public function findWidgetSetRegistersForPage($page_id) {
         return $this->getEntityManager()
-                        ->createQuery('SELECT r.id, rcd.fixedValue FROM BmsVisualizationBundle:WidgetBar w '
+                        ->createQuery('SELECT r.id, rcd.fixedValue, p.id as panel_id FROM BmsVisualizationBundle:WidgetBar w '
                                 . '             JOIN w.setRegisterId r '
                                 . '             JOIN r.registerCurrentData rcd'
                                 . '             JOIN w.panel p'

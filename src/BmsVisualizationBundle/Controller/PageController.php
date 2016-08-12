@@ -2,6 +2,7 @@
 
 namespace BmsVisualizationBundle\Controller;
 
+use BmsVisualizationBundle\BmsVisualizationBundle;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -126,38 +127,14 @@ class PageController extends Controller
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
             $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
-            $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-            $bitRegisterRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:BitRegister');
-
+            $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
             $pages = $pageRepo->findAll();
             $panels = $panelRepo->findPanelsForPage($request->get("page_id"));
             $widgets = $widgetBarRepo->findAll();
-
-            $registers = array();
-            foreach ($panels as $p) {
-                if ($p->getType() === "variable") {
-                    $rid = $p->getContentSource();
-                    if (substr($rid, 0, 3) == "bit") {
-                        $register = $bitRegisterRepo->find(substr($rid, 3));
-                        $registers[$rid] = $register->getBitValue();
-                    } else {
-                        $register = $registerRepo->findOneBy(['name' => $rid]);
-                        $registers[$rid] = $register->getRegisterCurrentData()->getFixedValue();
-                    }
-                }
-            }
-
-            foreach ($widgets as $w) {
-                if ($w->getSetRegisterId() != null) {
-                    $register = $w->getSetRegisterId();
-                    $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
-                }
-                $register = $w->getValueRegisterId();
-                $registers[$register->getId()] = $register->getRegisterCurrentData()->getFixedValue();
-            }
-
-
-            $ret['registers'] = $registers;
+            $ret['registers'] = $panelRepo->findVariablePanelsRegistersForPage($page_id);
+            $ret['registers'] = array_unique(array_merge($ret['registers'], $termRepo->findRegisterTermsForPage($page_id)), SORT_REGULAR);
+            $ret['registers'] = array_unique(array_merge($ret['registers'], $widgetBarRepo->findWidgetValueRegistersForPage($page_id)), SORT_REGULAR);
+            $ret['registers'] = array_unique(array_merge($ret['registers'], $widgetBarRepo->findWidgetSetRegistersForPage($page_id)), SORT_REGULAR);
             $ret['page'] = $this->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id, 'widgets' => $widgets]);
             $ret['panelList'] = $this->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);
             return new JsonResponse($ret);

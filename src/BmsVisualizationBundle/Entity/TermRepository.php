@@ -50,7 +50,7 @@ class TermRepository extends EntityRepository {
 
     public function findRegisterTermsForPage($page_id) {
         return $this->getEntityManager()
-                        ->createQuery('SELECT r.id, rcd.fixedValue FROM BmsVisualizationBundle:Term t '
+                        ->createQuery('SELECT r.id, rcd.fixedValue, p.id as panel_id FROM BmsVisualizationBundle:Term t '
                                 . '             JOIN t.panel p '
                                 . '             JOIN t.register r'
                                 . '             JOIN r.registerCurrentData rcd'

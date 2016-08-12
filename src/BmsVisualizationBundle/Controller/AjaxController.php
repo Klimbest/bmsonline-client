@@ -299,8 +299,9 @@ class AjaxController extends Controller
             $f = fopen($imagesDir . $relativePath . $fileName, 'w+');
             fwrite($f, $filteredImage);
             fclose($f);
-            $ret["imageWidth"] = $img;
-            //$ret["imageHeight"] = getimagesize($imagePath)[0];
+
+            $ret["imageWidth"] = $resolutionX;
+            $ret["imageHeight"] = $resolutionY;
             $ret["fileName"] = $fileName;
             $ret["url"] = $imagePath;
 

@@ -141,9 +141,11 @@ function editPanel(data) {
         url: Routing.generate('bms_visualization_edit_panel'),
         data: data,
         success: function (ret) {
-            $(".main-row div#page").hide();
-            $(".main-row div#panel-form").remove();
-            $(".main-row").append(ret["template"]).children(".fa-spinner").remove();
+            var mainRow = $('div.main-row');
+            mainRow.find("div#page").hide();
+            mainRow.find("div#panel-form").remove();
+            mainRow.append(ret["template"]).children("i.fa-spinner").remove();
+            setRandomVariables(ret["registers"]);
             setPanelForm();
             setEdit(ret["panel_type"], ret["panel_id"]);
 
@@ -218,21 +220,22 @@ function savePanel() {
         url: form.attr('action'),
         data: form.serialize(),
         success: function (ret) {
-            $("div.main-row .fa-spinner").remove();
-            $("div.main-row div#panel-form").remove();
-            $("div.main-row div#page").show().children("div.well").show().append(ret['panel']);
-
+            var mainRow = $('div.main-row');
+            mainRow.find("i.fa-spinner").remove();
+            mainRow.find("div#panel-form").remove();
+            mainRow.find("div#page").show().children("div.well").show().append(ret['panel']);
+            setRandomVariables(ret["registers"]);
             loadPanelList(ret["panelList"]);
             setPanelEvents();
         }
     });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    $('div.main-row').append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
 
 function closePanelForm() {
-    if (confirm("Na pewno anulować dodawanie obiektu?")) {
-        $("div.main-row div#panel-form").remove();
-        $(".main-row div").show();
+    if (confirm('Na pewno anulować dodawanie obiektu?')) {
+        $('div.main-row div#panel-form').remove();
+        $('.main-row div').show();
     }
 }
 function updateHref() {
@@ -562,10 +565,9 @@ function createImageManager(fw) {
                     var imageManager = $("div.image-manager");
                     var imgSource = imageManager.find("div.thumbnail-list div.selected img").attr("src");
                     if (fw === "data-source") {
-                        panelForm.find("input#width").val(imageManager.find("input#resolutionX").val());
-                        panelForm.find("input#height").val(imageManager.find("input#resolutionY").val());
-                        panelForm.find("input#opacity").val(0);
-                        panelForm.find("input#borderWidth").val(0);
+                        panelForm.find("input#panel_width").val(imageManager.find("input#resolutionX").val());
+                        panelForm.find("input#panel_height").val(imageManager.find("input#resolutionY").val());
+                        panelForm.find("input#panel_borderWidth").val(0);
                         panelForm.find("input#panel_contentSource").val(imgSource);
                         panelForm.find("input#panel-source-content").val(imgSource);
                     } else if (fw === "effect") {
@@ -614,7 +616,7 @@ function createImageManager(fw) {
         });
         //choose image
         $("div.thumbnail-list div").click(function () {
-            setClickableImage(this);
+            setClickOnImage(this);
         });
         //change size of image
         imageManager.find("input#resolutionX").change(function () {
@@ -630,13 +632,17 @@ function createImageManager(fw) {
         });
     }
 
-    function setClickableImage(i) {
+    function setClickOnImage(i) {
+        var imageManager = $("div.image-manager");
         $("div.thumbnail-list div").removeClass("selected");
         $(i).addClass("selected");
-        $("div.image-manager input#imageName").val($(i).attr("id"));
+        imageManager.find("input#imageName").val($(i).attr("id"));
         var img = new Image();
+        img.onload = function () {
+            imageManager.find("input#resolutionX").val(this.width);
+            imageManager.find("input#resolutionY").val(this.height);
+        };
         img.src = $(i).children("img").attr("src");
-        console.log(img);
     }
 
     function saveData(data) {
@@ -657,7 +663,7 @@ function createImageManager(fw) {
                     "<img class='img-responsive' src='" + ret['url'] + "' />" +
                     "</div>");
                 imageManager.find("div.thumbnail-list div").last().click(function () {
-                    setClickableImage(this);
+                    setClickOnImage(this);
                 });
             }
         });
@@ -890,19 +896,21 @@ function createCondition(panel_id) {
             success: function (ret) {
                 $(".main-row").children(".fa-spinner").remove();
                 var term = ret["term"][0];
+                var effectType;
                 switch (term.effect_type) {
                     case "src":
-                        var effectType = "Wyświetl obraz";
+                        effectType = "Wyświetl obraz";
                         break;
                     case "css":
-                        var effectType = "Właściwości formatu";
+                        effectType = "Właściwości formatu";
                         break;
                     case "animation":
-                        var effectType = "Animacja";
+                        effectType = "Animacja";
                         break;
                 }
+                var tbody = $("table tbody");
                 if ($("table tr#no-data").length > 0) {
-                    $("table tbody").empty().append("<tr>\n\
+                    tbody.empty().append("<tr>\n\
                         <td></td>\n\
                         <td class='text-center'>Jeżeli żaden z poniższych warunków nie jest spełniony</td>\n\
                         <td class='text-center'></td>\n\
@@ -913,7 +921,7 @@ function createCondition(panel_id) {
                         <td></td>\n\
                     </tr>");
                 }
-                $("table tbody").append(
+                tbody.append(
                     "<tr>\n\
                         <td>" + term.register_name + "</td>\n\
                             <td class='text-center'>" + term.fixedValue + "</td>\n\
@@ -986,7 +994,7 @@ function ajaxDeletePanel(data) {
 
 //dodanie obsługi zdarzeń na każdym panelu na stronie
 function setPanelEvents() {
-    var panels = $(".bms-panel");
+    var panels = $("div.bms-panel");
 
     panels.each(function () {
         //pobranie id panelu
@@ -1018,8 +1026,22 @@ function setPanelEvents() {
             snapMode: "both",
             aspectRatio: aR,
             handles: "se",
+            minWidth: 15,
+            minHeight: 15,
             resize: function (event, ui) {
-                if (ui.element.hasClass("image-panel")) {
+                var bw = ui.element.css("border-top-width");
+                bw = parseInt(bw);
+                var delta_x = ui.size.width - (ui.originalSize.width + 2 * bw);
+                var delta_y = ui.size.height - (ui.originalSize.height + 2 * bw);
+                if (delta_x !== 0) {
+                    ui.size.width += 2 * bw;
+                }
+                if (delta_y !== 0) {
+                    ui.size.height += 2 * bw;
+                }
+                ui.element.css({lineHeight: ui.element.height() + "px"});
+
+                if (ui.element.hasClass("bms-panel-image")) {
                     var image = $(this).children("img");
                     var mW = image[0].naturalWidth;
                     if (ui.size.width > mW) {
@@ -1029,19 +1051,9 @@ function setPanelEvents() {
                     if (ui.size.height > mH) {
                         ui.size.height = mH;
                     }
-                } else {
-                    var bw = ui.element.css("border-top-width");
-                    bw = parseInt(bw);
-                    var delta_x = ui.size.width - (ui.originalSize.width + 2 * bw);
-                    var delta_y = ui.size.height - (ui.originalSize.height + 2 * bw);
-                    if (delta_x !== 0) {
-                        ui.size.width += 2 * bw;
-                    }
-                    if (delta_y !== 0) {
-                        ui.size.height += 2 * bw;
-                    }
-                    ui.element.css({lineHeight: ui.element.height() + "px"});
                 }
+
+
                 ui.element.addClass("hover");
             },
             stop: function (event, ui) {
@@ -1280,55 +1292,27 @@ function ajaxChangePage(data) {
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
             createPage(ret['page'], ret['panelList']);
-            setVariables(ret['registers']);
+            setRandomVariables(ret['registers']);
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-
-    function setVariables(registers) {
-        $.each(registers, function (key, value) {
-            $("div.bms-panel").children("span#" + key).empty().append((Math.floor(Math.random() * 10000) + 1) / 100);
-            // if (value !== null) {
-            //     var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
-            //     var roundValue = parseFloat(value).toFixed(displayPrecision);
-            // }
-            // $("div.bms-panel").children("span#" + key).empty().append(roundValue);
-            //
-            // if ($("div.bms-panel-widget").find("div#value" + key).length > 0) {
-            //     var rangeMin = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
-            //     var rangeMax = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
-            //
-            //     var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
-            //     if (widgetValue < 0) {
-            //         widgetValue = 0;
-            //         $("div.bms-panel-widget").find("div#value" + key).hide();
-            //     }
-            //     $("div.bms-panel-widget").find("div#value" + key).show().animate({
-            //         left: widgetValue + "%"
-            //     }, 2000);
-            // }
-            // if ($("div.bms-panel-widget").find("div#set" + key).length > 0) {
-            //     var rangeMin = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMin").text().trim());
-            //     var rangeMax = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMax").text().trim());
-            //     var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
-            //     if (widgetValue < 0) {
-            //         widgetValue = 0;
-            //         $("div.bms-panel-widget").find("div#set" + key).hide();
-            //     }
-            //     $("div.bms-panel-widget").find("div#set" + key).show().animate({
-            //         left: widgetValue + "%"
-            //     }, 2000);
-            // }
-
-        });
-    }
-
 }
 
+function setRandomVariables(registers) {
+    $.each(registers, function () {
+        var key = this.name;
+        var panel_id = this.panel_id;
+        var randValue = this.fixedValue;//(Math.floor(Math.random() * 10000) + 1) / 100;
+        var displayPrecision = $("div#" + panel_id + ".bms-panel-variable").children("input#" + key).val();
+        var roundValue = parseFloat(randValue).toFixed(displayPrecision);
+        $("div#" + panel_id + ".bms-panel").children("span#" + key).empty().append(roundValue);
+    });
+}
 //utworzenie nowej strony
 function createPage(page, panelList) {
-    $(".main-row div.col-md-12").children().remove();
-    $(".main-row div.col-md-12").append(page).fadeIn("slow");
+    var mainRow = $(".main-row div.col-md-12");
+    mainRow.children().remove();
+    mainRow.append(page).fadeIn("slow");
     setPatternNet($("input#pattern-net-size").val());
     setPageLabelsEvent();
     setPanelEvents();

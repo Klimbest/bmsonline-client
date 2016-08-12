@@ -34,14 +34,14 @@ function ajaxChangePage(page_id) {
     });
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
     clearInterval(interval);
-    
+
     function minBrowserSizeGuard() {
         if ($(window).width() < parseInt($(".page").css("width")) + 45) {
             //$(".page").css({width: "100%"});
         }
         if (fire && $(window).width() >= parseInt($(".page").css("width")) + 45) {
-           /* $("div.content-container").children("div:not('.footer-well')").show();
-            $("div.error-label").remove();*/
+            /* $("div.content-container").children("div:not('.footer-well')").show();
+             $("div.error-label").remove();*/
         }
     }
 }
@@ -67,38 +67,40 @@ function ajaxRefreshPage(terms) {
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 
     function setVariables(registers) {
-        if(registers){
+        if (registers) {
             $.each(registers, function () {
                 var key = this.name;
-                var value = this.fixedValue;
+                var panel_id = this.panel_id;
+                var value = this.fixed_value;
                 if (value !== null) {
-                    var displayPrecision = parseInt($("div.bms-panel-variable").children("span#" + key).attr("value"));
+                    var displayPrecision = parseInt($("div#" + panel_id + ".bms-panel-variable").children("input#" + key).val());
                     var roundValue = parseFloat(value).toFixed(displayPrecision);
                 }
-                $("div.bms-panel").children("span#" + key).empty().append(roundValue);
+                $("div#" + panel_id + ".bms-panel").children("span#" + key).empty().append(roundValue);
+                var bmsWidgetPanel = $("div#" + panel_id + ".bms-panel-widget");
+                var rangeMin, rangeMax, widgetValue;
+                if (bmsWidgetPanel.find("div#value" + key).length > 0) {
+                    rangeMin = parseFloat(bmsWidgetPanel.find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
+                    rangeMax = parseFloat(bmsWidgetPanel.find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
 
-                if ($("div.bms-panel-widget").find("div#value" + key).length > 0) {
-                    var rangeMin = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
-                    var rangeMax = parseFloat($("div.bms-panel-widget").find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
-
-                    var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
+                    widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
                     if (widgetValue < 0) {
                         widgetValue = 0;
-                        $("div.bms-panel-widget").find("div#value" + key).hide();
+                        bmsWidgetPanel.find("div#value" + key).hide();
                     }
-                    $("div.bms-panel-widget").find("div#value" + key).show().animate({
+                    bmsWidgetPanel.find("div#value" + key).show().animate({
                         left: widgetValue + "%"
                     }, 2000);
                 }
-                if ($("div.bms-panel-widget").find("div#set" + key).length > 0) {
-                    var rangeMin = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMin").text().trim());
-                    var rangeMax = parseFloat($("div.bms-panel-widget").find("div#set" + key).parent().parent().find("div#rangeMax").text().trim());
-                    var widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
+                if (bmsWidgetPanel.find("div#set" + key).length > 0) {
+                    rangeMin = parseFloat(bmsWidgetPanel.find("div#set" + key).parent().parent().find("div#rangeMin").text().trim());
+                    rangeMax = parseFloat(bmsWidgetPanel.find("div#set" + key).parent().parent().find("div#rangeMax").text().trim());
+                    widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
                     if (widgetValue < 0) {
                         widgetValue = 0;
-                        $("div.bms-panel-widget").find("div#set" + key).hide();
+                        bmsWidgetPanel.find("div#set" + key).hide();
                     }
-                    $("div.bms-panel-widget").find("div#set" + key).show().animate({
+                    bmsWidgetPanel.find("div#set" + key).show().animate({
                         left: widgetValue + "%"
                     }, 2000);
                 }

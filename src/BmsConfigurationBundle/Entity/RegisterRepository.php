@@ -12,22 +12,44 @@ use Doctrine\ORM\EntityRepository;
  */
 class RegisterRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function getArchivatedRegisters() {
+    public function getArchivedRegisters()
+    {
         return $this->getEntityManager()
-                        ->createQuery('SELECT r.id, r.name, r.description FROM BmsConfigurationBundle:Register AS r WHERE r.archiveRegister = 1')
-                        ->getResult();
+            ->createQuery('SELECT r.id, r.name, r.description FROM BmsConfigurationBundle:Register AS r WHERE r.archiveRegister = 1')
+            ->getResult();
     }
-    
-    public function getAllOrderByName(){
+
+    /**
+     * @return array
+     */
+    public function getAllOrderByName()
+    {
         return $this->getEntityManager()
-                        ->createQuery('SELECT r FROM BmsConfigurationBundle:Register AS r ORDER BY r.name')
-                        ->getResult();
+            ->createQuery('SELECT r FROM BmsConfigurationBundle:Register AS r ORDER BY r.name')
+            ->getResult();
     }
-    
-    public function getAllOrderByAdr($device_id){
+
+    /**
+     * @param $device_id
+     * @return array
+     */
+    public function getAllOrderByAdr($device_id)
+    {
         return $this->getEntityManager()
-                        ->createQuery('SELECT r FROM BmsConfigurationBundle:Register AS r WHERE r.device =' . $device_id . ' ORDER BY r.registerAddress' )
-                        ->getResult();
+            ->createQuery('SELECT r FROM BmsConfigurationBundle:Register AS r WHERE r.device =' . $device_id . ' ORDER BY r.registerAddress')
+            ->getResult();
     }
-    
+
+    /**
+     * @param $register_name
+     * @return \Doctrine\ORM\Query
+     */
+    public function getFixedValueByRegisterName($register_name)
+    {
+        return $this->getEntityManager()
+            ->createQuery("SELECT rcd.fixedValue FROM BmsConfigurationBundle:Register r 
+                                JOIN r.registerCurrentData rcd
+                                WHERE r.name LIKE '" . $register_name . "'")
+            ->getOneOrNullResult();
+    }
 }
