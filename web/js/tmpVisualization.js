@@ -1302,10 +1302,19 @@ function setRandomVariables(registers) {
     $.each(registers, function () {
         var key = this.name;
         var panel_id = this.panel_id;
-        var randValue = this.fixedValue;//(Math.floor(Math.random() * 10000) + 1) / 100;
+        var randValue;
+        var color;
+        if (this.fixedValue !== null) {
+            randValue = this.fixedValue;
+            color = "initial";
+        } else {
+            randValue = (Math.floor(Math.random() * 10000) + 1) / 100;
+            color = "#990000";
+        }
+
         var displayPrecision = $("div#" + panel_id + ".bms-panel-variable").children("input#" + key).val();
         var roundValue = parseFloat(randValue).toFixed(displayPrecision);
-        $("div#" + panel_id + ".bms-panel").children("span#" + key).empty().append(roundValue);
+        $("div#" + panel_id + ".bms-panel").children("span#" + key).empty().append(roundValue).css({"color" : color});
     });
 }
 //utworzenie nowej strony

@@ -15,7 +15,6 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
-composer.lock
 nbproject/
 src/BmsConfigurationBundle/Resources/public/
 src/BmsDataAnalyzeBundle/Resources/public/
