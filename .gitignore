@@ -21,6 +21,5 @@ src/BmsVisualizationBundle/Resources/public/images/
 src/WriteBundle/Resources/views/
 web/images/user/
 .idea/
-src/BmsBundle/Resources/views/Pages/
-!src/BmsBundle/Resources/views/Pages/.gitkeep
+src/BmsBundle/Resources/views/Pages/*
 composer.phar
