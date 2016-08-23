@@ -449,9 +449,9 @@ class ConfigurationController extends Controller
     public function synchronizeDatabaseAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-            $host = $request->getHost();
-            $h = explode(".", $host);
-            $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync' " . $h[0]);
+            $vpn = $this->getParameter('vpn');
+
+            $process = new Process("ssh pi@" . $vpn . " ./bin/dbSync.sh");
             $process->run();
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
             $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
