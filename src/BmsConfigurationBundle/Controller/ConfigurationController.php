@@ -451,7 +451,7 @@ class ConfigurationController extends Controller
         if ($request->isXmlHttpRequest()) {
             $vpn = $this->getParameter('vpn');
 
-            $process = new Process("ssh pi@" . $vpn . " ./bin/dbSync.sh");
+            $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/dbSync' " . $vpn);
             $process->run();
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
             $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
