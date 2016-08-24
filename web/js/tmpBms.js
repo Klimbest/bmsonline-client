@@ -71,39 +71,39 @@ function ajaxRefreshPage(terms) {
             $.each(registers, function () {
                 var key = this.name;
                 var panel_id = this.panel_id;
-                var value = this.fixed_value;
+                var value = this.fixedValue;
                 if (value !== null) {
                     var displayPrecision = parseInt($("div#" + panel_id + ".bms-panel-variable").children("input#" + key).val());
                     var roundValue = parseFloat(value).toFixed(displayPrecision);
                 }
                 $("div#" + panel_id + ".bms-panel").children("span#" + key).empty().append(roundValue);
-                var bmsWidgetPanel = $("div#" + panel_id + ".bms-panel-widget");
-                var rangeMin, rangeMax, widgetValue;
-                if (bmsWidgetPanel.find("div#value" + key).length > 0) {
-                    rangeMin = parseFloat(bmsWidgetPanel.find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
-                    rangeMax = parseFloat(bmsWidgetPanel.find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
-
-                    widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
-                    if (widgetValue < 0) {
-                        widgetValue = 0;
-                        bmsWidgetPanel.find("div#value" + key).hide();
-                    }
-                    bmsWidgetPanel.find("div#value" + key).show().animate({
-                        left: widgetValue + "%"
-                    }, 2000);
-                }
-                if (bmsWidgetPanel.find("div#set" + key).length > 0) {
-                    rangeMin = parseFloat(bmsWidgetPanel.find("div#set" + key).parent().parent().find("div#rangeMin").text().trim());
-                    rangeMax = parseFloat(bmsWidgetPanel.find("div#set" + key).parent().parent().find("div#rangeMax").text().trim());
-                    widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
-                    if (widgetValue < 0) {
-                        widgetValue = 0;
-                        bmsWidgetPanel.find("div#set" + key).hide();
-                    }
-                    bmsWidgetPanel.find("div#set" + key).show().animate({
-                        left: widgetValue + "%"
-                    }, 2000);
-                }
+                //var bmsWidgetPanel = $("div#" + panel_id + ".bms-panel-widget");
+                // var rangeMin, rangeMax, widgetValue;
+                // if (bmsWidgetPanel.find("div#value" + key).length > 0) {
+                //     rangeMin = parseFloat(bmsWidgetPanel.find("div#value" + key).parent().parent().find("div#rangeMin").text().trim());
+                //     rangeMax = parseFloat(bmsWidgetPanel.find("div#value" + key).parent().parent().find("div#rangeMax").text().trim());
+                //
+                //     widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
+                //     if (widgetValue < 0) {
+                //         widgetValue = 0;
+                //         bmsWidgetPanel.find("div#value" + key).hide();
+                //     }
+                //     bmsWidgetPanel.find("div#value" + key).show().animate({
+                //         left: widgetValue + "%"
+                //     }, 2000);
+                // }
+                // if (bmsWidgetPanel.find("div#set" + key).length > 0) {
+                //     rangeMin = parseFloat(bmsWidgetPanel.find("div#set" + key).parent().parent().find("div#rangeMin").text().trim());
+                //     rangeMax = parseFloat(bmsWidgetPanel.find("div#set" + key).parent().parent().find("div#rangeMax").text().trim());
+                //     widgetValue = (value - rangeMin) / (rangeMax - rangeMin) * 100;
+                //     if (widgetValue < 0) {
+                //         widgetValue = 0;
+                //         bmsWidgetPanel.find("div#set" + key).hide();
+                //     }
+                //     bmsWidgetPanel.find("div#set" + key).show().animate({
+                //         left: widgetValue + "%"
+                //     }, 2000);
+                // }
             });
         }
     }
