@@ -357,52 +357,6 @@ class ConfigurationController extends Controller
         return $this->redirectToRoute('bms_configuration_index');
     }
 
-    /**
-     * @Route("/{comm_id}/{device_id}/registers-delete", name="bms_configuration_del_many_registers", requirements={"comm_id" = "\d+", "device_id" = "\d+"}, options={"expose"=true})
-     * @param $comm_id
-     * @param $device_id
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     */
-    public function delManyRegistersAction($comm_id, $device_id, Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
-        $checkedRegisters = $request->request->get('checkedRegId');
-        if ($checkedRegisters > 0) {
-            foreach ($checkedRegisters as $registersToDeleteId) {
-                $registersToDeleteId = intval($registersToDeleteId);
-
-                $register = $registerRepo->find($registersToDeleteId);
-
-                $em->remove($register);
-            }
-            $em->flush();
-        }
-
-        $em->getConnection()->exec("ALTER TABLE register AUTO_INCREMENT = 1;");
-        $em->getConnection()->exec("ALTER TABLE register_current_data AUTO_INCREMENT = 1;");
-        $em->getConnection()->exec("ALTER TABLE bit_register AUTO_INCREMENT = 1;");
-
-        $session = $request->getSession();
-        $session->set('comm_id', $comm_id);
-        $session->set('device_id', $device_id);
-        $this->setDataToSync();
-
-        return $this->redirectToRoute('bms_configuration_index');
-    }
-
-    /**
-     * @Route("/{comm_id}/registers-delete", name="bms_configuration_del_many_devices", requirements={"comm_id" = "\d+"}, options={"expose"=true})
-     * @return Response
-     * @internal param $comm_id
-     * @internal param Request $request
-     */
-    public function delManyDevicesAction()
-    {
-        $this->setDataToSync();
-        return new Response();
-    }
 
     /**
      * @Route("/{comm_id}/{device_id}/{register_id}/refresh", name="bms_configuration_refresh_page", requirements={"comm_id" = "\d+", "device_id" = "\d+", "register_id" = "\d+"}, options={"expose"=true})

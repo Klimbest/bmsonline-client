@@ -76,27 +76,18 @@
     <div class="well text-left">
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-4">
                 <span class="label label-default label-title">{{ device.description }}</span>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4 col-md-offset-4 text-center">
+            <div class="col-md-4 text-center">
                     <span id="{{ device.id }}" class="label label-primary label-last-read">Ostatnia aktualizacja danych:
                             <span>-</span>
                     </span>
             </div>
             <div class="col-md-4 text-right">
                 <span class="label label-primary">Liczba rejestrów: {{ device.registers|length }}</span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 text-right">
-                <input type="button" class="btn btn-default btn-xs checkAll" value="Zaznacz wszystkie"/>
-                <button type="button" class="btn btn-default btn-xs refresh"><i
-                            class="fa fa-refresh fa-fw fa-blue"></i></button>
-                <button type="submit" class="btn btn-default btn-xs"><i
-                            class="fa fa-remove fa-fw fa-red remove-many"></i></button>
             </div>
         </div>
         {% if device.registers|length > 0 %}
