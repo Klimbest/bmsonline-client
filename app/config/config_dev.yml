@@ -33,3 +33,15 @@ monolog:
 
 #swiftmailer:
 #    delivery_address: me@example.com
+security:
+    access_control:
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY  }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/manage, role: ROLE_ADMIN }
+        - { path: ^/write, role: ROLE_ADMIN }
+        - { path: ^/data_analyze, role: ROLE_DATA_ANALYZE }
+        - { path: ^/configuration, role: ROLE_CONFIGURATION }
+        - { path: ^/visualization, role: ROLE_VISUALIZATION }
+        - { path: ^/alarm_history, role: ROLE_ALARM_HISTORY }
+        - { path: ^/, role: ROLE_BMS }
