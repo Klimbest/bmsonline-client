@@ -36,7 +36,7 @@ class ConfigurationController extends Controller
         $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
         $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync'])->getStatus();
 
-        $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType');
+        $communicationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:CommunicationType', 'local');
         $communicationTypes = $communicationRepo->getActive();
         $comm_id = $session->get('comm_id');
         $device_id = $session->get('device_id');
@@ -403,9 +403,9 @@ class ConfigurationController extends Controller
     public function synchronizeDatabaseAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-            $vpn = $this->getParameter('vpn');
+            //$vpn = $this->getParameter('vpn');
 
-            $process = new Process("bash ../../_bin/orderToRPi.sh " . $vpn);
+            $process = new Process("ls /dev");
             $process->run();
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
             $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
