@@ -1730,7 +1730,7 @@ function createPage(page, panelList) {
         });
         //usuwanie strony
         function deletePageEvent(label, page_id) {
-            label.children("i.fa-trash-o").click(function () {
+            label.children("i.fa-remove").click(function () {
                 var data = {
                     page_id: page_id
                 };
