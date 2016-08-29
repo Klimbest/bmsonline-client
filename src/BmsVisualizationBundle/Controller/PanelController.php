@@ -50,7 +50,7 @@ class PanelController extends Controller
                         "name" => $panel->getContentSource()];
                     $ret["registers"] = array_merge($ret["registers"], $registerRepo->getFixedValueByRegisterName($panel->getContentSource()));
                 } else {
-                    $ret["registers"] = null;
+                    $ret["registers"] = [];
                 }
                 $ret["panel"] = $template->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
                 $panels = $panelRepo->findPanelsForPage($page->getId());
@@ -94,8 +94,9 @@ class PanelController extends Controller
                         "name" => $panel->getContentSource()];
                     $ret["registers"] = array_merge($ret["registers"], $registerRepo->getFixedValueByRegisterName($panel->getContentSource()));
                 } else {
-                    $ret["registers"] = null;
+                    $ret["registers"] = [];
                 }
+                $ret["edit"] = 1;
                 $ret["panel"] = $this->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
                 return new JsonResponse($ret);
             } else {

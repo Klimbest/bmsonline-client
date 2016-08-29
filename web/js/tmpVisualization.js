@@ -141,14 +141,12 @@ function editPanel(data) {
         url: Routing.generate('bms_visualization_edit_panel'),
         data: data,
         success: function (ret) {
-            var mainRow = $('div.main-row');
+            var mainRow = $("div.main-row");
             mainRow.find("div#page").hide();
-            mainRow.find("div#panel-form").remove();
-            mainRow.append(ret["template"]).children("i.fa-spinner").remove();
-            setRandomVariables(ret["registers"]);
+            mainRow.append(ret["template"]);
             setPanelForm();
             setEdit(ret["panel_type"], ret["panel_id"]);
-
+            mainRow.children("i.fa-spinner").remove();
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -224,8 +222,11 @@ function savePanel() {
             mainRow.find("i.fa-spinner").remove();
             mainRow.find("div#panel-form").remove();
             mainRow.find("div#page").show().children("div.well").show().append(ret['panel']);
-            setRandomVariables(ret["registers"]);
-            loadPanelList(ret["panelList"]);
+
+            if (ret["edit"] != 1) {
+                setVariables(ret["registers"]);
+                loadPanelList(ret["panelList"]);
+            }
             setPanelEvents();
         }
     });
@@ -1292,13 +1293,13 @@ function ajaxChangePage(data) {
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
             createPage(ret['page'], ret['panelList']);
-            setRandomVariables(ret['registers']);
+            setVariables(ret['registers']);
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
 
-function setRandomVariables(registers) {
+function setVariables(registers) {
     $.each(registers, function () {
         var key = this.name;
         var panel_id = this.panel_id;
@@ -1314,7 +1315,7 @@ function setRandomVariables(registers) {
 
         var displayPrecision = $("div#" + panel_id + ".bms-panel-variable").children("input#" + key).val();
         var roundValue = parseFloat(randValue).toFixed(displayPrecision);
-        $("div#" + panel_id + ".bms-panel").children("span#" + key).empty().append(roundValue).css({"color" : color});
+        $("div#" + panel_id + ".bms-panel").children("span#" + key).empty().append(roundValue).css({"color": color});
     });
 }
 //utworzenie nowej strony
@@ -1506,6 +1507,7 @@ function loadPanelList(panelList) {
         var panel = $("div#" + id + ".bms-panel");
         var data = {panel_id: id};
         editPanel(data);
+        console.log("asdasd");
         panel.remove();
     });
     // usuwanie
