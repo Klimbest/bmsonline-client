@@ -97,6 +97,7 @@ class PanelController extends Controller
                     $ret["registers"] = [];
                 }
                 $ret["edit"] = 1;
+                $ret["panel_id"] = $panel->getId();
                 $ret["panel"] = $this->get('templating')->render('BmsVisualizationBundle::panel.html.twig', ['panel' => $panel]);
                 return new JsonResponse($ret);
             } else {

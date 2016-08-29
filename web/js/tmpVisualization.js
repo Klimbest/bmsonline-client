@@ -143,9 +143,10 @@ function editPanel(data) {
         success: function (ret) {
             var mainRow = $("div.main-row");
             mainRow.find("div#page").hide();
+            mainRow.find("div#panel-form").remove();
             mainRow.append(ret["template"]);
-            setPanelForm();
             setEdit(ret["panel_type"], ret["panel_id"]);
+            setPanelForm();
             mainRow.children("i.fa-spinner").remove();
         }
     });
@@ -219,8 +220,9 @@ function savePanel() {
         data: form.serialize(),
         success: function (ret) {
             var mainRow = $('div.main-row');
-            mainRow.find("i.fa-spinner").remove();
+            var panel = $("div#" + ret["panel_id"] + ".bms-panel");
             mainRow.find("div#panel-form").remove();
+            panel.remove();
             mainRow.find("div#page").show().children("div.well").show().append(ret['panel']);
 
             if (ret["edit"] != 1) {
@@ -228,6 +230,7 @@ function savePanel() {
                 loadPanelList(ret["panelList"]);
             }
             setPanelEvents();
+            mainRow.find("i.fa-spinner").remove();
         }
     });
     $('div.main-row').append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
@@ -1139,7 +1142,6 @@ function setPanelEvents() {
             var panel = $("div#" + id + ".bms-panel");
             var data = {panel_id: id};
             editPanel(data);
-            panel.remove();
         });
         //usuwanie
         $(label + " i.fa-trash-o").click(function () {
