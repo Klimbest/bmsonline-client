@@ -17,13 +17,13 @@ class LoginFormType extends AbstractType {
                 ->add('_username', EmailType::class, array(
                     'label' => 'form.email',
                     'translation_domain' => 'FOSUserBundle',
-                    'attr' => array('placeholder' => 'Adres e-mail'
+                    'attr' => array('placeholder' => 'form.email'
             )))
                 ->add('_password', PasswordType::class, array(
                     'label' => 'form.password',
                     'translation_domain' => 'FOSUserBundle',
                     'mapped' => false,
-                    'attr' => array('placeholder' => 'Hasło'
+                    'attr' => array('placeholder' => 'form.password'
             )));
     }
 
