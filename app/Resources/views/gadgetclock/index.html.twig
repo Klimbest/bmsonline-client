@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>GadgetClock list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for gadgetClock in gadgetClocks %}
+            <tr>
+                <td><a href="{{ path('gadgetclock_show', { 'id': gadgetClock.id }) }}">{{ gadgetClock.id }}</a></td>
+                <td>{{ gadgetClock.name }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('gadgetclock_show', { 'id': gadgetClock.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('gadgetclock_edit', { 'id': gadgetClock.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('gadgetclock_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}
