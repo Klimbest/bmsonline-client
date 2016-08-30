@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>InputRange list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for inputRange in inputRanges %}
+            <tr>
+                <td><a href="{{ path('inputrange_show', { 'id': inputRange.id }) }}">{{ inputRange.id }}</a></td>
+                <td>{{ inputRange.name }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('inputrange_show', { 'id': inputRange.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('inputrange_edit', { 'id': inputRange.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('inputrange_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}
