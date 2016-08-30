@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>PanelVariable list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Source</th>
+                <th>Tooltip</th>
+                <th>Topposition</th>
+                <th>Leftposition</th>
+                <th>Width</th>
+                <th>Height</th>
+                <th>Zindex</th>
+                <th>Displayprecision</th>
+                <th>Backgroundcolor</th>
+                <th>Borderwidth</th>
+                <th>Borderstyle</th>
+                <th>Bordercolor</th>
+                <th>Borderradiuslefttop</th>
+                <th>Borderradiusleftbottom</th>
+                <th>Borderradiusrighttop</th>
+                <th>Borderradiusrightbottom</th>
+                <th>Textalign</th>
+                <th>Fontweight</th>
+                <th>Textdecoration</th>
+                <th>Fontstyle</th>
+                <th>Fontfamily</th>
+                <th>Fontcolor</th>
+                <th>Fontsize</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for panelVariable in panelVariables %}
+            <tr>
+                <td><a href="{{ path('panelvariable_show', { 'id': panelVariable.id }) }}">{{ panelVariable.id }}</a></td>
+                <td>{{ panelVariable.name }}</td>
+                <td>{{ panelVariable.source }}</td>
+                <td>{% if panelVariable.tooltip %}Yes{% else %}No{% endif %}</td>
+                <td>{{ panelVariable.topPosition }}</td>
+                <td>{{ panelVariable.leftPosition }}</td>
+                <td>{{ panelVariable.width }}</td>
+                <td>{{ panelVariable.height }}</td>
+                <td>{{ panelVariable.zIndex }}</td>
+                <td>{{ panelVariable.displayPrecision }}</td>
+                <td>{{ panelVariable.backgroundColor }}</td>
+                <td>{{ panelVariable.borderWidth }}</td>
+                <td>{{ panelVariable.borderStyle }}</td>
+                <td>{{ panelVariable.borderColor }}</td>
+                <td>{{ panelVariable.borderRadiusLeftTop }}</td>
+                <td>{{ panelVariable.borderRadiusLeftBottom }}</td>
+                <td>{{ panelVariable.borderRadiusRightTop }}</td>
+                <td>{{ panelVariable.borderRadiusRightBottom }}</td>
+                <td>{{ panelVariable.textAlign }}</td>
+                <td>{{ panelVariable.fontWeight }}</td>
+                <td>{{ panelVariable.textDecoration }}</td>
+                <td>{{ panelVariable.fontStyle }}</td>
+                <td>{{ panelVariable.fontFamily }}</td>
+                <td>{{ panelVariable.fontColor }}</td>
+                <td>{{ panelVariable.fontSize }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('panelvariable_show', { 'id': panelVariable.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('panelvariable_edit', { 'id': panelVariable.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('panelvariable_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

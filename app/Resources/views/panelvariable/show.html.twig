@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>PanelVariable</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ panelVariable.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ panelVariable.name }}</td>
+            </tr>
+            <tr>
+                <th>Source</th>
+                <td>{{ panelVariable.source }}</td>
+            </tr>
+            <tr>
+                <th>Tooltip</th>
+                <td>{% if panelVariable.tooltip %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Topposition</th>
+                <td>{{ panelVariable.topPosition }}</td>
+            </tr>
+            <tr>
+                <th>Leftposition</th>
+                <td>{{ panelVariable.leftPosition }}</td>
+            </tr>
+            <tr>
+                <th>Width</th>
+                <td>{{ panelVariable.width }}</td>
+            </tr>
+            <tr>
+                <th>Height</th>
+                <td>{{ panelVariable.height }}</td>
+            </tr>
+            <tr>
+                <th>Zindex</th>
+                <td>{{ panelVariable.zIndex }}</td>
+            </tr>
+            <tr>
+                <th>Displayprecision</th>
+                <td>{{ panelVariable.displayPrecision }}</td>
+            </tr>
+            <tr>
+                <th>Backgroundcolor</th>
+                <td>{{ panelVariable.backgroundColor }}</td>
+            </tr>
+            <tr>
+                <th>Borderwidth</th>
+                <td>{{ panelVariable.borderWidth }}</td>
+            </tr>
+            <tr>
+                <th>Borderstyle</th>
+                <td>{{ panelVariable.borderStyle }}</td>
+            </tr>
+            <tr>
+                <th>Bordercolor</th>
+                <td>{{ panelVariable.borderColor }}</td>
+            </tr>
+            <tr>
+                <th>Borderradiuslefttop</th>
+                <td>{{ panelVariable.borderRadiusLeftTop }}</td>
+            </tr>
+            <tr>
+                <th>Borderradiusleftbottom</th>
+                <td>{{ panelVariable.borderRadiusLeftBottom }}</td>
+            </tr>
+            <tr>
+                <th>Borderradiusrighttop</th>
+                <td>{{ panelVariable.borderRadiusRightTop }}</td>
+            </tr>
+            <tr>
+                <th>Borderradiusrightbottom</th>
+                <td>{{ panelVariable.borderRadiusRightBottom }}</td>
+            </tr>
+            <tr>
+                <th>Textalign</th>
+                <td>{{ panelVariable.textAlign }}</td>
+            </tr>
+            <tr>
+                <th>Fontweight</th>
+                <td>{{ panelVariable.fontWeight }}</td>
+            </tr>
+            <tr>
+                <th>Textdecoration</th>
+                <td>{{ panelVariable.textDecoration }}</td>
+            </tr>
+            <tr>
+                <th>Fontstyle</th>
+                <td>{{ panelVariable.fontStyle }}</td>
+            </tr>
+            <tr>
+                <th>Fontfamily</th>
+                <td>{{ panelVariable.fontFamily }}</td>
+            </tr>
+            <tr>
+                <th>Fontcolor</th>
+                <td>{{ panelVariable.fontColor }}</td>
+            </tr>
+            <tr>
+                <th>Fontsize</th>
+                <td>{{ panelVariable.fontSize }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('panelvariable_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('panelvariable_edit', { 'id': panelVariable.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
