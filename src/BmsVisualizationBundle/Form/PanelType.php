@@ -36,8 +36,7 @@ class PanelType extends AbstractType
                 'choices' => [
                     'Zmienna' => 'variable',
                     'Tekst' => 'text',
-                    'Obraz' => 'image',
-                    'Progress bar' => 'widget',
+                    'Obraz' => 'image'
                 ],
                 'label' => false,
                 'required' => true

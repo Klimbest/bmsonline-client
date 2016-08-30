@@ -41,7 +41,7 @@
     </div>
     {# Format section #}
     <div class="well well-lg dialog-panel-format">
-        {% include 'BmsVisualizationBundle:dialog:panelDialogFormat.html.twig' %}
+        {% include 'BmsVisualizationBundle:dialog:panelManagerFormat.html.twig' %}
     </div>
     {# Navigation section #}
     <div class="well well-lg dialog-panel-navigation">
@@ -60,12 +60,9 @@
     </div>
     {# Event section #}
     <div class="well well-lg dialog-panel-event">
-        {% include 'BmsVisualizationBundle:dialog:panelDialogEvent.html.twig' %}
+        {% include 'BmsVisualizationBundle:dialog:panelManagerEvent.html.twig' %}
     </div>
-    {# Progress bar section #}
-    <div class="well well-lg dialog-panel-progress-bar">
-        {% include 'BmsVisualizationBundle:dialog:progresBarManager.html.twig' %}
-    </div>
+
     <input id="page_id" type="hidden" name="panel[page_id]"/>
     <input id="panel_id" type="hidden" name="panel_id"/>
     {{ form_row(form.contentSource) }}

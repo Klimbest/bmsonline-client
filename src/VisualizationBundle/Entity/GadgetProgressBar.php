@@ -1,16 +1,18 @@
 <?php
 
-namespace BmsVisualizationBundle\Entity;
+namespace VisualizationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use BmsConfigurationBundle\Entity\Register;
 
 /**
- * WidgetBar
+ * GadgetProgressBar
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="BmsVisualizationBundle\Entity\WidgetBarRepository")
+ * @ORM\Entity(repositoryClass="VisualizationBundle\Entity\Repository\GadgetProgressBarRepository")
  */
-class WidgetBar {
+class GadgetProgressBar
+{
 
     /**
      * @var integer
@@ -20,6 +22,13 @@ class WidgetBar {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
+     */
+    private $name;
 
     /**
      * @var integer
@@ -72,7 +81,7 @@ class WidgetBar {
 
     /**
      * @var Register
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="\BmsConfigurationBundle\Entity\Register")
      * @ORM\JoinColumn(name="set_register_id", referencedColumnName="id", nullable=true)
      * })
@@ -81,7 +90,7 @@ class WidgetBar {
 
     /**
      * @var Register
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="\BmsConfigurationBundle\Entity\Register")
      * @ORM\JoinColumn(name="value_register_id", referencedColumnName="id", nullable=false)
      * })
@@ -89,13 +98,14 @@ class WidgetBar {
     private $valueRegisterId;
 
     /**
-     * @var Panel
-     * 
-     * @ORM\ManyToOne(targetEntity="Panel")
-     * @ORM\JoinColumn(name="panel_id", referencedColumnName="id", nullable=false)
-     * 
+     * @var Page
+     *
+     * @ORM\ManyToOne(targetEntity="Page", inversedBy="gadgets_progress_bar")
+     * @ORM\JoinColumn(name="page_id", referencedColumnName="id", nullable=false)
      */
-    private $panel;
+    private $page;
+
+
 
     /**
      * Get id
@@ -112,7 +122,7 @@ class WidgetBar {
      *
      * @param string $name
      *
-     * @return WidgetBar
+     * @return GadgetProgressBar
      */
     public function setName($name)
     {
@@ -134,9 +144,9 @@ class WidgetBar {
     /**
      * Set rangeMin
      *
-     * @param integer $rangeMin
+     * @param string $rangeMin
      *
-     * @return WidgetBar
+     * @return GadgetProgressBar
      */
     public function setRangeMin($rangeMin)
     {
@@ -148,7 +158,7 @@ class WidgetBar {
     /**
      * Get rangeMin
      *
-     * @return integer
+     * @return string
      */
     public function getRangeMin()
     {
@@ -158,9 +168,9 @@ class WidgetBar {
     /**
      * Set rangeMax
      *
-     * @param integer $rangeMax
+     * @param string $rangeMax
      *
-     * @return WidgetBar
+     * @return GadgetProgressBar
      */
     public function setRangeMax($rangeMax)
     {
@@ -172,7 +182,7 @@ class WidgetBar {
     /**
      * Get rangeMax
      *
-     * @return integer
+     * @return string
      */
     public function getRangeMax()
     {
@@ -182,9 +192,9 @@ class WidgetBar {
     /**
      * Set optimumMin
      *
-     * @param integer $optimumMin
+     * @param string $optimumMin
      *
-     * @return WidgetBar
+     * @return GadgetProgressBar
      */
     public function setOptimumMin($optimumMin)
     {
@@ -196,7 +206,7 @@ class WidgetBar {
     /**
      * Get optimumMin
      *
-     * @return integer
+     * @return string
      */
     public function getOptimumMin()
     {
@@ -206,9 +216,9 @@ class WidgetBar {
     /**
      * Set optimumMax
      *
-     * @param integer $optimumMax
+     * @param string $optimumMax
      *
-     * @return WidgetBar
+     * @return GadgetProgressBar
      */
     public function setOptimumMax($optimumMax)
     {
@@ -220,7 +230,7 @@ class WidgetBar {
     /**
      * Get optimumMax
      *
-     * @return integer
+     * @return string
      */
     public function getOptimumMax()
     {
@@ -230,9 +240,9 @@ class WidgetBar {
     /**
      * Set color1
      *
-     * @param integer $color1
+     * @param string $color1
      *
-     * @return WidgetBar
+     * @return GadgetProgressBar
      */
     public function setColor1($color1)
     {
@@ -244,7 +254,7 @@ class WidgetBar {
     /**
      * Get color1
      *
-     * @return integer
+     * @return string
      */
     public function getColor1()
     {
@@ -256,7 +266,7 @@ class WidgetBar {
      *
      * @param string $color2
      *
-     * @return WidgetBar
+     * @return GadgetProgressBar
      */
     public function setColor2($color2)
     {
@@ -280,7 +290,7 @@ class WidgetBar {
      *
      * @param string $color3
      *
-     * @return WidgetBar
+     * @return GadgetProgressBar
      */
     public function setColor3($color3)
     {
@@ -304,9 +314,9 @@ class WidgetBar {
      *
      * @param \BmsConfigurationBundle\Entity\Register $setRegisterId
      *
-     * @return WidgetBar
+     * @return GadgetProgressBar
      */
-    public function setSetRegisterId(\BmsConfigurationBundle\Entity\Register $setRegisterId)
+    public function setSetRegisterId(\BmsConfigurationBundle\Entity\Register $setRegisterId = null)
     {
         $this->setRegisterId = $setRegisterId;
 
@@ -328,7 +338,7 @@ class WidgetBar {
      *
      * @param \BmsConfigurationBundle\Entity\Register $valueRegisterId
      *
-     * @return WidgetBar
+     * @return GadgetProgressBar
      */
     public function setValueRegisterId(\BmsConfigurationBundle\Entity\Register $valueRegisterId)
     {
@@ -348,26 +358,26 @@ class WidgetBar {
     }
 
     /**
-     * Set panel
+     * Set page
      *
-     * @param \BmsVisualizationBundle\Entity\Panel $panel
+     * @param \VisualizationBundle\Entity\Page $page
      *
-     * @return WidgetBar
+     * @return GadgetProgressBar
      */
-    public function setPanel(\BmsVisualizationBundle\Entity\Panel $panel)
+    public function setPage(\VisualizationBundle\Entity\Page $page)
     {
-        $this->panel = $panel;
+        $this->page = $page;
 
         return $this;
     }
 
     /**
-     * Get panel
+     * Get page
      *
-     * @return \BmsVisualizationBundle\Entity\Panel
+     * @return \VisualizationBundle\Entity\Page
      */
-    public function getPanel()
+    public function getPage()
     {
-        return $this->panel;
+        return $this->page;
     }
 }

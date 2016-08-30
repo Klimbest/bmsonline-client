@@ -1,6 +1,6 @@
 <?php
 
-namespace BmsVisualizationBundle\Entity;
+namespace VisualizationBundle\Entity\Repository;
 
 /**
  * PageRepository

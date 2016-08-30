@@ -42,7 +42,7 @@ class PageController extends Controller
             $page_id = $page->getId();
 
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $panelRepo = $this->getDoctrine()->getRepository('PanelText.php');
             $pages = $pageRepo->findAll();
 
             $ret['page'] = $this->get('templating')->render('BmsVisualizationBundle::page.html.twig', ['pages' => $pages, 'page_id' => $page_id]);
@@ -125,7 +125,7 @@ class PageController extends Controller
         if ($request->isXmlHttpRequest()) {
             $page_id = $request->get("page_id");
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $panelRepo = $this->getDoctrine()->getRepository('PanelText.php');
             $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
             $pages = $pageRepo->findAll();

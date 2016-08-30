@@ -153,7 +153,7 @@ class AjaxController extends Controller
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $panelRepo = $this->getDoctrine()->getRepository('PanelText.php');
 //            $effectRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Effect');
 //            $myConditionRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:MyCondition');
 
@@ -187,7 +187,7 @@ class AjaxController extends Controller
             $em = $this->getDoctrine()->getManager();
             $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
             $bitRegisterRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:BitRegister');
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $panelRepo = $this->getDoctrine()->getRepository('PanelText.php');
             $conditionRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:MyCondition');
             $effectRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Effect');
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
@@ -349,7 +349,7 @@ class AjaxController extends Controller
     public function loadPanelListAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $panelRepo = $this->getDoctrine()->getRepository('PanelText.php');
             $panels = $panelRepo->findPanelsForPage($request->get("page_id"));
 
             $ret['template'] = $this->get('templating')->render('BmsVisualizationBundle::panelList.html.twig', ['panels' => $panels]);

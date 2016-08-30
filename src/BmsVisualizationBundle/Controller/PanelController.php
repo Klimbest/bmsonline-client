@@ -24,12 +24,11 @@ class PanelController extends Controller
     {
         if ($request->isXmlHttpRequest()) {
             $options = array();
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $panelRepo = $this->getDoctrine()->getRepository('PanelText.php');
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $template = $this->get('templating');
             $panel = new Panel();
             $panel->setName($panelRepo->getNewPanelName());
-
             $form = $this->createForm(PanelType::class, $panel, array(
                 'action' => $this->generateUrl('bms_visualization_add_panel'),
                 'method' => 'POST'
@@ -73,7 +72,7 @@ class PanelController extends Controller
     {
         if ($request->isXmlHttpRequest()) {
             $options = array();
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $panelRepo = $this->getDoctrine()->getRepository('PanelText.php');
             $pageRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Page');
             $panel_id = (int)$request->request->get('panel_id');
             $panel = $panelRepo->find($panel_id);
@@ -120,7 +119,7 @@ class PanelController extends Controller
     {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $panelRepo = $this->getDoctrine()->getRepository('PanelText.php');
             $panel = $panelRepo->find($request->get("panel_id"));
 
             $height = $request->get("height");
@@ -159,7 +158,7 @@ class PanelController extends Controller
             $panel_id = $request->get("panel_id");
 
             $em = $this->getDoctrine()->getManager();
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $panelRepo = $this->getDoctrine()->getRepository('PanelText.php');
             $panel = $panelRepo->find($panel_id);
 
             if ($panel->getType() === "variable") {
@@ -219,7 +218,7 @@ class PanelController extends Controller
             $panel_id = $request->get("panel_id");
 
             $em = $this->getDoctrine()->getManager();
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $panelRepo = $this->getDoctrine()->getRepository('PanelText.php');
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
 
             $panel = $panelRepo->find($panel_id);

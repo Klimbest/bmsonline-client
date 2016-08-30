@@ -44,7 +44,7 @@ class BmsController extends Controller
     public function ajaxRefreshPageAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-            $panelRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Panel');
+            $panelRepo = $this->getDoctrine()->getRepository('PanelText.php');
             $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
             $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
             $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');

@@ -25,7 +25,10 @@
              ">
             {% for panel in page.panels %}
                 {% include 'BmsVisualizationBundle::panel.html.twig' %}
-            {% endfor %}            
+            {% endfor %}
+            {% for progresBar in progresBars %}
+                {% include 'BmsVisualizationBundle::progressBar.html.twig' %}
+            {% endfor %}
         </div>
     {% endif %}
 {% endfor %}

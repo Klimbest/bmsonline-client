@@ -1,17 +1,18 @@
 <?php
 
-namespace BmsVisualizationBundle\Entity;
+namespace VisualizationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+
 /**
- * Panel
+ * PanelVariable
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="BmsVisualizationBundle\Entity\PanelRepository")
+ * @ORM\Entity(repositoryClass="VisualizationBundle\Entity\Repository\PanelVariableRepository")
  */
-class Panel
+class PanelVariable
 {
 
     /**
@@ -33,16 +34,9 @@ class Panel
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=10, nullable=false)
+     * @ORM\Column(name="source", type="text", nullable=true)
      */
-    private $type;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="visibility", type="boolean", nullable=false, options={"default" : true})
-     */
-    private $visibility;
+    private $source;
 
     /**
      * @var boolean
@@ -199,33 +193,10 @@ class Panel
     private $fontSize;
 
     /**
-     * @var float
-     *
-     * @ORM\Column(name="opacity", type="float", nullable=true, options={"default"=1})
-     */
-    private $opacity;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="content_source", type="text", nullable=true)
-     */
-    private $contentSource;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="href", type="text", nullable=true)
-     */
-    private $href;
-
-    /**
      * @var Page
      *
-     * @ORM\ManyToOne(targetEntity="Page", inversedBy="panels")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="page_id", referencedColumnName="id")
-     * })
+     * @ORM\ManyToOne(targetEntity="Page", inversedBy="panels_variable")
+     * @ORM\JoinColumn(name="page_id", referencedColumnName="id", nullable=false)
      */
     private $page;
 
@@ -235,9 +206,6 @@ class Panel
      */
     public function __construct()
     {
-        $this->terms = new ArrayCollection();
-        $this->type = "text";
-        $this->visibility = true;
         $this->tooltip = false;
         $this->topPosition = 0;
         $this->leftPosition = 0;
@@ -260,12 +228,7 @@ class Panel
         $this->fontFamily = 'Arial';
         $this->fontColor = '#000000';
         $this->fontSize = 14;
-        $this->opacity = 1;
-        $this->contentSource = "";
-        $this->href = null;
     }
-
-
 
 
     /**
@@ -283,7 +246,7 @@ class Panel
      *
      * @param string $name
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setName($name)
     {
@@ -303,51 +266,27 @@ class Panel
     }
 
     /**
-     * Set type
+     * Set source
      *
-     * @param string $type
+     * @param string $source
      *
-     * @return Panel
+     * @return PanelVariable
      */
-    public function setType($type)
+    public function setSource($source)
     {
-        $this->type = $type;
+        $this->source = $source;
 
         return $this;
     }
 
     /**
-     * Get type
+     * Get source
      *
      * @return string
      */
-    public function getType()
+    public function getSource()
     {
-        return $this->type;
-    }
-
-    /**
-     * Set visibility
-     *
-     * @param boolean $visibility
-     *
-     * @return Panel
-     */
-    public function setVisibility($visibility)
-    {
-        $this->visibility = $visibility;
-
-        return $this;
-    }
-
-    /**
-     * Get visibility
-     *
-     * @return boolean
-     */
-    public function getVisibility()
-    {
-        return $this->visibility;
+        return $this->source;
     }
 
     /**
@@ -355,7 +294,7 @@ class Panel
      *
      * @param boolean $tooltip
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setTooltip($tooltip)
     {
@@ -379,7 +318,7 @@ class Panel
      *
      * @param integer $topPosition
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setTopPosition($topPosition)
     {
@@ -403,7 +342,7 @@ class Panel
      *
      * @param integer $leftPosition
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setLeftPosition($leftPosition)
     {
@@ -427,7 +366,7 @@ class Panel
      *
      * @param integer $width
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setWidth($width)
     {
@@ -451,7 +390,7 @@ class Panel
      *
      * @param integer $height
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setHeight($height)
     {
@@ -475,7 +414,7 @@ class Panel
      *
      * @param integer $zIndex
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setZIndex($zIndex)
     {
@@ -499,7 +438,7 @@ class Panel
      *
      * @param integer $displayPrecision
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setDisplayPrecision($displayPrecision)
     {
@@ -523,7 +462,7 @@ class Panel
      *
      * @param string $backgroundColor
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setBackgroundColor($backgroundColor)
     {
@@ -547,7 +486,7 @@ class Panel
      *
      * @param integer $borderWidth
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setBorderWidth($borderWidth)
     {
@@ -571,7 +510,7 @@ class Panel
      *
      * @param string $borderStyle
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setBorderStyle($borderStyle)
     {
@@ -595,7 +534,7 @@ class Panel
      *
      * @param string $borderColor
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setBorderColor($borderColor)
     {
@@ -619,7 +558,7 @@ class Panel
      *
      * @param integer $borderRadiusLeftTop
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setBorderRadiusLeftTop($borderRadiusLeftTop)
     {
@@ -643,7 +582,7 @@ class Panel
      *
      * @param integer $borderRadiusLeftBottom
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setBorderRadiusLeftBottom($borderRadiusLeftBottom)
     {
@@ -667,7 +606,7 @@ class Panel
      *
      * @param integer $borderRadiusRightTop
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setBorderRadiusRightTop($borderRadiusRightTop)
     {
@@ -691,7 +630,7 @@ class Panel
      *
      * @param integer $borderRadiusRightBottom
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setBorderRadiusRightBottom($borderRadiusRightBottom)
     {
@@ -715,7 +654,7 @@ class Panel
      *
      * @param string $textAlign
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setTextAlign($textAlign)
     {
@@ -739,7 +678,7 @@ class Panel
      *
      * @param string $fontWeight
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setFontWeight($fontWeight)
     {
@@ -763,7 +702,7 @@ class Panel
      *
      * @param string $textDecoration
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setTextDecoration($textDecoration)
     {
@@ -787,7 +726,7 @@ class Panel
      *
      * @param string $fontStyle
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setFontStyle($fontStyle)
     {
@@ -811,7 +750,7 @@ class Panel
      *
      * @param string $fontFamily
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setFontFamily($fontFamily)
     {
@@ -835,7 +774,7 @@ class Panel
      *
      * @param string $fontColor
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setFontColor($fontColor)
     {
@@ -859,7 +798,7 @@ class Panel
      *
      * @param integer $fontSize
      *
-     * @return Panel
+     * @return PanelVariable
      */
     public function setFontSize($fontSize)
     {
@@ -879,85 +818,13 @@ class Panel
     }
 
     /**
-     * Set opacity
-     *
-     * @param float $opacity
-     *
-     * @return Panel
-     */
-    public function setOpacity($opacity)
-    {
-        $this->opacity = $opacity;
-
-        return $this;
-    }
-
-    /**
-     * Get opacity
-     *
-     * @return float
-     */
-    public function getOpacity()
-    {
-        return $this->opacity;
-    }
-
-    /**
-     * Set contentSource
-     *
-     * @param string $contentSource
-     *
-     * @return Panel
-     */
-    public function setContentSource($contentSource)
-    {
-        $this->contentSource = $contentSource;
-
-        return $this;
-    }
-
-    /**
-     * Get contentSource
-     *
-     * @return string
-     */
-    public function getContentSource()
-    {
-        return $this->contentSource;
-    }
-
-    /**
-     * Set href
-     *
-     * @param string $href
-     *
-     * @return Panel
-     */
-    public function setHref($href)
-    {
-        $this->href = $href;
-
-        return $this;
-    }
-
-    /**
-     * Get href
-     *
-     * @return string
-     */
-    public function getHref()
-    {
-        return $this->href;
-    }
-
-    /**
      * Set page
      *
-     * @param \BmsVisualizationBundle\Entity\Page $page
+     * @param \VisualizationBundle\Entity\Page $page
      *
-     * @return Panel
+     * @return PanelVariable
      */
-    public function setPage(Page $page = null)
+    public function setPage(\VisualizationBundle\Entity\Page $page)
     {
         $this->page = $page;
 
@@ -967,7 +834,7 @@ class Panel
     /**
      * Get page
      *
-     * @return \BmsVisualizationBundle\Entity\Page
+     * @return \VisualizationBundle\Entity\Page
      */
     public function getPage()
     {

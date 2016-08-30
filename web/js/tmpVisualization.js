@@ -123,12 +123,6 @@ function setPanelForm() {
                 $(".precision-group, li#dialog-panel-progress-bar").hide();
                 $(".font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
                 break;
-            case "widget":
-                inputSourceContent.val("").prop({"disabled": true, "required": true}).hide();
-                buttonManager.addClass("disabled").hide().unbind("click");
-                $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
-                $("li#dialog-panel-progress-bar").show();
-                break;
         }
     });
 
@@ -181,12 +175,6 @@ function setEdit(type, id) {
             progressBarLi.hide();
             $(".precision-group, li#dialog-panel-progress-bar").hide();
             $(".font-group, li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").show();
-            break;
-        case "widget":
-            inputSourceContent.val("").prop({"disabled": true, "required": true}).hide();
-            buttonManager.addClass("disabled").hide().unbind("click");
-            $("li#dialog-panel-format, li#dialog-panel-navigation, li#dialog-panel-event").hide();
-            progressBarLi.show();
             break;
     }
     //set input for hidden form fields
@@ -1429,10 +1417,6 @@ function loadPanelList(panelList) {
     //ukryj pokaż panele typu variable na liście
     $('input#panel-list-variable').change(function () {
         $(this).is(':checked') ? $("span.panel-list-variable").parent().parent().parent("div.panel-list").show() : $("span.panel-list-variable").parent().parent().parent("div.panel-list").hide();
-    });
-    //ukryj pokaż panele typu widget na liście
-    $('input#panel-list-widget').change(function () {
-        $(this).is(':checked') ? $("span.panel-list-widget").parent().parent().parent("div.panel-list").show() : $("span.panel-list-widget").parent().parent().parent("div.panel-list").hide();
     });
     //obsługa najechania na panel na liscie
     $('div.panel-list').hover(function () {
