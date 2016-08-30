@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>PanelText list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Source</th>
+                <th>Topposition</th>
+                <th>Leftposition</th>
+                <th>Width</th>
+                <th>Height</th>
+                <th>Zindex</th>
+                <th>Backgroundcolor</th>
+                <th>Borderwidth</th>
+                <th>Borderstyle</th>
+                <th>Bordercolor</th>
+                <th>Borderradiuslefttop</th>
+                <th>Borderradiusleftbottom</th>
+                <th>Borderradiusrighttop</th>
+                <th>Borderradiusrightbottom</th>
+                <th>Textalign</th>
+                <th>Fontweight</th>
+                <th>Textdecoration</th>
+                <th>Fontstyle</th>
+                <th>Fontfamily</th>
+                <th>Fontcolor</th>
+                <th>Fontsize</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for panelText in panelTexts %}
+            <tr>
+                <td><a href="{{ path('paneltext_show', { 'id': panelText.id }) }}">{{ panelText.id }}</a></td>
+                <td>{{ panelText.name }}</td>
+                <td>{{ panelText.source }}</td>
+                <td>{{ panelText.topPosition }}</td>
+                <td>{{ panelText.leftPosition }}</td>
+                <td>{{ panelText.width }}</td>
+                <td>{{ panelText.height }}</td>
+                <td>{{ panelText.zIndex }}</td>
+                <td>{{ panelText.backgroundColor }}</td>
+                <td>{{ panelText.borderWidth }}</td>
+                <td>{{ panelText.borderStyle }}</td>
+                <td>{{ panelText.borderColor }}</td>
+                <td>{{ panelText.borderRadiusLeftTop }}</td>
+                <td>{{ panelText.borderRadiusLeftBottom }}</td>
+                <td>{{ panelText.borderRadiusRightTop }}</td>
+                <td>{{ panelText.borderRadiusRightBottom }}</td>
+                <td>{{ panelText.textAlign }}</td>
+                <td>{{ panelText.fontWeight }}</td>
+                <td>{{ panelText.textDecoration }}</td>
+                <td>{{ panelText.fontStyle }}</td>
+                <td>{{ panelText.fontFamily }}</td>
+                <td>{{ panelText.fontColor }}</td>
+                <td>{{ panelText.fontSize }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('paneltext_show', { 'id': panelText.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('paneltext_edit', { 'id': panelText.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('paneltext_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}
