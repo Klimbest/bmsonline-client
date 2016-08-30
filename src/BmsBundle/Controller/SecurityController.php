@@ -77,4 +77,14 @@ class SecurityController extends Controller {
     {
         return $this->render('FOSUserBundle:Security:login.html.twig', $data);
     }
+
+    public function checkAction()
+    {
+
+    }
+
+    public function logoutAction()
+    {
+
+    }
 }
