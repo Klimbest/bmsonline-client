@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>PanelImage list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Source</th>
+                <th>Tooltip</th>
+                <th>Topposition</th>
+                <th>Leftposition</th>
+                <th>Width</th>
+                <th>Height</th>
+                <th>Zindex</th>
+                <th>Borderwidth</th>
+                <th>Borderstyle</th>
+                <th>Bordercolor</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for panelImage in panelImages %}
+            <tr>
+                <td><a href="{{ path('panelimage_show', { 'id': panelImage.id }) }}">{{ panelImage.id }}</a></td>
+                <td>{{ panelImage.name }}</td>
+                <td>{{ panelImage.source }}</td>
+                <td>{% if panelImage.tooltip %}Yes{% else %}No{% endif %}</td>
+                <td>{{ panelImage.topPosition }}</td>
+                <td>{{ panelImage.leftPosition }}</td>
+                <td>{{ panelImage.width }}</td>
+                <td>{{ panelImage.height }}</td>
+                <td>{{ panelImage.zIndex }}</td>
+                <td>{{ panelImage.borderWidth }}</td>
+                <td>{{ panelImage.borderStyle }}</td>
+                <td>{{ panelImage.borderColor }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('panelimage_show', { 'id': panelImage.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('panelimage_edit', { 'id': panelImage.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('panelimage_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}
