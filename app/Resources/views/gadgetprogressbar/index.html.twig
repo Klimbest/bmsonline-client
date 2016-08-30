@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>GadgetProgressBar list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Rangemin</th>
+                <th>Rangemax</th>
+                <th>Optimummin</th>
+                <th>Optimummax</th>
+                <th>Color1</th>
+                <th>Color2</th>
+                <th>Color3</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for gadgetProgressBar in gadgetProgressBars %}
+            <tr>
+                <td><a href="{{ path('gadgetprogressbar_show', { 'id': gadgetProgressBar.id }) }}">{{ gadgetProgressBar.id }}</a></td>
+                <td>{{ gadgetProgressBar.name }}</td>
+                <td>{{ gadgetProgressBar.rangeMin }}</td>
+                <td>{{ gadgetProgressBar.rangeMax }}</td>
+                <td>{{ gadgetProgressBar.optimumMin }}</td>
+                <td>{{ gadgetProgressBar.optimumMax }}</td>
+                <td>{{ gadgetProgressBar.color1 }}</td>
+                <td>{{ gadgetProgressBar.color2 }}</td>
+                <td>{{ gadgetProgressBar.color3 }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('gadgetprogressbar_show', { 'id': gadgetProgressBar.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('gadgetprogressbar_edit', { 'id': gadgetProgressBar.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('gadgetprogressbar_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}
