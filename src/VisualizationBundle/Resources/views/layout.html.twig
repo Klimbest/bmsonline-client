@@ -5,30 +5,13 @@
     <link rel="stylesheet" href="{{ asset('css/newVisualization.css') }}">
 {% endblock %}
 
-
 {% block nav %}
     {{ parent() }}
     <button id="generateVisualization" class="btn btn-xs btn-success">Generuj wizualizacje</button>
 {% endblock %}
 
-{% block sidebar %}
-    {% include 'VisualizationBundle::sidebar.html.twig' %}
-
-{% endblock %}
-
 {% block body %}
-    <div class="row main-row hidden-xs hidden-sm">
-        <div class="col-md-12">
-            {% block page %}
 
-            {% endblock %}
-        </div>
-    </div>
-    <div class="row hidden-md hidden-lg">
-        <div class="col-md-12 text-center">
-            <span class="label label-danger">Opcja niedostępna dla urządzeń mobilnych</span>
-        </div>
-    </div>
 {% endblock %}
 
 {% block javascripts %}

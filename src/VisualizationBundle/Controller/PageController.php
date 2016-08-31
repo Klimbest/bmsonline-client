@@ -35,13 +35,13 @@ class PageController extends Controller
             $em->persist($page);
             $em->flush();
 
-            return $this->redirectToRoute('page_show', array('id' => $page->getId()));
+            return $this->redirectToRoute('page_show', ['id' => $page->getId()]);
         }
 
-        return $this->render('VisualizationBundle:page:new.html.twig', array(
+        return $this->render('VisualizationBundle:page:form.html.twig', [
             'page' => $page,
             'form' => $form->createView(),
-        ));
+        ]);
     }
 
     /**
@@ -61,7 +61,6 @@ class PageController extends Controller
         #$parameters['panels_variable'] = $em->getRepository('VisualizationBundle:PanelVariable')->findAll();
 
         $parameters['active_page'] = $page;
-        $parameters['delete_form'] = $this->createDeleteForm($page)->createView();
 
         return $this->render('VisualizationBundle:page:show.html.twig', $parameters);
     }
@@ -74,58 +73,36 @@ class PageController extends Controller
      */
     public function editAction(Request $request, Page $page)
     {
-        $deleteForm = $this->createDeleteForm($page);
-        $editForm = $this->createForm('VisualizationBundle\Form\PageType', $page);
-        $editForm->handleRequest($request);
+        $form = $this->createForm('VisualizationBundle\Form\PageType', $page);
+        $form->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($page);
             $em->flush();
 
-            return $this->redirectToRoute('page_edit', array('id' => $page->getId()));
+            return $this->redirectToRoute('page_show', ['id' => $page->getId()]);
         }
 
-        return $this->render('VisualizationBundle:page:edit.html.twig', array(
+        return $this->render('VisualizationBundle:page:form.html.twig', [
             'page' => $page,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+            'form' => $form->createView()
+        ]);
     }
 
     /**
      * Deletes a Page entity.
      *
-     * @Route("/{id}", name="page_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="page_delete")
      */
-    public function deleteAction(Request $request, Page $page)
+    public function deleteAction(Page $page)
     {
-        $form = $this->createDeleteForm($page);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($page);
-            $em->flush();
-        }
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($page);
+        $em->flush();
 
         return $this->redirectToRoute('page_index');
     }
 
-    /**
-     * Creates a form to delete a Page entity.
-     *
-     * @param Page $page The Page entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Page $page)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('page_delete', array('id' => $page->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
+
 }

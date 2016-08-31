@@ -109,7 +109,7 @@ services:
               manager_type: orm
               label:        Warunek
               
-    bmsvisualization.form.type.color:
-        class: BmsVisualizationBundle\Form\ColorType
+    visualization.form.type.color:
+        class: VisualizationBundle\Form\ColorType
         tags:
             - { name: form.type, alias: color }
