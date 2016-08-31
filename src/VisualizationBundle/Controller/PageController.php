@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use VisualizationBundle\Entity\Page;
 use VisualizationBundle\Form\PageType;
 
@@ -22,12 +24,12 @@ class PageController extends Controller
      * @Route("/new", name="page_new")
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse | Response
      */
     public function newAction(Request $request)
     {
         $page = new Page();
-        $form = $this->createForm('VisualizationBundle\Form\PageType', $page);
+        $form = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -50,7 +52,7 @@ class PageController extends Controller
      * @Route("/{id}", name="page_show")
      * @Method("GET")
      * @param Page $page
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function showAction(Page $page)
     {
@@ -70,10 +72,13 @@ class PageController extends Controller
      *
      * @Route("/{id}/edit", name="page_edit")
      * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param Page $page
+     * @return RedirectResponse|Response
      */
     public function editAction(Request $request, Page $page)
     {
-        $form = $this->createForm('VisualizationBundle\Form\PageType', $page);
+        $form = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -94,6 +99,8 @@ class PageController extends Controller
      * Deletes a Page entity.
      *
      * @Route("/{id}/delete", name="page_delete")
+     * @param Page $page
+     * @return RedirectResponse
      */
     public function deleteAction(Page $page)
     {
