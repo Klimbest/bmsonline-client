@@ -17,27 +17,12 @@ use VisualizationBundle\Form\PageType;
 class PageController extends Controller
 {
     /**
-     * Lists all Page entities.
-     *
-     * @Route("/", name="page_index")
-     * @Method("GET")
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $pages = $em->getRepository('VisualizationBundle:Page')->findAll();
-
-        return $this->render('page/index.html.twig', array(
-            'pages' => $pages,
-        ));
-    }
-
-    /**
      * Creates a new Page entity.
      *
      * @Route("/new", name="page_new")
      * @Method({"GET", "POST"})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function newAction(Request $request)
     {
@@ -53,7 +38,7 @@ class PageController extends Controller
             return $this->redirectToRoute('page_show', array('id' => $page->getId()));
         }
 
-        return $this->render('page/new.html.twig', array(
+        return $this->render('VisualizationBundle:page:new.html.twig', array(
             'page' => $page,
             'form' => $form->createView(),
         ));
@@ -64,15 +49,21 @@ class PageController extends Controller
      *
      * @Route("/{id}", name="page_show")
      * @Method("GET")
+     * @param Page $page
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showAction(Page $page)
     {
-        $deleteForm = $this->createDeleteForm($page);
+        $em = $this->getDoctrine()->getManager();
+        $parameters['pages'] = $em->getRepository('VisualizationBundle:Page')->findAll();
+        #$parameters['panels_image'] = $em->getRepository('VisualizationBundle:PanelImage')->findAll();
+        #$parameters['panels_text'] = $em->getRepository('VisualizationBundle:PanelText')->findAll();
+        #$parameters['panels_variable'] = $em->getRepository('VisualizationBundle:PanelVariable')->findAll();
 
-        return $this->render('page/show.html.twig', array(
-            'page' => $page,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $parameters['active_page'] = $page;
+        $parameters['delete_form'] = $this->createDeleteForm($page)->createView();
+
+        return $this->render('VisualizationBundle:page:show.html.twig', $parameters);
     }
 
     /**
@@ -95,7 +86,7 @@ class PageController extends Controller
             return $this->redirectToRoute('page_edit', array('id' => $page->getId()));
         }
 
-        return $this->render('page/edit.html.twig', array(
+        return $this->render('VisualizationBundle:page:edit.html.twig', array(
             'page' => $page,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

@@ -12,17 +12,18 @@
 {% endblock %}
 
 {% block sidebar %}
-    {% include 'BmsVisualizationBundle::sidebar.html.twig' %}
+    {% include 'VisualizationBundle::sidebar.html.twig' %}
 
 {% endblock %}
 
 {% block body %}
     <div class="row main-row hidden-xs hidden-sm">
         <div class="col-md-12">
+            {% block page %}
 
+            {% endblock %}
         </div>
     </div>
-
     <div class="row hidden-md hidden-lg">
         <div class="col-md-12 text-center">
             <span class="label label-danger">Opcja niedostępna dla urządzeń mobilnych</span>

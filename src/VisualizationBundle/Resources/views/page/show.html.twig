@@ -1,0 +1,78 @@
+{% extends 'VisualizationBundle::index.html.twig' %}
+
+{% block page %}
+    <div class="btn-group">
+        {% for page in pages %}
+            {% if page.id == active_page.id %}
+                <a class="btn btn-xs btn-info" href="{{ path('page_show', { 'id': page.id }) }}">{{ page.name }}</a>
+            {% else %}
+                <a class="btn btn-xs btn-primary" href="{{ path('page_show', { 'id': page.id }) }}">{{ page.name }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <h1>Page</h1>
+
+    <table>
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ active_page.id }}</td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td>{{ active_page.name }}</td>
+        </tr>
+        <tr>
+            <th>Width</th>
+            <td>{{ active_page.width }}</td>
+        </tr>
+        <tr>
+            <th>Height</th>
+            <td>{{ active_page.height }}</td>
+        </tr>
+        <tr>
+            <th>Backgroundcolor</th>
+            <td>{{ active_page.backgroundColor }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('page_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('page_edit', { 'id': active_page.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+            <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
+
+{% block page_elements %}
+    {% for panel_image in panels_image %}
+        <div id="{{ panel_image.id }}" class="panel-list">
+            <div class="row">
+                <div class="col-md-12 panel-list-label">
+                    <i class="fa fa-picture-o fa-fw icon-type"></i>
+                    <span class="label label-primary">
+                        #{{ panel_image.id }}
+                        - {{ panel_image.name|length > 14 ? panel_image.name|slice(0, 14) ~ '...' : panel_image.name }}
+                    </span>
+                </div>
+                <div class="panel-list-controls">
+                    <i class="fa fa-arrow-up fa-fw"></i>
+                    <i class="fa fa-arrow-down fa-fw"></i>
+                    <i class="fa fa-fw fa-clone fa-blue"></i>
+                    <i class="fa fa-fw fa-cogs fa-orange"></i>
+                    <i class="fa fa-fw fa-trash-o fa-red"></i>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}

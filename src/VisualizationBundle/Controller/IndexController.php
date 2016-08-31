@@ -8,10 +8,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class IndexController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/", name="page_index")
      */
     public function indexAction()
     {
-        return $this->render('VisualizationBundle::index.html.twig');
+        $page = $this->getDoctrine()->getRepository('VisualizationBundle:Page')->findMainPage();
+
+        return $this->redirectToRoute('page_show', ['id' => $page->getId()]);
     }
 }

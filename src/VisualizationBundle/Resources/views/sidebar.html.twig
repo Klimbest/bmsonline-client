@@ -1,0 +1,51 @@
+<div class="navbar-default sidebar text-left hidden-xs hidden-sm" role="navigation">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="btn-group-vertical">
+                <a class="btn btn-primary" href="{{ path('page_new') }}">Dodaj stronę</a>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        Dodaj element <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class="dropdown-header">Panel</li>
+                        <li><a href="{{ path('panelimage_new') }}"><i class="fa fa-image"></i> Obraz</a></li>
+                        <li><a href="{{ path('paneltext_new') }}"><i class="fa fa-font"></i> Tekst</a></li>
+                        <li><a href="{{ path('panelvariable_new') }}"><i class="fa fa-hdd-o"></i> Zmienna</a></li>
+                        <li class="dropdown-header">Gadżet</li>
+                        <li><a href="{{ path('gadgetclock_new') }}"><i class="fa fa-clock-o"></i> Zegar</a></li>
+                        <li><a href="{{ path('gadgetprogressbar_new') }}"><i class="fa fa-tasks"></i> Progress bar</a>
+                        </li>
+                        <li class="dropdown-header">Input</li>
+                        <li><a href="{{ path('inputbutton_new') }}"><i class="fa fa-hand-pointer-o"></i> Przycisk</a>
+                        </li>
+                        <li><a href="{{ path('inputrange_new') }}"><i class="fa fa-arrows-h"></i> Suwak</a></li>
+                        <li><a href="{{ path('inputnumber_new') }}"><i class="fa fa-edit"></i> Okienko</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <label for="pattern-net-size">Rozmiar siatki (px):</label>
+        </div>
+        <div class="col-md-4 text-right">
+            <label for="pattern-net-size">ON/OFF</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <input id="pattern-net-size" type="number" class="form-control" placeholder="min 25" min="25" step="25"/>
+        </div>
+        <div class="col-md-5 text-right">
+            <button type="button" class="btn btn-default btn-pattern-net"><span class="toggler">&nbsp;</span></button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {% block page_elements %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
