@@ -7,7 +7,7 @@
 
 {% block nav %}
     {{ parent() }}
-
+    <a href="{{ path('bms_alarm_clear_history') }}" class="btn btn-xs btn-danger">Wyczyść historię alarmów</a>
 {% endblock %}
 
 {% block body %}

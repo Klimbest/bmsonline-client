@@ -8,5 +8,6 @@ $(document).ready(function () {
         }else{
             $(this).parent().parent().css({color: "#FF0000"});            
         }
-    });    
+    });
+
 });
