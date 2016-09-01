@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use VisualizationBundle\Entity\GadgetClock;
 use VisualizationBundle\Form\GadgetClockType;
 
@@ -16,33 +18,19 @@ use VisualizationBundle\Form\GadgetClockType;
  */
 class GadgetClockController extends Controller
 {
-    /**
-     * Lists all GadgetClock entities.
-     *
-     * @Route("/", name="gadgetclock_index")
-     * @Method("GET")
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $gadgetClocks = $em->getRepository('VisualizationBundle:GadgetClock')->findAll();
-
-        return $this->render('gadgetclock/index.html.twig', array(
-            'gadgetClocks' => $gadgetClocks,
-        ));
-    }
 
     /**
      * Creates a new GadgetClock entity.
      *
      * @Route("/new", name="gadgetclock_new")
      * @Method({"GET", "POST"})
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
     public function newAction(Request $request)
     {
         $gadgetClock = new GadgetClock();
-        $form = $this->createForm('VisualizationBundle\Form\GadgetClockType', $gadgetClock);
+        $form = $this->createForm(GadgetClockType::class, $gadgetClock);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -50,29 +38,13 @@ class GadgetClockController extends Controller
             $em->persist($gadgetClock);
             $em->flush();
 
-            return $this->redirectToRoute('gadgetclock_show', array('id' => $gadgetClock->getId()));
+            return $this->redirectToRoute('gadgetclock_show', ['id' => $gadgetClock->getId()]);
         }
 
-        return $this->render('gadgetclock/new.html.twig', array(
+        return $this->render('VisualizationBundle:gadgetclock:form.html.twig', [
             'gadgetClock' => $gadgetClock,
             'form' => $form->createView(),
-        ));
-    }
-
-    /**
-     * Finds and displays a GadgetClock entity.
-     *
-     * @Route("/{id}", name="gadgetclock_show")
-     * @Method("GET")
-     */
-    public function showAction(GadgetClock $gadgetClock)
-    {
-        $deleteForm = $this->createDeleteForm($gadgetClock);
-
-        return $this->render('gadgetclock/show.html.twig', array(
-            'gadgetClock' => $gadgetClock,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        ]);
     }
 
     /**
@@ -80,61 +52,43 @@ class GadgetClockController extends Controller
      *
      * @Route("/{id}/edit", name="gadgetclock_edit")
      * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param GadgetClock $gadgetClock
+     * @return RedirectResponse|Response
      */
     public function editAction(Request $request, GadgetClock $gadgetClock)
     {
-        $deleteForm = $this->createDeleteForm($gadgetClock);
-        $editForm = $this->createForm('VisualizationBundle\Form\GadgetClockType', $gadgetClock);
-        $editForm->handleRequest($request);
+        $form = $this->createForm(GadgetClockType::class, $gadgetClock);
+        $form->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($gadgetClock);
             $em->flush();
 
-            return $this->redirectToRoute('gadgetclock_edit', array('id' => $gadgetClock->getId()));
+            return $this->redirectToRoute('gadgetclock_edit', ['id' => $gadgetClock->getId()]);
         }
 
-        return $this->render('gadgetclock/edit.html.twig', array(
+        return $this->render('VisualizationBundle:gadgetclock:form.html.twig', [
             'gadgetClock' => $gadgetClock,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
      * Deletes a GadgetClock entity.
      *
      * @Route("/{id}", name="gadgetclock_delete")
-     * @Method("DELETE")
+     * @param GadgetClock $gadgetClock
+     * @return RedirectResponse
      */
-    public function deleteAction(Request $request, GadgetClock $gadgetClock)
+    public function deleteAction(GadgetClock $gadgetClock)
     {
-        $form = $this->createDeleteForm($gadgetClock);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($gadgetClock);
-            $em->flush();
-        }
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($gadgetClock);
+        $em->flush();
 
         return $this->redirectToRoute('gadgetclock_index');
     }
 
-    /**
-     * Creates a form to delete a GadgetClock entity.
-     *
-     * @param GadgetClock $gadgetClock The GadgetClock entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(GadgetClock $gadgetClock)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('gadgetclock_delete', array('id' => $gadgetClock->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
 }

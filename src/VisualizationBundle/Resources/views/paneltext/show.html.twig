@@ -1,116 +1,31 @@
-{% extends 'base.html.twig' %}
+<div
+        {% if panelText.tooltip %}
+            title="{{ panelText.name }}"
+        {% endif %}
+        name="{{ panelText.name }}"
+        id="{{ panelText.id }}" class="bms-panel bms-panel-text text-{{ panelText.textAlign }}"
+        style="
+                top: {{ panelText.topPosition }}px;
+                left: {{ panelText.leftPosition }}px;
+                width: {{ panelText.width }}px;
+                height: {{ panelText.height }}px;
+                border-style: {{ panelText.borderStyle }};
+                border-width: {{ panelText.borderWidth }}px;
+                border-color: {{ panelText.borderColor }};
+                border-top-left-radius: {{ panelText.borderRadiusLeftTop }}px;
+                border-bottom-left-radius: {{ panelText.borderRadiusLeftBottom }}px;
+                border-top-right-radius: {{ panelText.borderRadiusRightTop }}px;
+                border-bottom-right-radius: {{ panelText.borderRadiusRightBottom }}px;
+                background-color: {{ panelText.backgroundColor }};
+                font-weight: {{ panelText.fontWeight }};
+                text-decoration: {{ panelText.textDecoration }};
+                font-style: {{ panelText.fontStyle }};
+                font-family: {{ panelText.fontFamily }};
+                color: {{ panelText.fontColor }};
+                font-size: {{ panelText.fontSize }}px;
+                line-height: {{ panelText.height }}px;
+                z-index: {{ panelText.zIndex }};
+                ">
+    <span class="bms-panel-content">{{ panelText.source }}</span>
+</div>
 
-{% block body %}
-    <h1>PanelText</h1>
-
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ panelText.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ panelText.name }}</td>
-            </tr>
-            <tr>
-                <th>Source</th>
-                <td>{{ panelText.source }}</td>
-            </tr>
-            <tr>
-                <th>Topposition</th>
-                <td>{{ panelText.topPosition }}</td>
-            </tr>
-            <tr>
-                <th>Leftposition</th>
-                <td>{{ panelText.leftPosition }}</td>
-            </tr>
-            <tr>
-                <th>Width</th>
-                <td>{{ panelText.width }}</td>
-            </tr>
-            <tr>
-                <th>Height</th>
-                <td>{{ panelText.height }}</td>
-            </tr>
-            <tr>
-                <th>Zindex</th>
-                <td>{{ panelText.zIndex }}</td>
-            </tr>
-            <tr>
-                <th>Backgroundcolor</th>
-                <td>{{ panelText.backgroundColor }}</td>
-            </tr>
-            <tr>
-                <th>Borderwidth</th>
-                <td>{{ panelText.borderWidth }}</td>
-            </tr>
-            <tr>
-                <th>Borderstyle</th>
-                <td>{{ panelText.borderStyle }}</td>
-            </tr>
-            <tr>
-                <th>Bordercolor</th>
-                <td>{{ panelText.borderColor }}</td>
-            </tr>
-            <tr>
-                <th>Borderradiuslefttop</th>
-                <td>{{ panelText.borderRadiusLeftTop }}</td>
-            </tr>
-            <tr>
-                <th>Borderradiusleftbottom</th>
-                <td>{{ panelText.borderRadiusLeftBottom }}</td>
-            </tr>
-            <tr>
-                <th>Borderradiusrighttop</th>
-                <td>{{ panelText.borderRadiusRightTop }}</td>
-            </tr>
-            <tr>
-                <th>Borderradiusrightbottom</th>
-                <td>{{ panelText.borderRadiusRightBottom }}</td>
-            </tr>
-            <tr>
-                <th>Textalign</th>
-                <td>{{ panelText.textAlign }}</td>
-            </tr>
-            <tr>
-                <th>Fontweight</th>
-                <td>{{ panelText.fontWeight }}</td>
-            </tr>
-            <tr>
-                <th>Textdecoration</th>
-                <td>{{ panelText.textDecoration }}</td>
-            </tr>
-            <tr>
-                <th>Fontstyle</th>
-                <td>{{ panelText.fontStyle }}</td>
-            </tr>
-            <tr>
-                <th>Fontfamily</th>
-                <td>{{ panelText.fontFamily }}</td>
-            </tr>
-            <tr>
-                <th>Fontcolor</th>
-                <td>{{ panelText.fontColor }}</td>
-            </tr>
-            <tr>
-                <th>Fontsize</th>
-                <td>{{ panelText.fontSize }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('paneltext_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('paneltext_edit', { 'id': panelText.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
-{% endblock %}

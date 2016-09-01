@@ -110,3 +110,24 @@ div.label-page:hover {
     position: relative;
     pointer-events: none;
 }
+
+/*PANELE*/
+.bms-panel {
+    position: absolute;
+    cursor: pointer;
+}
+
+.bms-panel:hover,
+.bms-panel.hover,
+.bms-panel.active {
+    z-index: 100;
+    box-shadow: 0px 0px 20px #000;
+}
+
+.label-bms-panel {
+    position: absolute;
+    background-color: #868686;
+    z-index: 50;
+    width: 120px;
+    height: 25px;
+}

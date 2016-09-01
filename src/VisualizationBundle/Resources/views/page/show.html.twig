@@ -10,9 +10,14 @@
             <div class="btn-group">
                 {% for page in pages %}
                     {% if page.id == active_page.id %}
-                        <a class="btn btn-xs btn-info" href="{{ path('page_show', { 'id': page.id }) }}">{{ page.name }}</a>
-                        <a class="btn btn-xs btn-info" href="{{ path('page_edit', { 'id': active_page.id }) }}"><i class="fa fa-cog fa-yellow"></i></a>
-                        <a class="btn btn-xs btn-info" href="{{ path('page_delete', { 'id': active_page.id }) }}"><i class="fa fa-remove fa-red"></i></a>
+                        <a class="btn btn-xs btn-info"
+                           href="{{ path('page_show', { 'id': page.id }) }}">{{ page.name }}</a>
+                        <a class="btn btn-xs btn-info" href="{{ path('page_edit', { 'id': active_page.id }) }}">
+                            <i class="fa fa-cog fa-yellow"></i>
+                        </a>
+                        <a class="btn btn-xs btn-info" href="{{ path('page_delete', { 'id': active_page.id }) }}">
+                            <i class="fa fa-remove fa-red"></i>
+                        </a>
                     {% else %}
                         <a class="btn btn-xs btn-primary" href="{{ path('page_show', { 'id': page.id }) }}">
                             {{ page.id }} - {{ page.name }}
@@ -20,45 +25,38 @@
                     {% endif %}
                 {% endfor %}
             </div>
+            <div class="well" style="
+                    width: {{ active_page.width }}px;
+                    height: {{ active_page.height }}px;
+                    background-color: {{ active_page.backgroundColor }};
+                    ">
+                {% for panelImage in active_page.panelsImage %}
+                    {% include 'VisualizationBundle:panelimage:show.html.twig' %}
+                {% endfor %}
+                {% for panelText in active_page.panelsText %}
+                    {% include 'VisualizationBundle:paneltext:show.html.twig' %}
+                {% endfor %}
+                {% for panelVariable in active_page.panelsVariable %}
+                    {% include 'VisualizationBundle:panelvariable:show.html.twig' %}
+                {% endfor %}
 
-            <h1>Page</h1>
+                {% for gadgetClock in active_page.gadgetsClock %}
+                    {% include 'VisualizationBundle:gadgetclock:show.html.twig' %}
+                {% endfor %}
+                {% for gadgetProgressBar in active_page.gadgetsProgressBar %}
+                    {% include 'VisualizationBundle:gadgetprogressbar:show.html.twig' %}
+                {% endfor %}
 
-            <table>
-                <tbody>
-                <tr>
-                    <th>Id</th>
-                    <td>{{ active_page.id }}</td>
-                </tr>
-                <tr>
-                    <th>Name</th>
-                    <td>{{ active_page.name }}</td>
-                </tr>
-                <tr>
-                    <th>Width</th>
-                    <td>{{ active_page.width }}</td>
-                </tr>
-                <tr>
-                    <th>Height</th>
-                    <td>{{ active_page.height }}</td>
-                </tr>
-                <tr>
-                    <th>Backgroundcolor</th>
-                    <td>{{ active_page.backgroundColor }}</td>
-                </tr>
-                </tbody>
-            </table>
-
-            <ul>
-                <li>
-                    <a href="{{ path('page_index') }}">Back to the list</a>
-                </li>
-                <li>
-
-                </li>
-                <li>
-
-                </li>
-            </ul>
+                {% for inputButton in active_page.inputsButton %}
+                    {% include 'VisualizationBundle:inputbutton:show.html.twig' %}
+                {% endfor %}
+                {% for inputRTange in active_page.inputsRange %}
+                    {% include 'VisualizationBundle:inputrange:show.html.twig' %}
+                {% endfor %}
+                {% for inputNumber in active_page.inputsNumber %}
+                    {% include 'VisualizationBundle:inputnumber:show.html.twig' %}
+                {% endfor %}
+            </div>
         </div>
     </div>
     <div class="row hidden-md hidden-lg">

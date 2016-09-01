@@ -58,12 +58,7 @@ class PageController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $parameters['pages'] = $em->getRepository('VisualizationBundle:Page')->findAll();
-        #$parameters['panels_image'] = $em->getRepository('VisualizationBundle:PanelImage')->findAll();
-        #$parameters['panels_text'] = $em->getRepository('VisualizationBundle:PanelText')->findAll();
-        #$parameters['panels_variable'] = $em->getRepository('VisualizationBundle:PanelVariable')->findAll();
-
         $parameters['active_page'] = $page;
-
         return $this->render('VisualizationBundle:page:show.html.twig', $parameters);
     }
 
@@ -110,6 +105,5 @@ class PageController extends Controller
 
         return $this->redirectToRoute('page_index');
     }
-
 
 }

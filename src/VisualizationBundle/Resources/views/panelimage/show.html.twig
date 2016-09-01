@@ -1,72 +1,20 @@
-{% extends 'base.html.twig' %}
+<div
+        {% if panelImage.tooltip %}
+            title="{{ panelImage.name }}"
+        {% endif %}
+        name="{{ panelImage.name }}"
+        id="{{ panelImage.id }}" class="bms-panel bms-panel-image"
+        style="
+                top: {{ panelImage.topPosition }}px;
+                left: {{ panelImage.leftPosition }}px;
+                width: {{ panelImage.width }}px;
+                height: {{ panelImage.height }}px;
+                border-style: {{ panelImage.borderStyle }};
+                border-width: {{ panelImage.borderWidth }}px;
+                border-color: {{ panelImage.borderColor }};
+                z-index: {{ panelImage.zIndex }};
+                ">
 
-{% block body %}
-    <h1>PanelImage</h1>
+    <img class="img-responsive" src="{{ panelImage.source }}"/>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ panelImage.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ panelImage.name }}</td>
-            </tr>
-            <tr>
-                <th>Source</th>
-                <td>{{ panelImage.source }}</td>
-            </tr>
-            <tr>
-                <th>Tooltip</th>
-                <td>{% if panelImage.tooltip %}Yes{% else %}No{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Topposition</th>
-                <td>{{ panelImage.topPosition }}</td>
-            </tr>
-            <tr>
-                <th>Leftposition</th>
-                <td>{{ panelImage.leftPosition }}</td>
-            </tr>
-            <tr>
-                <th>Width</th>
-                <td>{{ panelImage.width }}</td>
-            </tr>
-            <tr>
-                <th>Height</th>
-                <td>{{ panelImage.height }}</td>
-            </tr>
-            <tr>
-                <th>Zindex</th>
-                <td>{{ panelImage.zIndex }}</td>
-            </tr>
-            <tr>
-                <th>Borderwidth</th>
-                <td>{{ panelImage.borderWidth }}</td>
-            </tr>
-            <tr>
-                <th>Borderstyle</th>
-                <td>{{ panelImage.borderStyle }}</td>
-            </tr>
-            <tr>
-                <th>Bordercolor</th>
-                <td>{{ panelImage.borderColor }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('panelimage_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('panelimage_edit', { 'id': panelImage.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
-{% endblock %}
+</div>

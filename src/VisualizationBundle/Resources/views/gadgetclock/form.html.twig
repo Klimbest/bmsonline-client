@@ -1,0 +1,19 @@
+{% extends 'VisualizationBundle::layout.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <h1>Tworzenie gadżetu - zegar</h1>
+            {{ form_start(form) }}
+
+            {{ form_widget(form) }}
+
+            <div class="btn-group">
+                <a class="btn btn-warning" href="{{ path('page_index') }}"><i class="fa fa-arrow-left"></i> Anuluj</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> Zapisz</button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

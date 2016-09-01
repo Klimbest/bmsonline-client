@@ -111,14 +111,19 @@ class Page {
      */
     public function __construct()
     {
-        $this->gadgets_clock = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->gadgets_progress_bar = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->inputs_button = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->inputs_number = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->inputs_range = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->panels_image = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->panels_text = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->panels_variable = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->gadgets_clock = new ArrayCollection();
+        $this->gadgets_progress_bar = new ArrayCollection();
+        $this->inputs_button = new ArrayCollection();
+        $this->inputs_number = new ArrayCollection();
+        $this->inputs_range = new ArrayCollection();
+        $this->panels_image = new ArrayCollection();
+        $this->panels_text = new ArrayCollection();
+        $this->panels_variable = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
     }
 
     /**
