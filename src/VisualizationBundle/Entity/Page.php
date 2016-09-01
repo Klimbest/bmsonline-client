@@ -111,6 +111,9 @@ class Page {
      */
     public function __construct()
     {
+        $this->width = 1200;
+        $this->height = 700;
+        $this->backgroundColor = '#FFFFFF';
         $this->gadgets_clock = new ArrayCollection();
         $this->gadgets_progress_bar = new ArrayCollection();
         $this->inputs_button = new ArrayCollection();
