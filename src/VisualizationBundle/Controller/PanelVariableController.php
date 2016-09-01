@@ -78,7 +78,7 @@ class PanelVariableController extends Controller
     /**
      * Deletes a PanelVariable entity.
      *
-     * @Route("/{id}", name="panelvariable_delete")
+     * @Route("/{id}/delete", name="panelvariable_delete")
      * @param PanelVariable $panelVariable
      * @return RedirectResponse
      */

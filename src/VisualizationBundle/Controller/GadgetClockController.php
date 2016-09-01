@@ -78,7 +78,7 @@ class GadgetClockController extends Controller
     /**
      * Deletes a GadgetClock entity.
      *
-     * @Route("/{id}", name="gadgetclock_delete")
+     * @Route("/{id}/delete", name="gadgetclock_delete")
      * @param GadgetClock $gadgetClock
      * @return RedirectResponse
      */

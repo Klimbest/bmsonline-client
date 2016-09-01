@@ -78,7 +78,7 @@ class InputNumberController extends Controller
     /**
      * Deletes a InputNumber entity.
      *
-     * @Route("/{id}", name="inputnumber_delete")
+     * @Route("/{id}/delete", name="inputnumber_delete")
      * @param InputNumber $inputNumber
      * @return RedirectResponse
      */

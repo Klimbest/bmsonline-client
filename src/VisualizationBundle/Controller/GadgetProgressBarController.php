@@ -78,7 +78,7 @@ class GadgetProgressBarController extends Controller
     /**
      * Deletes a GadgetProgressBar entity.
      *
-     * @Route("/{id}", name="gadgetprogressbar_delete")
+     * @Route("/{id}/delete", name="gadgetprogressbar_delete")
      * @param GadgetProgressBar $gadgetProgressBar
      * @return RedirectResponse
      */

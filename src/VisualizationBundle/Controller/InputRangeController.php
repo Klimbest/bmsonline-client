@@ -78,7 +78,7 @@ class InputRangeController extends Controller
     /**
      * Deletes a InputRange entity.
      *
-     * @Route("/{id}", name="inputrange_delete")
+     * @Route("/{id}/delete", name="inputrange_delete")
      * @param InputRange $inputRange
      * @return RedirectResponse
      */

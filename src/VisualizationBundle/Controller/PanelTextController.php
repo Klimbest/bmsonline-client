@@ -78,7 +78,7 @@ class PanelTextController extends Controller
     /**
      * Deletes a PanelText entity.
      *
-     * @Route("/{id}", name="paneltext_delete")
+     * @Route("/{id}/delete", name="paneltext_delete")
      * @param PanelText $panelText
      * @return RedirectResponse
      */

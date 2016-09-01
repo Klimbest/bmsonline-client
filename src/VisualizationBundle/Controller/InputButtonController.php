@@ -78,7 +78,7 @@ class InputButtonController extends Controller
     /**
      * Deletes a InputButton entity.
      *
-     * @Route("/{id}", name="inputbutton_delete")
+     * @Route("/{id}/delete", name="inputbutton_delete")
      * @param InputButton $inputButton
      * @return RedirectResponse
      */

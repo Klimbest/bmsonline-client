@@ -78,7 +78,7 @@ class PanelImageController extends Controller
     /**
      * Deletes a PanelImage entity.
      *
-     * @Route("/{id}", name="panelimage_delete")
+     * @Route("/{id}/delete", name="panelimage_delete")
      * @param PanelImage $panelImage
      * @return RedirectResponse
      */
