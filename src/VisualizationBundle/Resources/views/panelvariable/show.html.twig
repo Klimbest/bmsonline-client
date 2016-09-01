@@ -1,6 +1,6 @@
 <div
-        {% if panel.tooltip %}
-            title="{{ panel.name }}"
+        {% if panelVariable.tooltip %}
+            title="{{ panelVariable.name }}"
         {% endif %}
         name="{{ panelVariable.name }}"
         id="{{ panelVariable.id }}"
@@ -29,10 +29,12 @@
                 ">
 
     <span id="{{ panelVariable.source }}" class="bms-panel-content"></span>
-    <span class="label label-primary label-bms-panel">
-        {{ panelVariable.id }}
-        <a href="#"><i class='fa fa-fw fa-clone fa-blue'></i></a>
-        <a href="{{ path('panelvariable_edit', {'id': panelVariable.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
-        <a href="{{ path('panelvariable_delete', {'id': panelVariable.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
-    </span>
+    {% if labels %}
+        <span class="label label-primary label-bms-panel">
+            {{ panelVariable.id }}
+            <a href="#"><i class='fa fa-fw fa-clone fa-blue'></i></a>
+            <a href="{{ path('panelvariable_edit', {'id': panelVariable.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
+            <a href="{{ path('panelvariable_delete', {'id': panelVariable.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
+        </span>
+    {% endif %}
 </div>

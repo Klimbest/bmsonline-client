@@ -7,7 +7,7 @@
 
 {% block nav %}
     {{ parent() }}
-    <button id="generateVisualization" class="btn btn-xs btn-success">Generuj wizualizacje</button>
+    <a href="{{ path('page_generate') }}" class="btn btn-xs btn-success">Generuj wizualizacje</a>
 {% endblock %}
 
 {% block body %}

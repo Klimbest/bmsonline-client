@@ -1,7 +1,7 @@
 visualization:
     resource: "@VisualizationBundle/Controller/"
     type:     annotation
-    prefix:   /new_visualization
+    prefix:   /visualization
 
 write:
     resource: "@WriteBundle/Controller/"
@@ -22,11 +22,6 @@ bms_data_analyze:
     resource: "@BmsDataAnalyzeBundle/Controller/"
     type: annotation
     prefix:   /data_analyze
-        
-bms_visualization:
-    resource: "@BmsVisualizationBundle/Controller/"
-    type: annotation
-    prefix:   /visualization
 
 bms_configuration:
     resource: "@BmsConfigurationBundle/Controller/"

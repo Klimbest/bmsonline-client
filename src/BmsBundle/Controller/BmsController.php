@@ -29,7 +29,7 @@ class BmsController extends Controller
     {
         if ($request->isXmlHttpRequest()) {
 
-            $page_id = $request->get("page_id");
+            $page_id = 3;//$request->get("page_id");
 
             $ret['template'] = $this->container->get('templating')->render('BmsBundle:Pages:' . $page_id . '.html.twig');
             return new JsonResponse($ret);
@@ -44,16 +44,11 @@ class BmsController extends Controller
     public function ajaxRefreshPageAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-            $panelRepo = $this->getDoctrine()->getRepository('PanelText.php');
-            $termRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:Term');
-            $widgetBarRepo = $this->getDoctrine()->getRepository('BmsVisualizationBundle:WidgetBar');
+            $panelRepo = $this->getDoctrine()->getRepository('VisualizationBundle:PanelVariable');
             $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
             $page_id = $request->get("page_id");
-            $ret['registers'] = $panelRepo->findVariablePanelsRegistersForPage($page_id);
-            $ret['registers'] = array_unique(array_merge($ret['registers'], $termRepo->findRegisterTermsForPage($page_id)), SORT_REGULAR);
-            $ret['registers'] = array_unique(array_merge($ret['registers'], $widgetBarRepo->findWidgetValueRegistersForPage($page_id)), SORT_REGULAR);
-            $ret['registers'] = array_unique(array_merge($ret['registers'], $widgetBarRepo->findWidgetSetRegistersForPage($page_id)), SORT_REGULAR);
+            $ret['registers'] = []; //$panelRepo->findVariablePanelsRegistersForPage($page_id);
             $ret['devicesStatus'] = $deviceRepo->getDevicesStatus();
             $time = $technicalInformationRepo->getRpiStatus();
             $time ? $ret['state'] = $time[0]["time"]->getTimestamp() : $ret['state'] = null;

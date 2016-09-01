@@ -25,10 +25,12 @@
                 z-index: {{ panelText.zIndex }};
                 ">
     <span class="bms-panel-content">{{ panelText.source }}</span>
-    <span class="label label-primary label-bms-panel">
-        {{ panelText.id }}
-        <a href="#"><i class='fa fa-fw fa-clone fa-blue'></i></a>
-        <a href="{{ path('paneltext_edit', {'id': panelText.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
-        <a href="{{ path('paneltext_delete', {'id': panelText.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
-    </span>
+    {% if labels %}
+        <span class="label label-primary label-bms-panel">
+            {{ panelText.id }}
+            <a href="#"><i class='fa fa-fw fa-clone fa-blue'></i></a>
+            <a href="{{ path('paneltext_edit', {'id': panelText.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
+            <a href="{{ path('paneltext_delete', {'id': panelText.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
+        </span>
+    {% endif %}
 </div>
