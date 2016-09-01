@@ -29,6 +29,7 @@
                 ">
 
     <span id="{{ panelVariable.source }}" class="bms-panel-content"></span>
+    <input id="{{ panelVariable.source }}" type="hidden" value="{{ panelVariable.displayPrecision }}"/>
     {% if labels %}
         <span class="label label-primary label-bms-panel">
             {{ panelVariable.id }}

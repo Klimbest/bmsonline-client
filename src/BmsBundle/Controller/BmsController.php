@@ -29,7 +29,11 @@ class BmsController extends Controller
     {
         if ($request->isXmlHttpRequest()) {
 
-            $page_id = 3;//$request->get("page_id");
+            $page_id = $request->get("page_id");
+            if(empty($page_id)) {
+                $page = $this->getDoctrine()->getRepository('VisualizationBundle:Page')->findMainPage();
+                $page_id = $page->getId();
+            }
 
             $ret['template'] = $this->container->get('templating')->render('BmsBundle:Pages:' . $page_id . '.html.twig');
             return new JsonResponse($ret);
@@ -48,7 +52,7 @@ class BmsController extends Controller
             $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
             $page_id = $request->get("page_id");
-            $ret['registers'] = []; //$panelRepo->findVariablePanelsRegistersForPage($page_id);
+            $ret['registers'] = $panelRepo->findVariablePanelsRegistersForPage($page_id);
             $ret['devicesStatus'] = $deviceRepo->getDevicesStatus();
             $time = $technicalInformationRepo->getRpiStatus();
             $time ? $ret['state'] = $time[0]["time"]->getTimestamp() : $ret['state'] = null;
