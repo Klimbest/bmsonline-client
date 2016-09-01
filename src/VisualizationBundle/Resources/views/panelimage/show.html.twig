@@ -16,5 +16,10 @@
                 ">
 
     <img class="img-responsive" src="{{ panelImage.source }}"/>
-
+    <span class="label label-primary label-bms-panel">
+        {{ panelImage.id }}
+        <a href="#"><i class='fa fa-fw fa-clone fa-blue'></i></a>
+        <a href="{{ path('panelimage_edit', {'id': panelImage.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
+        <a href="{{ path('panelimage_delete', {'id': panelImage.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
+    </span>
 </div>

@@ -1,124 +1,38 @@
-{% extends 'base.html.twig' %}
+<div
+        {% if panel.tooltip %}
+            title="{{ panel.name }}"
+        {% endif %}
+        name="{{ panelVariable.name }}"
+        id="{{ panelVariable.id }}"
+        class="bms-panel bms-panel-variable text-{{ panelVariable.textAlign }}"
+        style="
+                top: {{ panelVariable.topPosition }}px;
+                left: {{ panelVariable.leftPosition }}px;
+                width: {{ panelVariable.width }}px;
+                height: {{ panelVariable.height }}px;
+                border-style: {{ panelVariable.borderStyle }};
+                border-width: {{ panelVariable.borderWidth }}px;
+                border-color: {{ panelVariable.borderColor }};
+                border-top-left-radius: {{ panelVariable.borderRadiusLeftTop }}px;
+                border-bottom-left-radius: {{ panelVariable.borderRadiusLeftBottom }}px;
+                border-top-right-radius: {{ panelVariable.borderRadiusRightTop }}px;
+                border-bottom-right-radius: {{ panelVariable.borderRadiusRightBottom }}px;
+                background-color: {{ panelVariable.backgroundColor }};
+                font-weight: {{ panelVariable.fontWeight }};
+                text-decoration: {{ panelVariable.textDecoration }};
+                font-style: {{ panelVariable.fontStyle }};
+                font-family: {{ panelVariable.fontFamily }};
+                color: {{ panelVariable.fontColor }};
+                font-size: {{ panelVariable.fontSize }}px;
+                line-height: {{ panelVariable.height }}px;
+                z-index: {{ panelVariable.zIndex }};
+                ">
 
-{% block body %}
-    <h1>PanelVariable</h1>
-
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ panelVariable.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ panelVariable.name }}</td>
-            </tr>
-            <tr>
-                <th>Source</th>
-                <td>{{ panelVariable.source }}</td>
-            </tr>
-            <tr>
-                <th>Tooltip</th>
-                <td>{% if panelVariable.tooltip %}Yes{% else %}No{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Topposition</th>
-                <td>{{ panelVariable.topPosition }}</td>
-            </tr>
-            <tr>
-                <th>Leftposition</th>
-                <td>{{ panelVariable.leftPosition }}</td>
-            </tr>
-            <tr>
-                <th>Width</th>
-                <td>{{ panelVariable.width }}</td>
-            </tr>
-            <tr>
-                <th>Height</th>
-                <td>{{ panelVariable.height }}</td>
-            </tr>
-            <tr>
-                <th>Zindex</th>
-                <td>{{ panelVariable.zIndex }}</td>
-            </tr>
-            <tr>
-                <th>Displayprecision</th>
-                <td>{{ panelVariable.displayPrecision }}</td>
-            </tr>
-            <tr>
-                <th>Backgroundcolor</th>
-                <td>{{ panelVariable.backgroundColor }}</td>
-            </tr>
-            <tr>
-                <th>Borderwidth</th>
-                <td>{{ panelVariable.borderWidth }}</td>
-            </tr>
-            <tr>
-                <th>Borderstyle</th>
-                <td>{{ panelVariable.borderStyle }}</td>
-            </tr>
-            <tr>
-                <th>Bordercolor</th>
-                <td>{{ panelVariable.borderColor }}</td>
-            </tr>
-            <tr>
-                <th>Borderradiuslefttop</th>
-                <td>{{ panelVariable.borderRadiusLeftTop }}</td>
-            </tr>
-            <tr>
-                <th>Borderradiusleftbottom</th>
-                <td>{{ panelVariable.borderRadiusLeftBottom }}</td>
-            </tr>
-            <tr>
-                <th>Borderradiusrighttop</th>
-                <td>{{ panelVariable.borderRadiusRightTop }}</td>
-            </tr>
-            <tr>
-                <th>Borderradiusrightbottom</th>
-                <td>{{ panelVariable.borderRadiusRightBottom }}</td>
-            </tr>
-            <tr>
-                <th>Textalign</th>
-                <td>{{ panelVariable.textAlign }}</td>
-            </tr>
-            <tr>
-                <th>Fontweight</th>
-                <td>{{ panelVariable.fontWeight }}</td>
-            </tr>
-            <tr>
-                <th>Textdecoration</th>
-                <td>{{ panelVariable.textDecoration }}</td>
-            </tr>
-            <tr>
-                <th>Fontstyle</th>
-                <td>{{ panelVariable.fontStyle }}</td>
-            </tr>
-            <tr>
-                <th>Fontfamily</th>
-                <td>{{ panelVariable.fontFamily }}</td>
-            </tr>
-            <tr>
-                <th>Fontcolor</th>
-                <td>{{ panelVariable.fontColor }}</td>
-            </tr>
-            <tr>
-                <th>Fontsize</th>
-                <td>{{ panelVariable.fontSize }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('panelvariable_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('panelvariable_edit', { 'id': panelVariable.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
-{% endblock %}
+    <span id="{{ panelVariable.source }}" class="bms-panel-content"></span>
+    <span class="label label-primary label-bms-panel">
+        {{ panelVariable.id }}
+        <a href="#"><i class='fa fa-fw fa-clone fa-blue'></i></a>
+        <a href="{{ path('panelvariable_edit', {'id': panelVariable.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
+        <a href="{{ path('panelvariable_delete', {'id': panelVariable.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
+    </span>
+</div>

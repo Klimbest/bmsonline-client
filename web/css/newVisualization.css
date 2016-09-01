@@ -26,36 +26,6 @@ span.toggler.off {
     border-left-width: 15px;
 }
 
-div.panel-list.active span {
-    background-color: #FF0000;
-}
-
-div.panel-list.active div i.icon-type {
-    display: none;
-}
-
-div.panel-list.active div.panel-list-controls {
-    display: inline-block;
-}
-
-div.panel-list.active div.panel-list-label {
-    overflow: hidden;
-}
-
-div.panel-list i:not(.icon-type):hover {
-    color: #FF0000;
-    font-size: 120%;
-}
-
-div.panel-list-container {
-    max-height: 300px;
-    overflow-y: auto;
-    background-color: rgb(255, 255, 255);
-    padding: 5px 15px;
-    box-shadow: 0px 0px 20px rgb(0, 0, 0);
-    border-radius: 5px;
-}
-
 /*BODY*/
 .main-row {
     max-width: 80%;
@@ -68,20 +38,6 @@ div.panel-list-container {
     position: relative;
     padding: 0px;
     overflow: hidden;
-}
-
-/*PAGE*/
-div.label-page {
-    margin-right: 2px;
-}
-
-div.label-page.active {
-    font-size: 90%;
-}
-
-div.label-page:hover {
-    background-color: #337AB7;
-    cursor: pointer;
 }
 
 /*Siatka pomocnicza*/
@@ -126,8 +82,10 @@ div.label-page:hover {
 
 .label-bms-panel {
     position: absolute;
-    background-color: #868686;
+    padding: 5px;
     z-index: 50;
-    width: 120px;
-    height: 25px;
+    top: 0px;
+    left: 0px;
+    display: none;
+    font-size: 100%;
 }
