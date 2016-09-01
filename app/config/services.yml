@@ -75,40 +75,7 @@ services:
             - name:         sonata.admin
               manager_type: orm
               label:        Rejestr
-   
-    sonata.admin.page:
-        class: BmsVisualizationBundle\Admin\PageAdmin
-        arguments: 
-            - ~
-            - BmsVisualizationBundle\Entity\Page
-            - ~
-        tags:
-            - name:         sonata.admin
-              manager_type: orm
-              label:        Strona
-              
-    sonata.admin.panel:
-        class: BmsVisualizationBundle\Admin\PanelAdmin
-        arguments: 
-            - ~
-            - BmsVisualizationBundle\Entity\Panel
-            - ~
-        tags:
-            - name:         sonata.admin
-              manager_type: orm
-              label:        Panel
-              
-    sonata.admin.term:
-        class: BmsVisualizationBundle\Admin\TermAdmin
-        arguments: 
-            - ~
-            - BmsVisualizationBundle\Entity\Term
-            - ~
-        tags:
-            - name:         sonata.admin
-              manager_type: orm
-              label:        Warunek
-              
+
     visualization.form.type.color:
         class: VisualizationBundle\Form\ColorType
         tags:

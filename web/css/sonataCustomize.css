@@ -1,31 +1,35 @@
 
-.logo img{
-    max-height: none;
-    max-width: none;
-    margin: initial;
-    padding: initial;
-}
-.btn-default,
-.btn-default:active{
-    border-color: #3c8dbc;
-    color: #3c8dbc;
-    background-color: #FFF;
-}
-
-.btn-default:hover,
-.btn-default:focus,
-.btn-default:active:focus{
-    border-color: #3c8dbc;
-    color: #FFF;
-    background-color: #3c8dbc;
-}
-
-.navbar-left{
+.navbar-left {
     margin-left: 10px;
 }
 
-.skin-black .main-header > .logo,
+.skin-black .main-header .navbar-brand {
+    color: #FFF;
+    border-right: 1px solid #eee;
+    width: 231px;
+    text-align: center;
+    background-color: #272b2e;
+}
+
+.skin-black .main-header > .navbar {
+    background-color: #272b2e;
+    margin-left: 231px;
+}
+
+.skin-black .main-header > .navbar .nav > .active > a {
+    background: #272b2e;
+    color: #FFF;
+}
+
 .skin-black .main-header > .navbar > .sidebar-toggle,
-.skin-black .main-header > .navbar .navbar-custom-menu .navbar-nav > li > a{
-    border-color: #3c8dbc;
+.skin-black .main-header > .navbar .nav > li > a {
+    color: #FFF;
+}
+
+.skin-black .main-header > .navbar .nav > .active > a:hover,
+.skin-black .main-header > .navbar > .sidebar-toggle:hover,
+.skin-black .main-header > .navbar .nav > li:hover > a{
+    color: #fff;
+    background-color: #000;
+    font-weight: bold;
 }

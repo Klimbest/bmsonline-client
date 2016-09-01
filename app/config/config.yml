@@ -139,10 +139,9 @@ sonata_admin:
             - EDIT
             - DELETE
         acl_user_manager:     null
-    title:                'Bmsonline zarządzanie'
-    title_logo:           images/logo.jpg
+    title:                'Bmsonline'
     options:
-        title_mode:     "single_image"
+        title_mode:     "single_text"
         use_select2:    false
     show_mosaic_button: false
     dashboard:
@@ -190,30 +189,6 @@ sonata_admin:
                 settings:
                     groups: [ sonata.admin.group.configuration ]
             -   position: bottom
-                class: col-md-2
-                type: sonata.admin.block.stats
-                settings: 
-                    code:  sonata.admin.page        
-                    icon:  fa-file                  
-                    text:  Dodanych stron
-                    color: bg-blue       
-            -   position: bottom 
-                class: col-md-2
-                type: sonata.admin.block.stats
-                settings: 
-                    code:  sonata.admin.panel
-                    icon:  fa-image                  
-                    text:  Dodanych paneli
-                    color: bg-red  
-            -   position: bottom 
-                class: col-md-2
-                type: sonata.admin.block.stats
-                settings: 
-                    code:  sonata.admin.term        
-                    icon:  fa-magic                  
-                    text:  Dodanych warunków
-                    color: bg-green         
-            -   position: bottom
                 class: col-md-6
                 type: sonata.admin.block.admin_list
                 settings:
@@ -237,12 +212,4 @@ sonata_admin:
                     - sonata.admin.communicationtype
                     - sonata.admin.device
                     - sonata.admin.register
-                    
-            sonata.admin.group.visualization:
-                label:           Wizualizacja
-                label_catalogue: BmsVisualizationBundle
-                icon:            '<i class="fa fa-paint-brush"></i>'
-                items:
-                    - sonata.admin.page
-                    - sonata.admin.panel
-                    - sonata.admin.term
+
