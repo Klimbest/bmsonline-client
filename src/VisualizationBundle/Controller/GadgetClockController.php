@@ -38,7 +38,7 @@ class GadgetClockController extends Controller
             $em->persist($gadgetClock);
             $em->flush();
 
-            return $this->redirectToRoute('gadgetclock_show', ['id' => $gadgetClock->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $gadgetClock->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:gadgetclock:form.html.twig', [
@@ -66,7 +66,7 @@ class GadgetClockController extends Controller
             $em->persist($gadgetClock);
             $em->flush();
 
-            return $this->redirectToRoute('gadgetclock_edit', ['id' => $gadgetClock->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $gadgetClock->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:gadgetclock:form.html.twig', [
@@ -84,11 +84,12 @@ class GadgetClockController extends Controller
      */
     public function deleteAction(GadgetClock $gadgetClock)
     {
+        $page_id = $gadgetClock->getPage()->getId();
         $em = $this->getDoctrine()->getManager();
         $em->remove($gadgetClock);
         $em->flush();
 
-        return $this->redirectToRoute('gadgetclock_index');
+        return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
 }

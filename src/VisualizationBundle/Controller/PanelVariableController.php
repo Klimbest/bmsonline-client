@@ -38,7 +38,7 @@ class PanelVariableController extends Controller
             $em->persist($panelVariable);
             $em->flush();
 
-            return $this->redirectToRoute('panelvariable_show', ['id' => $panelVariable->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $panelVariable->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:panelvariable:form.html.twig', [
@@ -66,7 +66,7 @@ class PanelVariableController extends Controller
             $em->persist($panelVariable);
             $em->flush();
 
-            return $this->redirectToRoute('panelvariable_edit', ['id' => $panelVariable->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $panelVariable->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:panelvariable:form.html.twig', [
@@ -84,11 +84,12 @@ class PanelVariableController extends Controller
      */
     public function deleteAction(PanelVariable $panelVariable)
     {
+        $page_id = $panelVariable->getPage()->getId();
         $em = $this->getDoctrine()->getManager();
         $em->remove($panelVariable);
         $em->flush();
 
-        return $this->redirectToRoute('panelvariable_index');
+        return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
 }

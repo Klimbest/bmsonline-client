@@ -38,7 +38,7 @@ class PanelImageController extends Controller
             $em->persist($panelImage);
             $em->flush();
 
-            return $this->redirectToRoute('panelimage_show', ['id' => $panelImage->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $panelImage->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:panelimage:form.html.twig', [
@@ -66,7 +66,7 @@ class PanelImageController extends Controller
             $em->persist($panelImage);
             $em->flush();
 
-            return $this->redirectToRoute('panelimage_edit', ['id' => $panelImage->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $panelImage->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:panelimage:form.html.twig', [
@@ -84,11 +84,12 @@ class PanelImageController extends Controller
      */
     public function deleteAction(PanelImage $panelImage)
     {
+        $page_id = $panelImage->getPage()->getId();
         $em = $this->getDoctrine()->getManager();
         $em->remove($panelImage);
         $em->flush();
 
-        return $this->redirectToRoute('panelimage_index');
+        return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
 }

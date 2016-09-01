@@ -38,7 +38,7 @@ class InputNumberController extends Controller
             $em->persist($inputNumber);
             $em->flush();
 
-            return $this->redirectToRoute('inputnumber_show', ['id' => $inputNumber->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $inputNumber->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:inputnumber:form.html.twig', [
@@ -66,7 +66,7 @@ class InputNumberController extends Controller
             $em->persist($inputNumber);
             $em->flush();
 
-            return $this->redirectToRoute('inputnumber_edit', ['id' => $inputNumber->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $inputNumber->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:inputnumber:form.html.twig', [
@@ -84,11 +84,12 @@ class InputNumberController extends Controller
      */
     public function deleteAction(InputNumber $inputNumber)
     {
+        $page_id = $inputNumber->getPage()->getId();
         $em = $this->getDoctrine()->getManager();
         $em->remove($inputNumber);
         $em->flush();
 
-        return $this->redirectToRoute('inputnumber_index');
+        return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
 }

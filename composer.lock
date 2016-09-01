@@ -1100,12 +1100,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "07ec96d93f03650e7480e0637fcd51eee6575c12"
+                "reference": "147ca6888712365e5ad3b7906f7b6e8654da2f48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/07ec96d93f03650e7480e0637fcd51eee6575c12",
-                "reference": "07ec96d93f03650e7480e0637fcd51eee6575c12",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/147ca6888712365e5ad3b7906f7b6e8654da2f48",
+                "reference": "147ca6888712365e5ad3b7906f7b6e8654da2f48",
                 "shasum": ""
             },
             "require": {
@@ -1164,7 +1164,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-08-04 10:13:39"
+            "time": "2016-08-31 11:01:35"
         },
         {
             "name": "imagine/imagine",
@@ -2477,12 +2477,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "71a63ac370949c88ad08bf65cb841022d52a01fd"
+                "reference": "d8d42dc89dbde955a4b294775c871529cdbe99b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/71a63ac370949c88ad08bf65cb841022d52a01fd",
-                "reference": "71a63ac370949c88ad08bf65cb841022d52a01fd",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/d8d42dc89dbde955a4b294775c871529cdbe99b5",
+                "reference": "d8d42dc89dbde955a4b294775c871529cdbe99b5",
                 "shasum": ""
             },
             "require": {
@@ -2566,7 +2566,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2016-08-29 16:07:39"
+            "time": "2016-08-31 16:12:32"
         },
         {
             "name": "sonata-project/block-bundle",

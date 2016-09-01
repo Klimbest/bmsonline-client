@@ -38,7 +38,7 @@ class GadgetProgressBarController extends Controller
             $em->persist($gadgetProgressBar);
             $em->flush();
 
-            return $this->redirectToRoute('gadgetprogressbar_show', ['id' => $gadgetProgressBar->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $gadgetProgressBar->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:gadgetprogressbar:form.html.twig', [
@@ -66,7 +66,7 @@ class GadgetProgressBarController extends Controller
             $em->persist($gadgetProgressBar);
             $em->flush();
 
-            return $this->redirectToRoute('gadgetprogressbar_edit', ['id' => $gadgetProgressBar->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $gadgetProgressBar->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:gadgetprogressbar:form.html.twig', [
@@ -84,11 +84,12 @@ class GadgetProgressBarController extends Controller
      */
     public function deleteAction(GadgetProgressBar $gadgetProgressBar)
     {
+        $page_id = $gadgetProgressBar->getPage()->getId();
         $em = $this->getDoctrine()->getManager();
         $em->remove($gadgetProgressBar);
         $em->flush();
 
-        return $this->redirectToRoute('gadgetprogressbar_index');
+        return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
 }

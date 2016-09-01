@@ -38,7 +38,7 @@ class InputRangeController extends Controller
             $em->persist($inputRange);
             $em->flush();
 
-            return $this->redirectToRoute('inputrange_show', ['id' => $inputRange->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $inputRange->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:inputrange:form.html.twig', [
@@ -66,7 +66,7 @@ class InputRangeController extends Controller
             $em->persist($inputRange);
             $em->flush();
 
-            return $this->redirectToRoute('inputrange_edit', ['id' => $inputRange->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $inputRange->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:inputrange:form.html.twig', [
@@ -84,11 +84,12 @@ class InputRangeController extends Controller
      */
     public function deleteAction(InputRange $inputRange)
     {
+        $page_id = $inputRange->getPage()->getId();
         $em = $this->getDoctrine()->getManager();
         $em->remove($inputRange);
         $em->flush();
 
-        return $this->redirectToRoute('inputrange_index');
+        return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
 }

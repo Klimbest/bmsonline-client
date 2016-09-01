@@ -38,7 +38,7 @@ class PanelTextController extends Controller
             $em->persist($panelText);
             $em->flush();
 
-            return $this->redirectToRoute('paneltext_show', ['id' => $panelText->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $panelText->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:paneltext:form.html.twig', [
@@ -66,7 +66,7 @@ class PanelTextController extends Controller
             $em->persist($panelText);
             $em->flush();
 
-            return $this->redirectToRoute('paneltext_edit', ['id' => $panelText->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $panelText->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:paneltext:form.html.twig', [
@@ -84,11 +84,12 @@ class PanelTextController extends Controller
      */
     public function deleteAction(PanelText $panelText)
     {
+        $page_id = $panelText->getPage()->getId();
         $em = $this->getDoctrine()->getManager();
         $em->remove($panelText);
         $em->flush();
 
-        return $this->redirectToRoute('paneltext_index');
+        return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
 }

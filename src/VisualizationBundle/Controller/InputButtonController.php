@@ -38,7 +38,7 @@ class InputButtonController extends Controller
             $em->persist($inputButton);
             $em->flush();
 
-            return $this->redirectToRoute('inputbutton_show', ['id' => $inputButton->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $inputButton->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:inputbutton:form.html.twig', [
@@ -66,7 +66,7 @@ class InputButtonController extends Controller
             $em->persist($inputButton);
             $em->flush();
 
-            return $this->redirectToRoute('inputbutton_edit', ['id' => $inputButton->getId()]);
+            return $this->redirectToRoute('page_show', ['id' => $inputButton->getPage()->getId()]);
         }
 
         return $this->render('VisualizationBundle:inputbutton:form.html.twig', [
@@ -84,11 +84,12 @@ class InputButtonController extends Controller
      */
     public function deleteAction(InputButton $inputButton)
     {
+        $page_id = $inputButton->getPage()->getId();
         $em = $this->getDoctrine()->getManager();
         $em->remove($inputButton);
         $em->flush();
 
-        return $this->redirectToRoute('inputbutton_index');
+        return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
 }

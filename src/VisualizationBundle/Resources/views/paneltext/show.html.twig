@@ -1,9 +1,7 @@
 <div
-        {% if panelText.tooltip %}
-            title="{{ panelText.name }}"
-        {% endif %}
         name="{{ panelText.name }}"
-        id="{{ panelText.id }}" class="bms-panel bms-panel-text text-{{ panelText.textAlign }}"
+        id="{{ panelText.id }}"
+        class="bms-panel bms-panel-text text-{{ panelText.textAlign }}"
         style="
                 top: {{ panelText.topPosition }}px;
                 left: {{ panelText.leftPosition }}px;
