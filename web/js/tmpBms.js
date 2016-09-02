@@ -70,7 +70,7 @@ function ajaxRefreshPage() {
     function setVariables(registers) {
         if (registers) {
             $.each(registers, function () {
-                var panelVariable = $("div#" + this.panel_id + ".bms-panel-variable");
+                var panelVariable = $("div#" + this.panel_id + ".bms-panelvariable");
                 var value = this.fixed_value;
                 if (value !== null) {
                     var displayPrecision = parseInt(panelVariable.find("input").val());

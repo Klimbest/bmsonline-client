@@ -14,7 +14,7 @@ use VisualizationBundle\Form\PanelVariableType;
 /**
  * PanelVariable controller.
  *
- * @Route("/panelvariable")
+ * @Route("/page/{page_id}/panelvariable")
  */
 class PanelVariableController extends Controller
 {
@@ -30,6 +30,8 @@ class PanelVariableController extends Controller
     public function newAction(Request $request)
     {
         $panelVariable = new PanelVariable();
+        $page = $this->getDoctrine()->getManager()->getRepository('VisualizationBundle:Page')->find($request->get('page_id'));
+        $panelVariable->setPage($page);
         $form = $this->createForm(PanelVariableType::class, $panelVariable);
         $form->handleRequest($request);
 

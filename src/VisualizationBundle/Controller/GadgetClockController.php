@@ -14,7 +14,7 @@ use VisualizationBundle\Form\GadgetClockType;
 /**
  * GadgetClock controller.
  *
- * @Route("/gadgetclock")
+ * @Route("/page/{page_id}/gadgetclock")
  */
 class GadgetClockController extends Controller
 {
@@ -30,6 +30,8 @@ class GadgetClockController extends Controller
     public function newAction(Request $request)
     {
         $gadgetClock = new GadgetClock();
+        $page = $this->getDoctrine()->getManager()->getRepository('VisualizationBundle:Page')->find($request->get('page_id'));
+        $gadgetClock->setPage($page);
         $form = $this->createForm(GadgetClockType::class, $gadgetClock);
         $form->handleRequest($request);
 

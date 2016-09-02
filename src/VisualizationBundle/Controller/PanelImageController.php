@@ -14,7 +14,7 @@ use VisualizationBundle\Form\PanelImageType;
 /**
  * PanelImage controller.
  *
- * @Route("/panelimage")
+ * @Route("/page/{page_id}/panelimage")
  */
 class PanelImageController extends Controller
 {
@@ -30,6 +30,8 @@ class PanelImageController extends Controller
     public function newAction(Request $request)
     {
         $panelImage = new PanelImage();
+        $page = $this->getDoctrine()->getManager()->getRepository('VisualizationBundle:Page')->find($request->get('page_id'));
+        $panelImage->setPage($page);
         $form = $this->createForm(PanelImageType::class, $panelImage);
         $form->handleRequest($request);
 

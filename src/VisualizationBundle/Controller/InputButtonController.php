@@ -14,7 +14,7 @@ use VisualizationBundle\Form\InputButtonType;
 /**
  * InputButton controller.
  *
- * @Route("/inputbutton")
+ * @Route("/page/{page_id}/inputbutton")
  */
 class InputButtonController extends Controller
 {
@@ -30,6 +30,8 @@ class InputButtonController extends Controller
     public function newAction(Request $request)
     {
         $inputButton = new InputButton();
+        $page = $this->getDoctrine()->getManager()->getRepository('VisualizationBundle:Page')->find($request->get('page_id'));
+        $inputButton->setPage($page);
         $form = $this->createForm(InputButtonType::class, $inputButton);
         $form->handleRequest($request);
 

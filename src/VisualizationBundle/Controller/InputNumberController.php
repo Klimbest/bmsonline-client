@@ -14,7 +14,7 @@ use VisualizationBundle\Form\InputNumberType;
 /**
  * InputNumber controller.
  *
- * @Route("/inputnumber")
+ * @Route("/page/{page_id}/inputnumber")
  */
 class InputNumberController extends Controller
 {
@@ -30,6 +30,8 @@ class InputNumberController extends Controller
     public function newAction(Request $request)
     {
         $inputNumber = new InputNumber();
+        $page = $this->getDoctrine()->getManager()->getRepository('VisualizationBundle:Page')->find($request->get('page_id'));
+        $inputNumber->setPage($page);
         $form = $this->createForm(InputNumberType::class, $inputNumber);
         $form->handleRequest($request);
 

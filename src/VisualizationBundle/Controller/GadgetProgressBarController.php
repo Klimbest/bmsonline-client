@@ -14,7 +14,7 @@ use VisualizationBundle\Form\GadgetProgressBarType;
 /**
  * GadgetProgressBar controller.
  *
- * @Route("/gadgetprogressbar")
+ * @Route("/page/{page_id}/gadgetprogressbar")
  */
 class GadgetProgressBarController extends Controller
 {
@@ -30,6 +30,8 @@ class GadgetProgressBarController extends Controller
     public function newAction(Request $request)
     {
         $gadgetProgressBar = new GadgetProgressBar();
+        $page = $this->getDoctrine()->getManager()->getRepository('VisualizationBundle:Page')->find($request->get('page_id'));
+        $gadgetProgressBar->setPage($page);
         $form = $this->createForm(GadgetProgressBarType::class, $gadgetProgressBar);
         $form->handleRequest($request);
 

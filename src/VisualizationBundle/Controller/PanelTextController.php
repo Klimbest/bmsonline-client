@@ -10,11 +10,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use VisualizationBundle\Entity\PanelText;
 use VisualizationBundle\Form\PanelTextType;
+use VisualizationBundle\Entity\Page;
 
 /**
  * PanelText controller.
  *
- * @Route("/paneltext")
+ * @Route("/page/{page_id}/paneltext")
  */
 class PanelTextController extends Controller
 {
@@ -30,6 +31,8 @@ class PanelTextController extends Controller
     public function newAction(Request $request)
     {
         $panelText = new PanelText();
+        $page = $this->getDoctrine()->getManager()->getRepository('VisualizationBundle:Page')->find($request->get('page_id'));
+        $panelText->setPage($page);
         $form = $this->createForm(PanelTextType::class, $panelText);
         $form->handleRequest($request);
 
