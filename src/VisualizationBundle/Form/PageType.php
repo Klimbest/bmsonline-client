@@ -8,7 +8,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 //FORM TYPES
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use VisualizationBundle\Form\ColorType;
 
 class PageType extends AbstractType
 {

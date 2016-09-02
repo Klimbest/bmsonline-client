@@ -9,18 +9,18 @@
                     </button>
                     <ul class="dropdown-menu" role="menu">
                         <li class="dropdown-header">Panel</li>
-                        <li><a href="{{ path('panelimage_new') }}"><i class="fa fa-image"></i> Obraz</a></li>
-                        <li><a href="{{ path('paneltext_new') }}"><i class="fa fa-font"></i> Tekst</a></li>
-                        <li><a href="{{ path('panelvariable_new') }}"><i class="fa fa-hdd-o"></i> Zmienna</a></li>
+                        <li><a href="{{ path('panelimage_new', {'page_id': active_page.id}) }}"><i class="fa fa-image"></i> Obraz</a></li>
+                        <li><a href="{{ path('paneltext_new', {'page_id': active_page.id}) }}"><i class="fa fa-font"></i> Tekst</a></li>
+                        <li><a href="{{ path('panelvariable_new', {'page_id': active_page.id}) }}"><i class="fa fa-hdd-o"></i> Zmienna</a></li>
                         <li class="dropdown-header">Gadżet</li>
-                        <li><a href="{{ path('gadgetclock_new') }}"><i class="fa fa-clock-o"></i> Zegar</a></li>
-                        <li><a href="{{ path('gadgetprogressbar_new') }}"><i class="fa fa-tasks"></i> Progress bar</a>
+                        <li><a href="{{ path('gadgetclock_new', {'page_id': active_page.id}) }}"><i class="fa fa-clock-o"></i> Zegar</a></li>
+                        <li><a href="{{ path('gadgetprogressbar_new', {'page_id': active_page.id}) }}"><i class="fa fa-tasks"></i> Progress bar</a>
                         </li>
                         <li class="dropdown-header">Input</li>
-                        <li><a href="{{ path('inputbutton_new') }}"><i class="fa fa-hand-pointer-o"></i> Przycisk</a>
+                        <li><a href="{{ path('inputbutton_new', {'page_id': active_page.id}) }}"><i class="fa fa-hand-pointer-o"></i> Przycisk</a>
                         </li>
-                        <li><a href="{{ path('inputrange_new') }}"><i class="fa fa-arrows-h"></i> Suwak</a></li>
-                        <li><a href="{{ path('inputnumber_new') }}"><i class="fa fa-edit"></i> Pole</a></li>
+                        <li><a href="{{ path('inputrange_new', {'page_id': active_page.id}) }}"><i class="fa fa-arrows-h"></i> Suwak</a></li>
+                        <li><a href="{{ path('inputnumber_new', {'page_id': active_page.id}) }}"><i class="fa fa-edit"></i> Pole</a></li>
                     </ul>
                 </div>
             </div>
