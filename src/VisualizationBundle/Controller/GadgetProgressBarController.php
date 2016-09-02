@@ -14,7 +14,7 @@ use VisualizationBundle\Form\GadgetProgressBarType;
 /**
  * GadgetProgressBar controller.
  *
- * @Route("/page/{page_id}/gadgetprogressbar")
+ * @Route("/gadgetprogressbar")
  */
 class GadgetProgressBarController extends Controller
 {
@@ -22,7 +22,7 @@ class GadgetProgressBarController extends Controller
     /**
      * Creates a new GadgetProgressBar entity.
      *
-     * @Route("/new", name="gadgetprogressbar_new")
+     * @Route("/page/{page_id}/new", name="gadgetprogressbar_new")
      * @Method({"GET", "POST"})
      * @param Request $request
      * @return RedirectResponse|Response

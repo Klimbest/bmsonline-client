@@ -14,7 +14,7 @@ use VisualizationBundle\Form\GadgetClockType;
 /**
  * GadgetClock controller.
  *
- * @Route("/page/{page_id}/gadgetclock")
+ * @Route("/gadgetclock")
  */
 class GadgetClockController extends Controller
 {
@@ -22,7 +22,7 @@ class GadgetClockController extends Controller
     /**
      * Creates a new GadgetClock entity.
      *
-     * @Route("/new", name="gadgetclock_new")
+     * @Route("/page/{page_id}/new", name="gadgetclock_new")
      * @Method({"GET", "POST"})
      * @param Request $request
      * @return RedirectResponse|Response

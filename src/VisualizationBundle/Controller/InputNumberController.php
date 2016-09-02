@@ -14,7 +14,7 @@ use VisualizationBundle\Form\InputNumberType;
 /**
  * InputNumber controller.
  *
- * @Route("/page/{page_id}/inputnumber")
+ * @Route("/inputnumber")
  */
 class InputNumberController extends Controller
 {
@@ -22,7 +22,7 @@ class InputNumberController extends Controller
     /**
      * Creates a new InputNumber entity.
      *
-     * @Route("/new", name="inputnumber_new")
+     * @Route("/page/{page_id}/new", name="inputnumber_new")
      * @Method({"GET", "POST"})
      * @param Request $request
      * @return RedirectResponse|Response

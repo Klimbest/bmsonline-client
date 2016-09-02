@@ -34,8 +34,8 @@
         <span class="label label-primary label-bms-panel">
             <i class="fa fa-hdd-o fa-fw"></i> {{ panelVariable.id }}
             <a href="#"><i class='fa fa-fw fa-clone fa-blue'></i></a>
-            <a href="{{ path('panelvariable_edit', {'id': panelVariable.id, 'page_id': active_page.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
-            <a href="{{ path('panelvariable_delete', {'id': panelVariable.id, 'page_id': active_page.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
+            <a href="{{ path('panelvariable_edit', {'id': panelVariable.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
+            <a href="{{ path('panelvariable_delete', {'id': panelVariable.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
         </span>
     {% endif %}
 </div>

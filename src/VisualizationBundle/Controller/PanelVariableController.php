@@ -14,7 +14,7 @@ use VisualizationBundle\Form\PanelVariableType;
 /**
  * PanelVariable controller.
  *
- * @Route("/page/{page_id}/panelvariable")
+ * @Route("/panelvariable")
  */
 class PanelVariableController extends Controller
 {
@@ -22,7 +22,7 @@ class PanelVariableController extends Controller
     /**
      * Creates a new PanelVariable entity.
      *
-     * @Route("/new", name="panelvariable_new")
+     * @Route("/page/{page_id}/new", name="panelvariable_new")
      * @Method({"GET", "POST"})
      * @param Request $request
      * @return RedirectResponse|Response

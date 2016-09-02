@@ -14,7 +14,7 @@ use VisualizationBundle\Form\PanelImageType;
 /**
  * PanelImage controller.
  *
- * @Route("/page/{page_id}/panelimage")
+ * @Route("/panelimage")
  */
 class PanelImageController extends Controller
 {
@@ -22,7 +22,7 @@ class PanelImageController extends Controller
     /**
      * Creates a new PanelImage entity.
      *
-     * @Route("/new", name="panelimage_new")
+     * @Route("/page/{page_id}/new", name="panelimage_new")
      * @Method({"GET", "POST"})
      * @param Request $request
      * @return RedirectResponse|Response

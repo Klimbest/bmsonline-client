@@ -14,7 +14,7 @@ use VisualizationBundle\Form\InputRangeType;
 /**
  * InputRange controller.
  *
- * @Route("/page/{page_id}/inputrange")
+ * @Route("/inputrange")
  */
 class InputRangeController extends Controller
 {
@@ -22,7 +22,7 @@ class InputRangeController extends Controller
     /**
      * Creates a new InputRange entity.
      *
-     * @Route("/new", name="inputrange_new")
+     * @Route("/page/{page_id}/new", name="inputrange_new")
      * @Method({"GET", "POST"})
      * @param Request $request
      * @return RedirectResponse|Response

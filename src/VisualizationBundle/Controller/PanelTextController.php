@@ -15,7 +15,7 @@ use VisualizationBundle\Entity\Page;
 /**
  * PanelText controller.
  *
- * @Route("/page/{page_id}/paneltext")
+ * @Route("/paneltext")
  */
 class PanelTextController extends Controller
 {
@@ -23,7 +23,7 @@ class PanelTextController extends Controller
     /**
      * Creates a new PanelText entity.
      *
-     * @Route("/new", name="paneltext_new")
+     * @Route("/page/{page_id}/new", name="paneltext_new")
      * @Method({"GET", "POST"})
      * @param Request $request
      * @return RedirectResponse|Response

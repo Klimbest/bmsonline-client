@@ -29,8 +29,8 @@
         <span class="label label-primary label-bms-panel">
             <i class="fa fa-font fa-fw"></i> {{ panelText.id }}
             <a href="#"><i class='fa fa-fw fa-clone fa-blue'></i></a>
-            <a href="{{ path('paneltext_edit', {'id': panelText.id, 'page_id': active_page.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
-            <a href="{{ path('paneltext_delete', {'id': panelText.id, 'page_id': active_page.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
+            <a href="{{ path('paneltext_edit', {'id': panelText.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
+            <a href="{{ path('paneltext_delete', {'id': panelText.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
         </span>
     {% endif %}
 </div>

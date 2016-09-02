@@ -14,7 +14,7 @@ use VisualizationBundle\Form\InputButtonType;
 /**
  * InputButton controller.
  *
- * @Route("/page/{page_id}/inputbutton")
+ * @Route("/inputbutton")
  */
 class InputButtonController extends Controller
 {
@@ -22,7 +22,7 @@ class InputButtonController extends Controller
     /**
      * Creates a new InputButton entity.
      *
-     * @Route("/new", name="inputbutton_new")
+     * @Route("/page/{page_id}/new", name="inputbutton_new")
      * @Method({"GET", "POST"})
      * @param Request $request
      * @return RedirectResponse|Response
