@@ -1,69 +1,3 @@
-var defaultPatternNetSize = 50;
-
-$(document).ready(function () {
-//wczytanie strony startowej
-    var data = {
-        page_id: 1
-    };
-    //załadowanie strony startowej
-    ajaxChangePage(data);
-    //ustawienie eventów w bocznym menu
-    setSidebarEvents();
-});
-//ustawienie obsługi przycisków w menu bocznym
-function setSidebarEvents() {
-    //przycisk dodający stronę
-    $("button.btn-add-page").click(function () {
-        createDialogPageAddSettings().dialog("open");
-    });
-    //przycisk dodający panel
-    $("button.btn-add-panel").click(addPanel);
-    //ON/OFF siatka pomocnicza
-    $("button.btn-pattern-net").click(function () {
-        $(this).children("span").toggleClass('off');
-        var state = $(this).children("span").hasClass("off");
-        if (state === true) {
-            $(".pattern-net, .pattern-net-right").remove();
-        } else {
-            var gridSize = $("input#pattern-net-size").val();
-            if (gridSize.length === 0) {
-                setPatternNet(defaultPatternNetSize);
-            } else {
-                setPatternNet(gridSize);
-            }
-        }
-    });
-    //ustaw domyślny rozmiar siatki i zmianę rozmiaru
-    $("input#pattern-net-size").val(defaultPatternNetSize).change(function () {
-
-        var x = $(this).val();
-        setPatternNet(x);
-    });
-    //ON/OFF lista paneli
-    $("button.btn-panel-list").click(function () {
-        $(this).children("span").toggleClass('off');
-        var state = $(this).children("span").hasClass("off");
-        if (state === true) {
-            $("div.panel-list-container").hide();
-        } else {
-            $("div.panel-list-container").show();
-        }
-    });
-}
-
-function addPanel() {
-    $.ajax({
-        type: "POST",
-        url: Routing.generate('bms_visualization_add_panel'),
-        success: function (ret) {
-            $(".main-row div#page").hide();
-            $(".main-row div#panel-form").remove();
-            $(".main-row").append(ret["template"]).children(".fa-spinner").remove();
-            setPanelForm();
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
 
 function setPanelForm() {
     var panelForm = $("div#panel-form");
@@ -199,31 +133,6 @@ function setEdit(type, id) {
     panelForm.find("input#panel-source-content").val($("div#panel-form input#panel_contentSource").val());
 }
 
-function savePanel() {
-    var form = $("form[name='panel']");
-    //todo: validowanie formularza przed wysłaniem
-    $.ajax({
-        type: form.attr('method'),
-        url: form.attr('action'),
-        data: form.serialize(),
-        success: function (ret) {
-            var mainRow = $('div.main-row');
-            var panel = $("div#" + ret["panel_id"] + ".bms-panel");
-            mainRow.find("div#panel-form").remove();
-            panel.remove();
-            mainRow.find("div#page").show().children("div.well").show().append(ret['panel']);
-
-            if (ret["edit"] != 1) {
-                setVariables(ret["registers"]);
-                loadPanelList(ret["panelList"]);
-            }
-            setPanelEvents();
-            mainRow.find("i.fa-spinner").remove();
-        }
-    });
-    $('div.main-row').append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-
 function closePanelForm() {
     if (confirm('Na pewno anulować dodawanie obiektu?')) {
         $('div.main-row div#panel-form').remove();
@@ -316,6 +225,7 @@ function setDialogButtonEvent(panel_id) {
     //delete term
     setDeleteTerm();
 }
+
 function setDialogButtonProgressBar() {
     //zmiana kolorów
     $("input#color1").on('input', function () {
@@ -936,212 +846,23 @@ function createCondition(panel_id) {
 
 }
 
-function ajaxMovePanel(data) {
+function copyPanel(data) {
     $.ajax({
         type: "POST",
         datatype: "application/json",
-        url: Routing.generate('bms_visualization_move_panel'),
+        url: Routing.generate('bms_visualization_copy_panel'),
         data: data,
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
+            $("div.main-row div.well").append(ret["template"]);
+            $(".main-row").append(ret["dialog"]);
             loadPanelList(ret["panelList"]);
+
+            setPanelEvents();
+            createPanelDialog(ret["panel_id"]).dialog("open");
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-
-/*
- function copyPanel(data) {
- $.ajax({
- type: "POST",
- datatype: "application/json",
- url: Routing.generate('bms_visualization_copy_panel'),
- data: data,
- success: function (ret) {
- $(".main-row").children(".fa-spinner").remove();
- $("div.main-row div.well").append(ret["template"]);
- $(".main-row").append(ret["dialog"]);
- loadPanelList(ret["panelList"]);
-
- setPanelEvents();
- createPanelDialog(ret["panel_id"]).dialog("open");
- }
- });
- $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
- }
- */
-function ajaxDeletePanel(data) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_delete_panel'),
-        data: data,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            loadPanelList(ret["panelList"]);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-
-//dodanie obsługi zdarzeń na każdym panelu na stronie
-function setPanelEvents() {
-    var panels = $("div.bms-panel");
-
-    panels.each(function () {
-        //pobranie id panelu
-        var id = $(this).attr("id");
-        var aR = $(this).children("img").length > 0;
-        $(this).show().removeAttr("onclick").unbind("mouseenter mouseleave");
-        //draggable and resizable
-        $(this).draggable({
-            containment: "parent",
-            snap: ".pattern-net",
-            snapTolerance: 10,
-            snapMode: "both",
-            distance: 5,
-            stop: function (event, ui) {
-                var data = {
-                    panel_id: id,
-                    topPosition: ui.helper.css("top"),
-                    leftPosition: ui.helper.css("left"),
-                    width: ui.helper.css("width"),
-                    height: ui.helper.css("height"),
-                    zIndex: ui.helper.css("z-index")
-                };
-                ajaxMovePanel(data);
-            }
-        }).resizable({
-            containment: "parent",
-            snap: ".pattern-net",
-            snapTolerance: 10,
-            snapMode: "both",
-            aspectRatio: aR,
-            handles: "se",
-            minWidth: 15,
-            minHeight: 15,
-            resize: function (event, ui) {
-                var bw = ui.element.css("border-top-width");
-                bw = parseInt(bw);
-                var delta_x = ui.size.width - (ui.originalSize.width + 2 * bw);
-                var delta_y = ui.size.height - (ui.originalSize.height + 2 * bw);
-                if (delta_x !== 0) {
-                    ui.size.width += 2 * bw;
-                }
-                if (delta_y !== 0) {
-                    ui.size.height += 2 * bw;
-                }
-                ui.element.css({lineHeight: ui.element.height() + "px"});
-
-                if (ui.element.hasClass("bms-panel-image")) {
-                    var image = $(this).children("img");
-                    var mW = image[0].naturalWidth;
-                    if (ui.size.width > mW) {
-                        ui.size.width = mW;
-                    }
-                    var mH = image[0].naturalHeight;
-                    if (ui.size.height > mH) {
-                        ui.size.height = mH;
-                    }
-                }
-
-
-                ui.element.addClass("hover");
-            },
-            stop: function (event, ui) {
-                ui.element.removeClass("hover");
-                var data = {
-                    panel_id: id,
-                    topPosition: ui.helper.css("top"),
-                    leftPosition: ui.helper.css("left"),
-                    width: ui.element.css("width"),
-                    height: ui.element.css("height"),
-                    zIndex: ui.element.css("zIndex")
-                };
-                ajaxMovePanel(data);
-            }
-        });
-        $(this).hover(function () {
-            $(".panel-list-container div#" + id + " span.label").css({backgroundColor: "#FF0000"});
-        }, function () {
-            if ($("div#" + id + ".panel-list").hasClass("active")) {
-
-            } else {
-                $(".panel-list-container div#" + id + " span.label").css({backgroundColor: ""});
-            }
-        });
-        $(this).click(function (e) {
-            var panelLabel = $("span.label-bms-panel");
-            $(this).css({zIndex: 100});
-            if (panelLabel.length > 0) {
-                var relX = parseInt(panelLabel.css("left"));
-                var relY = parseInt(panelLabel.css("top"));
-            } else {
-                var relX = e.pageX - $(this).offset().left;
-                var relY = e.pageY - $(this).offset().top;
-                if ((parseInt($(this).css("left"))) + relX > parseInt($(this).parent().css("width")) / 2) {
-                    relX = relX - 116;
-                } else {
-                    relX = relX - 4;
-                }
-                if ((parseInt($(this).css("top"))) + relY > parseInt($(this).parent().css("height")) / 2) {
-                    relY = relY - 21;
-                } else {
-                    relY = relY - 4;
-                }
-            }
-            panelLabel.remove();
-            var label = "<span id=" + id + " class='label label-bms-panel' \n\
-                               style='top: " + relY + "px; \n\
-                                      left: " + relX + "px;\n\
-                                      font-size: initial;\n\
-                                      font-weight: initial;\n\
-                                      text-decoration: none;\n\
-                                      font-style: initial;'>\n\
-                            <div>\n\
-                                " + id + "\n\
-                                <i class='fa fa-fw fa-clone fa-blue'></i>\n\
-                                <i class='fa fa-fw fa-cogs fa-yellow'></i>\n\
-                                <i class='fa fa-fw fa-trash-o fa-red'></i>\n\
-                            </div>\n\
-                        </span>";
-            $(this).append(label);
-            setPanelLabelEvents(id);
-        });
-        $(this).mouseleave(function () {
-            var zI = $(".panel-list-container div#" + id + " span.label").attr("value");
-            $(this).css({zIndex: zI});
-            $("span.label-bms-panel").remove();
-        });
-    });
-    //ustawienie przełączania między stronami
-    function setPanelLabelEvents(id) {
-        var label = "span#" + id + ".label-bms-panel";
-        $(label).unbind("click");
-        //kopiowania
-        $(label + " i.fa-clone").click(function () {
-            // var data = {
-            //     panel_id: id
-            // };
-            // copyPanel(data);
-        });
-        //ustawienia
-        $(label + " i.fa-cogs").click(function () {
-            var panel = $("div#" + id + ".bms-panel");
-            var data = {panel_id: id};
-            editPanel(data);
-        });
-        //usuwanie
-        $(label + " i.fa-trash-o").click(function () {
-            if (confirm("Na pewno chcesz usunąć ten panel? Zostaną usunięte również wszystkie zdarzenia przypisane do tego panelu.")) {
-                $("div#" + id + ".bms-panel").remove();
-                var data = {
-                    panel_id: id
-                };
-                ajaxDeletePanel(data);
-            }
-        });
-    }
 }
 
 function createDialogPageAddSettings() {
@@ -1180,115 +901,6 @@ function createDialogPageAddSettings() {
     });
 }
 
-function createDialogPageEditSettings(page_id) {
-
-    return $("div.dialog-page-edit-settings").dialog({
-        autoOpen: false,
-        height: 300,
-        width: 450,
-        modal: true,
-        buttons: [
-            {
-                text: "Zapisz",
-                click: function () {
-                    var data = {
-                        page_id: page_id,
-                        width: $("div.dialog-page-edit-settings input#width").val(),
-                        height: $("div.dialog-page-edit-settings input#height").val(),
-                        name: $("div.dialog-page-edit-settings input#name").val()
-                    };
-                    ajaxEditPage(data);
-                    $(this).dialog("close");
-                }
-            },
-            {
-                text: "Anuluj",
-                click: function () {
-                    $(this).dialog("close");
-                }
-            }],
-        open: function () {
-            if (page_id !== null) {
-                setFormField();
-            }
-        },
-        close: function () {
-            $(this).dialog("close");
-        }
-    });
-    function setFormField() {
-        var mailWell = $('div.main-row div.well');
-        var width = parseInt(mailWell.css("width"));
-        var height = parseInt(mailWell.css("height"));
-        var name = $('div.label-page.active span#name').text();
-        var editSettings = $("div.dialog-page-edit-settings");
-        editSettings.find("input#width").val(width);
-        editSettings.find("input#height").val(height);
-        editSettings.find("input#name").val(name);
-    }
-}
-
-function ajaxAddPage(data) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_add_page'),
-        data: data,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            createPage(ret['page'], ret['panelList']);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-
-function ajaxDeletePage(data) {
-    $.ajax({
-        type: "POST",
-        url: Routing.generate('bms_visualization_delete_page'),
-        data: data,
-        success: function () {
-            $(".main-row").children(".fa-spinner").remove();
-            var data = {
-                page_id: 1
-            };
-            ajaxChangePage(data);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-
-function ajaxEditPage(data) {
-    $.ajax({
-        type: "POST",
-        url: Routing.generate('bms_visualization_edit_page'),
-        data: data,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            var data = {
-                page_id: ret['page_id']
-            };
-            ajaxChangePage(data);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-
-function ajaxChangePage(data) {
-    $.ajax({
-        type: "POST",
-        datatype: "application/json",
-        url: Routing.generate('bms_visualization_change_page'),
-        data: data,
-        success: function (ret) {
-            $(".main-row").children(".fa-spinner").remove();
-            createPage(ret['page'], ret['panelList']);
-            setVariables(ret['registers']);
-        }
-    });
-    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
-}
-
 function setVariables(registers) {
     $.each(registers, function () {
         var key = this.name;
@@ -1307,84 +919,6 @@ function setVariables(registers) {
         var roundValue = parseFloat(randValue).toFixed(displayPrecision);
         $("div#" + panel_id + ".bms-panel").children("span#" + key).empty().append(roundValue).css({"color": color});
     });
-}
-//utworzenie nowej strony
-function createPage(page, panelList) {
-    var mainRow = $(".main-row div.col-md-12");
-    mainRow.children().remove();
-    mainRow.append(page).fadeIn("slow");
-    setPatternNet($("input#pattern-net-size").val());
-    setPageLabelsEvent();
-    setPanelEvents();
-    loadPanelList(panelList);
-
-    function setPageLabelsEvent() {
-        var pageLabels = $(".label-page");
-        pageLabels.unbind("click");
-        pageLabels.each(function () {
-            var id = $(this).attr("id");
-            $(this).click(function () {
-                var data = {
-                    page_id: id
-                };
-                ajaxChangePage(data);
-            });
-            if ($(this).hasClass("active")) {
-                $(this).unbind("click");
-            }
-            deletePageEvent($(this), id);
-            editPageEvent($(this), id);
-        });
-        //usuwanie strony
-        function deletePageEvent(label, page_id) {
-            label.children("i.fa-remove").click(function () {
-                var data = {
-                    page_id: page_id
-                };
-                ajaxDeletePage(data);
-                label.remove();
-                $("div.main-row div.well").remove();
-            });
-        }
-
-        //edycja strony
-        function editPageEvent(label, page_id) {
-            label.children("i.fa-cogs").click(function () {
-                createDialogPageEditSettings(page_id).dialog("open");
-            });
-        }
-
-
-    }
-
-}
-
-//ustaw siatkę pomocniczą
-function setPatternNet(x) {
-
-    var state = $("button.btn-pattern-net span").hasClass("off");
-    if (state === false) {
-        $(".pattern-net, .pattern-net-right").remove();
-        var divItem;
-        if (x.length === 0) {
-            x = defaultPatternNetSize;
-        } else if (x < 25) {
-            x = 25;
-        }
-        var mainWell = $("div.main-row div.well");
-        var nx = mainWell.width() / x,
-            ny = mainWell.height() / x;
-        for (var i = 0; i < Math.floor(nx) * Math.floor(ny) + Math.floor(nx); i++) {
-            divItem = "<div id=" + i + " class='pattern-net'></div>";
-            mainWell.append(divItem);
-            $("div#" + i + ".pattern-net").width(x).height(x);
-        }
-        for (i = 0; i < ny; i++) {
-            divItem = "<div id=" + i + " class='pattern-net-right'></div>";
-            mainWell.append(divItem);
-            $("div#" + i + ".pattern-net-right").height(x);
-        }
-    }
 }
 
 //usuń obrazek z serwera
