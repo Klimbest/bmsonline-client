@@ -3,13 +3,12 @@
 namespace VisualizationBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ButtonType;
-use Symfony\Component\Form\Extension\Core\Type\RangeType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 //FORM TYPES
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\RangeType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -26,34 +25,33 @@ class PanelTextType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Nazwa'
             ])
+            ->add('source', TextareaType::class, [
+                'label' => 'Wyświetlany tekst'
+            ])
             //POZYCJA
             ->add('topPosition', IntegerType::class, [
                 'label' => 'Od góry',
                 'attr' => [
-                    'min' => 0,
-                    'step' => 25
+                    'min' => 0
                 ]
             ])
             ->add('leftPosition', IntegerType::class, [
                 'label' => 'Od lewej',
                 'attr' => [
-                    'min' => 0,
-                    'step' => 25
+                    'min' => 0
                 ]
             ])
             //ROZMIAR
             ->add('width', IntegerType::class, [
                 'label' => 'Szerokość',
                 'attr' => [
-                    'min' => 0,
-                    'step' => 25
+                    'min' => 0
                 ]
             ])
             ->add('height', IntegerType::class, [
                 'label' => 'Wysokość',
                 'attr' => [
-                    'min' => 0,
-                    'step' => 25
+                    'min' => 0
                 ]
             ])
             //Tło
@@ -154,10 +152,7 @@ class PanelTextType extends AbstractType
                 ]
             ])
             //UKRYTE
-            ->add('zIndex', HiddenType::class)
-            ->add('source', TextareaType::class, [
-                'label' => 'Wyświetlany tekst'
-            ]);
+            ->add('zIndex', HiddenType::class);
     }
 
     /**

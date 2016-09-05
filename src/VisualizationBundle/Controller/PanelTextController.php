@@ -95,4 +95,24 @@ class PanelTextController extends Controller
         return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
+    /**
+     * Copy a PanelText entity.
+     *
+     * @Route("/{id}/copy", name="paneltext_copy")
+     * @param PanelText $panelText
+     * @return RedirectResponse
+     */
+    public function copyAction(PanelText $panelText)
+    {
+        $panelText->getPage()->getId();
+        $panelText_new = clone $panelText;
+        $panelText_new->setTopPosition(0)->setLeftPosition(0);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($panelText_new);
+        $em->flush();
+
+        return $this->redirectToRoute('paneltext_edit', ['id' => $panelText_new->getId()]);
+    }
+
 }

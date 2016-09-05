@@ -91,3 +91,41 @@ span.toggler.off {
     font-style: normal;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
+
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+div.thumbnail-list div {
+    height: 50px;
+    width: 50px;
+    display: inline-block;
+}
+
+div.thumbnail-list div:hover {
+    border: solid 4px red;
+    cursor: pointer;
+}
+
+div.thumbnail-list div.selected {
+    border: solid 4px #337AB7;
+    cursor: pointer;
+}
+
+div.thumbnail-list div img {
+    max-height: 100%;
+    max-width: 100%;
+}

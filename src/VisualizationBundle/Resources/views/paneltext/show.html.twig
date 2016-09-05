@@ -28,7 +28,7 @@
     {% if labels %}
         <span class="label label-primary label-bms-panel">
             <i class="fa fa-font fa-fw"></i> {{ panelText.id }}
-            <a href="#"><i class='fa fa-fw fa-clone fa-blue'></i></a>
+            <a href="{{ path('paneltext_copy', {'id': panelText.id }) }}"><i class='fa fa-fw fa-clone fa-blue'></i></a>
             <a href="#"><i class='fa fa-fw fa-bolt fa-yellow'></i></a>
             <a href="{{ path('paneltext_edit', {'id': panelText.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
             <a href="{{ path('paneltext_delete', {'id': panelText.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>

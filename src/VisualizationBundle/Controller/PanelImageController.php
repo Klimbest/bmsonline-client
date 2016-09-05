@@ -2,6 +2,7 @@
 
 namespace VisualizationBundle\Controller;
 
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -18,6 +19,70 @@ use VisualizationBundle\Form\PanelImageType;
  */
 class PanelImageController extends Controller
 {
+    /**
+     * @return array
+     */
+    private function getImages()
+    {
+        $finder = new Finder();
+        $finder->directories()->in($this->getParameter('kernel.root_dir') . '/../web/images/');
+        $images = [];
+        foreach ($finder as $dir) {
+            $finder2 = new Finder();
+            $dirDet = explode("/", $dir->getRelativePathname());
+            switch (sizeof($dirDet)) {
+                case 1 :
+                    if (!empty($images[$dirDet[0]])) {
+                        $images[$dirDet[0]] = [];
+                    } else {
+                        null;
+                    }
+                    $finder2->depth('== 0')->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                    foreach ($finder2 as $file) {
+                        $fn = $file->getFilename();
+                        $images[$dirDet[0]][$fn] = $fn;
+                    }
+                    break;
+                case 2 :
+                    if (!empty($images[$dirDet[0]][$dirDet[1]])) {
+                        $images[$dirDet[0]][$dirDet[1]] = [];
+                    } else {
+                        null;
+                    }
+                    $finder2->depth('== 0')->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                    foreach ($finder2 as $file) {
+                        $fn = $file->getFilename();
+                        $images[$dirDet[0]][$dirDet[1]][$fn] = $fn;
+                    }
+                    break;
+                case 3 :
+                    if (!empty($images[$dirDet[0]][$dirDet[1]][$dirDet[2]])) {
+                        $images[$dirDet[0]][$dirDet[1]][$dirDet[2]] = [];
+                    } else {
+                        null;
+                    }
+                    $finder2->depth('== 0')->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                    foreach ($finder2 as $file) {
+                        $fn = $file->getFilename();
+                        $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$fn] = $fn;
+                    }
+                    break;
+                case 4 :
+                    if (!empty($images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]])) {
+                        $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]] = [];
+                    } else {
+                        null;
+                    }
+                    $finder2->depth('== 0')->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
+                    foreach ($finder2 as $file) {
+                        $fn = $file->getFilename();
+                        $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]][$fn] = $fn;
+                    }
+                    break;
+            }
+        }
+        return $images;
+    }
 
     /**
      * Creates a new PanelImage entity.
@@ -34,6 +99,7 @@ class PanelImageController extends Controller
         $panelImage->setPage($page);
         $form = $this->createForm(PanelImageType::class, $panelImage);
         $form->handleRequest($request);
+        $images = self::getImages();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -44,6 +110,7 @@ class PanelImageController extends Controller
         }
 
         return $this->render('VisualizationBundle:panelimage:form.html.twig', [
+            'images' => $images,
             'panelImage' => $panelImage,
             'form' => $form->createView(),
         ]);
