@@ -73,8 +73,7 @@ class IndexController extends Controller
                 ->setZIndex($zIndex);
 
             $em->flush();
-
-            return new JsonResponse(['element' => $element]);
+            return new JsonResponse();
         } else {
             throw new AccessDeniedHttpException();
         }

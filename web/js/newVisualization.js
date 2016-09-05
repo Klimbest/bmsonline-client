@@ -153,7 +153,6 @@ function ajaxMoveElement(data) {
         data: data,
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
-            console.log(ret["element"]);
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
