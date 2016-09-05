@@ -132,7 +132,7 @@ function setPanelEvents() {
                     height: ui.element.css("height")
                 };
 
-                ajaxMoveElement(data, url);
+                ajaxMoveElement(data);
             }
         });
 
