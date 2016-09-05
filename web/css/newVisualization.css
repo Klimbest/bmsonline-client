@@ -88,4 +88,6 @@ span.toggler.off {
     left: 0;
     display: none;
     font-size: 15px;
+    font-style: normal;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
