@@ -1,130 +1,139 @@
 {# /app/Resources/views/base.html.twig #}
 <!DOCTYPE html>
 <html lang="pl">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <meta name="description" content="bmsonline">
-        <meta name="author" content="Paweł Zajder">
-        <link rel="icon" type="image/x-icon" href="{{ asset('web/favicon.ico') }}" />
-        <title>BMS OnLine {% block title %}-{% endblock %} Klimbest</title>
-        {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('css/bootstrap.css')}}">
-            <link rel="stylesheet" href="{{ asset('css/ie10-viewport-bug-workaround.css')}}">
-            <link rel="stylesheet" href="{{ asset('css/jquery-ui.css')}}">
-            <link rel="stylesheet" href="{{ asset('css/font-awesome.css')}}">
-            <link rel="stylesheet" href="{{ asset('css/csshake.css')}}">
-            <link rel="stylesheet" href="{{ asset('css/main.css')}}">
-        {% endblock %}
-    </head>
-    <body>
-        <nav class="navbar navbar-default">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="http://bmsonline.pl">Bmsonline</a>
-                </div>
-                <div id="navbar" class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        {% if app.user %}
-                            {% if is_granted("ROLE_BMS") %}
-                                <li class="active"><a href="{{path('bms_index')}}"><i class="fa fa-building fa-fw"></i> BMS</a></li>
-                            {% endif %}
-                            {% if is_granted("ROLE_DATA_ANALYZE") %}
-                                <li class="active"><a href="{{path('bms_data_analyze_index')}}"><i class="fa fa-line-chart"></i> Analiza</a></li>
-                            {% endif %}
-                            {% if is_granted("ROLE_ALARM_HISTORY") %}
-                                <li class="active"><a href="{{path('bms_alarm_index')}}"><i class="fa fa-bell-o"></i> Alarmy</a></li>
-                            {% endif %}
-                            <li class="dropdown active hidden-xs hidden-sm">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i> Ustwienia <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    {% if is_granted("ROLE_CONFIGURATION") %}
-                                        <li><a href="{{path('bms_configuration_index')}}"><i class="fa fa-wrench"></i> Konfiguracja</a></li>
-                                    {% endif %}
-                                    {% if is_granted("ROLE_VISUALIZATION") %}
-                                        <li><a href="{{path('visualization')}}">
-                                                <i class="fa fa-paint-brush"></i> Wizualizacja</a>
-                                        </li>
-                                    {% endif %}
-                                </ul>
-                            </li>
-                        {% endif %}
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        {% if is_granted("ROLE_ADMIN") %}
-                            <li class="active"><a href="{{path('sonata_admin_dashboard')}}"><i class="fa fa-users"></i> Panel administratora</a></li>
-                        {% endif %}
-                        {% if app.user %}
-                            <li class="active"><a href="{{path('fos_user_security_logout')}}"><i class="fa fa-sign-out"></i> Wyloguj</a></li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-        </nav>      
-        {% if is_granted("ROLE_BMS") %}
-            <nav class="row">
-                <div class="col-md-4 col-md-offset-4 col-xs-12 error-message text-center">
-                    <i class='fa fa-warning fa-2x blink fa-red'></i>
-                </div>
-            </nav>
-            <nav class="row navbar-default">
-                <div class="col-xs-12 col-md-11 text-right"> 
-                    {% block nav %}
-                    {% endblock %}
-                    {% if app.user %}
-                        <small><strong>{{ app.user.username }}</strong></small>                                
-                    {% endif %}
-                </div>
-                <div class="col-xs-12 text-left col-md-3 col-md-offset-1">
-                    <span class="label label-primary">Czas: </span><span class="label label-primary clock">{{"now"|date("H:i:s")}}</span>
-                </div>                 
-                <div class="col-xs-12 text-center col-md-4">
-                    <div class="progress timer" style="margin-bottom: 1px; width: 150px; display: inline-block;">
-                        <div class="progress-bar progress-bar-success" role="progressbar" style="width: 0%;"></div>
-                    </div>
-                </div> 
-                <div class="col-xs-12 text-right col-md-3">                    
-                    <span id="errorModbusConnection" class="fa-stack">
-                        <img src="/images/system/connected.png" class="img-responsive" />
-                    </span>                            
-                    <span id="noInternetConnection" class="fa-stack">
-                        <img src="/images/system/ethernetOn.png" class="img-responsive" />
-                    </span> 
-                </div>
-            </nav>
-        {% endif %} 
-        {% block sidebar %}
-        {% endblock %}
-
-        <div class="content-container">
-            {% block body %}
-
-            {% endblock %} 
+    <meta name="description" content="bmsonline">
+    <meta name="author" content="Paweł Zajder">
+    <link rel="icon" type="image/x-icon" href="{{ asset('web/favicon.ico') }}"/>
+    <title>BMS OnLine {% block title %}-{% endblock %} Klimbest</title>
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/ie10-viewport-bug-workaround.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/font-awesome.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/csshake.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+    {% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand hidden-xs hidden-sm hidden-lg" href="http://bmsonline.pl">B</a>
+            <a class="navbar-brand hidden-md" href="http://bmsonline.pl">Bmsonline</a>
         </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                {% if app.user %}
+                    {% if is_granted("ROLE_BMS") %}
+                        <li class=""><a href="{{ path('bms_index') }}"><i class="fa fa-building fa-fw"></i> <span
+                                        class="hidden-md">BMS</span></a></li>
+                    {% endif %}
+                    {% if is_granted("ROLE_DATA_ANALYZE") %}
+                        <li class=""><a href="{{ path('bms_data_analyze_index') }}"><i
+                                        class="fa fa-line-chart"></i> <span class="hidden-md">Analiza</span></a></li>
+                    {% endif %}
+                    {% if is_granted("ROLE_ALARM_HISTORY") %}
+                        <li class=""><a href="{{ path('bms_alarm_index') }}"><i class="fa fa-bell-o"></i> <span
+                                        class="hidden-md">Alarmy</span></a></li>
+                    {% endif %}
+                    <li class="dropdown hidden-xs hidden-sm">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">
+                            <i class="fa fa-cog"></i> <span class="hidden-md">Ustwienia</span> <i
+                                    class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% if is_granted("ROLE_CONFIGURATION") %}
+                                <li><a href="{{ path('bms_configuration_index') }}"><i class="fa fa-wrench"></i>
+                                        Konfiguracja</a></li>
+                            {% endif %}
+                            {% if is_granted("ROLE_VISUALIZATION") %}
+                                <li><a href="{{ path('visualization') }}">
+                                        <i class="fa fa-paint-brush"></i> Wizualizacja</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    <li><a>Czas: <span class="clock">{{ "now"|date("H:i:s") }}</span></a></li>
+                {% endif %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
 
-        {% block javascripts %}
-            <script src="{{ asset('js/__jquery-1.11.3.js') }}"></script>
-            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-            <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
-            <script src="{{ asset('js/main.js') }}"></script>
-            <script src="{{ asset('js/datetimepicker-master/jquery.datetimepicker.js') }}"></script>
-            <script src="{{ asset('js/_bootstrap.js') }}"></script>
-            <script src="{{ asset('js/ie10-viewport-bug-workaround.js') }}"></script>            
-            <script src="{{ asset('js/jquery.cookie.js') }}"></script>
-            <script src="{{ asset('js/jquery-ui.js') }}"></script>
-            <script src="{{ asset('js/jquery.formatDateTime.js') }}"></script>
-            <script src="{{ asset('js/jquery.ui.resizable.snap.ext.js') }}"></script>
-            <script src="{{ asset('js/jquery.ae.image.resize.js') }}"></script>
-            <script src="{{ asset('js/jquery.form.js') }}"></script>
-            <script src="{{ asset('js/ajaxq.js') }}"></script>
-        {% endblock %}
-    </body>
+                <li><a><span><i class="fa fa-circle"></i></span></a></li>
+                <li><a>
+                    <span id="errorModbusConnection" class="fa-stack">
+                        <img src="/images/system/connected.png" class="img-responsive"/>
+                    </span>
+                    <span id="noInternetConnection" class="fa-stack">
+                        <img src="/images/system/ethernetOn.png" class="img-responsive"/>
+                    </span>
+                </a></li>
+                {% block nav %}
+
+                {% endblock %}
+
+                {% if is_granted("ROLE_ADMIN") %}
+                    <li class="">
+                        <a href="{{ path('sonata_admin_dashboard') }}">
+                            <i class="fa fa-users"></i> <span class="hidden-md">Panel administratora</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% if app.user %}
+                    <li class="">
+                        <a href="{{ path('fos_user_security_logout') }}">
+                            <i class="fa fa-sign-out"></i> <span class="hidden-md">Wyloguj</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% if is_granted("ROLE_BMS") %}
+    <nav class="row">
+        <div class="col-md-4 col-md-offset-4 col-xs-12 error-message text-center">
+            <i class='fa fa-warning fa-2x blink fa-red'></i>
+        </div>
+    </nav>
+
+{% endif %}
+{% block sidebar %}
+{% endblock %}
+
+<div class="content-container">
+    {% block body %}
+
+    {% endblock %}
+</div>
+
+{% block javascripts %}
+    <script src="{{ asset('js/__jquery-1.11.3.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
+    <script src="{{ asset('js/datetimepicker-master/jquery.datetimepicker.js') }}"></script>
+    <script src="{{ asset('js/_bootstrap.js') }}"></script>
+    <script src="{{ asset('js/ie10-viewport-bug-workaround.js') }}"></script>
+    <script src="{{ asset('js/jquery.cookie.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.js') }}"></script>
+    <script src="{{ asset('js/jquery.formatDateTime.js') }}"></script>
+    <script src="{{ asset('js/jquery.ui.resizable.snap.ext.js') }}"></script>
+    <script src="{{ asset('js/jquery.ae.image.resize.js') }}"></script>
+    <script src="{{ asset('js/jquery.form.js') }}"></script>
+    <script src="{{ asset('js/ajaxq.js') }}"></script>
+{% endblock %}
+</body>
 </html>

@@ -25,9 +25,7 @@ and open the template in the editor.
 .navbar{
     margin-bottom: 0px;
 }
-nav.row{
-    margin: 0px;
-}
+
 
 div.content-container{
     margin-left: 15px;
@@ -70,4 +68,8 @@ div.content-container{
     margin-top: -6px;
     margin-right: -4px;
     cursor: pointer;
+}
+span#noInternetConnection, span#errorModbusConnection, span.clock{
+    width: 1.3em;
+    height: 1.3em;
 }
