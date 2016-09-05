@@ -3,9 +3,12 @@
 namespace VisualizationBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class IndexController extends Controller
 {
@@ -41,4 +44,40 @@ class IndexController extends Controller
         $page = $this->getDoctrine()->getRepository('VisualizationBundle:Page')->findMainPage();
         return $this->redirectToRoute('page_show', ['id' => $page->getId()]);
     }
+
+    /**
+     * @Route("/move", name="element_move", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function moveElementAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $em = $this->getDoctrine()->getManager();
+            $type = $request->get("element_type");
+            $element_id = $request->get("element_id");
+
+            $repository = $this->getDoctrine()->getRepository('VisualizationBundle:' . $type);
+            $element = $repository->find($element_id);
+
+            $height = $request->get("height");
+            $width = $request->get("width");
+            $topPosition = $request->get("topPosition");
+            $leftPosition = $request->get("leftPosition");
+            $zIndex = $request->get("zIndex");
+
+            $element->setHeight($height)
+                ->setWidth($width)
+                ->setLeftPosition($leftPosition)
+                ->setTopPosition($topPosition)
+                ->setZIndex($zIndex);
+
+            $em->flush();
+
+            return new JsonResponse(['element' => $element]);
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
+
 }

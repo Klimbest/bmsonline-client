@@ -63,6 +63,8 @@ function setPanelEvents() {
     panels.each(function () {
         //pobranie id panelu
         var id = $(this).attr("id");
+        var element_type = setElementType($(this));
+
         var aR = $(this).children("img").length > 0;
         $(this).removeAttr("onclick").unbind("mouseenter mouseleave");
         $(this).click(function () {
@@ -81,13 +83,14 @@ function setPanelEvents() {
             distance: 5,
             stop: function (event, ui) {
                 var data = {
-                    panel_id: id,
+                    element_type: element_type,
+                    element_id: id,
                     topPosition: ui.helper.css("top"),
                     leftPosition: ui.helper.css("left"),
                     width: ui.helper.css("width"),
                     height: ui.helper.css("height")
                 };
-                //ajaxMoveElement(data);
+                ajaxMoveElement(data);
             }
         }).resizable({
             containment: "parent",
@@ -127,30 +130,61 @@ function setPanelEvents() {
             stop: function (event, ui) {
                 ui.element.removeClass("hover");
                 var data = {
-                    panel_id: id,
+                    element_type: element_type,
+                    element_id: id,
                     topPosition: ui.helper.css("top"),
                     leftPosition: ui.helper.css("left"),
                     width: ui.element.css("width"),
                     height: ui.element.css("height")
                 };
 
-                //ajaxMoveElement(data, url);
+                ajaxMoveElement(data, url);
             }
         });
 
     });
 }
 
-function ajaxMoveElement(data, url) {
+function ajaxMoveElement(data) {
     $.ajax({
         type: "POST",
         datatype: "application/json",
-        url: Routing.generate(url),
+        url: Routing.generate("element_move"),
         data: data,
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
-            loadPanelList(ret["panelList"]);
+            console.log(ret["element"]);
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+}
+
+function setElementType(element) {
+    var type = element.attr('class').split(" ");
+    switch (type[1]) {
+        case 'bms-panelimage' :
+            return 'PanelImage';
+            break;
+        case 'bms-paneltext' :
+            return 'PanelText';
+            break;
+        case 'bms-panelvariable' :
+            return 'PanelVariable';
+            break;
+        case 'bms-inputbutton' :
+            return 'InputButton';
+            break;
+        case 'bms-inputnumber' :
+            return 'InputNumber';
+            break;
+        case 'bms-inputrange' :
+            return 'InputRange';
+            break;
+        case 'bms-gadgetclock' :
+            return 'GadgetClock';
+            break;
+        case 'bms-gadgetprogressbar' :
+            return 'GadgetProgressBar';
+            break;
+    }
 }
