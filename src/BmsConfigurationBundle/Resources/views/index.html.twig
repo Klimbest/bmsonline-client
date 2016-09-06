@@ -8,7 +8,7 @@
 {% block nav %}
     {{ parent() }}
     {% if sync == 1 %}
-        <button id="synchronizeDatabase" class="btn btn-xs btn-danger">Generuj konfigurację</button>
+        <li><a><button id="synchronizeDatabase" class="btn btn-xs btn-danger">Generuj konfigurację</button></a></li>
     {% endif %}
 {% endblock %}
 

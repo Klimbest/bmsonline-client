@@ -86,12 +86,13 @@ function setGenerateVisualization() {
 var totaltime = 10;
 function update(percent){
     var deg;
+
     if(percent<(totaltime/2)){
         deg = 90 + (360*percent/totaltime);
         $('.pie').css('background-image',
             'linear-gradient('+deg+'deg, transparent 50%, white 50%),linear-gradient(90deg, white 50%, transparent 50%)'
         );
-    } else if(percent>=(totaltime/2)){
+    } else if(percent>=(totaltime/2) && percent < totaltime){
         deg = -90 + (360*percent/totaltime);
         $('.pie').css('background-image',
             'linear-gradient('+deg+'deg, transparent 50%, #27AE60 50%),linear-gradient(90deg, white 50%, transparent 50%)'
@@ -101,13 +102,14 @@ function update(percent){
 
 function counter() {
     if(count==0){
-        $('.pie').css('border-color', '#27AE60');
+        $('.pie').css('background-color', '#27AE60');
+        $('.degree').css('background-color','#27AE60' );
     }
     count+=1;
     update(count);
     if(count==totaltime){
-        $('.pie').css('border-color', '#FF0000');
-        // $('.degree').css('background-color','#FF0000' );
+        $('.pie').css('background-image', 'none');
+        $('.degree').css('background-color','#BB0000' );
         update(count);
         count = 0;
     }
