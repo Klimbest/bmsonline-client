@@ -31,6 +31,48 @@ class GadgetProgressBar
     private $name;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="tooltip", type="boolean", options={"default": false})
+     */
+    private $tooltip;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="topPosition", type="integer", nullable=false, options={"default":0})
+     */
+    private $topPosition;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="leftPosition", type="integer", nullable=false, options={"default":"0"})
+     */
+    private $leftPosition;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="width", type="integer", nullable=false, options={"default" : 100})
+     */
+    private $width;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="height", type="integer", nullable=false, options={"default"=100})
+     */
+    private $height;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="zIndex", type="integer", nullable=false, options={"default"=5})
+     */
+    private $zIndex;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="range_min", type="decimal", precision=9, scale=2, nullable=false)
@@ -105,7 +147,19 @@ class GadgetProgressBar
      */
     private $page;
 
-
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->name =  "gpb_" . rand(999, 9999);
+        $this->tooltip = false;
+        $this->topPosition = 0;
+        $this->leftPosition = 0;
+        $this->width = 100;
+        $this->height = 50;
+        $this->zIndex = 5;
+    }
 
     /**
      * Get id
@@ -312,11 +366,11 @@ class GadgetProgressBar
     /**
      * Set setRegisterId
      *
-     * @param \BmsConfigurationBundle\Entity\Register $setRegisterId
+     * @param Register $setRegisterId
      *
      * @return GadgetProgressBar
      */
-    public function setSetRegisterId(\BmsConfigurationBundle\Entity\Register $setRegisterId = null)
+    public function setSetRegisterId(Register $setRegisterId = null)
     {
         $this->setRegisterId = $setRegisterId;
 
@@ -326,7 +380,7 @@ class GadgetProgressBar
     /**
      * Get setRegisterId
      *
-     * @return \BmsConfigurationBundle\Entity\Register
+     * @return Register
      */
     public function getSetRegisterId()
     {
@@ -336,11 +390,11 @@ class GadgetProgressBar
     /**
      * Set valueRegisterId
      *
-     * @param \BmsConfigurationBundle\Entity\Register $valueRegisterId
+     * @param Register $valueRegisterId
      *
      * @return GadgetProgressBar
      */
-    public function setValueRegisterId(\BmsConfigurationBundle\Entity\Register $valueRegisterId)
+    public function setValueRegisterId(Register $valueRegisterId)
     {
         $this->valueRegisterId = $valueRegisterId;
 
@@ -350,7 +404,7 @@ class GadgetProgressBar
     /**
      * Get valueRegisterId
      *
-     * @return \BmsConfigurationBundle\Entity\Register
+     * @return Register
      */
     public function getValueRegisterId()
     {
@@ -360,11 +414,11 @@ class GadgetProgressBar
     /**
      * Set page
      *
-     * @param \VisualizationBundle\Entity\Page $page
+     * @param Page $page
      *
      * @return GadgetProgressBar
      */
-    public function setPage(\VisualizationBundle\Entity\Page $page)
+    public function setPage(Page $page)
     {
         $this->page = $page;
 
@@ -374,10 +428,154 @@ class GadgetProgressBar
     /**
      * Get page
      *
-     * @return \VisualizationBundle\Entity\Page
+     * @return Page
      */
     public function getPage()
     {
         return $this->page;
+    }
+
+    /**
+     * Set tooltip
+     *
+     * @param boolean $tooltip
+     *
+     * @return GadgetProgressBar
+     */
+    public function setTooltip($tooltip)
+    {
+        $this->tooltip = $tooltip;
+
+        return $this;
+    }
+
+    /**
+     * Get tooltip
+     *
+     * @return boolean
+     */
+    public function getTooltip()
+    {
+        return $this->tooltip;
+    }
+
+    /**
+     * Set topPosition
+     *
+     * @param integer $topPosition
+     *
+     * @return GadgetProgressBar
+     */
+    public function setTopPosition($topPosition)
+    {
+        $this->topPosition = $topPosition;
+
+        return $this;
+    }
+
+    /**
+     * Get topPosition
+     *
+     * @return integer
+     */
+    public function getTopPosition()
+    {
+        return $this->topPosition;
+    }
+
+    /**
+     * Set leftPosition
+     *
+     * @param integer $leftPosition
+     *
+     * @return GadgetProgressBar
+     */
+    public function setLeftPosition($leftPosition)
+    {
+        $this->leftPosition = $leftPosition;
+
+        return $this;
+    }
+
+    /**
+     * Get leftPosition
+     *
+     * @return integer
+     */
+    public function getLeftPosition()
+    {
+        return $this->leftPosition;
+    }
+
+    /**
+     * Set width
+     *
+     * @param integer $width
+     *
+     * @return GadgetProgressBar
+     */
+    public function setWidth($width)
+    {
+        $this->width = $width;
+
+        return $this;
+    }
+
+    /**
+     * Get width
+     *
+     * @return integer
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
+
+    /**
+     * Set height
+     *
+     * @param integer $height
+     *
+     * @return GadgetProgressBar
+     */
+    public function setHeight($height)
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
+    /**
+     * Get height
+     *
+     * @return integer
+     */
+    public function getHeight()
+    {
+        return $this->height;
+    }
+
+    /**
+     * Set zIndex
+     *
+     * @param integer $zIndex
+     *
+     * @return GadgetProgressBar
+     */
+    public function setZIndex($zIndex)
+    {
+        $this->zIndex = $zIndex;
+
+        return $this;
+    }
+
+    /**
+     * Get zIndex
+     *
+     * @return integer
+     */
+    public function getZIndex()
+    {
+        return $this->zIndex;
     }
 }

@@ -1,4 +1,14 @@
-<div>
+<div
+        name="{{ gadgetClock.name }}"
+        id="{{ gadgetClock.id }}" class="bms-panel bms-gadgetclock"
+        style="
+                top: {{ gadgetClock.topPosition }}px;
+                left: {{ gadgetClock.leftPosition }}px;
+                width: {{ gadgetClock.width }}px;
+                height: {{ gadgetClock.height }}px;
+                line-height: {{ gadgetClock.height }}px;
+                z-index: {{ gadgetClock.zIndex }};
+                ">
     GADGET CLOCK
     {% if labels %}
         <span class="label label-primary label-bms-panel">

@@ -61,14 +61,14 @@ class PanelText
     /**
      * @var integer
      *
-     * @ORM\Column(name="height", type="integer", nullable=true, options={"default"=100})
+     * @ORM\Column(name="height", type="integer", nullable=false, options={"default"=100})
      */
     private $height;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="zIndex", type="integer", nullable=true, options={"default"=5})
+     * @ORM\Column(name="zIndex", type="integer", nullable=false, options={"default"=5})
      */
     private $zIndex;
 
@@ -758,11 +758,11 @@ class PanelText
     /**
      * Set page
      *
-     * @param \VisualizationBundle\Entity\Page $page
+     * @param Page $page
      *
      * @return PanelText
      */
-    public function setPage(\VisualizationBundle\Entity\Page $page)
+    public function setPage(Page $page)
     {
         $this->page = $page;
 
@@ -772,7 +772,7 @@ class PanelText
     /**
      * Get page
      *
-     * @return \VisualizationBundle\Entity\Page
+     * @return Page
      */
     public function getPage()
     {

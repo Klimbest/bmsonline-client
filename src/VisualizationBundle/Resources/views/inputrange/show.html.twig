@@ -1,4 +1,14 @@
-<div>
+<div
+        name="{{ inputRange.name }}"
+        id="{{ inputRange.id }}" class="bms-panel bms-inputrange"
+        style="
+                top: {{ inputRange.topPosition }}px;
+                left: {{ inputRange.leftPosition }}px;
+                width: {{ inputRange.width }}px;
+                height: {{ inputRange.height }}px;
+                line-height: {{ inputRange.height }}px;
+                z-index: {{ inputRange.zIndex }};
+                ">
     INPUT RANGE
 
     {% if labels %}

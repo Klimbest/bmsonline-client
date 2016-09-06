@@ -1,4 +1,14 @@
-<div>
+<div
+        name="{{ gadgetProgressBar.name }}"
+        id="{{ gadgetProgressBar.id }}" class="bms-panel bms-gadgetprogressbar"
+        style="
+                top: {{ gadgetProgressBar.topPosition }}px;
+                left: {{ gadgetProgressBar.leftPosition }}px;
+                width: {{ gadgetProgressBar.width }}px;
+                height: {{ gadgetProgressBar.height }}px;
+                line-height: {{ gadgetProgressBar.height }}px;
+                z-index: {{ gadgetProgressBar.zIndex }};
+                ">
     GADGET PROGRESS BAR
     {% if labels %}
         <span class="label label-primary label-bms-panel">

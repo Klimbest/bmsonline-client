@@ -1,4 +1,14 @@
-<div>
+<div
+        name="{{ inputNumber.name }}"
+        id="{{ inputNumber.id }}" class="bms-panel bms-inputnumber"
+        style="
+                top: {{ inputNumber.topPosition }}px;
+                left: {{ inputNumber.leftPosition }}px;
+                width: {{ inputNumber.width }}px;
+                height: {{ inputNumber.height }}px;
+                line-height: {{ inputNumber.height }}px;
+                z-index: {{ inputNumber.zIndex }};
+                ">
     INPUT NUMBER
     {% if labels %}
         <span class="label label-primary label-bms-panel">
