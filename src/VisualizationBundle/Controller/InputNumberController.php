@@ -105,7 +105,6 @@ class InputNumberController extends Controller
     {
         $inputNumber->getPage()->getId();
         $inputNumber_new = clone $inputNumber;
-        $inputNumber_new->setTopPosition(0)->setLeftPosition(0);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($inputNumber_new);

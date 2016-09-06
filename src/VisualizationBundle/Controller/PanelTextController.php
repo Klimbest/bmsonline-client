@@ -107,7 +107,6 @@ class PanelTextController extends Controller
     {
         $panelText->getPage()->getId();
         $panelText_new = clone $panelText;
-        $panelText_new->setTopPosition(0)->setLeftPosition(0);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($panelText_new);

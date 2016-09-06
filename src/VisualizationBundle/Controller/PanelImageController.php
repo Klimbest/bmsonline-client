@@ -108,7 +108,6 @@ class PanelImageController extends Controller
     {
         $panelImage->getPage()->getId();
         $panelImage_new = clone $panelImage;
-        $panelImage_new->setTopPosition(0)->setLeftPosition(0);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($panelImage_new);

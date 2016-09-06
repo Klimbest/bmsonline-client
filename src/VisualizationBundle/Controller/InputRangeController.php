@@ -105,7 +105,6 @@ class InputRangeController extends Controller
     {
         $inputRange->getPage()->getId();
         $inputRange_new = clone $inputRange;
-        $inputRange_new->setTopPosition(0)->setLeftPosition(0);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($inputRange_new);

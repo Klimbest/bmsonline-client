@@ -105,7 +105,6 @@ class InputButtonController extends Controller
     {
         $inputButton->getPage()->getId();
         $inputButton_new = clone $inputButton;
-        $inputButton_new->setTopPosition(0)->setLeftPosition(0);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($inputButton_new);

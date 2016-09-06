@@ -105,7 +105,6 @@ class GadgetClockController extends Controller
     {
         $gadgetClock->getPage()->getId();
         $gadgetClock_new = clone $gadgetClock;
-        $gadgetClock_new->setTopPosition(0)->setLeftPosition(0);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($gadgetClock_new);

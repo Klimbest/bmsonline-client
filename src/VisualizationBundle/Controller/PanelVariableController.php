@@ -111,7 +111,6 @@ class PanelVariableController extends Controller
     {
         $panelVariable->getPage()->getId();
         $panelVariable_new = clone $panelVariable;
-        $panelVariable_new->setTopPosition(0)->setLeftPosition(0);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($panelVariable_new);

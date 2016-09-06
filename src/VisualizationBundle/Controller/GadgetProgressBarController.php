@@ -105,7 +105,6 @@ class GadgetProgressBarController extends Controller
     {
         $gadgetProgressBar->getPage()->getId();
         $gadgetProgressBar_new = clone $gadgetProgressBar;
-        $gadgetProgressBar_new->setTopPosition(0)->setLeftPosition(0);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($gadgetProgressBar_new);
