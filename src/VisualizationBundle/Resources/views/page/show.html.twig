@@ -2,6 +2,11 @@
 
 {% block sidebar %}
     {% include 'VisualizationBundle::sidebar.html.twig' %}
+
+    {% block page_elements %}
+
+
+    {% endblock %}
 {% endblock %}
 
 {% block body %}
@@ -64,28 +69,4 @@
             <span class="label label-danger">Opcja niedostępna dla urządzeń mobilnych</span>
         </div>
     </div>
-{% endblock %}
-
-{% block page_elements %}
-    {% for panel_image in panels_image %}
-        <div id="{{ panel_image.id }}" class="panel-list">
-            <div class="row">
-                <div class="col-md-12 panel-list-label">
-                    <i class="fa fa-picture-o fa-fw icon-type"></i>
-                    <span class="label label-primary">
-                        #{{ panel_image.id }}
-                        - {{ panel_image.name|length > 14 ? panel_image.name|slice(0, 14) ~ '...' : panel_image.name }}
-                    </span>
-                </div>
-                <div class="panel-list-controls">
-                    <i class="fa fa-arrow-up fa-fw"></i>
-                    <i class="fa fa-arrow-down fa-fw"></i>
-                    <i class="fa fa-fw fa-clone fa-blue"></i>
-                    <i class="fa fa-fw fa-cogs fa-orange"></i>
-                    <i class="fa fa-fw fa-trash-o fa-red"></i>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-
 {% endblock %}

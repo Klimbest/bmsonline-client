@@ -44,8 +44,51 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            {% block page_elements %}
-            {% endblock %}
+            {#{% for panelImage in active_page.panelsImage %}#}
+                {#<div id="{{ panelImage.id }}" class="row">#}
+                    {#<div class="col-md-12">#}
+                        {#<i class="fa fa-picture-o fa-fw icon-type"></i>#}
+                        {#<span class="label label-primary">#}
+                            {##{{ panelImage.id }} - {{ panelImage.name|length > 14 ? panelImage.name|slice(0, 14) ~ '...' : panelImage.name }}#}
+                        {#</span>#}
+                        {#<i class="fa fa-arrow-up fa-fw"></i>#}
+                        {#<i class="fa fa-arrow-down fa-fw"></i>#}
+                        {#<i class="fa fa-fw fa-clone fa-blue"></i>#}
+                        {#<i class="fa fa-fw fa-cogs fa-orange"></i>#}
+                        {#<i class="fa fa-fw fa-trash-o fa-red"></i>#}
+                    {#</div>#}
+                {#</div>#}
+            {#{% endfor %}#}
+            {#{% for panelVariable in active_page.panelsVariable %}#}
+                {#<div id="{{ panelVariable.id }}" class="row">#}
+                    {#<div class="col-md-12">#}
+                        {#<i class="fa fa-picture-o fa-fw icon-type"></i>#}
+                        {#<span class="label label-primary">#}
+                            {##{{ panelVariable.id }} - {{ panelVariable.name|length > 14 ? panelVariable.name|slice(0, 14) ~ '...' : panelVariable.name }}#}
+                        {#</span>#}
+                        {#<i class="fa fa-arrow-up fa-fw"></i>#}
+                        {#<i class="fa fa-arrow-down fa-fw"></i>#}
+                        {#<i class="fa fa-fw fa-clone fa-blue"></i>#}
+                        {#<i class="fa fa-fw fa-cogs fa-orange"></i>#}
+                        {#<i class="fa fa-fw fa-trash-o fa-red"></i>#}
+                    {#</div>#}
+                {#</div>#}
+            {#{% endfor %}#}
+            {#{% for panelText in active_page.panelsText %}#}
+                {#<div id="{{ panelText.id }}" class="row">#}
+                    {#<div class="col-md-12">#}
+                        {#<i class="fa fa-picture-o fa-fw icon-type"></i>#}
+                        {#<span class="label label-primary">#}
+                            {##{{ panelText.id }} - {{ panelText.name|length > 14 ? panelText.name|slice(0, 14) ~ '...' : panelText.name }}#}
+                        {#</span>#}
+                        {#<i class="fa fa-arrow-up fa-fw"></i>#}
+                        {#<i class="fa fa-arrow-down fa-fw"></i>#}
+                        {#<i class="fa fa-fw fa-clone fa-blue"></i>#}
+                        {#<i class="fa fa-fw fa-cogs fa-orange"></i>#}
+                        {#<i class="fa fa-fw fa-trash-o fa-red"></i>#}
+                    {#</div>#}
+                {#</div>#}
+            {#{% endfor %}#}
         </div>
     </div>
 </div>

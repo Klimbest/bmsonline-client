@@ -28,7 +28,8 @@ class PanelVariableType extends AbstractType
             ])
             ->add('source', HiddenType::class)
             ->add('tooltip', CheckboxType::class, [
-                'label' => 'Wyświetlać podpowiedź?'
+                'label' => 'Wyświetlać podpowiedź?',
+                'required' => false
             ])
             //POZYCJA
             ->add('topPosition', IntegerType::class, [
@@ -58,7 +59,7 @@ class PanelVariableType extends AbstractType
             ])
             //PRECYZJA WYŚWIETLANIA
             ->add('displayPrecision', ChoiceType::class, [
-                'label' => 'Precyzja wyświetlania',
+                'label' => false,
                 'choices' => [
                     "0" => 0,
                     "0.0" => 1,
