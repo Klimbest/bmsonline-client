@@ -73,6 +73,9 @@ span#noInternetConnection, span#errorModbusConnection, span.clock{
     width: 1.3em;
     height: 1.3em;
 }
+li#generate{
+    margin-bottom: -2px;
+  }
 
 .pie{
     width: 18px;

@@ -88,7 +88,7 @@
                 {% if is_granted("ROLE_ADMIN") %}
                     <li class="">
                         <a href="{{ path('sonata_admin_dashboard') }}">
-                            <i class="fa fa-users"></i> <span class="hidden-md">Panel administratora</span>
+                            <i class="fa fa-users"></i> <span class="hidden-md">Administracja</span>
                         </a>
                     </li>
                 {% endif %}
@@ -101,7 +101,7 @@
                 {% endif %}
             </ul>
 
-            <ul class="nav navbar-nav navbar-clock"><li><a href="#">Czas: <span class="clock">{{ "now"|date("H:i:s") }}</span></a></li></ul>
+            <ul class="nav navbar-nav navbar-clock"><li><a href="#"><span class="hidden-md">Czas: </span><span class="clock">{{ "now"|date("H:i:s") }}</span></a></li></ul>
         </div>
     </div>
 </nav>
