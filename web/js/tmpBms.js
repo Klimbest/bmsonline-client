@@ -6,7 +6,7 @@ $(document).ready(function () {
     setErrorMessage();
     ajaxChangePage();
     setInterval(clock, 1000);
-    setInterval(counter, 400);
+    setInterval(counter, 1000);
 
 });
 

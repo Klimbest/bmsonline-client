@@ -94,4 +94,23 @@ class InputRangeController extends Controller
         return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
+    /**
+     * Copy a InputRange entity.
+     *
+     * @Route("/{id}/copy", name="inputrange_copy")
+     * @param InputRange $inputRange
+     * @return RedirectResponse
+     */
+    public function copyAction(InputRange $inputRange)
+    {
+        $inputRange->getPage()->getId();
+        $inputRange_new = clone $inputRange;
+        $inputRange_new->setTopPosition(0)->setLeftPosition(0);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($inputRange_new);
+        $em->flush();
+
+        return $this->redirectToRoute('inputrange_edit', ['id' => $inputRange_new->getId()]);
+    }
 }

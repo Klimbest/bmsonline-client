@@ -70,16 +70,17 @@
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
-
-                <li><a><span><i class="fa fa-circle"></i></span></a></li>
-                <li><a>
-                    <span id="errorModbusConnection" class="fa-stack">
-                        <img src="/images/system/connected.png" class="img-responsive"/>
-                    </span>
-                    <span id="noInternetConnection" class="fa-stack">
-                        <img src="/images/system/ethernetOn.png" class="img-responsive"/>
-                    </span>
-                </a></li>
+                <li>
+                    <a>
+                        <span><div class="pie degree"></div></span>
+                        <span id="errorModbusConnection" class="fa-stack">
+                            <img src="/images/system/connected.png" class="img-responsive"/>
+                        </span>
+                        <span id="noInternetConnection" class="fa-stack">
+                            <img src="/images/system/ethernetOn.png" class="img-responsive"/>
+                        </span>
+                    </a>
+                </li>
                 {% block nav %}
 
                 {% endblock %}

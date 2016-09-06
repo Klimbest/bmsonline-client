@@ -94,4 +94,23 @@ class InputButtonController extends Controller
         return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
+    /**
+     * Copy a InputButton entity.
+     *
+     * @Route("/{id}/copy", name="inputbutton_copy")
+     * @param InputButton $inputButton
+     * @return RedirectResponse
+     */
+    public function copyAction(InputButton $inputButton)
+    {
+        $inputButton->getPage()->getId();
+        $inputButton_new = clone $inputButton;
+        $inputButton_new->setTopPosition(0)->setLeftPosition(0);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($inputButton_new);
+        $em->flush();
+
+        return $this->redirectToRoute('inputbutton_edit', ['id' => $inputButton_new->getId()]);
+    }
 }

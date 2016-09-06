@@ -94,4 +94,23 @@ class GadgetClockController extends Controller
         return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
+    /**
+     * Copy a GadgetClock entity.
+     *
+     * @Route("/{id}/copy", name="gadgetclock_copy")
+     * @param GadgetClock $gadgetClock
+     * @return RedirectResponse
+     */
+    public function copyAction(GadgetClock $gadgetClock)
+    {
+        $gadgetClock->getPage()->getId();
+        $gadgetClock_new = clone $gadgetClock;
+        $gadgetClock_new->setTopPosition(0)->setLeftPosition(0);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($gadgetClock_new);
+        $em->flush();
+
+        return $this->redirectToRoute('gadgetclock_edit', ['id' => $gadgetClock_new->getId()]);
+    }
 }

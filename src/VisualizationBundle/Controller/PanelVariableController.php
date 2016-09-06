@@ -94,4 +94,23 @@ class PanelVariableController extends Controller
         return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
+    /**
+     * Copy a PanelVariable entity.
+     *
+     * @Route("/{id}/copy", name="panelvariable_copy")
+     * @param PanelVariable $panelVariable
+     * @return RedirectResponse
+     */
+    public function copyAction(PanelVariable $panelVariable)
+    {
+        $panelVariable->getPage()->getId();
+        $panelVariable_new = clone $panelVariable;
+        $panelVariable_new->setTopPosition(0)->setLeftPosition(0);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($panelVariable_new);
+        $em->flush();
+
+        return $this->redirectToRoute('paneltext_edit', ['id' => $panelVariable_new->getId()]);
+    }
 }

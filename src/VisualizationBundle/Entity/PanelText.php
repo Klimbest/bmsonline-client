@@ -191,6 +191,7 @@ class PanelText
      */
     public function __construct()
     {
+        $this->name =  "pt_" . rand(999, 9999);
         $this->topPosition = 0;
         $this->leftPosition = 0;
         $this->width = 100;

@@ -94,4 +94,23 @@ class InputNumberController extends Controller
         return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
+    /**
+     * Copy a InputNumber entity.
+     *
+     * @Route("/{id}/copy", name="inputnumber_copy")
+     * @param InputNumber $inputNumber
+     * @return RedirectResponse
+     */
+    public function copyAction(InputNumber $inputNumber)
+    {
+        $inputNumber->getPage()->getId();
+        $inputNumber_new = clone $inputNumber;
+        $inputNumber_new->setTopPosition(0)->setLeftPosition(0);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($inputNumber_new);
+        $em->flush();
+
+        return $this->redirectToRoute('inputnumber_edit', ['id' => $inputNumber_new->getId()]);
+    }
 }

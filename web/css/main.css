@@ -73,3 +73,21 @@ span#noInternetConnection, span#errorModbusConnection, span.clock{
     width: 1.3em;
     height: 1.3em;
 }
+
+.pie{
+    width: 18.2px;
+    height: 18.2px;
+    display: block;
+    position: relative;
+    border-radius: 100%;
+    background-color: #27AE60;
+    border: 1px solid #27AE60;
+    float: left;
+    margin: 2px 7px;
+}
+.degree{
+    /*90 + ( 360 * .1 )*/
+    background-image:
+            linear-gradient(90deg, transparent 50%, white 50%),
+            linear-gradient(90deg, white 50%, transparent 50%);
+}

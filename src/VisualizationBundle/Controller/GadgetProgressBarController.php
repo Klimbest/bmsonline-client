@@ -94,4 +94,23 @@ class GadgetProgressBarController extends Controller
         return $this->redirectToRoute('page_show', ['id' => $page_id]);
     }
 
+    /**
+     * Copy a GadgetProgressBar entity.
+     *
+     * @Route("/{id}/copy", name="gadgetprogressbar_copy")
+     * @param GadgetProgressBar $gadgetProgressBar
+     * @return RedirectResponse
+     */
+    public function copyAction(GadgetProgressBar $gadgetProgressBar)
+    {
+        $gadgetProgressBar->getPage()->getId();
+        $gadgetProgressBar_new = clone $gadgetProgressBar;
+        $gadgetProgressBar_new->setTopPosition(0)->setLeftPosition(0);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($gadgetProgressBar_new);
+        $em->flush();
+
+        return $this->redirectToRoute('gadgetprogressbar_edit', ['id' => $gadgetProgressBar_new->getId()]);
+    }
 }
