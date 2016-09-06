@@ -5,7 +5,6 @@ var count = 0;
 
 $(document).ready(function () {
 
-    fitFooter();
     if ($.cookie('noShowWelcome'))
         $('.cookie').hide();
     else {
@@ -17,12 +16,6 @@ $(document).ready(function () {
     setGenerateVisualization();
 });
 
-function fitFooter() {
-
-    var footerH = $(".footer-well").height();
-    var containerH = $(".content-container").height();
-    $(".content-container").css("padding-bottom", footerH + 15 + "px");
-}
 
 function setState(time, devicesStatus) {
     var now = Date.parse(new Date);
@@ -40,15 +33,15 @@ function setState(time, devicesStatus) {
         }
     });
 
-//    if (networkConnectionDelay >= 300) {
-//        $("div.variable-panel span").empty();
-//        $("span#noInternetConnection img").attr("src", "/images/system/ethernetOff.png").addClass("blink");
-//        $(".error-message").show().append("<div class='row'><div class='col-xs-12'><span class='label label-danger'>Brak połączenia internetowego</span></div></div>");
-//        $("span#errorModbusConnection").hide();
-//    } else {
-//        $("span#noInternetConnection img").attr("src", "/images/system/ethernetOn.png").removeClass("blink");
-//        $("span#errorModbusConnection").show();
-//    }
+   if (networkConnectionDelay >= 300) {
+       $("div.variable-panel span").empty();
+       $("span#noInternetConnection img").attr("src", "/images/system/ethernetOff.png").addClass("blink");
+       $(".error-message").show().append("<div class='row'><div class='col-xs-12'><span class='label label-danger'>Brak połączenia internetowego</span></div></div>");
+       $("span#errorModbusConnection").hide();
+   } else {
+       $("span#noInternetConnection img").attr("src", "/images/system/ethernetOn.png").removeClass("blink");
+       $("span#errorModbusConnection").show();
+   }
 
     if (error !== 0) {
         $("div.variable-panel span").empty();
