@@ -269,6 +269,7 @@ function initForm(type){
     }
     var align = form.find("input#panel_" + type + "_textAlign").val();
     updateTextAlign(align);
+    form.find("select#panel_source").val(form.find("input#panel_" + type + "_source").val());
 }
 
 function updateSource(type){
