@@ -69,14 +69,12 @@
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
-
                 {% block nav %}
-
                 {% endblock %}
-
                 <li>
                     <a>
-                        <span><div class="pie degree"><span class="block"></span></div></span>
+                        {% block counter %}
+                        {% endblock %}
                         <span id="errorModbusConnection" class="fa-stack">
                             <img src="/images/system/connected.png" class="img-responsive"/>
                         </span>
@@ -101,7 +99,10 @@
                 {% endif %}
             </ul>
 
-            <ul class="nav navbar-nav navbar-clock"><li><a href="#"><span class="hidden-md">Czas: </span><span class="clock">{{ "now"|date("H:i:s") }}</span></a></li></ul>
+            <ul class="nav navbar-nav navbar-clock">
+                <li><a href="#"><span class="hidden-md">Czas: </span><span
+                                class="clock">{{ "now"|date("H:i:s") }}</span></a></li>
+            </ul>
         </div>
     </div>
 </nav>

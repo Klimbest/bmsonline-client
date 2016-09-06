@@ -2,13 +2,17 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/tmpBms.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/tmpBms.css') }}">
 {% endblock %}
 
 
 {% block nav %}
     {{ parent() }}
 
+{% endblock %}
+
+{% block counter %}
+    <span><div class="pie degree"><span class="block"></span></div></span>
 {% endblock %}
 
 {% block sidebar %}
