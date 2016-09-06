@@ -39,7 +39,7 @@
     {% if labels %}
         <span class="label label-primary label-bms-panel">
             <i class="fa fa-hdd-o fa-fw"></i> {{ panelVariable.id }}
-            <a href="#"><i class='fa fa-fw fa-clone fa-blue'></i></a>
+            <a href="{{ path('panelvariable_copy', {'id': panelVariable.id }) }}"><i class='fa fa-fw fa-clone fa-blue'></i></a>
             <a href="#"><i class='fa fa-fw fa-bolt fa-yellow'></i></a>
             <a href="{{ path('panelvariable_edit', {'id': panelVariable.id }) }}"><i
                         class='fa fa-fw fa-cogs fa-yellow'></i></a>

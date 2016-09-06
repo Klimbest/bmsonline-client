@@ -117,6 +117,6 @@ class PanelVariableController extends Controller
         $em->persist($panelVariable_new);
         $em->flush();
 
-        return $this->redirectToRoute('paneltext_edit', ['id' => $panelVariable_new->getId()]);
+        return $this->redirectToRoute('panelvariable_edit', ['id' => $panelVariable_new->getId()]);
     }
 }
