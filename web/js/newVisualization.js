@@ -270,3 +270,10 @@ function initForm(type){
     var align = form.find("input#panel_" + type + "_textAlign").val();
     updateTextAlign(align);
 }
+
+function updateSource(type){
+    var form = $("form");
+    var select = form.find("select#panel_source");
+    var input = form.find("input#panel_" + type + "_source");
+    input.val(select.val());
+}

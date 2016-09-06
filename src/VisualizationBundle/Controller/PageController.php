@@ -58,6 +58,7 @@ class PageController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $parameters['pages'] = $em->getRepository('VisualizationBundle:Page')->findAll();
+        $parameters['registers'] = $em->getRepository('VisualizationBundle:PanelVariable')->findVariablePanelsRegistersForPage($page->getId());
         $parameters['active_page'] = $page;
         $parameters['labels'] = true;
         return $this->render('VisualizationBundle:page:show.html.twig', $parameters);

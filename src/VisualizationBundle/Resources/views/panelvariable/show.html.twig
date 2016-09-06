@@ -28,15 +28,23 @@
                 z-index: {{ panelVariable.zIndex }};
                 ">
 
-    <span id="{{ panelVariable.source }}" class="bms-panel-content"></span>
+    <span id="{{ panelVariable.source }}" class="bms-panel-content">
+        {% for register in registers %}
+            {% if register.panel_id == panelVariable.id %}
+                {{ register.fixed_value|round(panelVariable.displayPrecision) }}
+            {% endif %}
+        {% endfor %}
+    </span>
     <input id="{{ panelVariable.source }}" type="hidden" value="{{ panelVariable.displayPrecision }}"/>
     {% if labels %}
         <span class="label label-primary label-bms-panel">
             <i class="fa fa-hdd-o fa-fw"></i> {{ panelVariable.id }}
             <a href="#"><i class='fa fa-fw fa-clone fa-blue'></i></a>
             <a href="#"><i class='fa fa-fw fa-bolt fa-yellow'></i></a>
-            <a href="{{ path('panelvariable_edit', {'id': panelVariable.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
-            <a href="{{ path('panelvariable_delete', {'id': panelVariable.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
+            <a href="{{ path('panelvariable_edit', {'id': panelVariable.id }) }}"><i
+                        class='fa fa-fw fa-cogs fa-yellow'></i></a>
+            <a href="{{ path('panelvariable_delete', {'id': panelVariable.id }) }}"><i
+                        class='fa fa-fw fa-trash-o fa-red'></i></a>
         </span>
     {% endif %}
 </div>

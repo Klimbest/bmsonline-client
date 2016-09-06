@@ -206,6 +206,7 @@ class PanelVariable
      */
     public function __construct()
     {
+        $this->name =  "pv_" . rand(999, 9999);
         $this->tooltip = false;
         $this->topPosition = 0;
         $this->leftPosition = 0;

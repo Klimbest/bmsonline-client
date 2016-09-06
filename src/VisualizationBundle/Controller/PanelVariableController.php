@@ -31,7 +31,9 @@ class PanelVariableController extends Controller
     {
         $panelVariable = new PanelVariable();
         $page = $this->getDoctrine()->getManager()->getRepository('VisualizationBundle:Page')->find($request->get('page_id'));
+        $registers = $this->getDoctrine()->getManager()->getRepository('BmsConfigurationBundle:Register')->findAll();
         $panelVariable->setPage($page);
+        $panelVariable->setBackgroundColor($page->getBackgroundColor());
         $form = $this->createForm(PanelVariableType::class, $panelVariable);
         $form->handleRequest($request);
 
@@ -46,6 +48,7 @@ class PanelVariableController extends Controller
         return $this->render('VisualizationBundle:panelvariable:form.html.twig', [
             'panelVariable' => $panelVariable,
             'form' => $form->createView(),
+            'registers' => $registers
         ]);
     }
 
@@ -61,6 +64,8 @@ class PanelVariableController extends Controller
     public function editAction(Request $request, PanelVariable $panelVariable)
     {
         $form = $this->createForm(PanelVariableType::class, $panelVariable);
+        $registers = $this->getDoctrine()->getManager()->getRepository('BmsConfigurationBundle:Register')->findAll();
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -74,6 +79,7 @@ class PanelVariableController extends Controller
         return $this->render('VisualizationBundle:panelvariable:form.html.twig', [
             'panelVariable' => $panelVariable,
             'form' => $form->createView(),
+            'registers' => $registers
         ]);
     }
 
