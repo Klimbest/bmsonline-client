@@ -1,0 +1,12 @@
+<div>
+    GADGET PROGRESS BAR
+    {% if labels %}
+        <span class="label label-primary label-bms-panel">
+            <i class="fa fa-font fa-fw"></i> {{ gadgetProgressBar.id }}
+            <a href="{{ path('gadgetprogressbar_copy', {'id': gadgetProgressBar.id }) }}"><i class='fa fa-fw fa-clone fa-blue'></i></a>
+            <a href="#"><i class='fa fa-fw fa-bolt fa-yellow'></i></a>
+            <a href="{{ path('gadgetprogressbar_edit', {'id': gadgetProgressBar.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
+            <a href="{{ path('gadgetprogressbar_delete', {'id': gadgetProgressBar.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
+        </span>
+    {% endif %}
+</div>

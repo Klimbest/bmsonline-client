@@ -19,7 +19,7 @@
     {% if labels %}
         <span class="label label-primary label-bms-panel">
             <i class="fa fa-image fa-fw"></i> {{ panelImage.id }}
-            <a href="#"><i class='fa fa-fw fa-clone fa-blue'></i></a>
+            <a href="{{ path('panelimage_copy', {'id': panelImage.id }) }}"><i class='fa fa-fw fa-clone fa-blue'></i></a>
             <a href="#"><i class='fa fa-fw fa-bolt fa-yellow'></i></a>
             <a href="{{ path('panelimage_edit', {'id': panelImage.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
             <a href="{{ path('panelimage_delete', {'id': panelImage.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
