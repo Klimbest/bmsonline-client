@@ -5,6 +5,8 @@ namespace VisualizationBundle\Controller;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -181,6 +183,41 @@ class PanelImageController extends Controller
             }
         }
         return $images;
+    }
+
+    /**
+     * @Route("/add_image ", name="send_image_to_server", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function addImageAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $imagesDir = $this->getParameter('kernel.root_dir') . '/../web';
+            //get data
+            $fileName = $request->get("fileName");
+            //save original file
+            $img = $request->files->get("file");
+
+            $relativePath = '/images/user/';
+            $img->move($imagesDir . $relativePath, $fileName);
+
+            $imagePath = $relativePath . $fileName;
+
+//            $processedImage = $this->get('liip_imagine.data.manager')->find('resize', $imagePath);
+//            $filteredImage = $this->get('liip_imagine.filter.manager')->applyFilter($processedImage, 'resize')->getContent();
+//            //update file
+//            $f = fopen($imagesDir . $relativePath . $fileName, 'w+');
+//            fwrite($f, $filteredImage);
+//            fclose($f);
+
+            $ret["fileName"] = $fileName;
+            $ret["url"] = $imagePath;
+
+            return new JsonResponse($ret);
+        } else {
+            throw new AccessDeniedHttpException();
+        }
     }
 
 }

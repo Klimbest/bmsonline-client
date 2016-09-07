@@ -111,6 +111,7 @@
                 var selected = $("img[src$='{{ panelImage.source }}']").parent("div");
                 setSelectedImage(selected);
             {% endif %}
+            setAddingNewImage();
         });
     </script>
 {% endblock %}

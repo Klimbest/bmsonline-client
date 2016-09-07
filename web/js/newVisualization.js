@@ -303,3 +303,43 @@ function setSelectedImage(element) {
     };
     img.src = source;
 }
+
+function setAddingNewImage(){
+    var form = $("form");
+    form.find("input#image").change(function (event) {
+        var src;
+        var img = new Image();
+        var input = event.target;
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                img.onload = function () {
+                    src = e.target.result;
+                    var data = new FormData();
+                    data.append('file', input.files[0]);
+                    data.append("fileName", input.files[0].name);
+                    sendImageToServer(data);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    });
+}
+
+function sendImageToServer(data) {
+    $.ajax({
+        type: "POST",
+        url: Routing.generate('send_image_to_server'),
+        data: data,
+        contentType: false,
+        processData: false,
+        success: function (ret) {
+            $(".main-row").children(".fa-spinner").remove();
+            $("div.thumbnail-list").append("<div id='" + ret['fileName'] + "' class='text-center' onclick='setSelectedImage(this)'>" +
+                "<img class='img-responsive' src='" + ret['url'] + "' />" +
+                "</div>");
+        }
+    });
+    $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+}
