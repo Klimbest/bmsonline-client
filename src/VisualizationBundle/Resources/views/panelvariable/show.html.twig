@@ -31,7 +31,7 @@
     <span id="{{ panelVariable.source }}" class="bms-panel-content">
         {% for register in registers %}
             {% if register.panel_id == panelVariable.id %}
-                {{ register.fixed_value|round(panelVariable.displayPrecision) }}
+                {{ register.fixed_value|round(panelVariable.displayPrecision)|number_format(panelVariable.displayPrecision) }}
             {% endif %}
         {% endfor %}
     </span>
