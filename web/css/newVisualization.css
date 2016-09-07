@@ -109,6 +109,11 @@ span.toggler.off {
     display: block;
 }
 
+div.thumbnail-list{
+    max-height: 400px;
+    overflow-y: auto;
+}
+
 div.thumbnail-list div {
     height: 50px;
     width: 50px;
