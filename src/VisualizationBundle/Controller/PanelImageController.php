@@ -2,11 +2,13 @@
 
 namespace VisualizationBundle\Controller;
 
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -186,7 +188,7 @@ class PanelImageController extends Controller
     }
 
     /**
-     * @Route("/add_image ", name="send_image_to_server", options={"expose"=true})
+     * @Route("/image/add ", name="send_image_to_server", options={"expose"=true})
      * @param Request $request
      * @return JsonResponse
      */
@@ -204,13 +206,6 @@ class PanelImageController extends Controller
 
             $imagePath = $relativePath . $fileName;
 
-//            $processedImage = $this->get('liip_imagine.data.manager')->find('resize', $imagePath);
-//            $filteredImage = $this->get('liip_imagine.filter.manager')->applyFilter($processedImage, 'resize')->getContent();
-//            //update file
-//            $f = fopen($imagesDir . $relativePath . $fileName, 'w+');
-//            fwrite($f, $filteredImage);
-//            fclose($f);
-
             $ret["fileName"] = $fileName;
             $ret["url"] = $imagePath;
 
@@ -218,6 +213,31 @@ class PanelImageController extends Controller
         } else {
             throw new AccessDeniedHttpException();
         }
+    }
+
+    /**
+     * @Route("/image/delete/{image_name}", name="remove_image_from_server")
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function deleteImageFromServerAction(Request $request)
+    {
+        $imagesDir = $this->getParameter('kernel.root_dir') . '/../web/images/';
+        $imageName = $request->get("image_name");
+
+        $finder = new Finder();
+        $finder->files()->name($imageName)->in($this->getParameter('kernel.root_dir') . '/../web/images/');
+        foreach ($finder as $file) {
+            $relativePath = $file->getRelativePathname();
+        }
+        $fs = new Filesystem();
+
+        try {
+            $fs->remove($imagesDir . $relativePath);
+        } catch (IOExceptionInterface $e) {
+            echo "An error occurred while creating your directory at " . $e->getPath();
+        }
+        return $this->redirect($request->headers->get('referer'));
     }
 
 }

@@ -113,6 +113,7 @@ div.thumbnail-list div {
     height: 50px;
     width: 50px;
     display: inline-block;
+    position: relative;
 }
 
 div.thumbnail-list div:hover {
@@ -128,4 +129,10 @@ div.thumbnail-list div.selected {
 div.thumbnail-list div img {
     max-height: 100%;
     max-width: 100%;
+}
+div.thumbnail-list div a{
+    position: absolute;
+    left: 30px;
+    top: -4px;
+    display: none;
 }
