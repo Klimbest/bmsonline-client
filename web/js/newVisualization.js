@@ -283,9 +283,10 @@ function setSelectedImage(element) {
     var form = $("form");
     var inputWidth = form.find("input#panel_image_width");
     var inputHeight = form.find("input#panel_image_height");
-    $("div.thumbnail-list div").removeClass("selected");
+    form.find("div.thumbnail-list div").removeClass("selected");
     $(element).addClass("selected");
     var source = $(element).children("img").attr("src");
+    form.find("span#image_name").empty().append(source);
     form.find("input#panel_image_source").val(source);
     var img = new Image();
     img.onload = function () {
