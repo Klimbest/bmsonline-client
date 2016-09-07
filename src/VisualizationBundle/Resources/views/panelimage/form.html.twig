@@ -97,11 +97,9 @@
                     Anuluj</a>
                 <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> Zapisz</button>
             </div>
-
             {{ form_end(form) }}
         </div>
     </div>
-
 {% endblock %}
 
 
@@ -109,8 +107,10 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
-            var selected = $("img[src$='{{ panelImage.source }}']").parent("div");
-            setSelectedImage(selected);
+            {% if panelImage.source is not empty %}
+                var selected = $("img[src$='{{ panelImage.source }}']").parent("div");
+                setSelectedImage(selected);
+            {% endif %}
         });
     </script>
 {% endblock %}
