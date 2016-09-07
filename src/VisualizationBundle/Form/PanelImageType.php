@@ -26,36 +26,33 @@ class PanelImageType extends AbstractType
             ])
             ->add('source', HiddenType::class)
             ->add('tooltip', CheckboxType::class,  [
-                'label' => 'Wyświetlać podpowiedź?'
+                'label' => 'Wyświetlać podpowiedź?',
+                'required' => false
             ])
             //POZYCJA
             ->add('topPosition', IntegerType::class, [
                 'label' => 'Od góry',
                 'attr' => [
-                    'min' => 0,
-                    'step' => 25
+                    'min' => 0
                 ]
             ])
             ->add('leftPosition', IntegerType::class, [
                 'label' => 'Od lewej',
                 'attr' => [
-                    'min' => 0,
-                    'step' => 25
+                    'min' => 0
                 ]
             ])
             //ROZMIAR
             ->add('width', IntegerType::class, [
                 'label' => 'Szerokość',
                 'attr' => [
-                    'min' => 0,
-                    'step' => 25
+                    'min' => 0
                 ]
             ])
             ->add('height', IntegerType::class, [
                 'label' => 'Wysokość',
                 'attr' => [
-                    'min' => 0,
-                    'step' => 25
+                    'min' => 0
                 ]
             ])
             //RAMKA

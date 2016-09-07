@@ -29,7 +29,7 @@
                         <label class="col-md-4 col-sm-3 control-label required" for="panel_source">Zmienna</label>
                         <div class="col-md-8 col-sm-9">
                             <select id="panel_source" class="form-control selectpicker" data-live-search="true"
-                                    onchange="updateSource('variable')">
+                                    onchange="updatePanelVariableSource()">
                                 {% for register in registers %}
                                     <option value="{{ register.id }}">{{ register.name }}
                                         - {{ register.description }}</option>

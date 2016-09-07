@@ -145,7 +145,7 @@ function ajaxMoveElement(data) {
         datatype: "application/json",
         url: Routing.generate("element_move"),
         data: data,
-        success: function (ret) {
+        success: function () {
             $(".main-row").children(".fa-spinner").remove();
         }
     });
@@ -240,7 +240,7 @@ function updateBorderRadius(type) {
     form.find("input#panel_" + type + "_borderRadiusRightBottom").val(form.find("input#borderRadiusBR").val());
 }
 
-function initForm(type){
+function initForm(type) {
     var form = $("form");
     form.find("input#panel_" + type + "_borderRadiusLeftTop").bind("input", function () {
         form.find("input#borderRadiusTL").val($(this).val());
@@ -272,9 +272,34 @@ function initForm(type){
     form.find("select#panel_source").val(form.find("input#panel_" + type + "_source").val());
 }
 
-function updateSource(type){
+function updatePanelVariableSource() {
     var form = $("form");
     var select = form.find("select#panel_source");
-    var input = form.find("input#panel_" + type + "_source");
+    var input = form.find("input#panel_variable_source");
     input.val(select.val());
+}
+
+function setSelectedImage(element) {
+    var form = $("form");
+    var inputWidth = form.find("input#panel_image_width");
+    var inputHeight = form.find("input#panel_image_height");
+    $("div.thumbnail-list div").removeClass("selected");
+    $(element).addClass("selected");
+    var source = $(element).children("img").attr("src");
+    form.find("input#panel_image_source").val(source);
+    var img = new Image();
+    img.onload = function () {
+        var ar = img.width/img.height;
+        inputWidth.val(this.width).attr("max", this.width);
+        inputWidth.change(function(){
+            var h = form.find("input#panel_image_width").val() / ar;
+            form.find("input#panel_image_height").val(Math.round(h));
+        });
+        inputHeight.val(this.height).attr("max", this.height);
+        inputHeight.change(function(){
+            var w = $(this).val() * ar;
+            form.find("input#panel_image_width").val(Math.round(w));
+        });
+    };
+    img.src = source;
 }

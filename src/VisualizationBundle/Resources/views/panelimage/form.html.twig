@@ -68,20 +68,19 @@
                                             {% for keykey,subsubdir in subdir %}
                                                 {% if subsubdir is iterable %}
                                                     {% for image in subsubdir %}
-                                                        <div id="{{ image }}" class="text-center">
-                                                            <img class='img-responsive'
-                                                                 src='/images/{{ k }}/{{ key }}/{{ keykey }}/{{ image }}'/>
+                                                        <div id="{{ image }}" class="text-center" onclick="setSelectedImage(this)">
+                                                            <img class='img-responsive' src='/images/{{ k }}/{{ key }}/{{ keykey }}/{{ image }}'/>
                                                         </div>
                                                     {% endfor %}
                                                 {% else %}
-                                                    <div id="{{ subsubdir }}" class="text-center">
+                                                    <div id="{{ subsubdir }}" class="text-center" onclick="setSelectedImage(this)">
                                                         <img class='img-responsive'
                                                              src='/images/{{ k }}/{{ key }}/{{ subsubdir }}'/>
                                                     </div>
                                                 {% endif %}
                                             {% endfor %}
                                         {% else %}
-                                            <div id="{{ subdir }}" class="text-center">
+                                            <div id="{{ subdir }}" class="text-center" onclick="setSelectedImage(this)">
                                                 <img class='img-responsive' src='/images/{{ k }}/{{ subdir }}'/>
                                             </div>
                                         {% endif %}
@@ -105,3 +104,13 @@
 
 {% endblock %}
 
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            var selected = $("img[src$='{{ panelImage.source }}']").parent("div");
+            setSelectedImage(selected);
+        });
+    </script>
+{% endblock %}

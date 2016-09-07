@@ -33,9 +33,9 @@ class PanelImageController extends Controller
         $panelImage = new PanelImage();
         $page = $this->getDoctrine()->getManager()->getRepository('VisualizationBundle:Page')->find($request->get('page_id'));
         $panelImage->setPage($page);
+        $images = self::getImages();
         $form = $this->createForm(PanelImageType::class, $panelImage);
         $form->handleRequest($request);
-        $images = self::getImages();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -63,6 +63,7 @@ class PanelImageController extends Controller
      */
     public function editAction(Request $request, PanelImage $panelImage)
     {
+        $images = self::getImages();
         $form = $this->createForm(PanelImageType::class, $panelImage);
         $form->handleRequest($request);
 
@@ -75,6 +76,7 @@ class PanelImageController extends Controller
         }
 
         return $this->render('VisualizationBundle:panelimage:form.html.twig', [
+            'images' => $images,
             'panelImage' => $panelImage,
             'form' => $form->createView()
         ]);
