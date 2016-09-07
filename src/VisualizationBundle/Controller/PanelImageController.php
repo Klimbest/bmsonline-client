@@ -128,62 +128,20 @@ class PanelImageController extends Controller
     private function getImages()
     {
         $finder = new Finder();
-        $finder->directories()->in($this->getParameter('kernel.root_dir') . '/../web/images/');
-        $images = [];
+        $finder2 = new Finder();
+        $finder->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/system/');
+        $images_system = [];
         foreach ($finder as $dir) {
-            $finder2 = new Finder();
-            $dirDet = explode("/", $dir->getRelativePathname());
-            switch (sizeof($dirDet)) {
-                case 1 :
-                    if (!empty($images[$dirDet[0]])) {
-                        $images[$dirDet[0]] = [];
-                    } else {
-                        null;
-                    }
-                    $finder2->depth('== 0')->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
-                    foreach ($finder2 as $file) {
-                        $fn = $file->getFilename();
-                        $images[$dirDet[0]][$fn] = $fn;
-                    }
-                    break;
-                case 2 :
-                    if (!empty($images[$dirDet[0]][$dirDet[1]])) {
-                        $images[$dirDet[0]][$dirDet[1]] = [];
-                    } else {
-                        null;
-                    }
-                    $finder2->depth('== 0')->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
-                    foreach ($finder2 as $file) {
-                        $fn = $file->getFilename();
-                        $images[$dirDet[0]][$dirDet[1]][$fn] = $fn;
-                    }
-                    break;
-                case 3 :
-                    if (!empty($images[$dirDet[0]][$dirDet[1]][$dirDet[2]])) {
-                        $images[$dirDet[0]][$dirDet[1]][$dirDet[2]] = [];
-                    } else {
-                        null;
-                    }
-                    $finder2->depth('== 0')->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
-                    foreach ($finder2 as $file) {
-                        $fn = $file->getFilename();
-                        $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$fn] = $fn;
-                    }
-                    break;
-                case 4 :
-                    if (!empty($images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]])) {
-                        $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]] = [];
-                    } else {
-                        null;
-                    }
-                    $finder2->depth('== 0')->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/' . $dir->getRelativePathname());
-                    foreach ($finder2 as $file) {
-                        $fn = $file->getFilename();
-                        $images[$dirDet[0]][$dirDet[1]][$dirDet[2]][$dirDet[3]][$fn] = $fn;
-                    }
-                    break;
-            }
+            array_push($images_system, $dir->getRelativePathname());
         }
+        $finder2->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/user/');
+        $images_user = [];
+        foreach ($finder2 as $dir) {
+            array_push($images_user, $dir->getRelativePathname());
+        }
+        $images['system'] = $images_system;
+        $images['user'] = $images_user;
+
         return $images;
     }
 
@@ -208,6 +166,7 @@ class PanelImageController extends Controller
 
             $ret["fileName"] = $fileName;
             $ret["url"] = $imagePath;
+            $ret["href"] = $this->generateUrl('remove_image_from_server', ['image_name' => $fileName]);
 
             return new JsonResponse($ret);
         } else {

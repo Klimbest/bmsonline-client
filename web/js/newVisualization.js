@@ -290,14 +290,14 @@ function setSelectedImage(element) {
     form.find("input#panel_image_source").val(source);
     var img = new Image();
     img.onload = function () {
-        var ar = img.width/img.height;
+        var ar = img.width / img.height;
         inputWidth.val(this.width).attr("max", this.width);
-        inputWidth.change(function(){
+        inputWidth.change(function () {
             var h = form.find("input#panel_image_width").val() / ar;
             form.find("input#panel_image_height").val(Math.round(h));
         });
         inputHeight.val(this.height).attr("max", this.height);
-        inputHeight.change(function(){
+        inputHeight.change(function () {
             var w = $(this).val() * ar;
             form.find("input#panel_image_width").val(Math.round(w));
         });
@@ -305,7 +305,7 @@ function setSelectedImage(element) {
     img.src = source;
 }
 
-function setAddingNewImage(){
+function setAddingNewImage() {
     var form = $("form");
     form.find("input#image").change(function (event) {
         var src;
@@ -316,10 +316,14 @@ function setAddingNewImage(){
             reader.onload = function (e) {
                 img.onload = function () {
                     src = e.target.result;
-                    var data = new FormData();
-                    data.append('file', input.files[0]);
-                    data.append("fileName", input.files[0].name);
-                    sendImageToServer(data);
+                    if ($("div.thumbnail-list").last().find("div#" + input.files[0].name.replace(".", "\\.")).length == 0) {
+                        var data = new FormData();
+                        data.append('file', input.files[0]);
+                        data.append("fileName", input.files[0].name);
+                        sendImageToServer(data);
+                    } else {
+                        alert("Obrazek o tej nazwie istnieje w systemie.");
+                    }
                 };
                 img.src = e.target.result;
             };
@@ -337,9 +341,24 @@ function sendImageToServer(data) {
         processData: false,
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
-            $("div.thumbnail-list").append("<div id='" + ret['fileName'] + "' class='text-center' onclick='setSelectedImage(this)'>" +
+            var list = $("div.thumbnail-list").last();
+            list.append(
+                "<div id='" + ret['fileName'] + "' class='text-center' onclick='setSelectedImage(this)'>" +
                 "<img class='img-responsive' src='" + ret['url'] + "' />" +
+                "<a href='" + ret['href'] + "' >" +
+                "<i class='fa fa-remove fa-red'></i></a>" +
                 "</div>");
+
+            list.children("div").hover(function () {
+                $(this).children("a").show();
+            }, function () {
+                $(this).children("a").hide();
+            });
+
+            list.find("a").click(function () {
+                return confirm("Na pewno usunąć obrazek z systemu?")
+            });
+
         }
     });
     $(".main-row").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();

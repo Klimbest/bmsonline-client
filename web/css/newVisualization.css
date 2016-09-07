@@ -29,14 +29,14 @@ span.toggler.off {
 /*BODY*/
 .main-row {
     max-width: 80%;
-    margin-right: 0px;
+    margin-right: 0;
     margin-left: 210px;
     margin-top: 15px;
 }
 
 .main-row div.well {
     position: relative;
-    padding: 0px;
+    padding: 0;
     overflow: hidden;
 }
 
@@ -110,7 +110,7 @@ span.toggler.off {
 }
 
 div.thumbnail-list{
-    max-height: 400px;
+    max-height: 250px;
     overflow-y: auto;
 }
 

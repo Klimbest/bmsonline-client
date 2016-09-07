@@ -63,49 +63,37 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="thumbnail-list">
-                                {% for k,dir in images %}
-                                    {% for key,subdir in dir %}
-                                        {% if subdir is iterable %}
-                                            {#{% for keykey,subsubdir in subdir %}#}
-                                            {#{% if subsubdir is iterable %}#}
-                                            {#{% for image in subsubdir %}#}
-                                            {#<div id="{{ image }}" class="text-center"#}
-                                            {#onclick="setSelectedImage(this)" title="{{ image }}">#}
-                                            {#<img class='img-responsive'#}
-                                            {#src='/images/{{ k }}/{{ key }}/{{ keykey }}/{{ image }}'/>#}
-                                            {#<a href="{{ path('remove_image_from_server', {'image_name': image }) }}">#}
-                                            {#<i class="fa fa-remove fa-red"></i>#}
-                                            {#</a>#}
-                                            {#</div>#}
-                                            {#{% endfor %}#}
-                                            {#{% else %}#}
-                                            {#<div id="{{ subsubdir }}" class="text-center"#}
-                                            {#onclick="setSelectedImage(this)" title="{{ subsubdir }}">#}
-                                            {#<img class='img-responsive'#}
-                                            {#src='/images/{{ k }}/{{ key }}/{{ subsubdir }}'/>#}
-                                            {#<a href="{{ path('remove_image_from_server', {'image_name': subsubdir }) }}">#}
-                                            {#<i class="fa fa-remove fa-red"></i>#}
-                                            {#</a>#}
-                                            {#</div>#}
-                                            {#{% endif %}#}
-                                            {#{% endfor %}#}
-                                        {% else %}
-                                            <div id="{{ subdir }}" class="text-center" onclick="setSelectedImage(this)"
-                                                 title="{{ subdir }}">
-                                                <img class='img-responsive' src='/images/{{ k }}/{{ subdir }}'/>
-                                                <a href="{{ path('remove_image_from_server', {'image_name': subdir }) }}"
-                                                   onclick="return confirm('Na pewno usunąć obrazek z systemu?')">
-                                                    <i class="fa fa-remove fa-red"></i>
-                                                </a>
-                                            </div>
-                                        {% endif %}
-                                    {% endfor %}
+                        <div class="col-md-12 text-center">
+                            <h4><span class="label label-warning">Obrazy systemowe</span></h4>
+                            <div class="thumbnail-list text-left">
+                                {% for image in images['system'] %}
+                                    <div id="{{ image }}" class="text-center" onclick="setSelectedImage(this)"
+                                         title="{{ image }}">
+                                        <img class='img-responsive' src='/images/system/{{ image }}'/>
+                                    </div>
                                 {% endfor %}
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h4><span class="label label-success">Obrazy użytkownika</span></h4>
+                            <div class="thumbnail-list text-left">
+                                {% for image in images['user'] %}
+                                    <div id="{{ image }}" class="text-center" onclick="setSelectedImage(this)"
+                                         title="{{ image }}">
+                                        <img class='img-responsive' src='/images/user/{{ image }}'/>
+                                        <a href="{{ path('remove_image_from_server', {'image_name': image }) }}"
+                                           onclick="return confirm('Na pewno usunąć obrazek z systemu?')">
+                                            <i class="fa fa-remove fa-red"></i>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -124,16 +112,17 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
-            {% if panelImage.source is not empty %}
-            var selected = $("img[src$='{{ panelImage.source }}']").parent("div");
-            setSelectedImage(selected);
-            {% endif %}
-            setAddingNewImage();
+
             $("form").find("div.thumbnail-list div").hover(function () {
                 $(this).children("a").show();
             }, function () {
                 $(this).children("a").hide();
             });
+            {% if panelImage.source is not empty %}
+            var selected = $("img[src$='{{ panelImage.source }}']").parent("div");
+            setSelectedImage(selected);
+            {% endif %}
+            setAddingNewImage();
         });
     </script>
 {% endblock %}
