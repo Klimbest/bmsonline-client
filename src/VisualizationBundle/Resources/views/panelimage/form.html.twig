@@ -52,11 +52,13 @@
                 </div>
                 <div class="col-lg-8 col-lg-offset-1 col-md-8">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-5">
                             <div class="btn btn-sm btn-primary btn-file">
                                 <i class="fa fa-plus fa-fw"></i>Dodaj nowy
                                 <input class="" id="image" type="file" accept='image/*'>
                             </div>
+                        </div>
+                        <div class="col-md-5 text-right">
                             <span id="image_name" class="label label-info"></span>
                         </div>
                     </div>
@@ -69,12 +71,12 @@
                                             {% for keykey,subsubdir in subdir %}
                                                 {% if subsubdir is iterable %}
                                                     {% for image in subsubdir %}
-                                                        <div id="{{ image }}" class="text-center" onclick="setSelectedImage(this)" title="{{ image }}>
+                                                        <div id="{{ image }}" class="text-center" onclick="setSelectedImage(this)" title="{{ image }}">
                                                             <img class='img-responsive' src='/images/{{ k }}/{{ key }}/{{ keykey }}/{{ image }}'/>
                                                         </div>
                                                     {% endfor %}
                                                 {% else %}
-                                                    <div id="{{ subsubdir }}" class="text-center" onclick="setSelectedImage(this)" title="{{ subsubdir }}>
+                                                    <div id="{{ subsubdir }}" class="text-center" onclick="setSelectedImage(this)" title="{{ subsubdir }}">
                                                         <img class='img-responsive'
                                                              src='/images/{{ k }}/{{ key }}/{{ subsubdir }}'/>
                                                     </div>
