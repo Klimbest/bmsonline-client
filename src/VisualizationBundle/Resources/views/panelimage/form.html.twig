@@ -64,20 +64,6 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            <h4><span class="label label-warning">Obrazy systemowe</span></h4>
-                            <div class="thumbnail-list text-left">
-                                {% for image in images['system'] %}
-                                    <div id="{{ image }}" class="text-center" onclick="setSelectedImage(this)"
-                                         title="{{ image }}">
-                                        <img class='img-responsive' src='/images/system/{{ image }}'/>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12 text-center">
                             <h4><span class="label label-success">Obrazy użytkownika</span></h4>
                             <div class="thumbnail-list text-left">
                                 {% for image in images['user'] %}
@@ -94,6 +80,19 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h4><span class="label label-warning">Obrazy systemowe</span></h4>
+                            <div class="thumbnail-list text-left">
+                                {% for image in images['system'] %}
+                                    <div id="{{ image }}" class="text-center" onclick="setSelectedImage(this)"
+                                         title="{{ image }}">
+                                        <img class='img-responsive' src='/images/system/{{ image }}'/>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

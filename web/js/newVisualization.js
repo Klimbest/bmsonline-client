@@ -326,7 +326,7 @@ function setAddingNewImage() {
             reader.onload = function (e) {
                 img.onload = function () {
                     src = e.target.result;
-                    if ($("div.thumbnail-list").last().find("div#" + input.files[0].name.replace(".", "\\.")).length == 0) {
+                    if ($("div.thumbnail-list").first().find("div#" + input.files[0].name.replace(".", "\\.")).length == 0) {
                         var data = new FormData();
                         data.append('file', input.files[0]);
                         data.append("fileName", input.files[0].name);
@@ -351,7 +351,7 @@ function sendImageToServer(data) {
         processData: false,
         success: function (ret) {
             $(".main-row").children(".fa-spinner").remove();
-            var list = $("div.thumbnail-list").last();
+            var list = $("div.thumbnail-list").first();
             list.append(
                 "<div id='" + ret['fileName'] + "' class='text-center' onclick='setSelectedImage(this)'>" +
                 "<img class='img-responsive' src='" + ret['url'] + "' />" +
