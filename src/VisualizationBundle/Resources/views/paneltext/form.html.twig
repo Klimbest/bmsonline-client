@@ -45,28 +45,28 @@
                             <h5 class="text-center"><span class="label label-primary">Czcionka</span></h5>
                             <div class="form-group-sm text-center">
                                 <button type="button" id="panel_fontWeight" class="btn btn-default btn-sm"
-                                        onclick="updateFontWeight('variable')">
+                                        onclick="updateFontWeight('text')">
                                     <i class="fa fa-bold fa-fw"></i>
                                 </button>
                                 <button type="button" id="panel_textDecoration" class="btn btn-default btn-sm"
-                                        onclick="updateTextDecoration('variable')">
+                                        onclick="updateTextDecoration('text')">
                                     <i class="fa fa-underline fa-fw"></i>
                                 </button>
                                 <button type="button" id="panel_fontStyle" class="btn btn-default btn-sm btn-italic"
-                                        onclick="updateFontStyle('variable')">
+                                        onclick="updateFontStyle('text')">
                                     <i class="fa fa-italic fa-fw"></i>
                                 </button>
                                 <div class="btn-group" id="panel_textAlign" role="group">
                                     <button type="button" class="btn btn-default btn-sm btn-align-left active"
-                                            onclick="updateTextAlign('left', 'variable')">
+                                            onclick="updateTextAlign('left', 'text')">
                                         <i class="fa fa-align-left fa-fw"></i>
                                     </button>
                                     <button type="button" class="btn btn-default btn-sm btn-align-center"
-                                            onclick="updateTextAlign('center', 'variable')">
+                                            onclick="updateTextAlign('center', 'text')">
                                         <i class="fa fa-align-center fa-fw"></i>
                                     </button>
                                     <button type="button" class="btn btn-default btn-sm btn-align-right"
-                                            onclick="updateTextAlign('right', 'variable')">
+                                            onclick="updateTextAlign('right', 'text')">
                                         <i class="fa fa-align-right fa-fw"></i>
                                     </button>
                                 </div>
@@ -148,7 +148,7 @@
                             </div>
                             <div class="col-md-3">
                                 <input id="borderRadiusTL" class="form-control" type="number" name="txt_BR_TL" min="0"
-                                       max="200" step="1" value="0" oninput="updateBorderRadius('variable')"/>
+                                       max="200" step="1" value="0" oninput="updateBorderRadius('text')"/>
                             </div>
                         </div>
                     </div>
@@ -163,7 +163,7 @@
                             </div>
                             <div class="col-md-3">
                                 <input id="borderRadiusBL" class="form-control" type="number" name="txt_BR_BL" min="0"
-                                       max="200" step="1" value="0" oninput="updateBorderRadius('variable')"/>
+                                       max="200" step="1" value="0" oninput="updateBorderRadius('text')"/>
                             </div>
                         </div>
                     </div>
@@ -174,7 +174,7 @@
                         <div class="form-group-sm">
                             <div class="col-md-3">
                                 <input id="borderRadiusTR" class="form-control" type="number" name="txt_BR_TR" min="0"
-                                       max="200" step="1" value="0" oninput="updateBorderRadius('variable')"/>
+                                       max="200" step="1" value="0" oninput="updateBorderRadius('text')"/>
                             </div>
                             <div class="col-md-5">
                                 {{ form_widget(form.borderRadiusRightTop) }}
@@ -189,7 +189,7 @@
                         <div class="form-group-sm">
                             <div class="col-md-3">
                                 <input id="borderRadiusBR" class="form-control" type="number" name="txt_BR_BR" min="0"
-                                       max="200" step="1" value="0" oninput="updateBorderRadius('variable')"/>
+                                       max="200" step="1" value="0" oninput="updateBorderRadius('text')"/>
                             </div>
                             <div class="col-md-5">
                                 {{ form_widget(form.borderRadiusRightBottom) }}
