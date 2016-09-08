@@ -20,7 +20,7 @@
                         <a class="btn btn-xs btn-info" href="{{ path('page_edit', { 'id': active_page.id }) }}">
                             <i class="fa fa-cog fa-yellow"></i>
                         </a>
-                        <a class="btn btn-xs btn-info" href="{{ path('page_delete', { 'id': active_page.id }) }}">
+                        <a class="btn btn-xs btn-info" href="{{ path('page_delete', { 'id': active_page.id }) }}" onclick="return confirm('Na pewno usunąć stronę? Spowoduje to również usunięcie wszsytkich elementów znajdużacych się na niej.');">
                             <i class="fa fa-remove fa-red"></i>
                         </a>
                     {% else %}

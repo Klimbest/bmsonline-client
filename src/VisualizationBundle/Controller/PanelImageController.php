@@ -162,6 +162,7 @@ class PanelImageController extends Controller
 
         return $this->render('VisualizationBundle:events:eventLinkEdit.html.twig', [
             'element' => $panelImage,
+            'form' => $form->createView(),
         ]);
     }
 
