@@ -4,7 +4,6 @@ namespace VisualizationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * PanelVariable
@@ -207,6 +206,13 @@ class PanelVariable
      */
     private $page;
 
+    /**
+     * @var EventLink
+     *
+     * @ORM\ManyToOne(targetEntity="EventLink")
+     * @ORM\JoinColumn(name="event_link_id", referencedColumnName="id", nullable=true)
+     */
+    private $eventLink;
 
     /**
      * Constructor
@@ -871,5 +877,29 @@ class PanelVariable
     public function getBackgroundOpacity()
     {
         return $this->backgroundOpacity;
+    }
+
+    /**
+     * Set eventLink
+     *
+     * @param EventLink $eventLink
+     *
+     * @return PanelVariable
+     */
+    public function setEventLink(EventLink $eventLink = null)
+    {
+        $this->eventLink = $eventLink;
+
+        return $this;
+    }
+
+    /**
+     * Get eventLink
+     *
+     * @return EventLink
+     */
+    public function getEventLink()
+    {
+        return $this->eventLink;
     }
 }

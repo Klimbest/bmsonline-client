@@ -3,7 +3,6 @@
 namespace VisualizationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use BmsConfigurationBundle\Entity\Register;
 
 /**
  * InputNumber
@@ -79,6 +78,14 @@ class InputNumber
      * @ORM\JoinColumn(name="page_id", referencedColumnName="id", nullable=false)
      */
     private $page;
+
+    /**
+     * @var EventLink
+     *
+     * @ORM\ManyToOne(targetEntity="EventLink")
+     * @ORM\JoinColumn(name="event_link_id", referencedColumnName="id", nullable=true)
+     */
+    private $eventLink;
 
     /**
      * Constructor
@@ -294,5 +301,29 @@ class InputNumber
     public function getZIndex()
     {
         return $this->zIndex;
+    }
+
+    /**
+     * Set eventLink
+     *
+     * @param EventLink $eventLink
+     *
+     * @return InputNumber
+     */
+    public function setEventLink(EventLink $eventLink = null)
+    {
+        $this->eventLink = $eventLink;
+
+        return $this;
+    }
+
+    /**
+     * Get eventLink
+     *
+     * @return EventLink
+     */
+    public function getEventLink()
+    {
+        return $this->eventLink;
     }
 }

@@ -1,4 +1,7 @@
 <div
+        {% if (inputButton.eventLink is not empty) %}
+            onclick="ajaxChangePage({{ inputButton.eventLink.page.id }});"
+        {% endif %}
         name="{{ inputButton.name }}"
         id="{{ inputButton.id }}" class="bms-panel bms-inputbutton"
         style="
@@ -8,6 +11,9 @@
                 height: {{ inputButton.height }}px;
                 line-height: {{ inputButton.height }}px;
                 z-index: {{ inputButton.zIndex }};
+        {% if (inputButton.eventLink is not empty) %}
+                cursor: pointer;
+        {% endif %}
                 ">
     INPUT BUTTON
     {% if labels %}

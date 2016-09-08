@@ -118,4 +118,36 @@ class PanelVariableController extends Controller
 
         return $this->redirectToRoute('panelvariable_edit', ['id' => $panelVariable_new->getId()]);
     }
+
+    /**
+     * List all PanelVariable events.
+     *
+     * @Route("/{id}/events", name="panelvariable_events")
+     * @param PanelVariable $panelVariable
+     * @return Response
+     */
+    public function eventsAction(PanelVariable $panelVariable)
+    {
+
+        return $this->render('VisualizationBundle:events:show.html.twig', [
+            'element' => $panelVariable,
+            'element_type' => 'panelvariable'
+        ]);
+    }
+
+    /**
+     * List all PanelVariable events.
+     *
+     * @Route("/{id}/eventlink/edit", name="panelvariable_eventlink_edit")
+     * @param PanelVariable $panelVariable
+     * @return Response
+     */
+    public function eventLinkEditAction(PanelVariable $panelVariable)
+    {
+
+        return $this->render('VisualizationBundle:events:eventLinkEdit.html.twig', [
+            'element' => $panelVariable,
+        ]);
+    }
+
 }

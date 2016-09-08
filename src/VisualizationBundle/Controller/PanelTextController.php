@@ -115,4 +115,35 @@ class PanelTextController extends Controller
         return $this->redirectToRoute('paneltext_edit', ['id' => $panelText_new->getId()]);
     }
 
+    /**
+     * List all PanelText events.
+     *
+     * @Route("/{id}/events", name="paneltext_events")
+     * @param PanelText $panelText
+     * @return Response
+     */
+    public function eventsAction(PanelText $panelText)
+    {
+
+        return $this->render('VisualizationBundle:events:show.html.twig', [
+            'element' => $panelText,
+            'element_type' => 'paneltext'
+        ]);
+    }
+
+    /**
+     * Edit EventLink for PanelText.
+     *
+     * @Route("/{id}/eventlink/edit", name="paneltext_eventlink_edit")
+     * @param PanelText $panelText
+     * @return Response
+     */
+    public function eventLinkEditAction(PanelText $panelText)
+    {
+
+        return $this->render('VisualizationBundle:events:eventLinkEdit.html.twig', [
+            'element' => $panelText,
+        ]);
+    }
+
 }

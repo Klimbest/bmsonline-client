@@ -1,4 +1,7 @@
 <div
+        {% if (gadgetProgressBar.eventLink is not empty) %}
+            onclick="ajaxChangePage({{ gadgetProgressBar.eventLink.page.id }});"
+        {% endif %}
         name="{{ gadgetProgressBar.name }}"
         id="{{ gadgetProgressBar.id }}" class="bms-panel bms-gadgetprogressbar"
         style="
@@ -8,6 +11,9 @@
                 height: {{ gadgetProgressBar.height }}px;
                 line-height: {{ gadgetProgressBar.height }}px;
                 z-index: {{ gadgetProgressBar.zIndex }};
+        {% if (gadgetProgressBar.eventLink is not empty) %}
+                cursor: pointer;
+        {% endif %}
                 ">
 
     {% set optimumMin = (gadgetProgressBar.optimumMin-gadgetProgressBar.rangeMin)/(gadgetProgressBar.rangeMax-gadgetProgressBar.rangeMin)*100|round(2, 'common') %}
@@ -15,16 +21,16 @@
     {% if gadgetProgressBar.setRegisterId is not null %}
         {% set setPoint = (gadgetProgressBar.setRegisterId.registerCurrentData.fixedValue-gadgetProgressBar.rangeMin)/(gadgetProgressBar.rangeMax-gadgetProgressBar.rangeMin)*100|round(2, 'common') %}
     {% endif %}
-    <div class="progress" style="margin-bottom: 0px;">
+    <div class="progress" style="margin-bottom: 0;">
         <div id="value{{ gadgetProgressBar.valueRegisterId.id }}"
-             style="position: absolute; top: -2px; left: 0%; height: 100%; z-index: 15">
-            <img src="/images/system/line.jpg" class="img-responsive"/>
+             style="position: absolute; top: -2px; left: 0; height: 100%; z-index: 15">
+            {#<img src="/images/system/line.jpg" class="img-responsive"/>#}
             {#                <i class="fa fa-arrow-down fa-fw"></i>#}
         </div>
         {% if gadgetProgressBar.setRegisterId is not null %}
             <div id="set{{ gadgetProgressBar.setRegisterId.id }}"
                  style="position: absolute; top: -5px; left: {{ setPoint }}%; height: 100%; z-index: 14">
-                <img src="/images/system/linegreen.jpg" class="img-responsive"/>
+                {#<img src="/images/system/linegreen.jpg" class="img-responsive"/>#}
             </div>
         {% endif %}
         <div class="progress-bar" role="progressbar"

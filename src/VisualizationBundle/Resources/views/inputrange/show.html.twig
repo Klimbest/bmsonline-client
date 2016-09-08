@@ -1,4 +1,7 @@
 <div
+        {% if (inputRange.eventLink is not empty) %}
+            onclick="ajaxChangePage({{ inputRange.eventLink.page.id }});"
+        {% endif %}
         name="{{ inputRange.name }}"
         id="{{ inputRange.id }}" class="bms-panel bms-inputrange"
         style="
@@ -8,15 +11,20 @@
                 height: {{ inputRange.height }}px;
                 line-height: {{ inputRange.height }}px;
                 z-index: {{ inputRange.zIndex }};
+        {% if (inputRange.eventLink is not empty) %}
+                cursor: pointer;
+        {% endif %}
                 ">
     INPUT RANGE
 
     {% if labels %}
         <span class="label label-primary label-bms-panel">
             <i class="fa fa-font fa-fw"></i> {{ inputRange.id }}
-            <a href="{{ path('inputrange_copy', {'id': inputRange.id }) }}"><i class='fa fa-fw fa-clone fa-blue'></i></a>
+            <a href="{{ path('inputrange_copy', {'id': inputRange.id }) }}"><i
+                        class='fa fa-fw fa-clone fa-blue'></i></a>
             <a href="#"><i class='fa fa-fw fa-bolt fa-yellow'></i></a>
-            <a href="{{ path('inputrange_edit', {'id': inputRange.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
+            <a href="{{ path('inputrange_edit', {'id': inputRange.id }) }}"><i
+                        class='fa fa-fw fa-cogs fa-yellow'></i></a>
             <a href="{{ path('inputrange_delete', {'id': inputRange.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
         </span>
     {% endif %}

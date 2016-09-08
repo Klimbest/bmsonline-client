@@ -123,6 +123,37 @@ class PanelImageController extends Controller
     }
 
     /**
+     * List all PanelImage events.
+     *
+     * @Route("/{id}/events", name="panelimage_events")
+     * @param PanelImage $panelImage
+     * @return Response
+     */
+    public function eventsAction(PanelImage $panelImage)
+    {
+
+        return $this->render('VisualizationBundle:events:show.html.twig', [
+            'element' => $panelImage,
+            'element_type' => 'panelimage'
+        ]);
+    }
+
+    /**
+     * List all PanelImage events.
+     *
+     * @Route("/{id}/eventlink/edit", name="panelimage_eventlink_edit")
+     * @param PanelImage $panelImage
+     * @return Response
+     */
+    public function eventLinkEditAction(PanelImage $panelImage)
+    {
+
+        return $this->render('VisualizationBundle:events:eventLinkEdit.html.twig', [
+            'element' => $panelImage,
+        ]);
+    }
+
+    /**
      * @return array
      */
     private function getImages()

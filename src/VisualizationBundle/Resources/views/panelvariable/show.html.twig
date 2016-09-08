@@ -1,4 +1,7 @@
 <div
+        {% if (panelVariable.eventLink is not empty) %}
+            onclick="ajaxChangePage({{ panelVariable.eventLink.page.id }});"
+        {% endif %}
         {% if panelVariable.tooltip %}
             title="{{ panelVariable.name }}"
         {% endif %}
@@ -26,6 +29,9 @@
                 font-size: {{ panelVariable.fontSize }}px;
                 line-height: {{ panelVariable.height }}px;
                 z-index: {{ panelVariable.zIndex }};
+        {% if (panelVariable.eventLink is not empty) %}
+                cursor: pointer;
+        {% endif %}
                 ">
 
     <span id="{{ panelVariable.source }}" class="bms-panel-content">
@@ -39,10 +45,17 @@
     {% if labels %}
         <span class="label label-primary label-bms-panel">
             <i class="fa fa-hdd-o fa-fw"></i> {{ panelVariable.id }}
-            <a href="{{ path('panelvariable_copy', {'id': panelVariable.id }) }}"><i class='fa fa-fw fa-clone fa-blue'></i></a>
-            <a href="#"><i class='fa fa-fw fa-bolt fa-yellow'></i></a>
-            <a href="{{ path('panelvariable_edit', {'id': panelVariable.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
-            <a href="{{ path('panelvariable_delete', {'id': panelVariable.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
+            <a href="{{ path('panelvariable_copy', {'id': panelVariable.id }) }}">
+                <i class='fa fa-fw fa-clone fa-blue'></i></a>
+            <a href="{{ path('panelvariable_events', {'id': panelVariable.id }) }}">
+                <i class='fa fa-fw fa-bolt fa-yellow'></i>
+            </a>
+            <a href="{{ path('panelvariable_edit', {'id': panelVariable.id }) }}">
+                <i class='fa fa-fw fa-cogs fa-yellow'></i>
+            </a>
+            <a href="{{ path('panelvariable_delete', {'id': panelVariable.id }) }}">
+                <i class='fa fa-fw fa-trash-o fa-red'></i>
+            </a>
         </span>
     {% endif %}
 </div>

@@ -203,8 +203,9 @@
             </div>
             <h1></h1>
             <div class="btn-group">
-                <a class="btn btn-warning" href="{{ path('visualization') }}"><i class="fa fa-arrow-left"></i>
-                    Anuluj</a>
+                <a class="btn btn-warning" href="{{ app.request.headers.get('referer') }}">
+                    <i class="fa fa-arrow-left"></i> Anuluj
+                </a>
                 <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> Zapisz</button>
             </div>
             {{ form_end(form) }}

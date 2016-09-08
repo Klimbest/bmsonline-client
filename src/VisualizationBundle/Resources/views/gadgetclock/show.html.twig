@@ -1,4 +1,7 @@
 <div
+        {% if (gadgetClock.eventLink is not empty) %}
+            onclick="ajaxChangePage({{ gadgetClock.eventLink.page.id }});"
+        {% endif %}
         name="{{ gadgetClock.name }}"
         id="{{ gadgetClock.id }}" class="bms-panel bms-gadgetclock"
         style="
@@ -8,6 +11,9 @@
                 height: {{ gadgetClock.height }}px;
                 line-height: {{ gadgetClock.height }}px;
                 z-index: {{ gadgetClock.zIndex }};
+        {% if (gadgetClock.eventLink is not empty) %}
+                cursor: pointer;
+        {% endif %}
                 ">
     GADGET CLOCK
     {% if labels %}

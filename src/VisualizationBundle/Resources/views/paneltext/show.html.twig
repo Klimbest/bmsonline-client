@@ -1,4 +1,7 @@
 <div
+        {% if (panelText.eventLink is not empty) %}
+            onclick="ajaxChangePage({{ panelText.eventLink.page.id }});"
+        {% endif %}
         name="{{ panelText.name }}"
         id="{{ panelText.id }}"
         class="bms-panel bms-paneltext text-{{ panelText.textAlign }}"
@@ -23,15 +26,26 @@
                 font-size: {{ panelText.fontSize }}px;
                 line-height: {{ panelText.height }}px;
                 z-index: {{ panelText.zIndex }};
+        {% if (panelText.eventLink is not empty) %}
+                cursor: pointer;
+        {% endif %}
                 ">
     <span class="bms-panel-content">{{ panelText.source }}</span>
     {% if labels %}
         <span class="label label-primary label-bms-panel">
             <i class="fa fa-font fa-fw"></i> {{ panelText.id }}
-            <a href="{{ path('paneltext_copy', {'id': panelText.id }) }}"><i class='fa fa-fw fa-clone fa-blue'></i></a>
-            <a href="#"><i class='fa fa-fw fa-bolt fa-yellow'></i></a>
-            <a href="{{ path('paneltext_edit', {'id': panelText.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
-            <a href="{{ path('paneltext_delete', {'id': panelText.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
+            <a href="{{ path('paneltext_copy', {'id': panelText.id }) }}">
+                <i class='fa fa-fw fa-clone fa-blue'></i>
+            </a>
+            <a href="{{ path('paneltext_events', {'id': panelText.id }) }}">
+                <i class='fa fa-fw fa-bolt fa-yellow'></i>
+            </a>
+            <a href="{{ path('paneltext_edit', {'id': panelText.id }) }}">
+                <i class='fa fa-fw fa-cogs fa-yellow'></i>
+            </a>
+            <a href="{{ path('paneltext_delete', {'id': panelText.id }) }}">
+                <i class='fa fa-fw fa-trash-o fa-red'></i>
+            </a>
         </span>
     {% endif %}
 </div>

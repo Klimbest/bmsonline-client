@@ -4,7 +4,6 @@ namespace VisualizationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * PanelImage
@@ -109,6 +108,13 @@ class PanelImage
      */
     private $page;
 
+    /**
+     * @var EventLink
+     *
+     * @ORM\ManyToOne(targetEntity="EventLink")
+     * @ORM\JoinColumn(name="event_link_id", referencedColumnName="id", nullable=true)
+     */
+    private $eventLink;
 
     /**
      * Constructor
@@ -423,5 +429,29 @@ class PanelImage
     public function getPage()
     {
         return $this->page;
+    }
+
+    /**
+     * Set eventLink
+     *
+     * @param EventLink $eventLink
+     *
+     * @return PanelImage
+     */
+    public function setEventLink(EventLink $eventLink = null)
+    {
+        $this->eventLink = $eventLink;
+
+        return $this;
+    }
+
+    /**
+     * Get eventLink
+     *
+     * @return EventLink
+     */
+    public function getEventLink()
+    {
+        return $this->eventLink;
     }
 }
