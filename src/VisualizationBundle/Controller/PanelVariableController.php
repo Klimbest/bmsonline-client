@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use VisualizationBundle\Entity\PanelVariable;
 use VisualizationBundle\Form\PanelVariableType;
+use VisualizationBundle\Form\EventLinkType;
 
 /**
  * PanelVariable controller.
@@ -136,17 +137,29 @@ class PanelVariableController extends Controller
     }
 
     /**
-     * List all PanelVariable events.
+     * Edit EventLink for PanelVariable.
      *
      * @Route("/{id}/eventlink/edit", name="panelvariable_eventlink_edit")
+     * @param Request $request
      * @param PanelVariable $panelVariable
      * @return Response
      */
-    public function eventLinkEditAction(PanelVariable $panelVariable)
+    public function eventLinkEditAction(Request $request, PanelVariable $panelVariable)
     {
+        $form = $this->createForm(EventLinkType::class, $panelVariable, ['data_class' => PanelVariable::class]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($panelVariable);
+            $em->flush();
+
+            return $this->redirectToRoute('panelvariable_events', ['id' => $panelVariable->getId()]);
+        }
 
         return $this->render('VisualizationBundle:events:eventLinkEdit.html.twig', [
             'element' => $panelVariable,
+            'form' => $form->createView(),
         ]);
     }
 

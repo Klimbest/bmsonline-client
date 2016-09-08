@@ -3,9 +3,18 @@
 {% block body %}
 <div class="row">
 
-    {#{{ form_start(form) }}#}
+    {{ form_start(form) }}
 
-    {#{{ form_end(form) }}#}
+    {{ form_row(form.eventLink) }}
+
+    <h1></h1>
+    <div class="btn-group">
+        <a class="btn btn-warning" href="{{ app.request.headers.get('referer') }}">
+            <i class="fa fa-arrow-left"></i> Anuluj
+        </a>
+        <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> Zapisz</button>
+    </div>
+    {{ form_end(form) }}
 </div>
 {% endblock %}
 

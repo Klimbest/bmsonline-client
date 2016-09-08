@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use VisualizationBundle\Entity\PanelText;
 use VisualizationBundle\Form\PanelTextType;
 use VisualizationBundle\Entity\Page;
+use VisualizationBundle\Form\EventLinkType;
 
 /**
  * PanelText controller.
@@ -135,12 +136,22 @@ class PanelTextController extends Controller
      * Edit EventLink for PanelText.
      *
      * @Route("/{id}/eventlink/edit", name="paneltext_eventlink_edit")
+     * @param Request $request
      * @param PanelText $panelText
      * @return Response
      */
-    public function eventLinkEditAction(PanelText $panelText)
+    public function eventLinkEditAction(Request $request, PanelText $panelText)
     {
+        $form = $this->createForm(EventLinkType::class, $panelText, ['data_class' => PanelText::class]);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($panelText);
+            $em->flush();
+
+            return $this->redirectToRoute('paneltext_events', ['id' => $panelText->getId()]);
+        }
         return $this->render('VisualizationBundle:events:eventLinkEdit.html.twig', [
             'element' => $panelText,
         ]);

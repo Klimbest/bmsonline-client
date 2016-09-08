@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use VisualizationBundle\Entity\PanelImage;
 use VisualizationBundle\Form\PanelImageType;
+use VisualizationBundle\Form\EventLinkType;
 
 /**
  * PanelImage controller.
@@ -139,14 +140,25 @@ class PanelImageController extends Controller
     }
 
     /**
-     * List all PanelImage events.
+     * Edit EventLink for PanelImage.
      *
      * @Route("/{id}/eventlink/edit", name="panelimage_eventlink_edit")
+     * @param Request $request
      * @param PanelImage $panelImage
      * @return Response
      */
-    public function eventLinkEditAction(PanelImage $panelImage)
+    public function eventLinkEditAction(Request $request, PanelImage $panelImage)
     {
+        $form = $this->createForm(EventLinkType::class, $panelImage, ['data_class' => PanelImage::class]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($panelImage);
+            $em->flush();
+
+            return $this->redirectToRoute('panelimage_events', ['id' => $panelImage->getId()]);
+        }
 
         return $this->render('VisualizationBundle:events:eventLinkEdit.html.twig', [
             'element' => $panelImage,
