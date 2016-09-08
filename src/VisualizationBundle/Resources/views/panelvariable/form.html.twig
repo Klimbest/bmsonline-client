@@ -233,7 +233,7 @@
             </div>
             <h1></h1>
             <div class="btn-group">
-                <a class="btn btn-warning" href="{{ app.request.headers.get('referer') }}">
+                <a class="btn btn-warning" href="{{ path('page_show', {'id': panelVariable.page.id}) }}">
                     <i class="fa fa-arrow-left"></i> Anuluj
                 </a>
                 <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> Zapisz</button>
