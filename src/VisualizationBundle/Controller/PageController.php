@@ -131,7 +131,7 @@ class PageController extends Controller
         $em->remove($page);
         $em->flush();
 
-        return $this->redirectToRoute('page_index');
+        return $this->redirectToRoute('visualization');
     }
 
 }
