@@ -1,6 +1,4 @@
 {% extends 'VisualizationBundle::layout.html.twig' %}
-{% form_theme form 'VisualizationBundle::bootstrap_3_horizontal_layout.html.twig' %}
-
 
 {% block body %}
     <div class="row">
@@ -12,30 +10,30 @@
             </div>
             {{ form_start(form) }}
             <div class="row">
-                <div class="col-md-4">
-                    <div class="row row-label">
-                        <div class="col-md-8 col-md-offset-4 text-center">
-                            <h4><span class="label label-primary">Ogólne</span></h4>
+                <div class="col-md-7">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="text-center"><span class="label label-primary">Ogólne</span></h5>
                         </div>
                     </div>
-                    {{ form_row(form.name) }}
-                    {{ form_row(form.source) }}
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ form_row(form.name) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                           {{ form_row(form.source) }}
+                        </div>
+                    </div>
                 </div>
-                <div class="col-lg-3 col-md-4">
-                    <div class="row row-label">
-                        <div class="col-md-8 col-md-offset-4 text-center">
-                            <h4><span class="label label-primary">Pozycja</span></h4>
-                        </div>
-                    </div>
+                <div class="col-md-2 col-md-offset-1">
+                    <h5 class="text-center"><span class="label label-primary">Pozycja</span></h5>
                     {{ form_row(form.topPosition) }}
                     {{ form_row(form.leftPosition) }}
                 </div>
-                <div class="col-lg-3 col-md-4">
-                    <div class="row row-label">
-                        <div class="col-md-8 col-md-offset-4 text-center">
-                            <h4><span class="label label-primary">Rozmiar</span></h4>
-                        </div>
-                    </div>
+                <div class="col-md-2">
+                    <h5 class="text-center"><span class="label label-primary">Rozmiar</span></h5>
                     {{ form_row(form.width) }}
                     {{ form_row(form.height) }}
                 </div>
@@ -43,123 +41,167 @@
             <div class="row">
                 <div class="col-md-4 font-group">
                     <div class="row">
-                        <div class="col-md-8 col-md-offset-4 text-center">
-                            <h4><span class="label label-primary">Czcionka</span></h4>
-                        </div>
-                    </div>
-                    <div class="form-group text-center">
-                        <div class="col-md-8 col-md-offset-4 text-center">
-                            <button type="button" id="panel_fontWeight" class="btn btn-default btn-sm"
-                                    onclick="updateFontWeight('text')">
-                                <i class="fa fa-bold fa-fw"></i>
-                            </button>
-                            <button type="button" id="panel_textDecoration" class="btn btn-default btn-sm"
-                                    onclick="updateTextDecoration('text')">
-                                <i class="fa fa-underline fa-fw"></i>
-                            </button>
-                            <button type="button" id="panel_fontStyle" class="btn btn-default btn-sm btn-italic"
-                                    onclick="updateFontStyle('text')">
-                                <i class="fa fa-italic fa-fw"></i>
-                            </button>
-                            <div class="btn-group" id="panel_textAlign" role="group">
-                                <button type="button" class="btn btn-default btn-sm btn-align-left active"
-                                        onclick="updateTextAlign('left', 'text')">
-                                    <i class="fa fa-align-left fa-fw"></i>
+                        <div class="col-md-12">
+                            <h5 class="text-center"><span class="label label-primary">Czcionka</span></h5>
+                            <div class="form-group-sm text-center">
+                                <button type="button" id="panel_fontWeight" class="btn btn-default btn-sm"
+                                        onclick="updateFontWeight('variable')">
+                                    <i class="fa fa-bold fa-fw"></i>
                                 </button>
-                                <button type="button" class="btn btn-default btn-sm btn-align-center"
-                                        onclick="updateTextAlign('center', 'text')">
-                                    <i class="fa fa-align-center fa-fw"></i>
+                                <button type="button" id="panel_textDecoration" class="btn btn-default btn-sm"
+                                        onclick="updateTextDecoration('variable')">
+                                    <i class="fa fa-underline fa-fw"></i>
                                 </button>
-                                <button type="button" class="btn btn-default btn-sm btn-align-right"
-                                        onclick="updateTextAlign('right', 'text')">
-                                    <i class="fa fa-align-right fa-fw"></i>
+                                <button type="button" id="panel_fontStyle" class="btn btn-default btn-sm btn-italic"
+                                        onclick="updateFontStyle('variable')">
+                                    <i class="fa fa-italic fa-fw"></i>
                                 </button>
+                                <div class="btn-group" id="panel_textAlign" role="group">
+                                    <button type="button" class="btn btn-default btn-sm btn-align-left active"
+                                            onclick="updateTextAlign('left', 'variable')">
+                                        <i class="fa fa-align-left fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-sm btn-align-center"
+                                            onclick="updateTextAlign('center', 'variable')">
+                                        <i class="fa fa-align-center fa-fw"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-sm btn-align-right"
+                                            onclick="updateTextAlign('right', 'variable')">
+                                        <i class="fa fa-align-right fa-fw"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    {{ form_row(form.fontFamily) }}
-                    {{ form_row(form.fontSize) }}
-                    {{ form_row(form.fontColor) }}
-                </div>
-                <div class="col-lg-3 col-md-4">
-                    <div class="row row-label">
-                        <div class="col-md-8 col-md-offset-4 text-center">
-                            <h4><span class="label label-primary">Ramka</span></h4>
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            {{ form_row(form.fontFamily) }}
                         </div>
                     </div>
-                    {{ form_row(form.borderWidth) }}
-                    {{ form_row(form.borderStyle) }}
-                    {{ form_row(form.borderColor) }}
-                </div>
-                <div class="col-lg-3 col-md-4">
-                    <div class="row row-label">
-                        <div class="col-md-8 col-md-offset-4 text-center">
-                            <h4><span class="label label-primary">Tło</span></h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.fontSize) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.fontColor) }}
                         </div>
                     </div>
-                    {{ form_row(form.backgroundColor) }}
+
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="text-center"><span class="label label-primary">Ramka</span></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            {{ form_row(form.borderStyle) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.borderWidth) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.borderColor) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="text-center"><span class="label label-primary">Tło</span></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            {{ form_row(form.backgroundColor) }}
+                        </div>
+                        <div class="col-md-7">
+                            {{ form_row(form.backgroundOpacity) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="color-rgba">{{ panelText.backgroundColor|hexToRgba(panelText.backgroundOpacity) }}</div>
+                            <div id="color-hex">{{ panelText.backgroundColor }}</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 col-md-offset-3 text-center">
-                    <h4><span class="label label-primary">Zaokrąglenie narożników</span></h4>
+                <div class="col-md-12">
+                    <h5 class="text-center"><span class="label label-primary">Zaokrąglenie narożników</span></h5>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-5 col-lg-offset-1 col-md-6">
-                    <div class="form-group">
-                        <div class="col-md-8 text-right">
-                            {{ form_row(form.borderRadiusLeftTop) }}
-                        </div>
-                        <div class="col-md-3 text-right">
-                            <input id="borderRadiusTL" class="form-control" type="number" name="txt_BR_TL" min="0"
-                                   max="200" step="1" value="0" oninput="updateBorderRadius('text')"/>
+                <div class="col-md-6">
+                    <div class="row">
+                        <label class="control-label"></label>
+                        <div class="form-group-sm">
+                            <div class="col-md-4 text-right">
+                                {{ form_label(form.borderRadiusLeftTop) }}
+                            </div>
+                            <div class="col-md-5">
+                                {{ form_widget(form.borderRadiusLeftTop) }}
+                            </div>
+                            <div class="col-md-3">
+                                <input id="borderRadiusTL" class="form-control" type="number" name="txt_BR_TL" min="0"
+                                       max="200" step="1" value="0" oninput="updateBorderRadius('variable')"/>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-md-8">
-                            {{ form_row(form.borderRadiusLeftBottom) }}
-                        </div>
-                        <div class="col-md-3">
-                            <input id="borderRadiusBL" class="form-control" type="number" name="txt_BR_BL" min="0"
-                                   max="200" step="1" value="0" oninput="updateBorderRadius('text')"/>
+                    <div class="row">
+                        <label class="control-label"></label>
+                        <div class="form-group-sm">
+                            <div class="col-md-4 text-right">
+                                {{ form_label(form.borderRadiusLeftBottom) }}
+                            </div>
+                            <div class="col-md-5">
+                                {{ form_widget(form.borderRadiusLeftBottom) }}
+                            </div>
+                            <div class="col-md-3">
+                                <input id="borderRadiusBL" class="form-control" type="number" name="txt_BR_BL" min="0"
+                                       max="200" step="1" value="0" oninput="updateBorderRadius('variable')"/>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-5 col-md-6">
-                    <div class="form-group">
-                        <div class="col-md-3">
-                            <input id="borderRadiusTR" class="form-control" type="number" name="txt_BR_TR" min="0"
-                                   max="200" step="1" value="0" oninput="updateBorderRadius('text')"/>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <div class="col-sm-8">
-                                    {{ form_widget(form.borderRadiusRightTop) }}
-                                    {{ form_errors(form.borderRadiusRightTop) }}
-                                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <label class="control-label"></label>
+                        <div class="form-group-sm">
+                            <div class="col-md-3">
+                                <input id="borderRadiusTR" class="form-control" type="number" name="txt_BR_TR" min="0"
+                                       max="200" step="1" value="0" oninput="updateBorderRadius('variable')"/>
+                            </div>
+                            <div class="col-md-5">
+                                {{ form_widget(form.borderRadiusRightTop) }}
+                            </div>
+                            <div class="col-md-4">
                                 {{ form_label(form.borderRadiusRightTop) }}
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-md-3">
-                            <input id="borderRadiusBR" class="form-control" type="number" name="txt_BR_BR" min="0"
-                                   max="200" step="1" value="0" oninput="updateBorderRadius('text')"/>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <div class="col-sm-8">
-                                    {{ form_widget(form.borderRadiusRightBottom) }}
-                                    {{ form_errors(form.borderRadiusRightBottom) }}
-                                </div>
+                    <div class="row">
+                        <label class="control-label"></label>
+                        <div class="form-group-sm">
+                            <div class="col-md-3">
+                                <input id="borderRadiusBR" class="form-control" type="number" name="txt_BR_BR" min="0"
+                                       max="200" step="1" value="0" oninput="updateBorderRadius('variable')"/>
+                            </div>
+                            <div class="col-md-5">
+                                {{ form_widget(form.borderRadiusRightBottom) }}
+                            </div>
+                            <div class="col-md-4">
                                 {{ form_label(form.borderRadiusRightBottom) }}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
+            <h1></h1>
             <div class="btn-group">
                 <a class="btn btn-warning" href="{{ path('visualization') }}"><i class="fa fa-arrow-left"></i>
                     Anuluj</a>

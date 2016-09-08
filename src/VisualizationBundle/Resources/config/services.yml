@@ -2,3 +2,9 @@ services:
 #    visualization.example:
 #        class: VisualizationBundle\Example
 #        arguments: ["@service_id", "plain_value", %parameter%]
+
+    visualization.twig_extension:
+        class: VisualizationBundle\Twig\ColorExtension
+        public: false
+        tags:
+            - { name: twig.extension }

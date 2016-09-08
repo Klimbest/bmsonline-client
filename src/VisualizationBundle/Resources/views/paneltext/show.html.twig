@@ -14,7 +14,7 @@
                 border-bottom-left-radius: {{ panelText.borderRadiusLeftBottom }}px;
                 border-top-right-radius: {{ panelText.borderRadiusRightTop }}px;
                 border-bottom-right-radius: {{ panelText.borderRadiusRightBottom }}px;
-                background-color: {{ panelText.backgroundColor }};
+                background-color: {{ panelText.backgroundColor|hexToRgba(panelText.backgroundOpacity) }});
                 font-weight: {{ panelText.fontWeight }};
                 text-decoration: {{ panelText.textDecoration }};
                 font-style: {{ panelText.fontStyle }};

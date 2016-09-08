@@ -56,7 +56,19 @@ class PanelTextType extends AbstractType
             ])
             //Tło
             ->add('backgroundColor', ColorType::class, [
-                'label' => 'Kolor'
+                'label' => 'Kolor',
+                'attr' => [
+                    'oninput' => "updateBackgroundColor('text')"
+                ]
+            ])
+            ->add('backgroundOpacity', RangeType::class, [
+                'label' => 'Przezroczystość',
+                'attr' => [
+                    'min' => 0,
+                    'max' => 1,
+                    'step' => 0.1,
+                    'oninput' => "updateBackgroundColor('text')"
+                ]
             ])
             //RAMKA
             ->add('borderWidth', IntegerType::class, [

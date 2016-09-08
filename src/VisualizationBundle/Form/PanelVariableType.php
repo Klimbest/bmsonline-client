@@ -28,7 +28,7 @@ class PanelVariableType extends AbstractType
             ])
             ->add('source', HiddenType::class)
             ->add('tooltip', CheckboxType::class, [
-                'label' => 'Wyświetlać podpowiedź?',
+                'label' => 'Podpowiedź?',
                 'required' => false
             ])
             //POZYCJA
@@ -59,7 +59,7 @@ class PanelVariableType extends AbstractType
             ])
             //PRECYZJA WYŚWIETLANIA
             ->add('displayPrecision', ChoiceType::class, [
-                'label' => false,
+                'label' => 'Zaokrąglenie',
                 'choices' => [
                     "0" => 0,
                     "0.0" => 1,
@@ -69,7 +69,19 @@ class PanelVariableType extends AbstractType
             ])
             //Tło
             ->add('backgroundColor', ColorType::class, [
-                'label' => 'Kolor'
+                'label' => 'Kolor',
+                'attr' => [
+                    'oninput' => "updateBackgroundColor('variable')"
+                ]
+            ])
+            ->add('backgroundOpacity', RangeType::class, [
+                'label' => 'Przezroczystość',
+                'attr' => [
+                    'min' => 0,
+                    'max' => 1,
+                    'step' => 0.1,
+                    'oninput' => "updateBackgroundColor('variable')"
+                ]
             ])
             //RAMKA
             ->add('borderWidth', IntegerType::class, [

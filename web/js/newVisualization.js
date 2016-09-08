@@ -240,6 +240,16 @@ function updateBorderRadius(type) {
     form.find("input#panel_" + type + "_borderRadiusRightBottom").val(form.find("input#borderRadiusBR").val());
 }
 
+function updateBackgroundColor(type){
+    var form = $("form");
+    var inputBackground = form.find("input#panel_" + type + "_backgroundColor");
+    var inputOpacity = form.find("input#panel_" + type + "_backgroundOpacity");
+    var backgroundColor = inputBackground.val();
+    $("div#color-hex").empty().append(backgroundColor);
+    var rgba = "rgba(" + hexToR(backgroundColor) + ", " + hexToG(backgroundColor) + ", " + hexToB(backgroundColor) + ", " + inputOpacity.val() + ")";
+    $("div#color-rgba").empty().append(rgba);
+}
+
 function initForm(type) {
     var form = $("form");
     form.find("input#panel_" + type + "_borderRadiusLeftTop").bind("input", function () {

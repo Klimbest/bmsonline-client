@@ -95,6 +95,13 @@ class PanelVariable
     private $backgroundColor;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="backgroundOpacity", type="float", nullable=true, options={"default"=0})
+     */
+    private $backgroundOpacity;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="borderWidth", type="integer", nullable=true, options={"default"=1})
@@ -214,7 +221,7 @@ class PanelVariable
         $this->height = 50;
         $this->zIndex = 5;
         $this->displayPrecision = 2;
-        $this->backgroundColor = "#FFFFFF";
+        $this->backgroundOpacity = 0;
         $this->borderWidth = 0;
         $this->borderStyle = 'solid';
         $this->borderColor = "#000000";
@@ -840,5 +847,29 @@ class PanelVariable
     public function getPage()
     {
         return $this->page;
+    }
+
+    /**
+     * Set backgroundOpacity
+     *
+     * @param float $backgroundOpacity
+     *
+     * @return PanelVariable
+     */
+    public function setBackgroundOpacity($backgroundOpacity)
+    {
+        $this->backgroundOpacity = $backgroundOpacity;
+
+        return $this;
+    }
+
+    /**
+     * Get backgroundOpacity
+     *
+     * @return float
+     */
+    public function getBackgroundOpacity()
+    {
+        return $this->backgroundOpacity;
     }
 }
