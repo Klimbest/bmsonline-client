@@ -102,6 +102,32 @@ class PageController extends Controller
     public function deleteAction(Page $page)
     {
         $em = $this->getDoctrine()->getManager();
+        foreach($page->getPanelsImage() as $element){
+            $em->remove($element);
+        }
+        foreach($page->getPanelsText() as $element){
+            $em->remove($element);
+        }
+        foreach($page->getPanelsVariable() as $element){
+            $em->remove($element);
+        }
+
+        foreach($page->getInputsButton() as $element){
+            $em->remove($element);
+        }
+        foreach($page->getInputsNumber() as $element){
+            $em->remove($element);
+        }
+        foreach($page->getInputsRange() as $element){
+            $em->remove($element);
+        }
+
+        foreach($page->getGadgetsClock() as $element){
+            $em->remove($element);
+        }
+        foreach($page->getGadgetsProgressBar() as $element){
+            $em->remove($element);
+        }
         $em->remove($page);
         $em->flush();
 
