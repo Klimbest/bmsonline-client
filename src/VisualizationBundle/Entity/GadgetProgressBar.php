@@ -73,28 +73,28 @@ class GadgetProgressBar
     private $zIndex;
 
     /**
-     * @var integer
+     * @var float
      *
      * @ORM\Column(name="range_min", type="decimal", precision=9, scale=2, nullable=false)
      */
     private $rangeMin;
 
     /**
-     * @var integer
+     * @var float
      *
      * @ORM\Column(name="range_max", type="decimal", precision=9, scale=2, nullable=false)
      */
     private $rangeMax;
 
     /**
-     * @var integer
+     * @var float
      *
      * @ORM\Column(name="optimum_min", type="decimal", precision=9, scale=2, nullable=false)
      */
     private $optimumMin;
 
     /**
-     * @var integer
+     * @var float
      *
      * @ORM\Column(name="optimum_max", type="decimal", precision=9, scale=2, nullable=false)
      */

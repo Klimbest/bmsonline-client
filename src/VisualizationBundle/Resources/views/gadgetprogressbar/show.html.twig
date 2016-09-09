@@ -2,6 +2,9 @@
         {% if (gadgetProgressBar.eventLink is not empty) %}
             onclick="ajaxChangePage({{ gadgetProgressBar.eventLink.page.id }});"
         {% endif %}
+        {% if gadgetProgressBar.tooltip %}
+            title="{{ gadgetProgressBar.name }}"
+        {% endif %}
         name="{{ gadgetProgressBar.name }}"
         id="{{ gadgetProgressBar.id }}" class="bms-panel bms-gadgetprogressbar"
         style="

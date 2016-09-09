@@ -3,6 +3,7 @@
 namespace VisualizationBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -57,25 +58,29 @@ class GadgetProgressBarType extends AbstractType
                     'min' => 0
                 ]
             ])
-            ->add('rangeMin', IntegerType::class, [
+            ->add('rangeMin', NumberType::class, [
+                'scale' => 2,
                 'label' => 'Zakres min',
                 'attr' => [
                     'step' => 0.01
                 ]
             ])
-            ->add('rangeMax', IntegerType::class, [
+            ->add('rangeMax', NumberType::class, [
+                'scale' => 2,
                 'label' => 'Zakres max',
                 'attr' => [
                     'step' => 0.01
                 ]
             ])
-            ->add('optimumMin', IntegerType::class, [
+            ->add('optimumMin', NumberType::class, [
+                'scale' => 2,
                 'label' => 'Optimum min',
                 'attr' => [
                     'step' => 0.01
                 ]
             ])
-            ->add('optimumMax', IntegerType::class, [
+            ->add('optimumMax', NumberType::class, [
+                'scale' => 2,
                 'label' => 'Optimum max',
                 'attr' => [
                     'step' => 0.01
@@ -115,13 +120,4 @@ class GadgetProgressBarType extends AbstractType
 
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => 'VisualizationBundle\Entity\GadgetProgressBar'
-        ));
-    }
 }
