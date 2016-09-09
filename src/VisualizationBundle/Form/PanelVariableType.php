@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
 class PanelVariableType extends AbstractType
@@ -26,7 +27,13 @@ class PanelVariableType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Nazwa'
             ])
-            ->add('source', HiddenType::class)
+            ->add('source', EntityType::class, [
+                'label' => 'Zmienna',
+                'class' => 'BmsConfigurationBundle:Register',
+                'attr' => [
+                    'data-live-search' => true
+                ]
+            ])
             ->add('tooltip', CheckboxType::class, [
                 'label' => 'Podpowiedź?',
                 'required' => false

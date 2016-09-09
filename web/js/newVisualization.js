@@ -286,36 +286,7 @@ function initForm(type) {
     }
     var align = form.find("input#panel_" + type + "_textAlign").val();
     updateTextAlign(align);
-    form.find("select#panel_source").val(form.find("input#panel_" + type + "_source").val());
 }
-
-function updatePanelVariableSource() {
-    var form = $("form");
-    var select = form.find("select#panel_source");
-    var input = form.find("input#panel_variable_source");
-    input.val(select.val());
-}
-
-function updateGadgetVariableSetRegister(){
-    var form = $("form");
-    var select = form.find("select#gadgetprogressbar_set_register");
-    var input = form.find("input#gadget_progress_bar_setRegisterId");
-    input.val(select.val());
-}
-
-function updateGadgetVariableValueRegister(){
-    var form = $("form");
-    var select = form.find("select#gadgetprogressbar_value_register");
-    var input = form.find("input#gadget_progress_bar_valueRegisterId");
-    input.val(select.val());
-}
-
-function initProgressBarForm(){
-    var form = $("form");
-    form.find("select#gadgetprogressbar_set_register").val(form.find("input#gadget_progress_bar_setRegisterId").val());
-    form.find("select#gadgetprogressbar_value_register").val(form.find("input#gadget_progress_bar_valueRegisterId").val());
-}
-
 
 function setSelectedImage(element) {
     var form = $("form");

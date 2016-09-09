@@ -5,14 +5,24 @@ namespace VisualizationBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Doctrine\Common\Persistence\ObjectManager;
 //FORM TYPES
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use VisualizationBundle\Form\DataTransformer\RegisterToNameDescriptionTransformer;
 
 class GadgetProgressBarType extends AbstractType
 {
+    private $manager;
+
+    public function __construct(ObjectManager $manager)
+    {
+        $this->manager = $manager;
+    }
+
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -80,10 +90,31 @@ class GadgetProgressBarType extends AbstractType
             ->add('color3', ColorType::class, [
                 'label' => false
             ])
-            ->add('setRegisterId', HiddenType::class)
-            ->add('valueRegisterId', HiddenType::class);
+            ->add('setRegisterId', EntityType::class, [
+                'label' => 'Wartość zadana',
+                'class' => 'BmsConfigurationBundle:Register',
+                'empty_data' => null,
+                'required' => false,
+                'attr' => [
+                    'data-live-search' => true
+                ]
+            ])
+            ->add('valueRegisterId', EntityType::class, [
+                'label' => 'Wartość',
+                'class' => 'BmsConfigurationBundle:Register',
+                'empty_data' => null,
+                'required' => false,
+                'attr' => [
+                    'data-live-search' => true
+                ]
+            ]);
+
+
+        $builder->get('setRegisterId')
+            ->addModelTransformer(new RegisterToNameDescriptionTransformer($this->manager));
+
     }
-    
+
     /**
      * @param OptionsResolver $resolver
      */

@@ -4,6 +4,7 @@ namespace VisualizationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use BmsConfigurationBundle\Entity\Register;
 
 /**
  * PanelVariable
@@ -31,9 +32,11 @@ class PanelVariable
     private $name;
 
     /**
-     * @var string
+     * @var Register
      *
-     * @ORM\Column(name="source", type="text", nullable=true)
+     * @ORM\ManyToOne(targetEntity="\BmsConfigurationBundle\Entity\Register")
+     * @ORM\JoinColumn(name="source", referencedColumnName="id", nullable=true)
+     * })
      */
     private $source;
 
@@ -279,29 +282,6 @@ class PanelVariable
         return $this->name;
     }
 
-    /**
-     * Set source
-     *
-     * @param string $source
-     *
-     * @return PanelVariable
-     */
-    public function setSource($source)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-    /**
-     * Get source
-     *
-     * @return string
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
 
     /**
      * Set tooltip
@@ -901,5 +881,29 @@ class PanelVariable
     public function getEventLink()
     {
         return $this->eventLink;
+    }
+
+    /**
+     * Set source
+     *
+     * @param Register $source
+     *
+     * @return PanelVariable
+     */
+    public function setSource(Register $source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return Register
+     */
+    public function getSource()
+    {
+        return $this->source;
     }
 }
