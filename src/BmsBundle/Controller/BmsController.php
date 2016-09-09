@@ -24,6 +24,8 @@ class BmsController extends Controller
 
     /**
      * @Route("/bms_change_page", name="bms_change_page", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function ajaxChangePageAction(Request $request)
     {
@@ -44,15 +46,19 @@ class BmsController extends Controller
 
     /**
      * @Route("/bms_refresh_page", name="bms_refresh_page", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function ajaxRefreshPageAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-            $panelRepo = $this->getDoctrine()->getRepository('VisualizationBundle:PanelVariable');
+            $panelVariableRepo = $this->getDoctrine()->getRepository('VisualizationBundle:PanelVariable');
+            $gadgetProgressBarRepo = $this->getDoctrine()->getRepository('VisualizationBundle:GadgetProgressBar');
             $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
             $page_id = $request->get("page_id");
-            $ret['registers'] = $panelRepo->findVariablePanelsRegistersForPage($page_id);
+            $ret['registers'] = $panelVariableRepo->findVariablePanelsRegistersForPage($page_id);
+            $ret['progressbars'] = $gadgetProgressBarRepo->findBy(['page' => $page_id]);
             $ret['devicesStatus'] = $deviceRepo->getDevicesStatus();
             $time = $technicalInformationRepo->getRpiStatus();
             $time ? $ret['state'] = $time[0]["time"]->getTimestamp() : $ret['state'] = null;

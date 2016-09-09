@@ -296,6 +296,27 @@ function updatePanelVariableSource() {
     input.val(select.val());
 }
 
+function updateGadgetVariableSetRegister(){
+    var form = $("form");
+    var select = form.find("select#gadgetprogressbar_set_register");
+    var input = form.find("input#gadget_progress_bar_setRegisterId");
+    input.val(select.val());
+}
+
+function updateGadgetVariableValueRegister(){
+    var form = $("form");
+    var select = form.find("select#gadgetprogressbar_value_register");
+    var input = form.find("input#gadget_progress_bar_valueRegisterId");
+    input.val(select.val());
+}
+
+function initProgressBarForm(){
+    var form = $("form");
+    form.find("select#gadgetprogressbar_set_register").val(form.find("input#gadget_progress_bar_setRegisterId").val());
+    form.find("select#gadgetprogressbar_value_register").val(form.find("input#gadget_progress_bar_valueRegisterId").val());
+}
+
+
 function setSelectedImage(element) {
     var form = $("form");
     var inputWidth = form.find("input#panel_image_width");

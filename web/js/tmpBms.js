@@ -61,24 +61,33 @@ function ajaxRefreshPage() {
             $(".content-container").children(".fa-spinner").remove();
             $("span.timer").removeClass("label-danger").addClass("label-primary");
             setState(ret['state'], ret['devicesStatus']);
-            setVariables(ret['registers']);
+            setPanelVariables(ret['registers']);
+            setProgressBars(ret['progressbars']);
         }
     });
-    countToRefresh = 0;
+    count = 0;
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 
-    function setVariables(registers) {
-        if (registers) {
-            $.each(registers, function () {
-                var panelVariable = $("div#" + this.panel_id + ".bms-panelvariable");
-                var value = this.fixed_value;
-                if (value !== null) {
-                    var displayPrecision = parseInt(panelVariable.find("input").val());
-                    var roundValue = parseFloat(value).toFixed(displayPrecision);
-                }
-                panelVariable.find("span.bms-panel-content").empty().append(roundValue);
-            });
-        }
-    }
+}
 
+function setPanelVariables(registers) {
+    if (registers) {
+        $.each(registers, function () {
+            var panelVariable = $("div#" + this.panel_id + ".bms-panelvariable");
+            var value = this.fixed_value;
+            if (value !== null) {
+                var displayPrecision = parseInt(panelVariable.find("input").val());
+                var roundValue = parseFloat(value).toFixed(displayPrecision);
+            }
+            panelVariable.find("span.bms-panel-content").empty().append(roundValue);
+        });
+    }
+}
+
+function setProgressBars(progressbars) {
+    if (progressbars) {
+        $.each(progressbars, function () {
+            console.log(this);
+        });
+    }
 }
