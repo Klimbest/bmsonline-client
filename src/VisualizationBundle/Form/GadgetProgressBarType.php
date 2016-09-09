@@ -47,12 +47,6 @@ class GadgetProgressBarType extends AbstractType
                     'min' => 0
                 ]
             ])
-            ->add('height', IntegerType::class, [
-                'label' => 'Wysokość',
-                'attr' => [
-                    'min' => 0
-                ]
-            ])
             ->add('rangeMin', IntegerType::class, [
                 'label' => 'Zakres min'
             ])

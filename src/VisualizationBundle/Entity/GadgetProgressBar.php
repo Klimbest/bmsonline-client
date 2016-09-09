@@ -165,7 +165,7 @@ class GadgetProgressBar
         $this->topPosition = 0;
         $this->leftPosition = 0;
         $this->width = 100;
-        $this->height = 50;
+        $this->height = 25;
         $this->zIndex = 5;
     }
 

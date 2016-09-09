@@ -141,3 +141,11 @@ div.thumbnail-list div a{
     top: -4px;
     display: none;
 }
+
+div.progress-label {
+    height: 15px;
+    margin-bottom: 0;
+    overflow: visible;
+    line-height: 15px;
+    background-color: rgba(0, 0, 0, 0);
+}

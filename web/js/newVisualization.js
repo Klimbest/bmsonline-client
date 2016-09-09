@@ -58,6 +58,13 @@ function setPanelEvents() {
         //pobranie id panelu
         var id = $(this).attr("id");
         var element_type = setElementType($(this));
+        var handle;
+
+        if (element_type == "GadgetProgressBar") {
+            handle = "e, w";
+        } else {
+            handle = "se, sw";
+        }
 
         var aR = $(this).children("img").length > 0;
         $(this).removeAttr("onclick").unbind("mouseenter mouseleave");
@@ -92,7 +99,7 @@ function setPanelEvents() {
             snapTolerance: 10,
             snapMode: "both",
             aspectRatio: aR,
-            handles: "se",
+            handles: handle,
             minWidth: 15,
             minHeight: 15,
             resize: function (event, ui) {

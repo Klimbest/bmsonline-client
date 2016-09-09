@@ -19,18 +19,18 @@
     {% set optimumMin = (gadgetProgressBar.optimumMin-gadgetProgressBar.rangeMin)/(gadgetProgressBar.rangeMax-gadgetProgressBar.rangeMin)*100|round(2, 'common') %}
     {% set optimumMax = (gadgetProgressBar.optimumMax-gadgetProgressBar.rangeMin)/(gadgetProgressBar.rangeMax-gadgetProgressBar.rangeMin)*100|round(2, 'common') %}
     {% if gadgetProgressBar.setRegisterId is not null %}
-        {% set setPoint = (gadgetProgressBar.setRegisterId.registerCurrentData.fixedValue-gadgetProgressBar.rangeMin)/(gadgetProgressBar.rangeMax-gadgetProgressBar.rangeMin)*100|round(2, 'common') %}
+        {% set setPoint = (20-gadgetProgressBar.rangeMin)/(gadgetProgressBar.rangeMax-gadgetProgressBar.rangeMin)*100|round(2, 'common') %}
+
     {% endif %}
+    {% set valuePoint = (40-gadgetProgressBar.rangeMin)/(gadgetProgressBar.rangeMax-gadgetProgressBar.rangeMin)*100|round(2, 'common') %}
     <div class="progress" style="margin-bottom: 0;">
         <div id="value{{ gadgetProgressBar.valueRegisterId.id }}"
-             style="position: absolute; top: -2px; left: 0; height: 100%; z-index: 15">
-            {#<img src="/images/system/line.jpg" class="img-responsive"/>#}
-            {#                <i class="fa fa-arrow-down fa-fw"></i>#}
+             style="position: absolute; top:-2px; left: {{ valuePoint }}%; height: 50%; z-index: 15; border-left: 2px solid black;  color: black; margin-bottom: 10px;">
+
         </div>
         {% if gadgetProgressBar.setRegisterId is not null %}
             <div id="set{{ gadgetProgressBar.setRegisterId.id }}"
-                 style="position: absolute; top: -5px; left: {{ setPoint }}%; height: 100%; z-index: 14">
-                {#<img src="/images/system/linegreen.jpg" class="img-responsive"/>#}
+                 style="position: absolute; top: -4px; left: {{ setPoint }}%; height: 60%; z-index: 14; border-left: 3px solid green; color: green">
             </div>
         {% endif %}
         <div class="progress-bar" role="progressbar"
@@ -61,10 +61,13 @@
     {% if labels %}
         <span class="label label-primary label-bms-panel">
             <i class="fa fa-font fa-fw"></i> {{ gadgetProgressBar.id }}
-            <a href="{{ path('gadgetprogressbar_copy', {'id': gadgetProgressBar.id }) }}"><i class='fa fa-fw fa-clone fa-blue'></i></a>
+            <a href="{{ path('gadgetprogressbar_copy', {'id': gadgetProgressBar.id }) }}"><i
+                        class='fa fa-fw fa-clone fa-blue'></i></a>
             <a href="#"><i class='fa fa-fw fa-bolt fa-yellow'></i></a>
-            <a href="{{ path('gadgetprogressbar_edit', {'id': gadgetProgressBar.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
-            <a href="{{ path('gadgetprogressbar_delete', {'id': gadgetProgressBar.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
+            <a href="{{ path('gadgetprogressbar_edit', {'id': gadgetProgressBar.id }) }}"><i
+                        class='fa fa-fw fa-cogs fa-yellow'></i></a>
+            <a href="{{ path('gadgetprogressbar_delete', {'id': gadgetProgressBar.id }) }}"><i
+                        class='fa fa-fw fa-trash-o fa-red'></i></a>
         </span>
     {% endif %}
 </div>

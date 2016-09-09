@@ -5,7 +5,6 @@ namespace VisualizationBundle\Form;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EventLinkType extends AbstractType
 {
@@ -17,17 +16,12 @@ class EventLinkType extends AbstractType
     {
         $builder
             ->add('eventLink', EntityType::class, [
-                'class' => 'VisualizationBundle:EventLink'
+                'class' => 'VisualizationBundle:EventLink',
+                'label' => 'Po kliknięciu przenieś do strony',
+                'empty_data' => null,
+                'required' => false
             ]);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => null
-        ));
-    }
+
 }
