@@ -38,7 +38,7 @@ class PanelVariable
      * @ORM\JoinColumn(name="source", referencedColumnName="id", nullable=true)
      * })
      */
-    private $sourceRegister;
+    private $source;
 
     /**
      * @var boolean
