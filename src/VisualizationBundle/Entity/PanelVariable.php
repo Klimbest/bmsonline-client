@@ -38,7 +38,7 @@ class PanelVariable
      * @ORM\JoinColumn(name="source", referencedColumnName="id", nullable=true)
      * })
      */
-    private $source;
+    private $sourceRegister;
 
     /**
      * @var boolean
@@ -905,5 +905,29 @@ class PanelVariable
     public function getSource()
     {
         return $this->source;
+    }
+
+    /**
+     * Set sourceRegister
+     *
+     * @param \BmsConfigurationBundle\Entity\Register $sourceRegister
+     *
+     * @return PanelVariable
+     */
+    public function setSourceRegister(\BmsConfigurationBundle\Entity\Register $sourceRegister = null)
+    {
+        $this->sourceRegister = $sourceRegister;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceRegister
+     *
+     * @return \BmsConfigurationBundle\Entity\Register
+     */
+    public function getSourceRegister()
+    {
+        return $this->sourceRegister;
     }
 }
