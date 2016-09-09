@@ -167,6 +167,14 @@ class GadgetProgressBar
         $this->width = 100;
         $this->height = 25;
         $this->zIndex = 5;
+
+        $this->rangeMin = 0;
+        $this->rangeMax = 6;
+        $this->optimumMin = 2;
+        $this->optimumMax = 4;
+        $this->color1 = '#FF0000';
+        $this->color2 = '#00FF00';
+        $this->color3 = '#0000FF';
     }
 
     /**

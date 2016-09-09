@@ -19,18 +19,18 @@
     {% set optimumMin = (gadgetProgressBar.optimumMin-gadgetProgressBar.rangeMin)/(gadgetProgressBar.rangeMax-gadgetProgressBar.rangeMin)*100|round(2, 'common') %}
     {% set optimumMax = (gadgetProgressBar.optimumMax-gadgetProgressBar.rangeMin)/(gadgetProgressBar.rangeMax-gadgetProgressBar.rangeMin)*100|round(2, 'common') %}
     {% if gadgetProgressBar.setRegisterId is not null %}
-        {% set setPoint = (20-gadgetProgressBar.rangeMin)/(gadgetProgressBar.rangeMax-gadgetProgressBar.rangeMin)*100|round(2, 'common') %}
+        {% set setPoint = (7.2-gadgetProgressBar.rangeMin)/(gadgetProgressBar.rangeMax-gadgetProgressBar.rangeMin)*100|round(2, 'common') %}
 
     {% endif %}
-    {% set valuePoint = (40-gadgetProgressBar.rangeMin)/(gadgetProgressBar.rangeMax-gadgetProgressBar.rangeMin)*100|round(2, 'common') %}
+    {% set valuePoint = (6.47-gadgetProgressBar.rangeMin)/(gadgetProgressBar.rangeMax-gadgetProgressBar.rangeMin)*100|round(2, 'common') %}
     <div class="progress" style="margin-bottom: 0;">
         <div id="value{{ gadgetProgressBar.valueRegisterId.id }}"
-             style="position: absolute; top:-2px; left: {{ valuePoint }}%; height: 50%; z-index: 15; border-left: 2px solid black;  color: black; margin-bottom: 10px;">
+             style="position: absolute; top:-1px; left: {{ valuePoint }}%; height: 50%; z-index: 15; border-left: 2px solid black;  color: black; margin-bottom: 10px;">
 
         </div>
         {% if gadgetProgressBar.setRegisterId is not null %}
             <div id="set{{ gadgetProgressBar.setRegisterId.id }}"
-                 style="position: absolute; top: -4px; left: {{ setPoint }}%; height: 60%; z-index: 14; border-left: 3px solid green; color: green">
+                 style="position: absolute; top: -3px; left: {{ setPoint }}%; height: 60%; z-index: 14; border-left: 4px solid green; color: green">
             </div>
         {% endif %}
         <div class="progress-bar" role="progressbar"

@@ -31,6 +31,7 @@ class GadgetProgressBarController extends Controller
     {
         $gadgetProgressBar = new GadgetProgressBar();
         $page = $this->getDoctrine()->getManager()->getRepository('VisualizationBundle:Page')->find($request->get('page_id'));
+        $registers = $this->getDoctrine()->getManager()->getRepository('BmsConfigurationBundle:Register')->findAll();
         $gadgetProgressBar->setPage($page);
         $form = $this->createForm(GadgetProgressBarType::class, $gadgetProgressBar);
         $form->handleRequest($request);
@@ -46,6 +47,7 @@ class GadgetProgressBarController extends Controller
         return $this->render('VisualizationBundle:gadgetprogressbar:form.html.twig', [
             'gadgetProgressBar' => $gadgetProgressBar,
             'form' => $form->createView(),
+            'registers' => $registers
         ]);
     }
 

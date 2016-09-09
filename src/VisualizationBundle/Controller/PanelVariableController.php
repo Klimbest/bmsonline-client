@@ -34,7 +34,6 @@ class PanelVariableController extends Controller
         $page = $this->getDoctrine()->getManager()->getRepository('VisualizationBundle:Page')->find($request->get('page_id'));
         $registers = $this->getDoctrine()->getManager()->getRepository('BmsConfigurationBundle:Register')->findAll();
         $panelVariable->setPage($page);
-        $panelVariable->setBackgroundColor($page->getBackgroundColor());
         $form = $this->createForm(PanelVariableType::class, $panelVariable);
         $form->handleRequest($request);
 

@@ -34,7 +34,6 @@ class PanelTextController extends Controller
         $panelText = new PanelText();
         $page = $this->getDoctrine()->getManager()->getRepository('VisualizationBundle:Page')->find($request->get('page_id'));
         $panelText->setPage($page);
-        $panelText->setBackgroundColor($page->getBackgroundColor());
         $form = $this->createForm(PanelTextType::class, $panelText);
         $form->handleRequest($request);
 

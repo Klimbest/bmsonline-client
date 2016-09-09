@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\RangeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class GadgetProgressBarType extends AbstractType
 {
@@ -48,22 +48,40 @@ class GadgetProgressBarType extends AbstractType
                 ]
             ])
             ->add('rangeMin', IntegerType::class, [
-                'label' => 'Zakres min'
+                'label' => 'Zakres min',
+                'attr' => [
+                    'step' => 0.01
+                ]
             ])
             ->add('rangeMax', IntegerType::class, [
-                'label' => 'Zakres max'
+                'label' => 'Zakres max',
+                'attr' => [
+                    'step' => 0.01
+                ]
             ])
             ->add('optimumMin', IntegerType::class, [
-                'label' => 'Optimum min'
+                'label' => 'Optimum min',
+                'attr' => [
+                    'step' => 0.01
+                ]
             ])
             ->add('optimumMax', IntegerType::class, [
-                'label' => 'Optimum max'
+                'label' => 'Optimum max',
+                'attr' => [
+                    'step' => 0.01
+                ]
             ])
-            ->add('color1', ColorType::class)
-            ->add('color2', ColorType::class)
-            ->add('color3', ColorType::class)
-            ->add('setRegisterId')
-            ->add('valueRegisterId');
+            ->add('color1', ColorType::class, [
+                'label' => false
+            ])
+            ->add('color2', ColorType::class, [
+                'label' => false
+            ])
+            ->add('color3', ColorType::class, [
+                'label' => false
+            ])
+            ->add('setRegisterId', HiddenType::class)
+            ->add('valueRegisterId', HiddenType::class);
     }
     
     /**
