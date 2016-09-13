@@ -54,8 +54,13 @@ class PageRepository extends EntityRepository
             if ($this->my_operator((float)$element['value'], (float)$term[1], $term[0])) {
                 unset($element['term']);
                 unset($element['value']);
-                array_push($ret, $element);
-            };
+                $element['show'] = true;
+            } else {
+                unset($element['term']);
+                unset($element['value']);
+                $element['show'] = false;
+            }
+            array_push($ret, $element);
         }
 
         return $ret;

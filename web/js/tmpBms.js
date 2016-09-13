@@ -63,7 +63,7 @@ function ajaxRefreshPage() {
             setState(ret['state'], ret['devicesStatus']);
             setPanelVariables(ret['registers']);
             // setProgressBars(ret['progressbars']);
-            // makeEventsHideShow(ret['hide_show_events'])
+            makeEventsHideShow(ret['hide_show_events'])
         }
     });
     count = 0;
@@ -96,11 +96,11 @@ function setProgressBars(progressbars) {
 function makeEventsHideShow(events){
     if (events) {
         $.each(events, function () {
-
-            // $("div#" + this.panel_id + ".bms-" + this.panel_type);
-            //
-            // console.log($("div#" + this.panel_id + ".bms-" + this.panel_type));
-            console.log(this);
+            if(this.show){
+                $("div#" + this.panel_id + ".bms-" + this.panel_type).show();
+            }else{
+                $("div#" + this.panel_id + ".bms-" + this.panel_type).hide();
+            }
         });
     }
 }
