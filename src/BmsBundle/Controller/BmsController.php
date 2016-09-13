@@ -54,11 +54,13 @@ class BmsController extends Controller
         if ($request->isXmlHttpRequest()) {
             $panelVariableRepo = $this->getDoctrine()->getRepository('VisualizationBundle:PanelVariable');
             $gadgetProgressBarRepo = $this->getDoctrine()->getRepository('VisualizationBundle:GadgetProgressBar');
+            $pageRepo = $this->getDoctrine()->getRepository('VisualizationBundle:Page');
             $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
             $page_id = $request->get("page_id");
             $ret['registers'] = $panelVariableRepo->findVariablePanelsRegistersForPage($page_id);
             $ret['progressbars'] = $gadgetProgressBarRepo->findBy(['page' => $page_id]);
+            $ret['hide_show_events'] = $pageRepo->findHideShowElements($page_id);
             $ret['devicesStatus'] = $deviceRepo->getDevicesStatus();
             $time = $technicalInformationRepo->getRpiStatus();
             $time ? $ret['state'] = $time[0]["time"]->getTimestamp() : $ret['state'] = null;

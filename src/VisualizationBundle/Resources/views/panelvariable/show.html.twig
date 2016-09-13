@@ -32,6 +32,9 @@
         {% if (panelVariable.eventLink is not empty) %}
                 cursor: pointer;
         {% endif %}
+        {% if (panelImage.eventsHideShow is not empty) %}
+                display: none;
+        {% endif %}
                 ">
 
     <span id="{{ panelVariable.source }}" class="bms-panel-content">

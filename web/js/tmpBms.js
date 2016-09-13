@@ -62,7 +62,8 @@ function ajaxRefreshPage() {
             $("span.timer").removeClass("label-danger").addClass("label-primary");
             setState(ret['state'], ret['devicesStatus']);
             setPanelVariables(ret['registers']);
-            setProgressBars(ret['progressbars']);
+            // setProgressBars(ret['progressbars']);
+            // makeEventsHideShow(ret['hide_show_events'])
         }
     });
     count = 0;
@@ -87,6 +88,18 @@ function setPanelVariables(registers) {
 function setProgressBars(progressbars) {
     if (progressbars) {
         $.each(progressbars, function () {
+            // console.log(this);
+        });
+    }
+}
+
+function makeEventsHideShow(events){
+    if (events) {
+        $.each(events, function () {
+
+            // $("div#" + this.panel_id + ".bms-" + this.panel_type);
+            //
+            // console.log($("div#" + this.panel_id + ".bms-" + this.panel_type));
             console.log(this);
         });
     }

@@ -5,7 +5,7 @@ namespace VisualizationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Page
+ * EventLink
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="VisualizationBundle\Entity\Repository\EventLinkRepository")

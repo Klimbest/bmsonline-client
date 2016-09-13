@@ -4,6 +4,7 @@ namespace VisualizationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Panel
  *
@@ -200,10 +201,17 @@ class PanelText
     private $eventLink;
 
     /**
+     * @ORM\ManyToMany(targetEntity="EventHideShow", inversedBy="panelsText")
+     * @ORM\JoinTable(name="panels_text_events_hide_show")
+     */
+    private $eventsHideShow;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
+        $this->eventsHideShow = new ArrayCollection();
         $this->name =  "pt_" . rand(999, 9999);
         $this->topPosition = 0;
         $this->leftPosition = 0;
@@ -838,5 +846,41 @@ class PanelText
     public function getEventLink()
     {
         return $this->eventLink;
+    }
+
+
+
+    /**
+     * Add eventsHideShow
+     *
+     * @param \VisualizationBundle\Entity\EventHideShow $eventsHideShow
+     *
+     * @return PanelText
+     */
+    public function addEventsHideShow(\VisualizationBundle\Entity\EventHideShow $eventsHideShow)
+    {
+        $this->eventsHideShow[] = $eventsHideShow;
+
+        return $this;
+    }
+
+    /**
+     * Remove eventsHideShow
+     *
+     * @param \VisualizationBundle\Entity\EventHideShow $eventsHideShow
+     */
+    public function removeEventsHideShow(\VisualizationBundle\Entity\EventHideShow $eventsHideShow)
+    {
+        $this->eventsHideShow->removeElement($eventsHideShow);
+    }
+
+    /**
+     * Get eventsHideShow
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEventsHideShow()
+    {
+        return $this->eventsHideShow;
     }
 }

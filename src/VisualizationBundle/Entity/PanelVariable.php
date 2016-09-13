@@ -4,6 +4,7 @@ namespace VisualizationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 use BmsConfigurationBundle\Entity\Register;
 
 /**
@@ -218,10 +219,17 @@ class PanelVariable
     private $eventLink;
 
     /**
+     * @ORM\ManyToMany(targetEntity="EventHideShow", inversedBy="panelsVariable")
+     * @ORM\JoinTable(name="panels_variable_events_hide_show")
+     */
+    private $eventsHideShow;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
+        $this->eventsHideShow = new ArrayCollection();
         $this->name =  "pv_" . rand(999, 9999);
         $this->tooltip = false;
         $this->topPosition = 0;
@@ -907,27 +915,40 @@ class PanelVariable
         return $this->source;
     }
 
+
+
+
     /**
-     * Set sourceRegister
+     * Add eventsHideShow
      *
-     * @param \BmsConfigurationBundle\Entity\Register $sourceRegister
+     * @param \VisualizationBundle\Entity\EventHideShow $eventsHideShow
      *
      * @return PanelVariable
      */
-    public function setSourceRegister(\BmsConfigurationBundle\Entity\Register $sourceRegister = null)
+    public function addEventsHideShow(\VisualizationBundle\Entity\EventHideShow $eventsHideShow)
     {
-        $this->sourceRegister = $sourceRegister;
+        $this->eventsHideShow[] = $eventsHideShow;
 
         return $this;
     }
 
     /**
-     * Get sourceRegister
+     * Remove eventsHideShow
      *
-     * @return \BmsConfigurationBundle\Entity\Register
+     * @param \VisualizationBundle\Entity\EventHideShow $eventsHideShow
      */
-    public function getSourceRegister()
+    public function removeEventsHideShow(\VisualizationBundle\Entity\EventHideShow $eventsHideShow)
     {
-        return $this->sourceRegister;
+        $this->eventsHideShow->removeElement($eventsHideShow);
+    }
+
+    /**
+     * Get eventsHideShow
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEventsHideShow()
+    {
+        return $this->eventsHideShow;
     }
 }
