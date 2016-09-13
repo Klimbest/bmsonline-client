@@ -13,9 +13,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use VisualizationBundle\Entity\EventHideShow;
 use VisualizationBundle\Entity\PanelImage;
 use VisualizationBundle\Form\PanelImageType;
 use VisualizationBundle\Form\EventLinkType;
+use VisualizationBundle\Form\EventHideShowType;
 
 /**
  * PanelImage controller.
@@ -164,6 +166,55 @@ class PanelImageController extends Controller
             'element' => $panelImage,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * Edit EventShowHide for PanelImage.
+     *
+     * @Route("/{id}/eventhideshow/add", name="panelimage_eventhideshow_add")
+     * @param Request $request
+     * @param PanelImage $panelImage
+     * @return Response
+     */
+    public function eventShowHideAddAction(Request $request, PanelImage $panelImage)
+    {
+        $event = new EventHideShow();
+        $event->setPanelImage($panelImage);
+
+        $form = $this->createForm(EventHideShowType::class, $event);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($event);
+            $em->flush();
+
+            return $this->redirectToRoute('panelimage_events', ['id' => $panelImage->getId()]);
+        }
+
+        return $this->render('VisualizationBundle:events:form_event_hide_show.html.twig', [
+            'element' => $panelImage,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Delete EventShowHide for PanelImage.
+     *
+     * @Route("/{id}/eventhideshow/delete/{event_id}", name="panelimage_eventhideshow_delete")
+     * @param Request $request
+     * @param PanelImage $panelImage
+     * @return Response
+     */
+    public function eventShowHideDeleteAction(Request $request, PanelImage $panelImage)
+    {
+        $event_id = $request->get('event_id');
+        $event = $this->getDoctrine()->getRepository("VisualizationBundle:EventHideShow")->find($event_id);
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($event);
+        $em->flush();
+
+        return $this->redirectToRoute('panelimage_events', ['id' => $panelImage->getId()]);
     }
 
     /**

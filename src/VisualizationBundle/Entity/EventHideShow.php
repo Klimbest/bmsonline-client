@@ -40,25 +40,25 @@ class EventHideShow {
     private $source;
 
     /**
-     * @ORM\ManyToMany(targetEntity="PanelImage", mappedBy="eventsHideShow")
+     * @ORM\ManyToOne(targetEntity="PanelImage", inversedBy="eventsHideShow")
+     * @ORM\JoinColumn(name="panel_image_id", referencedColumnName="id", nullable=true)
      */
-    private $panelsImage;
+    private $panelImage;
 
     /**
-     * @ORM\ManyToMany(targetEntity="PanelText", mappedBy="eventsHideShow")
+     * @ORM\ManyToOne(targetEntity="PanelText", inversedBy="eventsHideShow")
+     * @ORM\JoinColumn(name="panel_text_id", referencedColumnName="id", nullable=true)
      */
-    private $panelsText;
+    private $panelText;
 
     /**
-     * @ORM\ManyToMany(targetEntity="PanelVariable", mappedBy="eventsHideShow")
+     * @ORM\ManyToOne(targetEntity="PanelVariable", inversedBy="eventsHideShow")
+     * @ORM\JoinColumn(name="panel_variable_id", referencedColumnName="id", nullable=true)
      */
-    private $panelsVariable;
+    private $panelVariable;
 
 
     public function __construct() {
-        $this->panelsImage = new ArrayCollection();
-        $this->panelsText = new ArrayCollection();
-        $this->panelsVariable = new ArrayCollection();
     }
 
     /**
@@ -119,105 +119,79 @@ class EventHideShow {
         return $this->source;
     }
 
+
+
+
+
     /**
-     * Add panelsImage
+     * Set panelImage
      *
-     * @param \VisualizationBundle\Entity\PanelImage $panelsImage
+     * @param \VisualizationBundle\Entity\PanelImage $panelImage
      *
      * @return EventHideShow
      */
-    public function addPanelsImage(\VisualizationBundle\Entity\PanelImage $panelsImage)
+    public function setPanelImage(\VisualizationBundle\Entity\PanelImage $panelImage = null)
     {
-        $this->panelsImage[] = $panelsImage;
+        $this->panelImage = $panelImage;
 
         return $this;
     }
 
     /**
-     * Remove panelsImage
+     * Get panelImage
      *
-     * @param \VisualizationBundle\Entity\PanelImage $panelsImage
+     * @return \VisualizationBundle\Entity\PanelImage
      */
-    public function removePanelsImage(\VisualizationBundle\Entity\PanelImage $panelsImage)
+    public function getPanelImage()
     {
-        $this->panelsImage->removeElement($panelsImage);
+        return $this->panelImage;
     }
 
     /**
-     * Get panelsImage
+     * Set panelText
      *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPanelsImage()
-    {
-        return $this->panelsImage;
-    }
-
-    /**
-     * Add panelsText
-     *
-     * @param \VisualizationBundle\Entity\PanelText $panelsText
+     * @param \VisualizationBundle\Entity\PanelText $panelText
      *
      * @return EventHideShow
      */
-    public function addPanelsText(\VisualizationBundle\Entity\PanelText $panelsText)
+    public function setPanelText(\VisualizationBundle\Entity\PanelText $panelText = null)
     {
-        $this->panelsText[] = $panelsText;
+        $this->panelText = $panelText;
 
         return $this;
     }
 
     /**
-     * Remove panelsText
+     * Get panelText
      *
-     * @param \VisualizationBundle\Entity\PanelText $panelsText
+     * @return \VisualizationBundle\Entity\PanelText
      */
-    public function removePanelsText(\VisualizationBundle\Entity\PanelText $panelsText)
+    public function getPanelText()
     {
-        $this->panelsText->removeElement($panelsText);
+        return $this->panelText;
     }
 
     /**
-     * Get panelsText
+     * Set panelVariable
      *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPanelsText()
-    {
-        return $this->panelsText;
-    }
-
-    /**
-     * Add panelsVariable
-     *
-     * @param \VisualizationBundle\Entity\PanelVariable $panelsVariable
+     * @param \VisualizationBundle\Entity\PanelVariable $panelVariable
      *
      * @return EventHideShow
      */
-    public function addPanelsVariable(\VisualizationBundle\Entity\PanelVariable $panelsVariable)
+    public function setPanelVariable(\VisualizationBundle\Entity\PanelVariable $panelVariable = null)
     {
-        $this->panelsVariable[] = $panelsVariable;
+        $this->panelVariable = $panelVariable;
 
         return $this;
     }
 
     /**
-     * Remove panelsVariable
+     * Get panelVariable
      *
-     * @param \VisualizationBundle\Entity\PanelVariable $panelsVariable
+     * @return \VisualizationBundle\Entity\PanelVariable
      */
-    public function removePanelsVariable(\VisualizationBundle\Entity\PanelVariable $panelsVariable)
+    public function getPanelVariable()
     {
-        $this->panelsVariable->removeElement($panelsVariable);
-    }
-
-    /**
-     * Get panelsVariable
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPanelsVariable()
-    {
-        return $this->panelsVariable;
+        return $this->panelVariable;
     }
 }

@@ -7,7 +7,8 @@
             <h4 class="text-center"><span class="label label-primary">Kliknięcie</span>
                 <a href="{{ path(element_type~'_eventlink_edit', {'id': element.id}) }}">
                     <i class="fa fa-edit fa-green"></i>
-                </a></h4>
+                </a>
+            </h4>
             {% if element.eventLink %}
                 <i class="fa fa-file"></i> {{ element.eventLink.page }}
             {% else %}
@@ -15,7 +16,24 @@
             {% endif %}
         </div>
         <div class="col-md-3">
-            <h4 class="text-center"><span class="label label-primary">Pokaż/ukryj</span></h4>
+            <h4 class="text-center"><span class="label label-primary">Pokaż/ukryj</span>
+                <a href="{{ path(element_type~'_eventhideshow_add', {'id': element.id}) }}">
+                    <i class="fa fa-plus fa-green"></i>
+                </a>
+            </h4>
+            {% if element.eventsHideShow %}
+                <h5>Pokaż jeśli WSZYSTKIE warunki są spełnione:</h5>
+                {% for event in element.eventsHideShow %}
+                    <h5><i class="fa fa-check fa-green"></i> <span title="{{ event.source.registerCurrentData.fixedValue }}">{{ event.source.name }}</span> {{ event.term }}
+                    <a href="{{ path(element_type~'_eventhideshow_delete', {'id': element.id, 'event_id': event.id}) }}">
+                        <i class="fa fa-trash-o fa-red"></i>
+                    </a>
+                    </h5>
+                {% endfor %}
+                <h5>w przeciwnym razie ukryj element.</h5>
+            {% else %}
+                -
+            {% endif %}
         </div>
         <div class="col-md-3">
             <h4 class="text-center"><span class="label label-primary">Animacja</span></h4>

@@ -219,8 +219,7 @@ class PanelVariable
     private $eventLink;
 
     /**
-     * @ORM\ManyToMany(targetEntity="EventHideShow", inversedBy="panelsVariable")
-     * @ORM\JoinTable(name="panels_variable_events_hide_show")
+     * @ORM\OneToMany(targetEntity="EventHideShow", mappedBy="panelVariable")
      */
     private $eventsHideShow;
 

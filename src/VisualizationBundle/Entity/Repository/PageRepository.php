@@ -24,7 +24,7 @@ class PageRepository extends EntityRepository
         $panelImage = $this->getEntityManager()
             ->createQuery('SELECT p.id as panel_id, \'panelimage\' as panel_type,  e.term as term, rcd.fixedValue as value' .
                 ' FROM VisualizationBundle:EventHideShow e' .
-                ' JOIN e.panelsImage p' .
+                ' JOIN e.panelImage p' .
                 ' JOIN e.source r' .
                 ' JOIN r.registerCurrentData rcd' .
                 ' WHERE p.page = ' . $page_id)->getArrayResult();
@@ -32,7 +32,7 @@ class PageRepository extends EntityRepository
         $panelVariable = $this->getEntityManager()
             ->createQuery('SELECT p.id as panel_id, \'panelvariable\' as panel_type,  e.term as term, rcd.fixedValue as value' .
                 ' FROM VisualizationBundle:EventHideShow e' .
-                ' JOIN e.panelsVariable p' .
+                ' JOIN e.panelVariable p' .
                 ' JOIN e.source r' .
                 ' JOIN r.registerCurrentData rcd' .
                 ' WHERE p.page = ' . $page_id)->getArrayResult();
@@ -40,7 +40,7 @@ class PageRepository extends EntityRepository
         $panelText = $this->getEntityManager()
             ->createQuery('SELECT p.id as panel_id, \'paneltext\' as panel_type,  e.term as term, rcd.fixedValue as value' .
                 ' FROM VisualizationBundle:EventHideShow e' .
-                ' JOIN e.panelsText p' .
+                ' JOIN e.panelText p' .
                 ' JOIN e.source r' .
                 ' JOIN r.registerCurrentData rcd' .
                 ' WHERE p.page = ' . $page_id)->getArrayResult();

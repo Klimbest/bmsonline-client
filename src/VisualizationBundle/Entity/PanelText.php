@@ -201,8 +201,7 @@ class PanelText
     private $eventLink;
 
     /**
-     * @ORM\ManyToMany(targetEntity="EventHideShow", inversedBy="panelsText")
-     * @ORM\JoinTable(name="panels_text_events_hide_show")
+     * @ORM\OneToMany(targetEntity="EventHideShow", mappedBy="panelText")
      */
     private $eventsHideShow;
 

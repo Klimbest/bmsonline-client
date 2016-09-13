@@ -118,8 +118,7 @@ class PanelImage
     private $eventLink;
 
     /**
-     * @ORM\ManyToMany(targetEntity="EventHideShow", inversedBy="panelsImage")
-     * @ORM\JoinTable(name="panels_image_events_hide_show")
+     * @ORM\OneToMany(targetEntity="EventHideShow", mappedBy="panelImage")
      */
     private $eventsHideShow;
 
@@ -139,6 +138,15 @@ class PanelImage
         $this->borderWidth = 0;
         $this->borderStyle = 'solid';
         $this->borderColor = "#000000";
+    }
+
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->id;
     }
 
     /**
