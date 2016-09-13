@@ -1,38 +1,36 @@
-<div class="row">
-    <div class="col-xs-12 text-center">
-        <div id="{{ page.id }}" class="well page" style="
-                width: {{ page.width }}px;
-                height: {{ page.height }}px;
-                background-color: {{ page.backgroundColor }};
-                ">
-            {% for panelImage in page.panelsImage %}
-                {% include 'VisualizationBundle:panelimage:show.html.twig' %}
-            {% endfor %}
-            {% for panelText in page.panelsText %}
-                {% include 'VisualizationBundle:paneltext:show.html.twig' %}
-            {% endfor %}
-            {% for panelVariable in page.panelsVariable %}
-                {% include 'VisualizationBundle:panelvariable:show.html.twig' %}
-            {% endfor %}
+<div class="col-xs-12 text-center">
+    <div id="{{ page.id }}" class="well page" style="
+            width: {{ page.width }}px;
+            height: {{ page.height }}px;
+            background-color: {{ page.backgroundColor }};
+            ">
+        {% for panelImage in page.panelsImage %}
+            {% include 'VisualizationBundle:panelimage:show.html.twig' %}
+        {% endfor %}
+        {% for panelText in page.panelsText %}
+            {% include 'VisualizationBundle:paneltext:show.html.twig' %}
+        {% endfor %}
+        {% for panelVariable in page.panelsVariable %}
+            {% include 'VisualizationBundle:panelvariable:show.html.twig' %}
+        {% endfor %}
 
-            {% for gadgetClock in page.gadgetsClock %}
-                {% include 'VisualizationBundle:gadgetclock:show.html.twig' %}
-            {% endfor %}
-            {% for gadgetProgressBar in page.gadgetsProgressBar %}
-                {% include 'VisualizationBundle:gadgetprogressbar:show.html.twig' %}
-            {% endfor %}
+        {% for gadgetClock in page.gadgetsClock %}
+            {% include 'VisualizationBundle:gadgetclock:show.html.twig' %}
+        {% endfor %}
+        {% for gadgetProgressBar in page.gadgetsProgressBar %}
+            {% include 'VisualizationBundle:gadgetprogressbar:show.html.twig' %}
+        {% endfor %}
 
-            {% for inputButton in page.inputsButton %}
-                {% include 'VisualizationBundle:inputbutton:show.html.twig' %}
-            {% endfor %}
-            {% for inputRange in page.inputsRange %}
-                {% include 'VisualizationBundle:inputrange:show.html.twig' %}
-            {% endfor %}
-            {% for inputNumber in page.inputsNumber %}
-                {% include 'VisualizationBundle:inputnumber:show.html.twig' %}
-            {% endfor %}
+        {% for inputButton in page.inputsButton %}
+            {% include 'VisualizationBundle:inputbutton:show.html.twig' %}
+        {% endfor %}
+        {% for inputRange in page.inputsRange %}
+            {% include 'VisualizationBundle:inputrange:show.html.twig' %}
+        {% endfor %}
+        {% for inputNumber in page.inputsNumber %}
+            {% include 'VisualizationBundle:inputnumber:show.html.twig' %}
+        {% endfor %}
 
-        </div>
     </div>
-
 </div>
+
