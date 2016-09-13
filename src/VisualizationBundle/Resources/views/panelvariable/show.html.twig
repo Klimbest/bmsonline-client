@@ -27,7 +27,7 @@
                 font-family: {{ panelVariable.fontFamily }};
                 color: {{ panelVariable.fontColor }};
                 font-size: {{ panelVariable.fontSize }}px;
-                line-height: {{ panelVariable.height }}px;
+                line-height: {{ panelVariable.height - 2 * panelVariable.borderWidth }}px;
                 z-index: {{ panelVariable.zIndex }};
         {% if (panelVariable.eventLink is not empty) %}
                 cursor: pointer;

@@ -24,7 +24,7 @@
                 font-family: {{ panelText.fontFamily }};
                 color: {{ panelText.fontColor }};
                 font-size: {{ panelText.fontSize }}px;
-                line-height: {{ panelText.height }}px;
+                line-height: {{ panelText.height - 2 * panelText.borderWidth }}px;
                 z-index: {{ panelText.zIndex }};
         {% if (panelText.eventLink is not empty) %}
                 cursor: pointer;

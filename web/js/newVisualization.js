@@ -113,7 +113,7 @@ function setPanelEvents() {
                 if (delta_y !== 0) {
                     ui.size.height += 2 * bw;
                 }
-                ui.element.css({lineHeight: ui.element.height() + "px"});
+                ui.element.css({lineHeight: ui.element.height() + 2 * bw + "px"});
 
                 if (ui.element.hasClass("bms-panelimage")) {
                     var image = $(this).children("img");
