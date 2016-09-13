@@ -9,8 +9,3 @@ services:
         tags:
             - { name: twig.extension }
 
-    visualization.form.type.gadgetprogressbar:
-            class: VisualizationBundle\Form\GadgetProgressBarType
-            arguments: ["@doctrine.orm.entity_manager"]
-            tags:
-                - { name: form.type }

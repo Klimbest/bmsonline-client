@@ -12,16 +12,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use VisualizationBundle\Form\DataTransformer\RegisterToNameDescriptionTransformer;
 
 class GadgetProgressBarType extends AbstractType
 {
-    private $manager;
-
-    public function __construct(ObjectManager $manager)
-    {
-        $this->manager = $manager;
-    }
 
 
     /**
@@ -95,15 +88,6 @@ class GadgetProgressBarType extends AbstractType
             ->add('color3', ColorType::class, [
                 'label' => false
             ])
-            ->add('setRegisterId', EntityType::class, [
-                'label' => 'Wartość zadana',
-                'class' => 'BmsConfigurationBundle:Register',
-                'empty_data' => null,
-                'required' => false,
-                'attr' => [
-                    'data-live-search' => true
-                ]
-            ])
             ->add('valueRegisterId', EntityType::class, [
                 'label' => 'Wartość',
                 'class' => 'BmsConfigurationBundle:Register',
@@ -112,11 +96,17 @@ class GadgetProgressBarType extends AbstractType
                 'attr' => [
                     'data-live-search' => true
                 ]
+            ])
+            ->add('setRegisterId', EntityType::class, [
+                'label' => 'Wartość zadana',
+                'class' => 'BmsConfigurationBundle:Register',
+                'empty_data' => null,
+                'required' => false,
+                'attr' => [
+                    'data-live-search' => true
+                ]
             ]);
 
-
-        $builder->get('setRegisterId')
-            ->addModelTransformer(new RegisterToNameDescriptionTransformer($this->manager));
 
     }
 
