@@ -160,7 +160,7 @@ class PanelImageController extends Controller
             return $this->redirectToRoute('panelimage_events', ['id' => $panelImage->getId()]);
         }
 
-        return $this->render('VisualizationBundle:events:eventLinkEdit.html.twig', [
+        return $this->render('VisualizationBundle:events:form_event_link.html.twig', [
             'element' => $panelImage,
             'form' => $form->createView(),
         ]);

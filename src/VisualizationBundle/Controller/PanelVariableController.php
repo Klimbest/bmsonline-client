@@ -156,7 +156,7 @@ class PanelVariableController extends Controller
             return $this->redirectToRoute('panelvariable_events', ['id' => $panelVariable->getId()]);
         }
 
-        return $this->render('VisualizationBundle:events:eventLinkEdit.html.twig', [
+        return $this->render('VisualizationBundle:events:form_event_link.html.twig', [
             'element' => $panelVariable,
             'form' => $form->createView(),
         ]);

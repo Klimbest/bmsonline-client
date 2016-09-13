@@ -151,7 +151,7 @@ class PanelTextController extends Controller
 
             return $this->redirectToRoute('paneltext_events', ['id' => $panelText->getId()]);
         }
-        return $this->render('VisualizationBundle:events:eventLinkEdit.html.twig', [
+        return $this->render('VisualizationBundle:events:form_event_link.html.twig', [
             'element' => $panelText,
             'form' => $form->createView(),
         ]);
