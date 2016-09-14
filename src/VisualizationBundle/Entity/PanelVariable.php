@@ -4,7 +4,6 @@ namespace VisualizationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 use BmsConfigurationBundle\Entity\Register;
 
 /**
@@ -219,16 +218,10 @@ class PanelVariable
     private $eventLink;
 
     /**
-     * @ORM\OneToMany(targetEntity="EventHideShow", mappedBy="panelVariable")
-     */
-    private $eventsHideShow;
-
-    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->eventsHideShow = new ArrayCollection();
         $this->name =  "pv_" . rand(999, 9999);
         $this->tooltip = false;
         $this->topPosition = 0;
@@ -253,6 +246,7 @@ class PanelVariable
         $this->fontColor = '#000000';
         $this->fontSize = 14;
     }
+
 
 
     /**
@@ -288,7 +282,6 @@ class PanelVariable
     {
         return $this->name;
     }
-
 
     /**
      * Set tooltip
@@ -480,6 +473,30 @@ class PanelVariable
     public function getBackgroundColor()
     {
         return $this->backgroundColor;
+    }
+
+    /**
+     * Set backgroundOpacity
+     *
+     * @param float $backgroundOpacity
+     *
+     * @return PanelVariable
+     */
+    public function setBackgroundOpacity($backgroundOpacity)
+    {
+        $this->backgroundOpacity = $backgroundOpacity;
+
+        return $this;
+    }
+
+    /**
+     * Get backgroundOpacity
+     *
+     * @return float
+     */
+    public function getBackgroundOpacity()
+    {
+        return $this->backgroundOpacity;
     }
 
     /**
@@ -819,85 +836,13 @@ class PanelVariable
     }
 
     /**
-     * Set page
-     *
-     * @param Page $page
-     *
-     * @return PanelVariable
-     */
-    public function setPage(Page $page)
-    {
-        $this->page = $page;
-
-        return $this;
-    }
-
-    /**
-     * Get page
-     *
-     * @return Page
-     */
-    public function getPage()
-    {
-        return $this->page;
-    }
-
-    /**
-     * Set backgroundOpacity
-     *
-     * @param float $backgroundOpacity
-     *
-     * @return PanelVariable
-     */
-    public function setBackgroundOpacity($backgroundOpacity)
-    {
-        $this->backgroundOpacity = $backgroundOpacity;
-
-        return $this;
-    }
-
-    /**
-     * Get backgroundOpacity
-     *
-     * @return float
-     */
-    public function getBackgroundOpacity()
-    {
-        return $this->backgroundOpacity;
-    }
-
-    /**
-     * Set eventLink
-     *
-     * @param EventLink $eventLink
-     *
-     * @return PanelVariable
-     */
-    public function setEventLink(EventLink $eventLink = null)
-    {
-        $this->eventLink = $eventLink;
-
-        return $this;
-    }
-
-    /**
-     * Get eventLink
-     *
-     * @return EventLink
-     */
-    public function getEventLink()
-    {
-        return $this->eventLink;
-    }
-
-    /**
      * Set source
      *
-     * @param Register $source
+     * @param \BmsConfigurationBundle\Entity\Register $source
      *
      * @return PanelVariable
      */
-    public function setSource(Register $source)
+    public function setSource(\BmsConfigurationBundle\Entity\Register $source = null)
     {
         $this->source = $source;
 
@@ -907,47 +852,58 @@ class PanelVariable
     /**
      * Get source
      *
-     * @return Register
+     * @return \BmsConfigurationBundle\Entity\Register
      */
     public function getSource()
     {
         return $this->source;
     }
 
-
-
-
     /**
-     * Add eventsHideShow
+     * Set page
      *
-     * @param \VisualizationBundle\Entity\EventHideShow $eventsHideShow
+     * @param \VisualizationBundle\Entity\Page $page
      *
      * @return PanelVariable
      */
-    public function addEventsHideShow(\VisualizationBundle\Entity\EventHideShow $eventsHideShow)
+    public function setPage(\VisualizationBundle\Entity\Page $page)
     {
-        $this->eventsHideShow[] = $eventsHideShow;
+        $this->page = $page;
 
         return $this;
     }
 
     /**
-     * Remove eventsHideShow
+     * Get page
      *
-     * @param \VisualizationBundle\Entity\EventHideShow $eventsHideShow
+     * @return \VisualizationBundle\Entity\Page
      */
-    public function removeEventsHideShow(\VisualizationBundle\Entity\EventHideShow $eventsHideShow)
+    public function getPage()
     {
-        $this->eventsHideShow->removeElement($eventsHideShow);
+        return $this->page;
     }
 
     /**
-     * Get eventsHideShow
+     * Set eventLink
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param \VisualizationBundle\Entity\EventLink $eventLink
+     *
+     * @return PanelVariable
      */
-    public function getEventsHideShow()
+    public function setEventLink(\VisualizationBundle\Entity\EventLink $eventLink = null)
     {
-        return $this->eventsHideShow;
+        $this->eventLink = $eventLink;
+
+        return $this;
+    }
+
+    /**
+     * Get eventLink
+     *
+     * @return \VisualizationBundle\Entity\EventLink
+     */
+    public function getEventLink()
+    {
+        return $this->eventLink;
     }
 }

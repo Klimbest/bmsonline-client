@@ -13,11 +13,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use VisualizationBundle\Entity\EventHideShow;
+use VisualizationBundle\Entity\EventChangeSource;
 use VisualizationBundle\Entity\PanelImage;
 use VisualizationBundle\Form\PanelImageType;
 use VisualizationBundle\Form\EventLinkType;
-use VisualizationBundle\Form\EventHideShowType;
+use VisualizationBundle\Form\EventChangeSourceType;
 
 /**
  * PanelImage controller.
@@ -134,10 +134,8 @@ class PanelImageController extends Controller
      */
     public function eventsAction(PanelImage $panelImage)
     {
-
-        return $this->render('VisualizationBundle:events:show.html.twig', [
-            'element' => $panelImage,
-            'element_type' => 'panelimage'
+        return $this->render('VisualizationBundle:panelimage:events.html.twig', [
+            'panelImage' => $panelImage,
         ]);
     }
 
@@ -171,17 +169,17 @@ class PanelImageController extends Controller
     /**
      * Edit EventShowHide for PanelImage.
      *
-     * @Route("/{id}/eventhideshow/add", name="panelimage_eventhideshow_add")
+     * @Route("/{id}/eventchangesource/add", name="panelimage_eventchangesource_add")
      * @param Request $request
      * @param PanelImage $panelImage
      * @return Response
      */
-    public function eventShowHideAddAction(Request $request, PanelImage $panelImage)
+    public function eventChangeSourceAddAction(Request $request, PanelImage $panelImage)
     {
-        $event = new EventHideShow();
+        $event = new EventChangeSource();
         $event->setPanelImage($panelImage);
-
-        $form = $this->createForm(EventHideShowType::class, $event);
+        $images = self::getImages();
+        $form = $this->createForm(EventChangeSourceType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -192,8 +190,9 @@ class PanelImageController extends Controller
             return $this->redirectToRoute('panelimage_events', ['id' => $panelImage->getId()]);
         }
 
-        return $this->render('VisualizationBundle:events:form_event_hide_show.html.twig', [
-            'element' => $panelImage,
+        return $this->render('VisualizationBundle:events:form_event_change_source.html.twig', [
+            'images' => $images,
+            'panelImage' => $panelImage,
             'form' => $form->createView(),
         ]);
     }
@@ -201,7 +200,7 @@ class PanelImageController extends Controller
     /**
      * Delete EventShowHide for PanelImage.
      *
-     * @Route("/{id}/eventhideshow/delete/{event_id}", name="panelimage_eventhideshow_delete")
+     * @Route("/{id}/eventchangesource/delete/{event_id}", name="panelimage_eventchangesource_delete")
      * @param Request $request
      * @param PanelImage $panelImage
      * @return Response
@@ -209,7 +208,7 @@ class PanelImageController extends Controller
     public function eventShowHideDeleteAction(Request $request, PanelImage $panelImage)
     {
         $event_id = $request->get('event_id');
-        $event = $this->getDoctrine()->getRepository("VisualizationBundle:EventHideShow")->find($event_id);
+        $event = $this->getDoctrine()->getRepository("VisualizationBundle:EventChangeSource")->find($event_id);
         $em = $this->getDoctrine()->getManager();
         $em->remove($event);
         $em->flush();

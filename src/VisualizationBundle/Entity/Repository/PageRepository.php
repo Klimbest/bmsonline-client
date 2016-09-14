@@ -22,48 +22,30 @@ class PageRepository extends EntityRepository
     public function findHideShowElements($page_id)
     {
         $panelImage = $this->getEntityManager()
-            ->createQuery('SELECT p.id as panel_id, \'panelimage\' as panel_type,  e.term as term, rcd.fixedValue as value' .
-                ' FROM VisualizationBundle:EventHideShow e' .
+            ->createQuery('SELECT p.id as panel_id, e.termSign as term_sign, e.termValue as term_value, e.panelImageSource as source, rcd.fixedValue as value' .
+                ' FROM VisualizationBundle:EventChangeSource e' .
                 ' JOIN e.panelImage p' .
-                ' JOIN e.source r' .
+                ' JOIN e.termSource r' .
                 ' JOIN r.registerCurrentData rcd' .
                 ' WHERE p.page = ' . $page_id)->getArrayResult();
-
-        $panelVariable = $this->getEntityManager()
-            ->createQuery('SELECT p.id as panel_id, \'panelvariable\' as panel_type,  e.term as term, rcd.fixedValue as value' .
-                ' FROM VisualizationBundle:EventHideShow e' .
-                ' JOIN e.panelVariable p' .
-                ' JOIN e.source r' .
-                ' JOIN r.registerCurrentData rcd' .
-                ' WHERE p.page = ' . $page_id)->getArrayResult();
-
-        $panelText = $this->getEntityManager()
-            ->createQuery('SELECT p.id as panel_id, \'paneltext\' as panel_type,  e.term as term, rcd.fixedValue as value' .
-                ' FROM VisualizationBundle:EventHideShow e' .
-                ' JOIN e.panelText p' .
-                ' JOIN e.source r' .
-                ' JOIN r.registerCurrentData rcd' .
-                ' WHERE p.page = ' . $page_id)->getArrayResult();
-
 
         $ret = [];
-        $elements = array_merge($panelImage, $panelVariable, $panelText);
+//
+//        foreach ($panelImage as $element) {
+//            $term = explode(" ", $element['term']);
+//            if ($this->my_operator((float)$element['value'], (float)$term[1], $term[0])) {
+//                unset($element['term']);
+//                unset($element['value']);
+//                $element['show'] = true;
+//            } else {
+//                unset($element['term']);
+//                unset($element['value']);
+//                $element['show'] = false;
+//            }
+//            array_push($ret, $element);
+//        }
 
-        foreach ($elements as $element) {
-            $term = explode(" ", $element['term']);
-            if ($this->my_operator((float)$element['value'], (float)$term[1], $term[0])) {
-                unset($element['term']);
-                unset($element['value']);
-                $element['show'] = true;
-            } else {
-                unset($element['term']);
-                unset($element['value']);
-                $element['show'] = false;
-            }
-            array_push($ret, $element);
-        }
-
-        return $ret;
+        return $panelImage;
     }
 
     private function my_operator($a, $b, $char)

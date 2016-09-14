@@ -27,7 +27,7 @@ class RegisterCurrentData
     private $realValue;
 
     /**
-     * @var decimal
+     * @var float
      *
      * @ORM\Column(name="fixed_value", type="decimal", precision=9, scale=2, nullable=true)
      */

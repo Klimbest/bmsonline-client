@@ -118,16 +118,16 @@ class PanelImage
     private $eventLink;
 
     /**
-     * @ORM\OneToMany(targetEntity="EventHideShow", mappedBy="panelImage")
+     * @ORM\OneToMany(targetEntity="EventChangeSource", mappedBy="panelImage")
      */
-    private $eventsHideShow;
+    private $eventsChangeSource;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->eventsHideShow = new ArrayCollection();
+        $this->eventsChangeSource = new ArrayCollection();
         $this->name =  "pi_" . rand(999, 9999);
         $this->tooltip = false;
         $this->topPosition = 0;
@@ -473,37 +473,38 @@ class PanelImage
 
 
 
+
     /**
-     * Add eventsHideShow
+     * Add eventsChangeSource
      *
-     * @param \VisualizationBundle\Entity\EventHideShow $eventsHideShow
+     * @param \VisualizationBundle\Entity\EventChangeSource $eventsChangeSource
      *
      * @return PanelImage
      */
-    public function addEventsHideShow(\VisualizationBundle\Entity\EventHideShow $eventsHideShow)
+    public function addEventsChangeSource(\VisualizationBundle\Entity\EventChangeSource $eventsChangeSource)
     {
-        $this->eventsHideShow[] = $eventsHideShow;
+        $this->eventsChangeSource[] = $eventsChangeSource;
 
         return $this;
     }
 
     /**
-     * Remove eventsHideShow
+     * Remove eventsChangeSource
      *
-     * @param \VisualizationBundle\Entity\EventHideShow $eventsHideShow
+     * @param \VisualizationBundle\Entity\EventChangeSource $eventsChangeSource
      */
-    public function removeEventsHideShow(\VisualizationBundle\Entity\EventHideShow $eventsHideShow)
+    public function removeEventsChangeSource(\VisualizationBundle\Entity\EventChangeSource $eventsChangeSource)
     {
-        $this->eventsHideShow->removeElement($eventsHideShow);
+        $this->eventsChangeSource->removeElement($eventsChangeSource);
     }
 
     /**
-     * Get eventsHideShow
+     * Get eventsChangeSource
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEventsHideShow()
+    public function getEventsChangeSource()
     {
-        return $this->eventsHideShow;
+        return $this->eventsChangeSource;
     }
 }

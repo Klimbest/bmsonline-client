@@ -1,0 +1,55 @@
+{% extends 'VisualizationBundle::layout.html.twig' %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-3">
+            <h4 class="text-center"><span class="label label-primary">Kliknięcie</span>
+                <a href="{{ path('panelimage_eventlink_edit', {'id': panelImage.id}) }}">
+                    <i class="fa fa-edit fa-green"></i>
+                </a>
+            </h4>
+            {% if panelImage.eventLink %}
+                <i class="fa fa-file"></i> {{ panelImage.eventLink.page }}
+            {% else %}
+                -
+            {% endif %}
+        </div>
+        <div class="col-md-3">
+            <h4 class="text-center"><span class="label label-primary">Zmiana obrazka</span>
+                <a href="{{ path('panelimage_eventchangesource_add', {'id': panelImage.id}) }}">
+                    <i class="fa fa-plus fa-green"></i>
+                </a>
+            </h4>
+            {% if panelImage.eventsChangeSource %}
+                {% for event in panelImage.eventsChangeSource %}
+                    <h5>
+                        <i class="fa fa-picture fa-green"></i>
+                        <span title="{{ event.termSource.registerCurrentData.fixedValue }}">{{ event.termSource.name }}</span>
+                        {{ event.termSign }} {{ event.termValue }}
+                        <img style="max-width: 25px; max-heitht:25px" src="{{ event.panelImageSource }}"/>
+                        <a href="{{ path('panelimage_eventchangesource_delete', {'id': panelImage.id, 'event_id': event.id}) }}">
+                            <i class="fa fa-trash-o fa-red"></i>
+                        </a>
+                    </h5>
+                {% endfor %}
+            {% else %}
+                -
+            {% endif %}
+        </div>
+        <div class="col-md-3">
+            <h4 class="text-center"><span class="label label-primary">Animacja</span></h4>
+        </div>
+        <div class="col-md-3">
+            <h4 class="text-center"><span class="label label-primary">Matematyczne</span></h4>
+        </div>
+    </div>
+    <h1></h1>
+    <div class="row">
+        <div class="col-md-12">
+            <a class="btn btn-sm btn-warning" href="{{ path('page_show', {'id': panelImage.page.id}) }}">
+                <i class="fa fa-arrow-left"></i> Wstecz
+            </a>
+        </div>
+    </div>
+{% endblock %}

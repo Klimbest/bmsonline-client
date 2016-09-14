@@ -4,7 +4,6 @@ namespace VisualizationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Panel
  *
@@ -200,17 +199,12 @@ class PanelText
      */
     private $eventLink;
 
-    /**
-     * @ORM\OneToMany(targetEntity="EventHideShow", mappedBy="panelText")
-     */
-    private $eventsHideShow;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->eventsHideShow = new ArrayCollection();
         $this->name =  "pt_" . rand(999, 9999);
         $this->topPosition = 0;
         $this->leftPosition = 0;
@@ -437,6 +431,30 @@ class PanelText
     public function getBackgroundColor()
     {
         return $this->backgroundColor;
+    }
+
+    /**
+     * Set backgroundOpacity
+     *
+     * @param float $backgroundOpacity
+     *
+     * @return PanelText
+     */
+    public function setBackgroundOpacity($backgroundOpacity)
+    {
+        $this->backgroundOpacity = $backgroundOpacity;
+
+        return $this;
+    }
+
+    /**
+     * Get backgroundOpacity
+     *
+     * @return float
+     */
+    public function getBackgroundOpacity()
+    {
+        return $this->backgroundOpacity;
     }
 
     /**
@@ -778,11 +796,11 @@ class PanelText
     /**
      * Set page
      *
-     * @param Page $page
+     * @param \VisualizationBundle\Entity\Page $page
      *
      * @return PanelText
      */
-    public function setPage(Page $page)
+    public function setPage(\VisualizationBundle\Entity\Page $page)
     {
         $this->page = $page;
 
@@ -792,7 +810,7 @@ class PanelText
     /**
      * Get page
      *
-     * @return Page
+     * @return \VisualizationBundle\Entity\Page
      */
     public function getPage()
     {
@@ -800,37 +818,13 @@ class PanelText
     }
 
     /**
-     * Set backgroundOpacity
-     *
-     * @param float $backgroundOpacity
-     *
-     * @return PanelText
-     */
-    public function setBackgroundOpacity($backgroundOpacity)
-    {
-        $this->backgroundOpacity = $backgroundOpacity;
-
-        return $this;
-    }
-
-    /**
-     * Get backgroundOpacity
-     *
-     * @return float
-     */
-    public function getBackgroundOpacity()
-    {
-        return $this->backgroundOpacity;
-    }
-
-    /**
      * Set eventLink
      *
-     * @param EventLink $eventLink
+     * @param \VisualizationBundle\Entity\EventLink $eventLink
      *
      * @return PanelText
      */
-    public function setEventLink(EventLink $eventLink = null)
+    public function setEventLink(\VisualizationBundle\Entity\EventLink $eventLink = null)
     {
         $this->eventLink = $eventLink;
 
@@ -840,46 +834,10 @@ class PanelText
     /**
      * Get eventLink
      *
-     * @return EventLink
+     * @return \VisualizationBundle\Entity\EventLink
      */
     public function getEventLink()
     {
         return $this->eventLink;
-    }
-
-
-
-    /**
-     * Add eventsHideShow
-     *
-     * @param \VisualizationBundle\Entity\EventHideShow $eventsHideShow
-     *
-     * @return PanelText
-     */
-    public function addEventsHideShow(\VisualizationBundle\Entity\EventHideShow $eventsHideShow)
-    {
-        $this->eventsHideShow[] = $eventsHideShow;
-
-        return $this;
-    }
-
-    /**
-     * Remove eventsHideShow
-     *
-     * @param \VisualizationBundle\Entity\EventHideShow $eventsHideShow
-     */
-    public function removeEventsHideShow(\VisualizationBundle\Entity\EventHideShow $eventsHideShow)
-    {
-        $this->eventsHideShow->removeElement($eventsHideShow);
-    }
-
-    /**
-     * Get eventsHideShow
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEventsHideShow()
-    {
-        return $this->eventsHideShow;
     }
 }

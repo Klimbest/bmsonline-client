@@ -96,11 +96,9 @@ function setProgressBars(progressbars) {
 function makeEventsHideShow(events){
     if (events) {
         $.each(events, function () {
-            if(this.show){
-                $("div#" + this.panel_id + ".bms-" + this.panel_type).show();
-            }else{
-                $("div#" + this.panel_id + ".bms-" + this.panel_type).hide();
-            }
+            var panelImage = $("div#" + this.panel_id + ".bms-panelimage");
+            panelImage.find("img").attr("src", this.source);
+            panelImage.show();
         });
     }
 }

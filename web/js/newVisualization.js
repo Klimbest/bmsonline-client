@@ -314,6 +314,15 @@ function setSelectedImage(element) {
     img.src = source;
 }
 
+function setSelectedImageTerm(element) {
+    var form = $("form");
+    form.find("div.thumbnail-list div").removeClass("selected");
+    $(element).addClass("selected");
+    var source = $(element).children("img").attr("src");
+    form.find("input#event_change_source_panelImageSource").val(source);
+
+}
+
 function setAddingNewImage() {
     var form = $("form");
     form.find("input#image").change(function (event) {
