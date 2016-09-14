@@ -59,7 +59,7 @@ function setPanelEvents() {
         var id = $(this).attr("id");
         var element_type = setElementType($(this));
         var handle;
-
+        var old_zIndex = $(this).css("zIndex");
         if (element_type == "GadgetProgressBar") {
             handle = "e, w";
         } else {
@@ -70,9 +70,10 @@ function setPanelEvents() {
         $(this).removeAttr("onclick").unbind("mouseenter mouseleave");
         $(this).click(function () {
             $(this).find("span.label-bms-panel").show();
+            $(this).css("zIndex", "100");
         });
         $(this).mouseleave(function () {
-
+            $(this).css("zIndex", old_zIndex);
             $(this).find("span.label-bms-panel").hide();
         });
         //draggable and resizable
