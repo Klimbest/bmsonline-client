@@ -36,7 +36,7 @@ function setState(time, devicesStatus) {
    if (networkConnectionDelay >= 300) {
        $("div.variable-panel span").empty();
        $("span#noInternetConnection img").attr("src", "/images/system/ethernetOff.png").addClass("blink");
-       $(".error-message").show().append("<div class='row'><div class='col-xs-12'><span class='label label-danger'>Brak połączenia internetowego</span></div></div>");
+       // $(".error-message").show().append("<div class='row'><div class='col-xs-12'><span class='label label-danger'>Brak połączenia internetowego</span></div></div>");
        $("span#errorModbusConnection").hide();
    } else {
        $("span#noInternetConnection img").attr("src", "/images/system/ethernetOn.png").removeClass("blink");
@@ -47,7 +47,7 @@ function setState(time, devicesStatus) {
         $("div.variable-panel span").empty();
         $("span#errorModbusConnection img").attr("src", "/images/system/disconnected.png").addClass("blink");
         if (errorClosed !== 1) {
-            $(".error-message").show().append("<div class='row'><div class='col-md-12'><span class='label label-danger'>Brak synchronizacji danych (slave: " + slaves + ")</span></div></div>");
+            // $(".error-message").show().append("<div class='row'><div class='col-md-12'><span class='label label-danger'>Brak synchronizacji danych (slave: " + slaves + ")</span></div></div>");
         }
     } else {
         $("span#errorModbusConnection img").attr("src", "/images/system/connected.png").removeClass("blink");
