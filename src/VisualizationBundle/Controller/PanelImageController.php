@@ -100,6 +100,12 @@ class PanelImageController extends Controller
     {
         $page_id = $panelImage->getPage()->getId();
         $em = $this->getDoctrine()->getManager();
+
+        $events = $panelImage->getEventsChangeSource();
+        foreach ($events as $event) {
+            $em->remove($event);
+        }
+
         $em->remove($panelImage);
         $em->flush();
 
@@ -117,9 +123,15 @@ class PanelImageController extends Controller
     {
         $panelImage->getPage()->getId();
         $panelImage_new = clone $panelImage;
-
+        $events = $panelImage->getEventsChangeSource();
         $em = $this->getDoctrine()->getManager();
         $em->persist($panelImage_new);
+        foreach ($events as $event) {
+            $new_event = clone $event;
+            $new_event->setPanelImage($panelImage_new);
+            $em->persist($new_event);
+        }
+
         $em->flush();
 
         return $this->redirectToRoute('panelimage_edit', ['id' => $panelImage_new->getId()]);
