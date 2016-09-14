@@ -97,7 +97,7 @@ function makeEventsHideShow(events){
     if (events) {
         $.each(events, function () {
             var panelImage = $("div#" + this.panel_id + ".bms-panelimage");
-            panelImage.find("img").attr("src", this.source);
+            panelImage.find("img").attr("src", this.source).attr("title", this.source_label);
             panelImage.show();
         });
     }

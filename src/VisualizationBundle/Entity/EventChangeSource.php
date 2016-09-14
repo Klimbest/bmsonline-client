@@ -30,6 +30,14 @@ class EventChangeSource {
     private $panelImageSource;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="panel_image_source_label", type="string", nullable=true)
+     */
+    private $panelImageSourceLabel;
+
+
+    /**
      * @var float
      *
      * @ORM\Column(name="term_value", type="decimal", precision=9, scale=2, nullable=false)
@@ -43,6 +51,7 @@ class EventChangeSource {
      * @ORM\Column(name="term_sign", type="string", nullable=false)
      */
     private $termSign;
+
 
     /**
      * @var Register
@@ -189,5 +198,29 @@ class EventChangeSource {
     public function getPanelImage()
     {
         return $this->panelImage;
+    }
+
+    /**
+     * Set panelImageSourceLabel
+     *
+     * @param string $panelImageSourceLabel
+     *
+     * @return EventChangeSource
+     */
+    public function setPanelImageSourceLabel($panelImageSourceLabel)
+    {
+        $this->panelImageSourceLabel = $panelImageSourceLabel;
+
+        return $this;
+    }
+
+    /**
+     * Get panelImageSourceLabel
+     *
+     * @return string
+     */
+    public function getPanelImageSourceLabel()
+    {
+        return $this->panelImageSourceLabel;
     }
 }

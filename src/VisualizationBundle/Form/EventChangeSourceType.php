@@ -45,6 +45,7 @@ class EventChangeSourceType extends AbstractType
                     'step' => 0.01
                 ]
             ])
+            ->add('panelImageSourceLabel')
             ->add('panelImageSource', HiddenType::class);
     }
 

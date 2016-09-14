@@ -22,7 +22,7 @@ class PageRepository extends EntityRepository
     public function findHideShowElements($page_id)
     {
         $panelImage = $this->getEntityManager()
-            ->createQuery('SELECT p.id as panel_id, e.termSign as term_sign, e.termValue as term_value, e.panelImageSource as source, rcd.fixedValue as value' .
+            ->createQuery('SELECT p.id as panel_id, e.termSign as term_sign, e.termValue as term_value, e.panelImageSource as source, e.panelImageSourceLabel as source_label, rcd.fixedValue as value' .
                 ' FROM VisualizationBundle:EventChangeSource e' .
                 ' JOIN e.panelImage p' .
                 ' JOIN e.termSource r' .
@@ -30,29 +30,23 @@ class PageRepository extends EntityRepository
                 ' WHERE p.page = ' . $page_id)->getArrayResult();
 
         $ret = [];
-//
-//        foreach ($panelImage as $element) {
-//            $term = explode(" ", $element['term']);
-//            if ($this->my_operator((float)$element['value'], (float)$term[1], $term[0])) {
-//                unset($element['term']);
-//                unset($element['value']);
-//                $element['show'] = true;
-//            } else {
-//                unset($element['term']);
-//                unset($element['value']);
-//                $element['show'] = false;
-//            }
-//            array_push($ret, $element);
-//        }
 
-        return $panelImage;
+        foreach ($panelImage as $element) {
+            if ($this->my_operator((float)$element['term_value'], (float)$element['value'], $element['term_sign'])) {
+                array_push($ret, $element);
+            }
+        }
+
+        return $ret;
     }
 
     private function my_operator($a, $b, $char)
     {
         switch ($char) {
-            case '==':
+            case '=':
                 return $a == $b;
+            case '!=':
+                return $a != $b;
             case '>':
                 return $a > $b;
             case '<':
@@ -61,8 +55,6 @@ class PageRepository extends EntityRepository
                 return $a <= $b;
             case '>=':
                 return $a >= $b;
-            case '!=':
-                return $a != $b;
         }
     }
 }
