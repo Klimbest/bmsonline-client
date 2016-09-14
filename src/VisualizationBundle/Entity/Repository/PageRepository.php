@@ -33,6 +33,9 @@ class PageRepository extends EntityRepository
 
         foreach ($panelImage as $element) {
             if ($this->my_operator((float)$element['term_value'], (float)$element['value'], $element['term_sign'])) {
+                unset($element['term_sign']);
+                unset($element['term_value']);
+                unset($element['value']);
                 array_push($ret, $element);
             }
         }

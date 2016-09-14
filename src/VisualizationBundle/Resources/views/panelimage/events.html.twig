@@ -27,7 +27,7 @@
                         <i class="fa fa-picture fa-green"></i>
                         <span title="{{ event.termSource.registerCurrentData.fixedValue }}">{{ event.termSource.name }}</span>
                         {{ event.termSign }} {{ event.termValue }}
-                        <img style="max-width: 25px; max-heitht:25px" src="{{ event.panelImageSource }}"/>
+                        <img style="max-width: 20px; max-height: 20px;" src="{{ event.panelImageSource }}"/>
                         <a href="{{ path('panelimage_eventchangesource_delete', {'id': panelImage.id, 'event_id': event.id}) }}">
                             <i class="fa fa-trash-o fa-red"></i>
                         </a>
