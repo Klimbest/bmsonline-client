@@ -128,10 +128,8 @@ class PanelVariableController extends Controller
      */
     public function eventsAction(PanelVariable $panelVariable)
     {
-
-        return $this->render('VisualizationBundle:events:show.html.twig', [
-            'element' => $panelVariable,
-            'element_type' => 'panelvariable'
+        return $this->render('VisualizationBundle:panelvariable:events.html.twig', [
+            'panelVariable' => $panelVariable,
         ]);
     }
 

@@ -124,10 +124,8 @@ class PanelTextController extends Controller
      */
     public function eventsAction(PanelText $panelText)
     {
-
-        return $this->render('VisualizationBundle:events:show.html.twig', [
-            'element' => $panelText,
-            'element_type' => 'paneltext'
+        return $this->render('VisualizationBundle:paneltext:events.html.twig', [
+            'panelText' => $panelText,
         ]);
     }
 

@@ -1,0 +1,33 @@
+{% extends 'VisualizationBundle::layout.html.twig' %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-3">
+            <h4 class="text-center"><span class="label label-primary">Kliknięcie</span>
+                <a href="{{ path('paneltext_eventlink_edit', {'id': panelText.id}) }}">
+                    <i class="fa fa-edit fa-green"></i>
+                </a>
+            </h4>
+            {% if panelText.eventLink %}
+                <i class="fa fa-file"></i> {{ panelText.eventLink.page }}
+            {% else %}
+                -
+            {% endif %}
+        </div>
+        <div class="col-md-3">
+            <h4 class="text-center"><span class="label label-primary">Animacja</span></h4>
+        </div>
+        <div class="col-md-3">
+            <h4 class="text-center"><span class="label label-primary">Matematyczne</span></h4>
+        </div>
+    </div>
+    <h1></h1>
+    <div class="row">
+        <div class="col-md-12">
+            <a class="btn btn-sm btn-warning" href="{{ path('page_show', {'id': panelText.page.id}) }}">
+                <i class="fa fa-arrow-left"></i> Wstecz
+            </a>
+        </div>
+    </div>
+{% endblock %}
