@@ -31,6 +31,9 @@
                         <a href="{{ path('panelimage_eventchangesource_delete', {'id': panelImage.id, 'event_id': event.id}) }}">
                             <i class="fa fa-trash-o fa-red"></i>
                         </a>
+                        <a href="{{ path('panelimage_eventchangesource_edit', {'id': event.id}) }}">
+                            <i class="fa fa-edit fa-blue"></i>
+                        </a>
                     </h5>
                 {% endfor %}
             {% else %}

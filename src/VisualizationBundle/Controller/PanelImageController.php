@@ -167,7 +167,7 @@ class PanelImageController extends Controller
     }
 
     /**
-     * Edit EventShowHide for PanelImage.
+     * Add EvencChangeSource for PanelImage.
      *
      * @Route("/{id}/eventchangesource/add", name="panelimage_eventchangesource_add")
      * @param Request $request
@@ -192,7 +192,36 @@ class PanelImageController extends Controller
 
         return $this->render('VisualizationBundle:events:form_event_change_source.html.twig', [
             'images' => $images,
-            'panelImage' => $panelImage,
+            'event' => $event,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Add EvencChangeSource for PanelImage.
+     *
+     * @Route("/eventchangesource/{id}/edit", name="panelimage_eventchangesource_edit")
+     * @param Request $request
+     * @param EventChangeSource $event
+     * @return Response
+     */
+    public function eventChangeSourceEditAction(Request $request, EventChangeSource $event)
+    {
+        $images = self::getImages();
+        $form = $this->createForm(EventChangeSourceType::class, $event);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($event);
+            $em->flush();
+
+            return $this->redirectToRoute('panelimage_events', ['id' => $event->getPanelImage()->getId()]);
+        }
+
+        return $this->render('VisualizationBundle:events:form_event_change_source.html.twig', [
+            'images' => $images,
+            'event' => $event,
             'form' => $form->createView(),
         ]);
     }

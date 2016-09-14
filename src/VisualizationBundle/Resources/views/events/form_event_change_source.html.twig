@@ -13,6 +13,16 @@
             $('select#event_change_source_termSource').selectpicker({
                 style: "btn dropdown-toggle btn-warning btn-sm"
             });
+            $("form").find("div.thumbnail-list div").hover(function () {
+                $(this).children("a").show();
+            }, function () {
+                $(this).children("a").hide();
+            });
+            {% if event.panelImageSource is not empty %}
+            var selected = $("img[src$='{{ event.panelImageSource }}']").parent("div");
+            setSelectedImage(selected);
+            {% endif %}
+            setAddingNewImage();
         });
     </script>
 {% endblock %}
