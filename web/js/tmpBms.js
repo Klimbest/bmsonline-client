@@ -74,6 +74,7 @@ function setPanelVariables(registers) {
     if (registers) {
         $.each(registers, function () {
             var panelVariable = $("div#" + this.panel_id + ".bms-panelvariable");
+            //noinspection JSUnresolvedVariable
             var value = this.fixed_value;
             if (value !== null) {
                 var displayPrecision = parseInt(panelVariable.find("input").val());
@@ -84,9 +85,9 @@ function setPanelVariables(registers) {
             if (old_value !== roundValue) {
                 panelVariable.find("span.bms-panel-content").empty().append(roundValue);
                 panelVariable.css({
-                    color: invert(old_color),
+                    color: invert(old_color)
                 }).animate({
-                    color: old_color,
+                    color: old_color
                 }, 500, "linear");
             }
         });
@@ -97,6 +98,13 @@ function setProgressBars(progressbars) {
     if (progressbars) {
         $.each(progressbars, function () {
             console.log(this);
+            var gadgetProgressBar = $("div#" + this.id + ".bms-gadgetprogressbar");
+            gadgetProgressBar.find("div#value").animate({
+                left: this.value + "%"
+            }, 500, "linear");
+            gadgetProgressBar.find("div#set").animate({
+                left: this.set + "%"
+            }, 500, "linear");
         });
     }
 }
@@ -105,8 +113,17 @@ function makeEventsHideShow(events) {
     if (events) {
         $.each(events, function () {
             var panelImage = $("div#" + this.panel_id + ".bms-panelimage");
-            panelImage.find("img").attr("src", this.source).attr("title", this.source_label);
-            panelImage.show();
+            var old_source = panelImage.find("img").attr("src");
+            if (old_source !== this.source) {
+                //noinspection JSUnresolvedVariable
+                panelImage.find("img").attr("src", this.source).attr("title", this.source_label);
+                panelImage.show();
+                panelImage.css({
+                    opacity: 0
+                }).animate({
+                    opacity: 1
+                }, 500, "linear");
+            }
         });
     }
 }
