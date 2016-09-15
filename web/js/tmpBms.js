@@ -81,11 +81,19 @@ function setPanelVariables(registers) {
                 var roundValue = parseFloat(value).toFixed(displayPrecision);
             }
             var old_color = panelVariable.css("color");
+            var old_backgroundColor = panelVariable.css("backgroundColor");
+            var old_opacity = panelVariable.css("opacity");
             var old_value = panelVariable.find("span.bms-panel-content").text();
             if (old_value !== roundValue) {
                 panelVariable.find("span.bms-panel-content").empty().append(roundValue);
-                panelVariable.css("color", "red").animate({
-                    color: old_color
+                panelVariable.css({
+                    color: "red",
+                    backgroundColor: "blue",
+                    opacity: 1
+                }).animate({
+                    color: old_color,
+                    backgroundColor: old_backgroundColor,
+                    opacity: old_opacity
                 }, 500, "linear");
             }
         });
