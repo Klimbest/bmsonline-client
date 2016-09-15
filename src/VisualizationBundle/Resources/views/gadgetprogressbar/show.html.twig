@@ -28,7 +28,7 @@
     {% set valuePoint = (gadgetProgressBar.valueRegisterId.registerCurrentData.fixedValue-gadgetProgressBar.rangeMin)/(gadgetProgressBar.rangeMax-gadgetProgressBar.rangeMin)*100|round(2, 'common') %}
     <div class="progress" style="margin-bottom: 0; overflow: hidden">
         <div id="value"
-             style="position: absolute; top:-1px; left: {{ valuePoint }}%; height: 50%; z-index: 15; border-left: 2px solid black;  color: black; margin-bottom: 10px;">
+             style="position: absolute; top:-1px; left: {{ valuePoint }}%; height: 50%; z-index: 15; border-left: 2px solid black;  color: black; margin-bottom: 10px; margin-left: 1px;">
 
         </div>
         {% if gadgetProgressBar.setRegisterId is not null %}
