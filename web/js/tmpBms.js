@@ -97,7 +97,6 @@ function setPanelVariables(registers) {
 function setProgressBars(progressbars) {
     if (progressbars) {
         $.each(progressbars, function () {
-            console.log(this);
             var gadgetProgressBar = $("div#" + this.id + ".bms-gadgetprogressbar");
             gadgetProgressBar.find("div#value").animate({
                 left: this.value + "%"
