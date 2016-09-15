@@ -59,7 +59,7 @@ class BmsController extends Controller
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
             $page_id = $request->get("page_id");
             $ret['registers'] = $panelVariableRepo->findVariablePanelsRegistersForPage($page_id);
-            $ret['progressbars'] = $gadgetProgressBarRepo->findForPage($page_id);
+            $ret['progressbars'] = $gadgetProgressBarRepo->findBy(['page' => $page_id]);
             $ret['hide_show_events'] = $pageRepo->findHideShowElements($page_id);
             $ret['devicesStatus'] = $deviceRepo->getDevicesStatus();
             $time = $technicalInformationRepo->getRpiStatus();
