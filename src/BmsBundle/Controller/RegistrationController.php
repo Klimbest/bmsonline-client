@@ -28,9 +28,10 @@ use FOS\UserBundle\Model\UserInterface;
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  * @author Christophe Coevoet <stof@notk.org>
  */
-class RegistrationController extends Controller {
-
-    public function registerAction(Request $request) {
+class RegistrationController extends Controller
+{
+    public function registerAction(Request $request)
+    {
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
         $formFactory = $this->get('fos_user.registration.form.factory');
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
@@ -50,60 +51,75 @@ class RegistrationController extends Controller {
 
         $form = $formFactory->createForm();
         $form->setData($user);
+
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $event = new FormEvent($form, $request);
-            $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $event = new FormEvent($form, $request);
+                $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
+                $user->setUsername($user->getEmail());
+                $userManager->updateUser($user);
 
-            $user->setUsername($user->getEmail());
-            $userManager->updateUser($user);
+                if (null === $response = $event->getResponse()) {
+                    $url = $this->generateUrl('fos_user_registration_confirmed');
+                    $response = new RedirectResponse($url);
+                }
 
-            if (null === $response = $event->getResponse()) {
-                $url = $this->generateUrl('fos_user_registration_confirmed');
-                $response = new RedirectResponse($url);
+                $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+
+                return $response;
             }
 
-            $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+            $event = new FormEvent($form, $request);
+            $dispatcher->dispatch(FOSUserEvents::REGISTRATION_FAILURE, $event);
 
-            return $response;
+            if (null !== $response = $event->getResponse()) {
+                return $response;
+            }
         }
 
         return $this->render('FOSUserBundle:Registration:register.html.twig', array(
-                    'form' => $form->createView(),
+            'form' => $form->createView(),
         ));
     }
 
     /**
      * Tell the user to check his email provider
      */
-    public function checkEmailAction() {
+    public function checkEmailAction()
+    {
         $email = $this->get('session')->get('fos_user_send_confirmation_email/email');
+
+        if (empty($email)) {
+            return new RedirectResponse($this->get('router')->generate('fos_user_registration_register'));
+        }
+
         $this->get('session')->remove('fos_user_send_confirmation_email/email');
         $user = $this->get('fos_user.user_manager')->findUserByEmail($email);
 
         if (null === $user) {
-            $session = $request->getSession();
             $this->get('session')->getFlashBag()->add('success', 'E-mail potwierdzony, poczekaj na aktywację przez administratora.');
-            return new RedirectResponse($this->container->get('router')->generate('fos_user_security_login'));
+            return new RedirectResponse($this->get('router')->generate('fos_user_security_login'));
         }
 
         return $this->render('FOSUserBundle:Registration:checkEmail.html.twig', array(
-                    'user' => $user,
+            'user' => $user,
         ));
     }
 
     /**
      * Receive the confirmation token from user email provider, login the user
      */
-    public function confirmAction(Request $request, $token) {
+    public function confirmAction(Request $request, $token)
+    {
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
         $userManager = $this->get('fos_user.user_manager');
 
         $user = $userManager->findUserByConfirmationToken($token);
 
         if (null === $user) {
-            return $this->render('BmsBundle:Resetting:registrationAlreadyConfirmed');
+            throw new NotFoundHttpException(sprintf('The user with confirmation token "%s" does not exist', $token));
         }
 
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
@@ -112,14 +128,13 @@ class RegistrationController extends Controller {
         $user->setConfirmationToken(null);
         $user->setEnabled(true);
         $user->setLocked(true);
-
         $event = new GetResponseUserEvent($user, $request);
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRM, $event);
 
         $userManager->updateUser($user);
 
         if (null === $response = $event->getResponse()) {
-            $url = $this->generateUrl('fos_user_security_login');
+            $url = $this->generateUrl('fos_user_registration_confirmed');
             $response = new RedirectResponse($url);
         }
 
@@ -131,19 +146,21 @@ class RegistrationController extends Controller {
     /**
      * Tell the user his account is now confirmed
      */
-    public function confirmedAction() {
+    public function confirmedAction()
+    {
         $user = $this->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
         return $this->render('FOSUserBundle:Registration:confirmed.html.twig', array(
-                    'user' => $user,
-                    'targetUrl' => $this->getTargetUrlFromSession(),
+            'user' => $user,
+            'targetUrl' => $this->getTargetUrlFromSession(),
         ));
     }
 
-    private function getTargetUrlFromSession() {
+    private function getTargetUrlFromSession()
+    {
         // Set the SecurityContext for Symfony <2.6
         if (interface_exists('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')) {
             $tokenStorage = $this->get('security.token_storage');
@@ -157,5 +174,4 @@ class RegistrationController extends Controller {
             return $this->get('session')->get($key);
         }
     }
-
 }

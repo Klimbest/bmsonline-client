@@ -11,6 +11,7 @@
 
 namespace BmsBundle\Controller;
 
+use FOS\UserBundle\Event\GetResponseNullableUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
@@ -20,6 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Controller managing the resetting of the password
@@ -46,11 +48,28 @@ class ResettingController extends Controller
 
         /** @var $user UserInterface */
         $user = $this->get('fos_user.user_manager')->findUserByUsernameOrEmail($username);
+        /** @var $dispatcher EventDispatcherInterface */
+        $dispatcher = $this->get('event_dispatcher');
+
+        /* Dispatch init event */
+        $event = new GetResponseNullableUserEvent($user, $request);
+        $dispatcher->dispatch(FOSUserEvents::RESETTING_SEND_EMAIL_INITIALIZE, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
 
         if (null === $user) {
             return $this->render('FOSUserBundle:Resetting:request.html.twig', array(
                 'invalid_username' => $username
             ));
+        }
+
+        $event = new GetResponseUserEvent($user, $request);
+        $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_REQUEST, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
         }
 
         if ($user->isPasswordRequestNonExpired($this->container->getParameter('fos_user.resetting.token_ttl'))) {
@@ -63,10 +82,25 @@ class ResettingController extends Controller
             $user->setConfirmationToken($tokenGenerator->generateToken());
         }
 
+        /* Dispatch confirm event */
+        $event = new GetResponseUserEvent($user, $request);
+        $dispatcher->dispatch(FOSUserEvents::RESETTING_SEND_EMAIL_CONFIRM, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
         $this->get('fos_user.mailer')->sendResettingEmailMessage($user);
         $user->setPasswordRequestedAt(new \DateTime());
         $this->get('fos_user.user_manager')->updateUser($user);
 
+
+        /* Dispatch completed event */
+        $event = new GetResponseUserEvent($user, $request);
+        $dispatcher->dispatch(FOSUserEvents::RESETTING_SEND_EMAIL_COMPLETED, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
         return new RedirectResponse($this->generateUrl('fos_user_resetting_check_email',
             array('email' => $this->getObfuscatedEmail($user))
         ));
@@ -104,7 +138,7 @@ class ResettingController extends Controller
         $user = $userManager->findUserByConfirmationToken($token);
 
         if (null === $user) {
-            return $this->render('BmsBundle:Resetting:passwordAlreadyChanged.html.twig');
+            throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
         }
 
         $event = new GetResponseUserEvent($user, $request);
@@ -126,8 +160,7 @@ class ResettingController extends Controller
             $userManager->updateUser($user);
 
             if (null === $response = $event->getResponse()) {
-                $session = $request->getSession();
-                $session->getFlashBag()->add('success', 'Hasło poprawnie zmienione, możesz się zalogować.');
+                $this->get('session')->getFlashBag()->add('success', 'Hasło poprawnie zmienione, możesz się zalogować.');
                 $url = $this->generateUrl('fos_user_security_login');
                 $response = new RedirectResponse($url);
             }
