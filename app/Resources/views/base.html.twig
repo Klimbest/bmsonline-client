@@ -100,8 +100,12 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-clock">
-                <li><a href="#"><span class="hidden-md">Czas: </span><span
-                                class="clock">{{ "now"|date("H:i:s") }}</span></a></li>
+                <li>
+                    <a href="#">
+                        <span class="clock">{{ "now"|date("H:i:s") }} - </span>
+                        <span class="hidden-md">{{ "now"|localizeddate('none', 'none', app.request.locale, "Europe/Warsaw", "cccc d MMMM Y") }}</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

@@ -88,7 +88,7 @@ function setPanelVariables(registers) {
 function setProgressBars(progressbars) {
     if (progressbars) {
         $.each(progressbars, function () {
-            // console.log(this);
+            console.log(this);
         });
     }
 }
