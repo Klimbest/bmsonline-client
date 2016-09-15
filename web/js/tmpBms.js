@@ -80,7 +80,11 @@ function setPanelVariables(registers) {
                 var displayPrecision = parseInt(panelVariable.find("input").val());
                 var roundValue = parseFloat(value).toFixed(displayPrecision);
             }
+            var old_color = panelVariable.css("color");
             panelVariable.find("span.bms-panel-content").empty().append(roundValue);
+            panelVariable.css("color", "red").animate({
+                color: old_color
+            }, 500, "linear");
         });
     }
 }
