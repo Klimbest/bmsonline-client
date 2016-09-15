@@ -2,7 +2,6 @@
         {% if (panelText.eventLink is not empty) %}
             onclick="ajaxChangePage({{ panelText.eventLink.page.id }});"
         {% endif %}
-        name="{{ panelText.name }}"
         id="{{ panelText.id }}"
         class="bms-panel bms-paneltext text-{{ panelText.textAlign }}"
         style="
