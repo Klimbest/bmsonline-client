@@ -13,6 +13,7 @@ $(document).ready(function () {
             $.cookie('noShowWelcome', true);
         });
     }
+    setInterval(clock, 1000);
     setGenerateVisualization();
 });
 

@@ -8,6 +8,7 @@ $(document).ready(function () {
     $("input#pattern-net-size").change(function () {
         setPatternNet($(this).val());
     });
+
 });
 
 function togglePatternNet() {

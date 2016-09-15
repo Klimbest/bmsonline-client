@@ -14,7 +14,6 @@ $(document).ready(function () {
         refreshPage();
     }, 1000 * 10);
 
-    setInterval(clock, 1000);
     setInterval(counter, 1000);
     tableEvents();
 
