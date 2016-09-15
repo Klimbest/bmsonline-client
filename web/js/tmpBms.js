@@ -62,7 +62,7 @@ function ajaxRefreshPage() {
             $("span.timer").removeClass("label-danger").addClass("label-primary");
             setState(ret['state'], ret['devicesStatus']);
             setPanelVariables(ret['registers']);
-            // setProgressBars(ret['progressbars']);
+            setProgressBars(ret['progressbars']);
             makeEventsHideShow(ret['events_change_source'])
         }
     });
