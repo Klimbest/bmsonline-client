@@ -81,10 +81,13 @@ function setPanelVariables(registers) {
                 var roundValue = parseFloat(value).toFixed(displayPrecision);
             }
             var old_color = panelVariable.css("color");
-            panelVariable.find("span.bms-panel-content").empty().append(roundValue);
-            panelVariable.css("color", "red").animate({
-                color: old_color
-            }, 500, "linear");
+            var old_value = panelVariable.find("span.bms-panel-content").text();
+            if (old_value !== roundValue) {
+                panelVariable.find("span.bms-panel-content").empty().append(roundValue);
+                panelVariable.css("color", "red").animate({
+                    color: old_color
+                }, 500, "linear");
+            }
         });
     }
 }
@@ -97,7 +100,7 @@ function setProgressBars(progressbars) {
     }
 }
 
-function makeEventsHideShow(events){
+function makeEventsHideShow(events) {
     if (events) {
         $.each(events, function () {
             var panelImage = $("div#" + this.panel_id + ".bms-panelimage");
