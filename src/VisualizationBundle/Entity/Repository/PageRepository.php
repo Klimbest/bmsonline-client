@@ -19,45 +19,5 @@ class PageRepository extends EntityRepository
             ->createQuery('SELECT p FROM VisualizationBundle:Page p')->setMaxResults(1)->getOneOrNullResult();
     }
 
-    public function findHideShowElements($page_id)
-    {
-        $panelImage = $this->getEntityManager()
-            ->createQuery('SELECT p.id as panel_id, e.termSign as term_sign, e.termValue as term_value, e.panelImageSource as source, e.panelImageSourceLabel as source_label, rcd.fixedValue as value' .
-                ' FROM VisualizationBundle:EventChangeSource e' .
-                ' JOIN e.panelImage p' .
-                ' JOIN e.termSource r' .
-                ' JOIN r.registerCurrentData rcd' .
-                ' WHERE p.page = ' . $page_id)->getArrayResult();
 
-        $ret = [];
-
-        foreach ($panelImage as $element) {
-            if ($this->my_operator((float)$element['term_value'], (float)$element['value'], $element['term_sign'])) {
-                unset($element['term_sign']);
-                unset($element['term_value']);
-                unset($element['value']);
-                array_push($ret, $element);
-            }
-        }
-
-        return $ret;
-    }
-
-    private function my_operator($a, $b, $char)
-    {
-        switch ($char) {
-            case '=':
-                return $a == $b;
-            case '!=':
-                return $a != $b;
-            case '>':
-                return $a > $b;
-            case '<':
-                return $a < $b;
-            case '<=':
-                return $a <= $b;
-            case '>=':
-                return $a >= $b;
-        }
-    }
 }

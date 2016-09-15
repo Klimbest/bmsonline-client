@@ -10,4 +10,10 @@ namespace VisualizationBundle\Entity\Repository;
  */
 class GadgetProgressBarRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function findForPage($page_id)
+    {
+
+
+    }
 }

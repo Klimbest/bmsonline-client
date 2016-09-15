@@ -63,7 +63,7 @@ function ajaxRefreshPage() {
             setState(ret['state'], ret['devicesStatus']);
             setPanelVariables(ret['registers']);
             // setProgressBars(ret['progressbars']);
-            makeEventsHideShow(ret['hide_show_events'])
+            makeEventsHideShow(ret['events_change_source'])
         }
     });
     count = 0;
