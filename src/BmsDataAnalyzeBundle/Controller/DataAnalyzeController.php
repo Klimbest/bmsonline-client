@@ -31,12 +31,14 @@ class DataAnalyzeController extends Controller
     {
         $detailChart->global->useUTC(false);
         $detailChart->colors = ['#2f7ed8', '#ffffff', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'];
-        $detailChart->chart->renderTo('detailContainer')
+        $detailChart->chart
+            ->renderTo('detailContainer')
             ->reflow(true)
             ->backgroundColor("#272b30")
             ->color("#c8c8c8");
         $detailChart->credits->enabled(false);
-        $detailChart->title->text('Pomiar danych, wykres odświeża się automatycznie')
+        $detailChart->title
+            ->text('Pomiar danych, wykres odświeża się automatycznie')
             ->style(["color" => "#c8c8c8"]);
         $detailChart->xAxis->type('datetime');
         $yAxis = array(
@@ -102,17 +104,12 @@ class DataAnalyzeController extends Controller
             ->shared(false)
             ->style(['width' => '250px'])
             ->useHTML(true);
-        $detailChart->legend->align('right')
-            ->y(25)
-            ->x(-50)
-            ->width(150)
+        $detailChart->legend
+            ->align('left')
             ->itemStyle(['color' => '#c8c8c8'])
-            ->verticalAlign('top')
+            ->verticalAlign('bottom')
             ->useHTML(true)
-            ->layout('vertical')
-            ->padding(3)
-            ->itemMarginTop(3)
-            ->itemMarginBottom(0)
+            ->layout('horizontal')
             ->itemHoverStyle(['color' => '#5BC0DE']);
         $detailChart->series();
 //        $detailChart->plotOptions->series([
