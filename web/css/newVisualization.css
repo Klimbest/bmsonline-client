@@ -172,7 +172,7 @@ div.bms-gadgetprogressbar div.progress div#value {
     margin-left: 1px;
 }
 
-div.bms-gadgetprogressbar div.progress div#value {
+div.bms-gadgetprogressbar div.progress div#set {
     position: absolute;
     top: -3px;
     left: 0;
