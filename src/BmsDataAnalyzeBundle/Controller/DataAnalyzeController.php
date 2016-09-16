@@ -110,7 +110,8 @@ class DataAnalyzeController extends Controller
             ->verticalAlign('bottom')
             ->useHTML(true)
             ->layout('horizontal')
-            ->itemHoverStyle(['color' => '#5BC0DE']);
+            ->itemHoverStyle(['color' => '#5BC0DE'])
+            ->itemHiddenStyle(['color' => '#000000']);
         $detailChart->series();
 //        $detailChart->plotOptions->series([
 //            'marker' => [
