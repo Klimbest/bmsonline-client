@@ -111,6 +111,9 @@ span.toggler.off {
 div.thumbnail-list {
     max-height: 250px;
     overflow-y: auto;
+    border: 1px solid #7a8288;
+    border-radius: 5px;
+    box-shadow: none;
 }
 
 div.thumbnail-list div {

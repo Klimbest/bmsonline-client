@@ -65,7 +65,7 @@
                     <div class="row">
                         <div class="col-md-12 text-center">
                             <h4><span class="label label-success">Obrazy użytkownika</span></h4>
-                            <div class="thumbnail-list text-left">
+                            <div class="well thumbnail-list text-left">
                                 {% for image in images['user'] %}
                                     <div id="{{ image }}" class="text-center" onclick="setSelectedImage(this)"
                                          title="{{ image }}">
@@ -83,7 +83,7 @@
                     <div class="row">
                         <div class="col-md-12 text-center">
                             <h4><span class="label label-warning">Obrazy systemowe</span></h4>
-                            <div class="thumbnail-list text-left">
+                            <div class="well thumbnail-list text-left">
                                 {% for image in images['system'] %}
                                     <div id="{{ image }}" class="text-center" onclick="setSelectedImage(this)"
                                          title="{{ image }}">
