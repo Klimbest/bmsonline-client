@@ -130,7 +130,6 @@ function setDialogButtons() {
         var yAxis = $('input[name=axType]:checked').val();
         registersToChart.push([regId, parseInt(yAxis)]);
         loadData(regId, dtpStart, dtpEnd, parseInt(yAxis));
-        $("option#" + parseInt(regId)).hide();
     });
 }
 //załadowanie danych

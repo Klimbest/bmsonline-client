@@ -43,9 +43,6 @@ class DataAnalyzeController extends Controller
         $detailChart->xAxis->type('datetime');
         $yAxis = array(
             array(
-                'tickInterval' => 1,
-                'floor' => 0,
-                'ceiling' => 100,
                 'title' => array(
                     'offset' => 0,
                     'text' => '%',
@@ -62,8 +59,6 @@ class DataAnalyzeController extends Controller
                 'opposite' => true,
             ),
             array(
-                'tickInterval' => 0.5,
-                'ceiling' => 40,
                 'title' => array(
                     'offset' => 0,
                     'text' => '°C',
@@ -79,8 +74,6 @@ class DataAnalyzeController extends Controller
                 'showEmpty' => false
             ),
             array(
-                'tickInterval' => 1,
-                'floor' => 0,
                 'title' => array(
                     'offset' => 0,
                     'text' => 'num',

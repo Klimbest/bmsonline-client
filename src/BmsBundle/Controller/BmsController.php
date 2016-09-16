@@ -37,7 +37,7 @@ class BmsController extends Controller
                 $page_id = $page->getId();
             }
 
-            $ret['template'] = $this->container->get('templating')->render('BmsBundle:Pages:' . $page_id . '.html.twig');
+            $ret['template'] = $this->get('templating')->render('BmsBundle:Pages:' . $page_id . '.html.twig');
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
