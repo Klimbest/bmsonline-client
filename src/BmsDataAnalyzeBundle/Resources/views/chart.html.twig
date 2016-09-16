@@ -1,4 +1,3 @@
-
 <form class="form-inline" role="form">
     <div class="row">
         <div class="col-sm-12">
@@ -37,7 +36,7 @@
                 <div class="col-sm-12">
                     <label for="customValue">Wartość dodatkowej linii: </label>
                     <input type="number" step="0.1" class="form-control" id="customValue">
-                    <input id="customColor" type="color" class="form-control" value="#bb0000" />
+                    <input id="customColor" type="color" class="form-control" value="#bb0000"/>
                     <button id="addCustomLine" type="button" class="btn btn-default">Dodaj linię</button>
                 </div>
             </div>
@@ -48,15 +47,18 @@
                     <div class="form-group-sm">
                         <select class="form-control" id="avRegs" data-live-search="data-live-search">
                             {% for register in registers %}
-                                <option value="{{register.id}}">{{register.id}} - ({{register.name}}) {{register.description|length > 20 ? register.description|slice(0, 20) ~ '...' : register.description}}</option>
+                                <option value="{{ register.id }}">{{ register.id }} - ({{ register.name }}
+                                    ) {{ register.description|length > 20 ? register.description|slice(0, 20) ~ '...' : register.description }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <button id="addSeries" type="button" class="btn btn-success btn-sm">Dodaj serie</button>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-6 text-left">
+                    <button id="addSeries" type="button" class="btn btn-success btn-sm">Dodaj serie</button>
+                </div>
+                <div class="col-sm-6 text-right">
                     <span class="label label-primary">Do której skali przypisać?</span>
                     <label class="radio-inline"><input type="radio" name="axType" value="2">num</label>
                     <label class="radio-inline"><input type="radio" name="axType" value="1" checked>°C</label>
