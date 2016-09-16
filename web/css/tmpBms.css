@@ -2,29 +2,7 @@
 .page{
     margin: 0 auto;
     position: relative;
-    padding: 0px;
+    padding: 0;
     overflow: hidden;
     background-color: #fff;
-}
-/*PANELE*/
-.bms-panel{
-    position: absolute;
-    cursor: default;
-}
-
-.bms-panel.navigation-panel{
-    cursor: pointer;
-}
-
-div.progress{
-    height: 10px;
-    line-height: 10px;
-}
-
-div.progress-label{
-    height: 15px;
-    margin-bottom: 0px;
-    overflow: visible;
-    line-height: 15px;
-    background-color: rgba(0,0,0,0);
 }

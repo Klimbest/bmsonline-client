@@ -23,7 +23,7 @@ and open the template in the editor.
     z-index:999;
 }
 .navbar{
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 
@@ -33,7 +33,7 @@ div.content-container{
 }
 
 .well{
-    border-radius: 0px;
+    border-radius: 0;
     border: solid 1px #337AB7;
     margin-bottom: 5px;
     /*padding-top: 0;*/
@@ -48,10 +48,7 @@ div.content-container{
     -webkit-box-shadow: 0 0 8px #337AB7;
     box-shadow: 0 0 8px #337AB7;
 }
-.progress{
-    background-color: #aaaaaa;
-    height: 10px;
-}
+
 .error-message{
     display: none;
     z-index:999;
@@ -112,6 +109,24 @@ ul.navbar-clock{
     transform: translate(-50%);
 }
 
+/*PANELE*/
+.bms-panel{
+    position: absolute;
+    cursor: default;
+}
+
+div.progress{
+    height: 10px;
+    line-height: 10px;
+}
+
+div.progress-label{
+    height: 15px;
+    margin-bottom: 0;
+    overflow: visible;
+    line-height: 15px;
+    background-color: rgba(0,0,0,0);
+}
 
 div.progress-label {
     height: 15px;
