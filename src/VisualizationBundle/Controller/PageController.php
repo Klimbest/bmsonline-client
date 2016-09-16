@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use VisualizationBundle\Entity\EventLink;
 use VisualizationBundle\Entity\Page;
 use VisualizationBundle\Form\PageType;
 
@@ -35,6 +36,11 @@ class PageController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($page);
+
+            $eventLink = new EventLink();
+            $eventLink->setPage($page);
+            $em->persist($eventLink);
+
             $em->flush();
 
             return $this->redirectToRoute('page_show', ['id' => $page->getId()]);
@@ -128,6 +134,7 @@ class PageController extends Controller
         foreach($page->getGadgetsProgressBar() as $element){
             $em->remove($element);
         }
+
         $em->remove($page);
         $em->flush();
 
