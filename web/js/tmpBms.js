@@ -57,7 +57,6 @@ function ajaxRefreshPage() {
         url: Routing.generate('bms_refresh_page'),
         data: data,
         success: function (ret) {
-            $(".content-container").children(".fa-spinner").remove();
             $("span.timer").removeClass("label-danger").addClass("label-primary");
             setState(ret['state'], ret['devicesStatus']);
             setPanelVariables(ret['registers']);
@@ -66,7 +65,6 @@ function ajaxRefreshPage() {
         }
     });
     count = 0;
-    $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 
 }
 
