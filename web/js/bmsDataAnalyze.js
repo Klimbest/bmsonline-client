@@ -1,6 +1,6 @@
 /* global registersToChart */
 
-registersToChart = [];
+var registersToChart = [];
 $(document).ready(function () {
     var mchart = $('#masterContainer').highcharts();
     var dchart = $('#detailContainer').highcharts();
@@ -8,9 +8,6 @@ $(document).ready(function () {
     var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
     var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
 
-    $.each(registersToChart, function (key, value) {
-        loadData(value[0], dtpStart, dtpEnd, value[1]);
-    });
     mchart.xAxis[0].addPlotBand({
         id: 'mask-before',
         from: mchart.xAxis[0].min,
@@ -28,93 +25,105 @@ $(document).ready(function () {
 
 //ustawienie zakresu danych
 function setDialogButtons() {
-    var now = new Date();
-    var yesterday = new Date();
-    var mchart = $('#masterContainer').highcharts();
-    var dchart = $('#detailContainer').highcharts();
-    yesterday.setHours(now.getHours() - 3);
-    //$.datetimepicker.setLocale('pl');
-    $("input#dtpStart").datetimepicker({
-        lang: 'pl',
-        format: 'Y-m-d H:i',
-        mask: true,
-        value: yesterday
-    });
-    $("input#dtpEnd").datetimepicker({
-        lang: 'pl',
-        format: 'Y-m-d H:i',
-        mask: true,
-        value: now
-    });
-    //obsługa przycisku ustawienia zakresu na ostatnią godzinę 
-    $("#setHour").click(function () {
-        var now = new Date();
-        var ago = new Date();
-        ago.setHours(now.getHours() - 1);
-        $("input#dtpStart").datetimepicker({value: ago});
-        $("input#dtpEnd").datetimepicker({value: now});
-
-    });
-    //obsługa przycisku ustawienia zakresu na ostatni dzień
-    $("#setDay").click(function () {
-        var now = new Date();
-        var ago = new Date();
-        ago.setDate(now.getDate() - 1);
-        $("input#dtpStart").datetimepicker({value: ago});
-        $("input#dtpEnd").datetimepicker({value: now});
-    });
-    //obsługa przycisku ustawienia zakresu na ostatni weekend 
-    $("#setWeek").click(function () {
-        var now = new Date();
-        var ago = new Date();
-        ago.setDate(now.getDate() - 7);
-        $("input#dtpStart").datetimepicker({value: ago});
-        $("input#dtpEnd").datetimepicker({value: now});
-    });
-    //obsługa przycisku ustawienia zakresu na ostatni miesiąc 
-    $("#setMonth").click(function () {
-        var now = new Date();
-        var ago = new Date();
-        ago.setMonth(now.getMonth() - 1);
-        $("input#dtpStart").datetimepicker({value: ago});
-        $("input#dtpEnd").datetimepicker({value: now});
-    });
-    //obsługa przycisku ustawienia zakresu na ostatni rok 
-    $("#setYear").click(function () {
-        var now = new Date();
-        var ago = new Date();
-        ago.setFullYear(now.getFullYear() - 1);
-        $("input#dtpStart").datetimepicker({value: ago});
-        $("input#dtpEnd").datetimepicker({value: now});
-    });
-    //obsługa przycisku ustawienia zakresu na cały zakres 
-    $("#setAll").click(function () {
-        var now = new Date();
-        var ago = new Date(0);
-        $("input#dtpStart").datetimepicker({value: ago});
-        $("input#dtpEnd").datetimepicker({value: now});
-    });
-    //zmiana zakresu
-    $("#changeScope").click(function () {
-        while (dchart.series.length > 0)
-            dchart.series[0].remove(true);
-        while (mchart.series.length > 0)
-            mchart.series[0].remove(true);
-
-        dchart.colorCounter = 0;
-        mchart.colorCounter = 0;
-        dchart.symbolCounter = 0;
-        mchart.symbolCounter = 0;
-
-        var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
-        var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
-        $.each(registersToChart, function (key, value) {
-            loadData(value[0], dtpStart, dtpEnd, value[1]);
-        });
-
-    });
+    $("div#detailContainer").hide();
     //przycisk dodania serii
     $("#addSeries").click(function () {
+        var now = new Date();
+        var yesterday = new Date();
+        var mchart = $('#masterContainer').highcharts();
+        var dchart = $('#detailContainer').highcharts();
+        var controls = $("div#controls");
+        $("div#detailContainer").show();
+        controls.show();
+        yesterday.setHours(now.getHours() - 3);
+        //$.datetimepicker.setLocale('pl');
+        $("input#dtpStart").datetimepicker({
+            lang: 'pl',
+            format: 'Y-m-d H:i',
+            mask: true,
+            value: yesterday
+        });
+        $("input#dtpEnd").datetimepicker({
+            lang: 'pl',
+            format: 'Y-m-d H:i',
+            mask: true,
+            value: now
+        });
+        //obsługa przycisku ustawienia zakresu na ostatnią godzinę
+        $("#setHour").click(function () {
+            var now = new Date();
+            var ago = new Date();
+            ago.setHours(now.getHours() - 1);
+            $("input#dtpStart").datetimepicker({value: ago});
+            $("input#dtpEnd").datetimepicker({value: now});
+
+        });
+        //obsługa przycisku ustawienia zakresu na ostatni dzień
+        $("#setDay").click(function () {
+            var now = new Date();
+            var ago = new Date();
+            ago.setDate(now.getDate() - 1);
+            $("input#dtpStart").datetimepicker({value: ago});
+            $("input#dtpEnd").datetimepicker({value: now});
+        });
+        //obsługa przycisku ustawienia zakresu na ostatni weekend
+        $("#setWeek").click(function () {
+            var now = new Date();
+            var ago = new Date();
+            ago.setDate(now.getDate() - 7);
+            $("input#dtpStart").datetimepicker({value: ago});
+            $("input#dtpEnd").datetimepicker({value: now});
+        });
+        //obsługa przycisku ustawienia zakresu na ostatni miesiąc
+        $("#setMonth").click(function () {
+            var now = new Date();
+            var ago = new Date();
+            ago.setMonth(now.getMonth() - 1);
+            $("input#dtpStart").datetimepicker({value: ago});
+            $("input#dtpEnd").datetimepicker({value: now});
+        });
+        //obsługa przycisku ustawienia zakresu na ostatni rok
+        $("#setYear").click(function () {
+            var now = new Date();
+            var ago = new Date();
+            ago.setFullYear(now.getFullYear() - 1);
+            $("input#dtpStart").datetimepicker({value: ago});
+            $("input#dtpEnd").datetimepicker({value: now});
+        });
+        //obsługa przycisku ustawienia zakresu na cały zakres
+        $("#setAll").click(function () {
+            var now = new Date();
+            var ago = new Date(0);
+            $("input#dtpStart").datetimepicker({value: ago});
+            $("input#dtpEnd").datetimepicker({value: now});
+        });
+        //zmiana zakresu
+        $("#changeScope").click(function () {
+            while (dchart.series.length > 0)
+                dchart.series[0].remove(true);
+            while (mchart.series.length > 0)
+                mchart.series[0].remove(true);
+
+            dchart.colorCounter = 0;
+            mchart.colorCounter = 0;
+            dchart.symbolCounter = 0;
+            mchart.symbolCounter = 0;
+
+            var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
+            var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
+            $.each(registersToChart, function (key, value) {
+                loadData(value[0], dtpStart, dtpEnd, value[1]);
+            });
+
+        });
+        //dodanie dowolnej linii
+        $("#addCustomLine").click(function () {
+            var yAxis = $('input[name=axType]:checked').val();
+            var value = parseFloat($('input#customValue').val());
+            var color = $('input#customColor').val();
+            addCustomLine(value, yAxis, color);
+        });
+
         var regId = $("select#avRegs").val();
         var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
         var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
@@ -122,12 +131,6 @@ function setDialogButtons() {
         registersToChart.push([regId, parseInt(yAxis)]);
         loadData(regId, dtpStart, dtpEnd, parseInt(yAxis));
         $("option#" + parseInt(regId)).hide();
-    });
-    $("#addCustomLine").click(function () {
-        var yAxis = $('input[name=axType]:checked').val();
-        var value = parseFloat($('input#customValue').val());
-        var color = $('input#customColor').val();
-        addCustomLine(value, yAxis, color);
     });
 }
 //załadowanie danych
@@ -191,7 +194,9 @@ function addCustomLine(value, yAxis, color) {
 
 
 function setClickable() {
-    $(".highcharts-legend-item").find("i").each(function () {
+    var legendItem = $(".highcharts-legend-item");
+
+    legendItem.find("i").each(function () {
         $(this).unbind("click").click(function () {
             var mchart = $('#masterContainer').highcharts();
             var dchart = $('#detailContainer').highcharts();
@@ -203,7 +208,7 @@ function setClickable() {
             $("." + id).show();
         });
     });
-    $(".highcharts-legend-item").hover(function () {
+    legendItem.hover(function () {
         $(this).find("i").show();
 
     }, function () {
