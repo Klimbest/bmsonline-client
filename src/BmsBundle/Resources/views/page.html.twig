@@ -20,6 +20,9 @@
         {% for gadgetProgressBar in page.gadgetsProgressBar %}
             {% include 'VisualizationBundle:gadgetprogressbar:show.html.twig' %}
         {% endfor %}
+        {% for gadgetChart in page.gadgetsChart %}
+            {% include 'VisualizationBundle:gadgetchart:show.html.twig' %}
+        {% endfor %}
 
         {% for inputButton in page.inputsButton %}
             {% include 'VisualizationBundle:inputbutton:show.html.twig' %}

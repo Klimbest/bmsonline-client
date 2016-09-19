@@ -47,7 +47,7 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
                 array_push($arrayToChart, [$time, $rad["fixedValue"]]);
             }
             $series = [
-                'data' => [1, 2, 4, 3, 5, 7, 8, 1, 2, 3, 1, 8, 12, 9, 4],//$arrayToChart,
+                'data' => $arrayToChart,
                 'color' => $element->getColor(),
                 'lineWidth' => 1,
                 'marker' => [
