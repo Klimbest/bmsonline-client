@@ -19,7 +19,26 @@
         <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     {% endblock %}
 </head>
+
 <body>
+{% block javascripts %}
+    <script src="{{ asset('js/__jquery-1.11.3.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
+    <script src="{{ asset('js/datetimepicker-master/jquery.datetimepicker.js') }}"></script>
+    <script src="{{ asset('js/_bootstrap.js') }}"></script>
+    <script src="{{ asset('js/ie10-viewport-bug-workaround.js') }}"></script>
+    <script src="{{ asset('js/jquery.cookie.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.js') }}"></script>
+    <script src="{{ asset('js/jquery.formatDateTime.js') }}"></script>
+    <script src="{{ asset('js/jquery.ui.resizable.snap.ext.js') }}"></script>
+    <script src="{{ asset('js/jquery.ae.image.resize.js') }}"></script>
+    <script src="{{ asset('js/jquery.form.js') }}"></script>
+    <script src="{{ asset('js/ajaxq.js') }}"></script>
+    <script src="{{ asset('js/highcharts/highcharts.js')}}"></script>
+    <script src="{{ asset('js/highcharts/modules/exporting.js')}}"></script>
+{% endblock %}
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -119,21 +138,5 @@
     {% endblock %}
 </div>
 
-{% block javascripts %}
-    <script src="{{ asset('js/__jquery-1.11.3.js') }}"></script>
-    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
-    <script src="{{ asset('js/datetimepicker-master/jquery.datetimepicker.js') }}"></script>
-    <script src="{{ asset('js/_bootstrap.js') }}"></script>
-    <script src="{{ asset('js/ie10-viewport-bug-workaround.js') }}"></script>
-    <script src="{{ asset('js/jquery.cookie.js') }}"></script>
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="{{ asset('js/jquery.formatDateTime.js') }}"></script>
-    <script src="{{ asset('js/jquery.ui.resizable.snap.ext.js') }}"></script>
-    <script src="{{ asset('js/jquery.ae.image.resize.js') }}"></script>
-    <script src="{{ asset('js/jquery.form.js') }}"></script>
-    <script src="{{ asset('js/ajaxq.js') }}"></script>
-{% endblock %}
 </body>
 </html>

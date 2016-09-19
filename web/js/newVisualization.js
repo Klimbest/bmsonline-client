@@ -188,6 +188,9 @@ function setElementType(element) {
         case 'bms-gadgetprogressbar' :
             return 'GadgetProgressBar';
             break;
+        case 'bms-gadgetchart' :
+            return 'GadgetChart';
+            break;
     }
 }
 
@@ -249,7 +252,7 @@ function updateBorderRadius(type) {
     form.find("input#panel_" + type + "_borderRadiusRightBottom").val(form.find("input#borderRadiusBR").val());
 }
 
-function updateBackgroundColor(type){
+function updateBackgroundColor(type) {
     var form = $("form");
     var inputBackground = form.find("input#panel_" + type + "_backgroundColor");
     var inputOpacity = form.find("input#panel_" + type + "_backgroundOpacity");

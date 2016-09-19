@@ -3,14 +3,15 @@
 namespace VisualizationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use BmsConfigurationBundle\Entity\Register;
 
 /**
  * GadgetClock
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="VisualizationBundle\Entity\Repository\GadgetClockRepository")
+ * @ORM\Entity(repositoryClass="VisualizationBundle\Entity\Repository\GadgetChartRepository")
  */
-class GadgetClock
+class GadgetChart
 {
 
     /**
@@ -80,6 +81,36 @@ class GadgetClock
     private $page;
 
     /**
+     * @var Register
+     *
+     * @ORM\ManyToOne(targetEntity="\BmsConfigurationBundle\Entity\Register")
+     * @ORM\JoinColumn(name="source", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $source;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="serie_color", type="string", length=50, nullable=false)
+     */
+    private $color;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="background_color", type="string", length=50, nullable=false)
+     */
+    private $backgroundColor;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="background_opacity", type="float", nullable=true, options={"default"=0})
+     */
+    private $backgroundOpacity;
+
+    /**
      * @var EventLink
      *
      * @ORM\ManyToOne(targetEntity="EventLink")
@@ -92,14 +123,18 @@ class GadgetClock
      */
     public function __construct()
     {
-        $this->name =  "gck_" . rand(999, 9999);
+        $this->name =  "gct_" . rand(999, 9999);
         $this->tooltip = false;
         $this->topPosition = 0;
         $this->leftPosition = 0;
         $this->width = 100;
         $this->height = 50;
         $this->zIndex = 5;
+        $this->backgroundOpacity = 0;
+        $this->color = '#FF0000';
     }
+
+
 
     /**
      * Get id
@@ -116,7 +151,7 @@ class GadgetClock
      *
      * @param string $name
      *
-     * @return GadgetClock
+     * @return GadgetChart
      */
     public function setName($name)
     {
@@ -136,35 +171,11 @@ class GadgetClock
     }
 
     /**
-     * Set page
-     *
-     * @param Page $page
-     *
-     * @return GadgetClock
-     */
-    public function setPage(Page $page)
-    {
-        $this->page = $page;
-
-        return $this;
-    }
-
-    /**
-     * Get page
-     *
-     * @return Page
-     */
-    public function getPage()
-    {
-        return $this->page;
-    }
-
-    /**
      * Set tooltip
      *
      * @param boolean $tooltip
      *
-     * @return GadgetClock
+     * @return GadgetChart
      */
     public function setTooltip($tooltip)
     {
@@ -188,7 +199,7 @@ class GadgetClock
      *
      * @param integer $topPosition
      *
-     * @return GadgetClock
+     * @return GadgetChart
      */
     public function setTopPosition($topPosition)
     {
@@ -212,7 +223,7 @@ class GadgetClock
      *
      * @param integer $leftPosition
      *
-     * @return GadgetClock
+     * @return GadgetChart
      */
     public function setLeftPosition($leftPosition)
     {
@@ -236,7 +247,7 @@ class GadgetClock
      *
      * @param integer $width
      *
-     * @return GadgetClock
+     * @return GadgetChart
      */
     public function setWidth($width)
     {
@@ -260,7 +271,7 @@ class GadgetClock
      *
      * @param integer $height
      *
-     * @return GadgetClock
+     * @return GadgetChart
      */
     public function setHeight($height)
     {
@@ -284,7 +295,7 @@ class GadgetClock
      *
      * @param integer $zIndex
      *
-     * @return GadgetClock
+     * @return GadgetChart
      */
     public function setZIndex($zIndex)
     {
@@ -304,13 +315,133 @@ class GadgetClock
     }
 
     /**
+     * Set color
+     *
+     * @param string $color
+     *
+     * @return GadgetChart
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * Set backgroundColor
+     *
+     * @param string $backgroundColor
+     *
+     * @return GadgetChart
+     */
+    public function setBackgroundColor($backgroundColor)
+    {
+        $this->backgroundColor = $backgroundColor;
+
+        return $this;
+    }
+
+    /**
+     * Get backgroundColor
+     *
+     * @return string
+     */
+    public function getBackgroundColor()
+    {
+        return $this->backgroundColor;
+    }
+
+    /**
+     * Set backgroundOpacity
+     *
+     * @param float $backgroundOpacity
+     *
+     * @return GadgetChart
+     */
+    public function setBackgroundOpacity($backgroundOpacity)
+    {
+        $this->backgroundOpacity = $backgroundOpacity;
+
+        return $this;
+    }
+
+    /**
+     * Get backgroundOpacity
+     *
+     * @return float
+     */
+    public function getBackgroundOpacity()
+    {
+        return $this->backgroundOpacity;
+    }
+
+    /**
+     * Set page
+     *
+     * @param \VisualizationBundle\Entity\Page $page
+     *
+     * @return GadgetChart
+     */
+    public function setPage(\VisualizationBundle\Entity\Page $page)
+    {
+        $this->page = $page;
+
+        return $this;
+    }
+
+    /**
+     * Get page
+     *
+     * @return \VisualizationBundle\Entity\Page
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
+     * Set source
+     *
+     * @param \BmsConfigurationBundle\Entity\Register $source
+     *
+     * @return GadgetChart
+     */
+    public function setSource(\BmsConfigurationBundle\Entity\Register $source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return \BmsConfigurationBundle\Entity\Register
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
      * Set eventLink
      *
-     * @param EventLink $eventLink
+     * @param \VisualizationBundle\Entity\EventLink $eventLink
      *
-     * @return GadgetClock
+     * @return GadgetChart
      */
-    public function setEventLink(EventLink $eventLink = null)
+    public function setEventLink(\VisualizationBundle\Entity\EventLink $eventLink = null)
     {
         $this->eventLink = $eventLink;
 
@@ -320,7 +451,7 @@ class GadgetClock
     /**
      * Get eventLink
      *
-     * @return EventLink
+     * @return \VisualizationBundle\Entity\EventLink
      */
     public function getEventLink()
     {

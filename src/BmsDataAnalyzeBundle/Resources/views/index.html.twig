@@ -11,8 +11,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/highcharts/highcharts.js')}}"></script>
-    <script src="{{ asset('js/highcharts/modules/exporting.js')}}"></script>
     <script type="text/javascript">
         {{ chart(detailChart) }}
         {{ chart(masterChart) }}

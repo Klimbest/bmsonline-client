@@ -10,7 +10,7 @@ namespace VisualizationBundle\Entity\Repository;
  */
 class PanelVariableRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findVariablePanelsRegistersForPage($page_id)
+    public function findForPage($page_id)
     {
         return $this->getEntityManager()
             ->createQuery('SELECT rcd.fixedValue as fixed_value, p.id as panel_id FROM BmsConfigurationBundle:Register r'

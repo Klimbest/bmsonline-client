@@ -1,0 +1,36 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        {{ chart(charts[gadgetChart.id]) }}
+    });
+</script>
+
+<div
+        {% if (gadgetChart.eventLink is not empty) %}
+            onclick="ajaxChangePage({{ gadgetChart.eventLink.page.id }});"
+        {% endif %}
+        id="{{ gadgetChart.id }}" class="bms-panel bms-gadgetchart"
+        style="
+                top: {{ gadgetChart.topPosition }}px;
+                left: {{ gadgetChart.leftPosition }}px;
+                width: {{ gadgetChart.width }}px;
+                height: {{ gadgetChart.height }}px;
+                z-index: {{ gadgetChart.zIndex }};
+        {% if (gadgetChart.eventLink is not empty) %}
+                cursor: pointer;
+        {% endif %}
+                ">
+    <div id="chart_{{ gadgetChart.id }}">
+
+    </div>
+    {% if labels %}
+        <span class="label label-primary label-bms-panel">
+            <i class="fa fa-line-chart fa-fw"></i> {{ gadgetChart.id }}
+            <a href="{{ path('gadgetchart_copy', {'id': gadgetChart.id }) }}"><i
+                        class='fa fa-fw fa-clone fa-blue'></i></a>
+            <a href="#"><i class='fa fa-fw fa-bolt fa-yellow'></i></a>
+            <a href="{{ path('gadgetchart_edit', {'id': gadgetChart.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
+            <a href="{{ path('gadgetchart_delete', {'id': gadgetChart.id }) }}"><i
+                        class='fa fa-fw fa-trash-o fa-red'></i></a>
+        </span>
+    {% endif %}
+</div>

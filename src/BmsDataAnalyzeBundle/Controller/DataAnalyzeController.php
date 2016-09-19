@@ -34,7 +34,7 @@ class DataAnalyzeController extends Controller
         $detailChart->chart
             ->renderTo('detailContainer')
             ->reflow(true)
-            ->backgroundColor("#272b30")
+            ->backgroundColor('rgba(255, 255, 255, 0)')
             ->color("#c8c8c8");
         $detailChart->credits->enabled(false);
         $detailChart->title

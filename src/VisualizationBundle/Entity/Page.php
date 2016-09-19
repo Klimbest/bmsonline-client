@@ -58,6 +58,13 @@ class Page {
     private $gadgets_clock;
 
     /**
+     * @var GadgetChart
+     *
+     * @ORM\OneToMany(targetEntity="GadgetChart", mappedBy="page")
+     */
+    private $gadgets_chart;
+
+    /**
      * @var GadgetProgressBar
      *
      * @ORM\OneToMany(targetEntity="GadgetProgressBar", mappedBy="page")
@@ -115,6 +122,7 @@ class Page {
         $this->height = 700;
         $this->backgroundColor = '#FFFFFF';
         $this->gadgets_clock = new ArrayCollection();
+        $this->gadgets_chart = new ArrayCollection();
         $this->gadgets_progress_bar = new ArrayCollection();
         $this->inputs_button = new ArrayCollection();
         $this->inputs_number = new ArrayCollection();
@@ -505,5 +513,39 @@ class Page {
     public function getPanelsVariable()
     {
         return $this->panels_variable;
+    }
+
+    /**
+     * Add gadgetsChart
+     *
+     * @param \VisualizationBundle\Entity\GadgetChart $gadgetsChart
+     *
+     * @return Page
+     */
+    public function addGadgetsChart(\VisualizationBundle\Entity\GadgetChart $gadgetsChart)
+    {
+        $this->gadgets_chart[] = $gadgetsChart;
+
+        return $this;
+    }
+
+    /**
+     * Remove gadgetsChart
+     *
+     * @param \VisualizationBundle\Entity\GadgetChart $gadgetsChart
+     */
+    public function removeGadgetsChart(\VisualizationBundle\Entity\GadgetChart $gadgetsChart)
+    {
+        $this->gadgets_chart->removeElement($gadgetsChart);
+    }
+
+    /**
+     * Get gadgetsChart
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGadgetsChart()
+    {
+        return $this->gadgets_chart;
     }
 }

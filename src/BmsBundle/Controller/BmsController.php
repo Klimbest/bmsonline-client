@@ -58,7 +58,7 @@ class BmsController extends Controller
             $deviceRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Device');
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
             $page_id = $request->get("page_id");
-            $ret['registers'] = $panelVariableRepo->findVariablePanelsRegistersForPage($page_id);
+            $ret['registers'] = $panelVariableRepo->findForPage($page_id);
             $ret['progressbars'] = $gadgetProgressBarRepo->findForPage($page_id);
             $ret['events_change_source'] = $eventChangeSourceRepo->findForPage($page_id);
             $ret['devicesStatus'] = $deviceRepo->getDevicesStatus();

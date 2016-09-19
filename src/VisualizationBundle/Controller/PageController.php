@@ -64,7 +64,8 @@ class PageController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $parameters['pages'] = $em->getRepository('VisualizationBundle:Page')->findAll();
-        $parameters['registers'] = $em->getRepository('VisualizationBundle:PanelVariable')->findVariablePanelsRegistersForPage($page->getId());
+        $parameters['registers'] = $em->getRepository('VisualizationBundle:PanelVariable')->findForPage($page->getId());
+        $parameters['charts'] = $em->getRepository('VisualizationBundle:GadgetChart')->findForPage($page->getId());
         $parameters['active_page'] = $page;
         $parameters['labels'] = true;
         return $this->render('VisualizationBundle:page:show.html.twig', $parameters);
@@ -139,6 +140,11 @@ class PageController extends Controller
         $em->flush();
 
         return $this->redirectToRoute('visualization');
+    }
+
+    private function generateCharts()
+    {
+
     }
 
 }

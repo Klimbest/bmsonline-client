@@ -1,0 +1,94 @@
+{% extends 'VisualizationBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-select.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/bootstrap-select.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('select#gadget_chart_source').selectpicker({
+                style: "btn dropdown-toggle btn-warning btn-sm"
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <h2>Gadżet wykres</h2>
+            {{ form_start(form) }}
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="text-center"><span class="label label-primary">Ogólne</span></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            {{ form_row(form.name) }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label"></label>
+                            {{ form_row(form.tooltip) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group-sm">
+                                {{ form_row(form.source) }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group-sm">
+                                {{ form_row(form.color) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-md-offset-1">
+                    <h5 class="text-center"><span class="label label-primary">Pozycja</span></h5>
+                    {{ form_row(form.topPosition) }}
+                    {{ form_row(form.leftPosition) }}
+                </div>
+                <div class="col-md-2">
+                    <h5 class="text-center"><span class="label label-primary">Rozmiar</span></h5>
+                    {{ form_row(form.width) }}
+                    {{ form_row(form.height) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="text-center"><span class="label label-primary">Tło</span></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            {{ form_row(form.backgroundColor) }}
+                        </div>
+                        <div class="col-md-7">
+                            {{ form_row(form.backgroundOpacity) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h1></h1>
+            <div class="btn-group">
+                <a class="btn btn-warning" href="{{ path('page_show', {'id': gadgetChart.page.id}) }}">
+                    <i class="fa fa-arrow-left"></i> Anuluj
+                </a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> Zapisz</button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
