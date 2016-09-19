@@ -45,6 +45,7 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
             }
             $series = [
                 'data' => $arrayToChart,
+                'color' => $element->getColor()
             ];
 
             $chart->series([$series]);
@@ -61,7 +62,7 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
                 'SELECT rad.timeOfInsert, rad.fixedValue '
                 . 'FROM BmsConfigurationBundle:RegisterArchiveData AS rad '
                 . 'WHERE rad.register = ' . $registerId
-                . ' AND rad.timeOfInsert >= DATE_SUB(CURRENT_DATE(), 1, \'HOUR\')'
+                . ' AND rad.timeOfInsert >= DATE_SUB(CURRENT_DATE(), 0.5, \'HOUR\')'
             )
             ->getResult();
     }
