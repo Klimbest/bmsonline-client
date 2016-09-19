@@ -233,7 +233,9 @@
                         <div class="row">
                             <div class="col-md-10 manage regs-bordered">
                                 <i id="{{ register.id }}" class="fa fa-refresh fa-fw fa-blue"></i>
-                                <i id="{{ register.id }}" class="fa fa-edit fa-fw fa-green fa-register"></i>
+                                <a href="{{ path('bms_configuration_register', {'comm_id': device.communicationType.id, 'device_id': device.id, 'register_id': register.id}) }}">
+                                    <i id="{{ register.id }}" class="fa fa-edit fa-fw fa-green fa-register"></i>
+                                </a>
                                 <a href="{{ path('bms_configuration_del_register', {'comm_id': device.communicationType.id, 'device_id': device.id, 'register_id': register.id}) }}">
                                     <i class="fa fa-remove fa-fw fa-red"></i>
                                 </a>
