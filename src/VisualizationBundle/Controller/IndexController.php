@@ -35,8 +35,9 @@ class IndexController extends Controller
             $fs->remove($file->getRealPath());
         }
         foreach ($pages as $page) {
-            $content = $this->get('templating')->render('BmsBundle::page.html.twig', ['page' => $page, 'labels' => false, 'registers' => false]);
 
+            $charts = $this->getDoctrine()->getManager()->getRepository('VisualizationBundle:GadgetChart')->findForPage($page->getId());
+            $content = $this->get('templating')->render('BmsBundle::page.html.twig', ['page' => $page, 'labels' => false, 'registers' => false, 'charts' => $charts]);
             $fs->dumpFile('../src/BmsBundle/Resources/views/Pages/' . $page->getId() . ".html.twig", $content);
         }
         $fs->remove($this->getParameter('kernel.cache_dir'));
