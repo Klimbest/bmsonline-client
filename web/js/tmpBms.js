@@ -110,17 +110,10 @@ function makeEventsHideShow(events) {
     if (events) {
         $.each(events, function () {
             var panelImage = $("div#" + this.panel_id + ".bms-panelimage");
-            var old_source = panelImage.find("img").attr("src");
-            if (old_source !== this.source) {
-                //noinspection JSUnresolvedVariable
-                panelImage.find("img").attr("src", this.source).attr("title", this.source_label);
-                panelImage.show();
-                panelImage.css({
-                    opacity: 0
-                }).animate({
-                    opacity: 1
-                }, 500, "linear");
-            }
+            //noinspection JSUnresolvedVariable
+            panelImage.find("img").attr("src", this.source).attr("title", this.source_label);
+            panelImage.show();
+
         });
     }
 }
