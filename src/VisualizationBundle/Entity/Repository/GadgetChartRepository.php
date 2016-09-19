@@ -29,14 +29,17 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
                 ->height($element->getHeight())
                 ->margin([2, 2, 2, 2]);
             $chart->title->text(null);
-            $chart->xAxis->title(null)
-                ->type('datetime');
-            $chart->yAxis->title(null);
+            $chart->xAxis
+                ->title(null)
+                ->type('datetime')
+                ->visible(false);
+            $chart->yAxis
+                ->title(null)
+                ->visible(false);
             $chart->exporting->enabled(false);
             $chart->legend->enabled(false);
             $chart->credits->enabled(false);
             $chart->tooltip->enabled(false);
-
             $registerArchiveData = self::getArchiveData($element->getSource()->getId());
             $arrayToChart = array();
             foreach ($registerArchiveData as $rad) {
@@ -44,8 +47,13 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
                 array_push($arrayToChart, [$time, $rad["fixedValue"]]);
             }
             $series = [
-                'data' => $arrayToChart,
-                'color' => $element->getColor()
+                'data' => [1, 2, 4, 3, 5, 7, 8, 1, 2, 3, 1, 8, 12, 9, 4],//$arrayToChart,
+                'color' => $element->getColor(),
+                'lineWidth' => 1,
+                'marker' => [
+                    'enabled' => false
+                ],
+                'enableMouseTracking' => false
             ];
 
             $chart->series([$series]);
