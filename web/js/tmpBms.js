@@ -126,11 +126,10 @@ function setGadgetsCart(charts) {
     if (charts) {
         $.each(charts, function () {
             var chart = $("div#" + this.id + ".bms-gadgetchart div#chart_" + this.id).highcharts();
-            
-            while(chart.series.length > 0)
+
+            while (chart.series.length > 0)
                 chart.series[0].remove(true);
             chart.addSeries(this.series);
-            //console.log(chart);
         });
     }
 }
