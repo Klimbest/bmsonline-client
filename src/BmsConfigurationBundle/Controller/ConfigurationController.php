@@ -406,8 +406,7 @@ class ConfigurationController extends Controller
         if ($request->isXmlHttpRequest()) {
             $vpn = $this->getParameter('vpn');
 
-//            $process = new Process("ssh pi@" . $vpn . "' bash ./bin/dbSync.sh'");
-            $process = new Process("ls -lsa");
+            $process = new Process("ssh pi@" . $vpn . "' bash ./bin/dbSync.sh'");
             $process->start();
 
             while ($process->isRunning()) {
