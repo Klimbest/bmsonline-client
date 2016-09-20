@@ -38,7 +38,7 @@ class BmsController extends Controller
             }
 
             $em = $this->getDoctrine()->getManager();
-            $charts = $em->getRepository('VisualizationBundle:GadgetChart')->findForPage($page->getId());
+            $charts = $em->getRepository('VisualizationBundle:GadgetChart')->findForPage($page_id);
             $ret['template'] = $this->get('templating')->render('BmsBundle:Pages:' . $page_id . '.html.twig', ['charts' => $charts]);
             return new JsonResponse($ret);
         } else {
