@@ -98,7 +98,7 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
                 'SELECT rad.timeOfInsert, rad.fixedValue '
                 . 'FROM BmsConfigurationBundle:RegisterArchiveData AS rad '
                 . 'WHERE rad.register = ' . $registerId
-                . ' AND rad.timeOfInsert >= DATE_SUB(CURRENT_DATE(), 0.5, \'HOUR\')'
+                . ' AND rad.timeOfInsert >= DATE_SUB(CURRENT_DATE(), 1, \'HOUR\')'
             )
             ->getResult();
     }
