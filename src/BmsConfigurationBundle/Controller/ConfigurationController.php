@@ -18,6 +18,7 @@ use BmsConfigurationBundle\Entity\RegisterCurrentData;
 use BmsConfigurationBundle\Entity\TechnicalInformation;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class ConfigurationController extends Controller
@@ -407,6 +408,10 @@ class ConfigurationController extends Controller
 
             $process = new Process("ssh pi@" . $vpn . " ./bin/dbSync.sh");
             $process->run();
+
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
             $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
             $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
 
