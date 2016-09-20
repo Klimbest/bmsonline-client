@@ -408,17 +408,18 @@ class ConfigurationController extends Controller
 
 //            $process = new Process("ssh pi@" . $vpn . "' bash ./bin/dbSync.sh'");
             $process = new Process("ls -lsa");
-            $process->run();
+            $process->start();
 
-            if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
-
-                $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
-                $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
-
-                $sync->setStatus(0);
-                $this->getDoctrine()->getManager()->flush();
+            while ($process->isRunning()) {
+                // waiting for process to finish
             }
+
+            $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
+            $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
+
+            $sync->setStatus(0);
+            $this->getDoctrine()->getManager()->flush();
+
             $ret['sync'] = $sync->getStatus();
             $ret['output'] = $process->getOutput();
 
