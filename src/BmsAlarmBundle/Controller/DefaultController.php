@@ -14,7 +14,25 @@ class DefaultController extends Controller
     {
         $alarmRepo = $this->getDoctrine()->getRepository('BmsAlarmBundle:AlarmHistory');
         $alarms = $alarmRepo->getAllOrderByTime();
-        
+
         return $this->render('BmsAlarmBundle:Default:index.html.twig', ['alarms' => $alarms]);
     }
+
+    /**
+     * @Route("/clear", name="clear_alarm_history")
+     */
+    public function clearAction()
+    {
+        $alarmRepo = $this->getDoctrine()->getRepository('BmsAlarmBundle:AlarmHistory');
+        $alarms = $alarmRepo->findAll();
+        $em = $this->getDoctrine()->getManager();
+        foreach ($alarms as $alarm) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($alarm);
+        }
+        $em->flush();
+
+        return $this->redirectToRoute('bms_alarm_index');
+    }
+
 }
