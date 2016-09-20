@@ -106,8 +106,12 @@ class DataAnalyzeController extends Controller
         $detailChart->series();
         $detailChart->exporting
             ->chartOptions(
-                ["subtitle" =>
-                    ["text" => "Wygenerowano: ".(new \DateTime())->format('d-m-Y H:i:s')]
+                [
+                    "subtitle" =>
+                        [
+                            "text" => "Wygenerowano: " . (new \DateTime())->format('d-m-Y H:i:s')
+                        ],
+                    "title" => null
                 ]);
 //        $detailChart->plotOptions->series([
 //            'marker' => [
