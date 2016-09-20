@@ -305,12 +305,12 @@ function setSelectedImage(element) {
     var img = new Image();
     img.onload = function () {
         var ar = img.width / img.height;
-        inputWidth.val(this.width).attr("max", this.width);
+        inputWidth.attr("max", this.width);
         inputWidth.change(function () {
             var h = form.find("input#panel_image_width").val() / ar;
             form.find("input#panel_image_height").val(Math.round(h));
         });
-        inputHeight.val(this.height).attr("max", this.height);
+        inputHeight.attr("max", this.height);
         inputHeight.change(function () {
             var w = $(this).val() * ar;
             form.find("input#panel_image_width").val(Math.round(w));
