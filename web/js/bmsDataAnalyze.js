@@ -2,25 +2,11 @@
 
 var registersToChart = [];
 $(document).ready(function () {
-    var mchart = $('#masterContainer').highcharts();
-    var dchart = $('#detailContainer').highcharts();
+    $('#detailContainer').highcharts();
     setDialogButtons();
     var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
     var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
 
-    mchart.xAxis[0].addPlotBand({
-        id: 'mask-before',
-        from: mchart.xAxis[0].min,
-        to: Math.floor(Date.now()) - (3600000 * 3),
-        color: 'rgba(0, 0, 0, 0.2)'
-    });
-
-    mchart.xAxis[0].addPlotBand({
-        id: 'mask-after',
-        from: mchart.xAxis[0].dataMax,
-        to: mchart.xAxis[0].max,
-        color: 'rgba(0, 0, 0, 0.2)'
-    });
 });
 
 //ustawienie zakresu danych
@@ -28,7 +14,6 @@ function setDialogButtons() {
     $("div#detailContainer").hide();
     var now = new Date();
     var yesterday = new Date();
-    var mchart = $('#masterContainer').highcharts();
     var dchart = $('#detailContainer').highcharts();
     var controls = $("div#controls");
      yesterday.setHours(now.getHours() - 3);
@@ -97,13 +82,9 @@ function setDialogButtons() {
     $("#changeScope").click(function () {
         while (dchart.series.length > 0)
             dchart.series[0].remove(true);
-        while (mchart.series.length > 0)
-            mchart.series[0].remove(true);
 
         dchart.colorCounter = 0;
-        mchart.colorCounter = 0;
         dchart.symbolCounter = 0;
-        mchart.symbolCounter = 0;
 
         var dtpStart = '\'' + $('input#dtpStart').val() + '\'';
         var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
@@ -163,11 +144,8 @@ function loadData(registerId, dtpStart, dtpEnd, yAxis) {
     });
 
     function setSeries(series) {
-        var mchart = $('#masterContainer').highcharts();
-        var dchart = $('#detailContainer').highcharts();
 
-        dchart.addSeries(series);
-        mchart.addSeries(series);
+        $('#detailContainer').highcharts().addSeries(series);
 
         setClickable();
         $("select#avRegs").val(null);
@@ -197,10 +175,9 @@ function setClickable() {
 
     legendItem.find("i").each(function () {
         $(this).unbind("click").click(function () {
-            var mchart = $('#masterContainer').highcharts();
             var dchart = $('#detailContainer').highcharts();
             var id = parseInt($(this).attr("id"));
-            mchart.get(id).remove();
+
             dchart.get(id).remove();
             registersToChart.splice($.inArray([id, 1], registersToChart), 1);
             setClickable();

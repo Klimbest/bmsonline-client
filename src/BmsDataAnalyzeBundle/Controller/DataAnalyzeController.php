@@ -20,11 +20,9 @@ class DataAnalyzeController extends Controller
         $registerRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:Register');
         $registers = $registerRepo->getArchivedRegisters();
         $detailChart = new Highchart();
-        $masterChart = new Highchart();
 
         return $this->render('BmsDataAnalyzeBundle::index.html.twig', ['registers' => $registers,
-            'detailChart' => $this->generateDetailChart($detailChart),
-            'masterChart' => $this->generateMasterChart($masterChart)]);
+            'detailChart' => $this->generateDetailChart($detailChart)]);
     }
 
     public function generateDetailChart($detailChart)
@@ -106,6 +104,11 @@ class DataAnalyzeController extends Controller
             ->itemHoverStyle(['color' => '#5BC0DE'])
             ->itemHiddenStyle(['color' => '#000000']);
         $detailChart->series();
+        $detailChart->exporting
+            ->chartOptions(
+                ["subtitle" =>
+                    ["text" => "Wygenerowano: ".(new \DateTime())->format('d-m-Y H:i:s')]
+                ]);
 //        $detailChart->plotOptions->series([
 //            'marker' => [
 //                'enabled' => true,
@@ -116,88 +119,6 @@ class DataAnalyzeController extends Controller
 //        ]);
         $detailChart->exporting->enabled(true);
         return $detailChart;
-    }
-
-    public function generateMasterChart($masterChart)
-    {
-
-        $masterChart->global->useUTC(false);
-        $masterChart->chart->renderTo('masterContainer')
-            ->reflow(true)
-            ->borderWidth(0)
-            ->backgroundColor(null)
-            ->marginLeft(65)
-            ->marginRight(50)
-            ->zoomType('x')
-            ->events(null);
-        $masterChart->title->text(null);
-        $masterChart->xAxis->type('datetime')
-            ->showLastTickLabel(true)
-            ->title(array('text' => null));
-        $yAxis = array(
-            array(
-                'floor' => 0,
-                'gridlineWidth' => 0,
-                'labels' => array(
-                    'enabled' => false
-                ),
-                'title' => array(
-                    'text' => null
-                ),
-                'opposite' => true,
-                'showFirstLabel' => false
-            ),
-            array(
-                'floor' => 0,
-                'gridlineWidth' => 0,
-                'labels' => array(
-                    'enabled' => false
-                ),
-                'title' => array(
-                    'text' => null
-                ),
-                'opposite' => true,
-                'showFirstLabel' => false
-            ),
-            array(
-                'floor' => 0,
-                'gridlineWidth' => 0,
-                'labels' => array(
-                    'enabled' => false
-                ),
-                'title' => array(
-                    'text' => null
-                ),
-                'opposite' => true,
-                'showFirstLabel' => false
-            )
-        );
-        $masterChart->yAxis($yAxis);
-        $masterChart->tooltip->pointFormat('{series.name}: <b>{point.y}</b><br/>');
-        $masterChart->legend->enabled(false);
-        $masterChart->plotOptions->series(array(
-            'marker' => array(
-                'enabled' => false
-            ),
-            'lineWidth' => 1,
-            'fillColor' => array(
-                'linearGradient' => [0, 0, 0, 70],
-                'stops' => [
-                    [1, '#FFF']
-                ]
-            ),
-            'shadow' => false,
-            'states' => array(
-                'hover' => array(
-                    'lineWidth' => 1
-                )
-            ),
-            'enableMouseTracking' => false
-        ));
-        $masterChart->credits->enabled(true);
-        $masterChart->series();
-        $masterChart->exporting->enabled(false);
-        return $masterChart;
     }
 
     /**
