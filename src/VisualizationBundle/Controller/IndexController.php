@@ -42,8 +42,7 @@ class IndexController extends Controller
         }
         $fs->remove($this->getParameter('kernel.cache_dir'));
 
-        $page = $this->getDoctrine()->getRepository('VisualizationBundle:Page')->findMainPage();
-        return $this->redirectToRoute('page_show', ['id' => $page->getId()]);
+        return $this->redirectToRoute('bms_index');
     }
 
     /**

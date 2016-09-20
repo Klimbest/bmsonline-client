@@ -24,6 +24,7 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
             $chart = new Highchart();
             $chart->global->useUTC(false);
             $chart->chart
+                ->animation(false)
                 ->renderTo('chart_' . $id)
                 ->backgroundColor('rgba(255, 255, 255, 0)')
                 ->height($element->getHeight())
@@ -40,6 +41,14 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
             $chart->legend->enabled(false);
             $chart->credits->enabled(false);
             $chart->tooltip->enabled(false);
+            $chart->plotOptions
+                ->series([
+                    'lineWidth' => 1,
+                    'marker' => [
+                        'enabled' => false
+                    ],
+                    'enableMouseTracking' => false,
+                ]);
             $registerArchiveData = self::getArchiveData($element->getSource()->getId());
             $arrayToChart = array();
             foreach ($registerArchiveData as $rad) {
@@ -49,16 +58,35 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
             $series = [
                 'data' => $arrayToChart,
                 'color' => $element->getColor(),
-                'lineWidth' => 1,
-                'marker' => [
-                    'enabled' => false
-                ],
-                'enableMouseTracking' => false
             ];
 
             $chart->series([$series]);
             $ret[$id] = $chart;
         }
+        return $ret;
+
+    }
+
+    public function updateForPage($page_id)
+    {
+        $data = self::findBy(['page' => $page_id]);
+        $ret = [];
+
+        foreach ($data as $element) {
+            $registerArchiveData = self::getArchiveData($element->getSource()->getId());
+            $arrayToChart = [];
+            foreach ($registerArchiveData as $rad) {
+                $time = $rad["timeOfInsert"]->getTimestamp() * 1000;
+                array_push($arrayToChart, [$time, $rad["fixedValue"]]);
+            }
+            $series = [
+                'data' => $arrayToChart,
+                'color' => $element->getColor(),
+            ];
+
+            array_push($ret, ['series' => $series, 'id' => $element->getId()]);
+        }
+
         return $ret;
 
     }

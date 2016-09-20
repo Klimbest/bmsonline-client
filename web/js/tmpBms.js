@@ -1,12 +1,16 @@
 /* global parseFloat */
 
-var terms;
-
 $(document).ready(function () {
     setErrorMessage();
     ajaxChangePage();
     setInterval(counter, 1000);
-
+    Highcharts.setOptions({
+        plotOptions: {
+            series: {
+                animation: false
+            }
+        }
+    });
 });
 
 function ajaxChangePage(page_id) {
@@ -23,7 +27,6 @@ function ajaxChangePage(page_id) {
             container.children(".fa-spinner").remove();
             container.children("div").remove();
             container.append(ret["template"]).fadeIn("slow");
-            terms = ret['terms'];
             ajaxRefreshPage();
             interval = setInterval(function () {
                 ajaxRefreshPage();
@@ -62,6 +65,7 @@ function ajaxRefreshPage() {
             setPanelVariables(ret['registers']);
             setProgressBars(ret['progressbars']);
             makeEventsHideShow(ret['events_change_source'])
+            setGadgetsCart(ret['gadget_chart']);
         }
     });
     count = 0;
@@ -114,6 +118,19 @@ function makeEventsHideShow(events) {
             panelImage.find("img").attr("src", this.source).attr("title", this.source_label);
             panelImage.show();
 
+        });
+    }
+}
+
+function setGadgetsCart(charts) {
+    if (charts) {
+        $.each(charts, function () {
+            var chart = $("div#" + this.id + ".bms-gadgetchart div#chart_" + this.id).highcharts();
+            
+            while(chart.series.length > 0)
+                chart.series[0].remove(true);
+            chart.addSeries(this.series);
+            //console.log(chart);
         });
     }
 }
