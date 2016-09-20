@@ -16,7 +16,7 @@ function setDialogButtons() {
     var yesterday = new Date();
     var dchart = $('#detailContainer').highcharts();
     var controls = $("div#controls");
-     yesterday.setHours(now.getHours() - 3);
+    yesterday.setHours(now.getHours() - 3);
     //$.datetimepicker.setLocale('pl');
     $("input#dtpStart").datetimepicker({
         lang: 'pl',
@@ -110,6 +110,7 @@ function setDialogButtons() {
         var dtpEnd = '\'' + $('input#dtpEnd').val() + '\'';
         var yAxis = $('input[name=axType]:checked').val();
         registersToChart.push([regId, parseInt(yAxis)]);
+
         loadData(regId, dtpStart, dtpEnd, parseInt(yAxis));
     });
 }
@@ -145,7 +146,11 @@ function loadData(registerId, dtpStart, dtpEnd, yAxis) {
 
     function setSeries(series) {
 
-        $('#detailContainer').highcharts().addSeries(series);
+        var chart = $('#detailContainer').highcharts();
+        chart.addSeries(series);
+        var max = new Date(chart.xAxis[0].max);
+        var min = new Date(chart.xAxis[0].min);
+        chart.setTitle({text: "Zakres: " + $.formatDateTime("dd-mm-yy", min) + " -" + $.formatDateTime("dd-mm-yy", max)});
 
         setClickable();
         $("select#avRegs").val(null);

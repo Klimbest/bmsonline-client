@@ -39,54 +39,54 @@ class DataAnalyzeController extends Controller
             ->text('Pomiar danych, wykres odświeża się automatycznie')
             ->style(["color" => "#c8c8c8"]);
         $detailChart->xAxis->type('datetime');
-        $yAxis = array(
-            array(
-                'title' => array(
+        $yAxis = [
+            [
+                'title' => [
                     'offset' => 0,
                     'text' => '%',
                     'rotation' => 0,
                     'align' => 'high',
                     'y' => -10
-                ),
-                'label' => array(
-                    'style' => array(
+                ],
+                'label' => [
+                    'style' => [
                         "fontSize" => "70%"
-                    )
-                ),
+                    ]
+                ],
                 'showEmpty' => false,
                 'opposite' => true,
-            ),
-            array(
-                'title' => array(
+            ],
+            [
+                'title' => [
                     'offset' => 0,
                     'text' => '°C',
                     'rotation' => 0,
                     'align' => 'high',
                     'y' => -10
-                ),
-                'label' => array(
-                    'style' => array(
+                ],
+                'label' => [
+                    'style' => [
                         "fontSize" => "70%"
-                    )
-                ),
+                    ]
+                ],
                 'showEmpty' => false
-            ),
-            array(
-                'title' => array(
+            ],
+            [
+                'title' => [
                     'offset' => 0,
                     'text' => 'num',
                     'rotation' => 0,
                     'align' => 'high',
                     'y' => -10
-                ),
-                'label' => array(
-                    'style' => array(
+                ],
+                'label' => [
+                    'style' => [
                         "fontSize" => "70%"
-                    )
-                ),
+                    ]
+                ],
                 'showEmpty' => false
-            )
-        );
+            ]
+        ];
         $detailChart->yAxis($yAxis);
 
         $detailChart->tooltip
@@ -105,22 +105,11 @@ class DataAnalyzeController extends Controller
             ->itemHiddenStyle(['color' => '#000000']);
         $detailChart->series();
         $detailChart->exporting
-            ->chartOptions(
-                [
-                    "subtitle" =>
-                        [
-                            "text" => "Wygenerowano: " . (new \DateTime())->format('d-m-Y H:i:s')
-                        ],
-                    "title" => null
-                ]);
-//        $detailChart->plotOptions->series([
-//            'marker' => [
-//                'enabled' => true,
-//                'fillColor' => "#FFF",
-//                'lineWidth' => 1,
-//                'lineColor' => null
-//            ]
-//        ]);
+            ->chartOptions([
+                "subtitle" => [
+                    "text" => "Wygenerowano: " . (new \DateTime())->format('d-m-Y H:i:s')
+                ]
+            ]);
         $detailChart->exporting->enabled(true);
         return $detailChart;
     }
