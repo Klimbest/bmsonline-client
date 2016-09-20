@@ -259,8 +259,8 @@ class ConfigurationController extends Controller
         $registerCD = new RegisterCurrentData();
         $form = $this->createForm(RegisterType::class, $register,
             ['action' => $this->generateUrl('bms_configuration_add_register', ['comm_id' => $comm_id, 'device_id' => $device_id]),
-            'method' => 'POST'
-        ]);
+                'method' => 'POST'
+            ]);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             $register->setDevice($device);
@@ -406,18 +406,18 @@ class ConfigurationController extends Controller
         if ($request->isXmlHttpRequest()) {
             $vpn = $this->getParameter('vpn');
 
-            $process = new Process("ssh pi@" . $vpn . " ./bin/dbSync.sh");
+//            $process = new Process("ssh pi@" . $vpn . " /home/pi/bin/dbSync.sh");
+            $process = new Process("ls -lsa");
             $process->run();
 
             if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
+                $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
+                $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
+
+                $sync->setStatus(0);
+                $this->getDoctrine()->getManager()->flush();
             }
-            $technicalInformationRepo = $this->getDoctrine()->getRepository('BmsConfigurationBundle:TechnicalInformation');
-            $sync = $technicalInformationRepo->findOneBy(['name' => 'dataToSync']);
-
-            $sync->setStatus(0);
-
-            $this->getDoctrine()->getManager()->flush();
             $ret['sync'] = $sync->getStatus();
             $ret['output'] = $process->getOutput();
 
@@ -425,19 +425,6 @@ class ConfigurationController extends Controller
         } else {
             throw new AccessDeniedHttpException();
         }
-    }
-
-    /**
-     * @Route("/stopScanners", name="bms_configuration_stop_scanners", options={"expose"=true})
-     * @param Request $request
-     */
-    public function stopScannersAction(Request $request)
-    {
-        $host = $request->getHost();
-        $h = explode(".", $host);
-        $process = new Process("bash ../../_bin/orderToRPi.sh 'bin/stopScanner' " . $h[0]);
-        //$process->disableOutput();
-        $process->run();
     }
 
 }
