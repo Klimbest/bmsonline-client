@@ -153,8 +153,10 @@ function writeRegister(value, register_id){
         datatype: "application/json",
         url: Routing.generate('write_register'),
         data: data,
-        success: function (ret) {
-            ajaxRefreshPage();
+        success: function () {
+            var container = $(".content-container");
+            container.children(".fa-spinner").remove();
         }
     });
+    $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
 }
