@@ -156,7 +156,12 @@ function writeRegister(value, register_id){
         success: function () {
             var container = $(".content-container");
             container.children(".fa-spinner").remove();
+            ajaxRefreshPage();
+            interval = setInterval(function () {
+                ajaxRefreshPage();
+            }, 10000);
         }
     });
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
+    clearInterval(interval);
 }
