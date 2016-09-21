@@ -61,6 +61,7 @@ function ajaxRefreshPage() {
         data: data,
         success: function (ret) {
             $("span.timer").removeClass("label-danger").addClass("label-primary");
+
             setState(ret['state'], ret['devicesStatus']);
             setPanelVariables(ret['registers']);
             setProgressBars(ret['progressbars']);
@@ -100,16 +101,16 @@ function setProgressBars(progressbars) {
     if (progressbars) {
         $.each(progressbars, function () {
             var gadgetProgressBar = $("div#" + this.id + ".bms-gadgetprogressbar");
-            if(this.value < 0 || this.value > 100){
+            if (this.value < 0 || this.value > 100) {
                 gadgetProgressBar.find("div#value").hide();
-            } else{
+            } else {
                 gadgetProgressBar.find("div#value").animate({
                     left: this.value + "%"
                 }, 500, "linear");
             }
-            if(this.value < 0 || this.value > 100){
+            if (this.value < 0 || this.value > 100) {
                 gadgetProgressBar.find("div#set").hide();
-            }else{
+            } else {
                 gadgetProgressBar.find("div#set").animate({
                     left: this.set + "%"
                 }, 500, "linear");
@@ -143,7 +144,7 @@ function setGadgetsCart(charts) {
     }
 }
 
-function writeRegister(value, register_id){
+function writeRegister(value, register_id) {
     var data = {
         value: value,
         register_id: register_id
@@ -156,10 +157,14 @@ function writeRegister(value, register_id){
         success: function () {
             var container = $(".content-container");
             container.children(".fa-spinner").remove();
-            ajaxRefreshPage();
-            interval = setInterval(function () {
-                ajaxRefreshPage();
-            }, 10000);
+            setTimeout(
+                function () {
+                    ajaxRefreshPage();
+                    interval = setInterval(function () {
+                        ajaxRefreshPage();
+                    }, 10000);
+                }, 5000);
+
         }
     });
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();
