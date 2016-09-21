@@ -89,9 +89,7 @@ class GadgetChartType extends AbstractType
             ->add('const', NumberType::class, [
                 'scale' => 2,
                 'label' => 'Stała',
-                'attr' => [
-                    'reqiured' => false
-                ]
+                'reqiured' => false
             ])
             //UKRYTE
             ->add('zIndex', HiddenType::class);
