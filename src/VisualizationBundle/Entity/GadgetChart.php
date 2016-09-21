@@ -73,6 +73,20 @@ class GadgetChart
     private $zIndex;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="hour_offset", type="integer", nullable=false, options={"default"=1})
+     */
+    private $hourOffset;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="const", type="float", precision=9, scale=2, nullable=true)
+     */
+    private $const;
+
+    /**
      * @var Page
      *
      * @ORM\ManyToOne(targetEntity="Page", inversedBy="gadgets_clock")
@@ -123,7 +137,7 @@ class GadgetChart
      */
     public function __construct()
     {
-        $this->name =  "gct_" . rand(999, 9999);
+        $this->name = "gct_" . rand(999, 9999);
         $this->tooltip = false;
         $this->topPosition = 0;
         $this->leftPosition = 0;
@@ -132,8 +146,8 @@ class GadgetChart
         $this->zIndex = 5;
         $this->backgroundOpacity = 0;
         $this->color = '#FF0000';
+        $this->hourOffset = 1;
     }
-
 
 
     /**
@@ -389,11 +403,11 @@ class GadgetChart
     /**
      * Set page
      *
-     * @param \VisualizationBundle\Entity\Page $page
+     * @param Page $page
      *
      * @return GadgetChart
      */
-    public function setPage(\VisualizationBundle\Entity\Page $page)
+    public function setPage(Page $page)
     {
         $this->page = $page;
 
@@ -403,7 +417,7 @@ class GadgetChart
     /**
      * Get page
      *
-     * @return \VisualizationBundle\Entity\Page
+     * @return Page
      */
     public function getPage()
     {
@@ -413,11 +427,11 @@ class GadgetChart
     /**
      * Set source
      *
-     * @param \BmsConfigurationBundle\Entity\Register $source
+     * @param Register $source
      *
      * @return GadgetChart
      */
-    public function setSource(\BmsConfigurationBundle\Entity\Register $source)
+    public function setSource(Register $source)
     {
         $this->source = $source;
 
@@ -427,7 +441,7 @@ class GadgetChart
     /**
      * Get source
      *
-     * @return \BmsConfigurationBundle\Entity\Register
+     * @return Register
      */
     public function getSource()
     {
@@ -437,11 +451,11 @@ class GadgetChart
     /**
      * Set eventLink
      *
-     * @param \VisualizationBundle\Entity\EventLink $eventLink
+     * @param EventLink $eventLink
      *
      * @return GadgetChart
      */
-    public function setEventLink(\VisualizationBundle\Entity\EventLink $eventLink = null)
+    public function setEventLink(EventLink $eventLink = null)
     {
         $this->eventLink = $eventLink;
 
@@ -451,10 +465,59 @@ class GadgetChart
     /**
      * Get eventLink
      *
-     * @return \VisualizationBundle\Entity\EventLink
+     * @return EventLink
      */
     public function getEventLink()
     {
         return $this->eventLink;
+    }
+
+    /**
+     * Set const
+     *
+     * @param float $const
+     *
+     * @return GadgetChart
+     */
+    public function setConst($const)
+    {
+        $this->const = $const;
+
+        return $this;
+    }
+
+    /**
+     * Get const
+     *
+     * @return float
+     */
+    public function getConst()
+    {
+        return $this->const;
+    }
+
+
+    /**
+     * Set hourOffset
+     *
+     * @param integer $hourOffset
+     *
+     * @return GadgetChart
+     */
+    public function setHourOffset($hourOffset)
+    {
+        $this->hourOffset = $hourOffset;
+
+        return $this;
+    }
+
+    /**
+     * Get hourOffset
+     *
+     * @return integer
+     */
+    public function getHourOffset()
+    {
+        return $this->hourOffset;
     }
 }

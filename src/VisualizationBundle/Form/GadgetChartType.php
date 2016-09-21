@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
@@ -81,6 +82,13 @@ class GadgetChartType extends AbstractType
                     'step' => 0.1,
                     'oninput' => "updateBackgroundColor('variable')"
                 ]
+            ])
+            ->add('hourOffset', IntegerType::class, [
+                'label' => 'Od ilu godzin'
+            ])
+            ->add('const', NumberType::class, [
+                'scale' => 2,
+                'label' => 'Stała',
             ])
             //UKRYTE
             ->add('zIndex', HiddenType::class);

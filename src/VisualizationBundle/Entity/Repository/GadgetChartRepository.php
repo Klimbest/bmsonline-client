@@ -36,7 +36,18 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
                 ->visible(false);
             $chart->yAxis
                 ->title(null)
-                ->visible(false);
+                ->visible(true)
+                ->minorTickColor('transparent')
+                ->minorGridLineColor('transparent')
+                ->gridLineColor('transparent')
+                ->lineColor('transparent')
+                ->plotLines([
+                    [
+                        'value' => $element->getConst(),
+                        'color' => 'white',
+                        'width' => 1
+                    ],
+                ]);;
             $chart->exporting->enabled(false);
             $chart->legend->enabled(false);
             $chart->credits->enabled(false);
@@ -49,7 +60,8 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
                     ],
                     'enableMouseTracking' => false,
                 ]);
-            $registerArchiveData = self::getArchiveData($element->getSource()->getId());
+            $from = (new \DateTime())->modify("-" . $element->getHourOffset() . " hour");
+            $registerArchiveData = self::getArchiveData($from, $element->getSource()->getId());
             $arrayToChart = array();
             foreach ($registerArchiveData as $rad) {
                 $time = $rad["timeOfInsert"]->getTimestamp() * 1000;
@@ -73,7 +85,9 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
         $ret = [];
 
         foreach ($data as $element) {
-            $registerArchiveData = self::getArchiveData($element->getSource()->getId());
+
+            $from = (new \DateTime())->modify("-" . $element->getHourOffset() . " hour");
+            $registerArchiveData = self::getArchiveData($from, $element->getSource()->getId());
             $arrayToChart = [];
             foreach ($registerArchiveData as $rad) {
                 $time = $rad["timeOfInsert"]->getTimestamp() * 1000;
@@ -91,14 +105,14 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
 
     }
 
-    public function getArchiveData($registerId)
+    public function getArchiveData($from, $registerId)
     {
         return $this->getEntityManager()
             ->createQuery(
                 'SELECT rad.timeOfInsert, rad.fixedValue '
                 . 'FROM BmsConfigurationBundle:RegisterArchiveData AS rad '
                 . 'WHERE rad.register = ' . $registerId
-                . ' AND rad.timeOfInsert >= DATE_SUB(CURRENT_DATE(), 1, \'HOUR\')'
+                . ' AND rad.timeOfInsert >= \'' . $from->format('Y-m-d H:i:s') . '\''
             )
             ->getResult();
     }

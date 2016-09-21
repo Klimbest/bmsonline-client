@@ -38,7 +38,7 @@ class RegisterArchiveData
     /**
      * @var float
      *
-     * @ORM\Column(name="fixed_value", type="float", precision=4, scale=1, nullable=true)
+     * @ORM\Column(name="fixed_value", type="float", precision=9, scale=2, nullable=true)
      */
     private $fixedValue;
 

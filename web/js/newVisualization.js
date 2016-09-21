@@ -128,6 +128,11 @@ function setPanelEvents() {
                         ui.size.height = mH;
                     }
                 }
+
+                if (ui.element.hasClass("bms-gadgetchart")) {
+                    var chart = $(this).children("div[id^=chart]").highcharts();
+                    chart.setSize(ui.size.width,ui.size.height, doAnimation = false );
+                }
                 ui.element.addClass("hover");
             },
             stop: function (event, ui) {
