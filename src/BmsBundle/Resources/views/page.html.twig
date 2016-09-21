@@ -14,16 +14,6 @@
             {% include 'VisualizationBundle:panelvariable:show.html.twig' %}
         {% endfor %}
 
-        {% for gadgetClock in page.gadgetsClock %}
-            {% include 'VisualizationBundle:gadgetclock:show.html.twig' %}
-        {% endfor %}
-        {% for gadgetProgressBar in page.gadgetsProgressBar %}
-            {% include 'VisualizationBundle:gadgetprogressbar:show.html.twig' %}
-        {% endfor %}
-        {% for gadgetChart in page.gadgetsChart %}
-            {% include 'VisualizationBundle:gadgetchart:show.html.twig' %}
-        {% endfor %}
-
         {% for inputButton in page.inputsButton %}
             {% include 'VisualizationBundle:inputbutton:show.html.twig' %}
         {% endfor %}
@@ -34,6 +24,15 @@
             {% include 'VisualizationBundle:inputnumber:show.html.twig' %}
         {% endfor %}
 
+        {% for gadgetClock in page.gadgetsClock %}
+            {% include 'VisualizationBundle:gadgetclock:show.html.twig' %}
+        {% endfor %}
+        {% for gadgetProgressBar in page.gadgetsProgressBar %}
+            {% include 'VisualizationBundle:gadgetprogressbar:show.html.twig' %}
+        {% endfor %}
+        {% for gadgetChart in page.gadgetsChart %}
+            {% include 'VisualizationBundle:gadgetchart:show.html.twig' %}
+        {% endfor %}
     </div>
 </div>
 
