@@ -9,6 +9,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class InputButtonType extends AbstractType
 {
@@ -52,11 +56,24 @@ class InputButtonType extends AbstractType
                     'min' => 0
                 ]
             ])
-            ->add('destination')
-            ->add('source')
-            ->add('value');
+            ->add('destination', EntityType::class, [
+                'label' => 'Zmienna',
+                'class' => 'BmsConfigurationBundle:Register',
+                'query_builder' => function (EntityRepository $repository) {
+                    return $repository->createQueryBuilder('r')
+                        ->where('r.writeRegister = 1');
+                },
+                'attr' => [
+                    'data-live-search' => true
+                ]
+            ])
+            ->add('source', HiddenType::class)
+            ->add('value', NumberType::class, [
+                'scale' => 2,
+                'label' => 'Wysyłana wartość',
+            ]);
     }
-    
+
     /**
      * @param OptionsResolver $resolver
      */

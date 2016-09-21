@@ -155,16 +155,14 @@ function writeRegister(value, register_id) {
         url: Routing.generate('write_register'),
         data: data,
         success: function () {
-            var container = $(".content-container");
-            container.children(".fa-spinner").remove();
             setTimeout(
                 function () {
+                    $(".content-container").children(".fa-spinner").remove();
                     ajaxRefreshPage();
                     interval = setInterval(function () {
                         ajaxRefreshPage();
                     }, 10000);
                 }, 5000);
-
         }
     });
     $(".content-container").append("<i class='fa fa-spinner fa-pulse fa-4x'></i>").show();

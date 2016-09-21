@@ -333,6 +333,16 @@ function setSelectedImageTerm(element) {
 
 }
 
+function setSelectedImageInput(element) {
+    var form = $("form");
+    form.find("div.thumbnail-list div").removeClass("selected");
+    $(element).addClass("selected");
+    var source = $(element).children("img").attr("src");
+    form.find("span#image_name").empty().append(source);
+    form.find("input#input_button_source").val(source);
+
+}
+
 function setAddingNewImage() {
     var form = $("form");
     form.find("input#image").change(function (event) {

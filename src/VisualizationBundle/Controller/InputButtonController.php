@@ -8,6 +8,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use VisualizationBundle\Entity\InputButton;
 use VisualizationBundle\Form\InputButtonType;
 
@@ -32,6 +37,7 @@ class InputButtonController extends Controller
         $inputButton = new InputButton();
         $page = $this->getDoctrine()->getManager()->getRepository('VisualizationBundle:Page')->find($request->get('page_id'));
         $inputButton->setPage($page);
+        $images = self::getImages();
         $form = $this->createForm(InputButtonType::class, $inputButton);
         $form->handleRequest($request);
 
@@ -44,6 +50,7 @@ class InputButtonController extends Controller
         }
 
         return $this->render('VisualizationBundle:inputbutton:form.html.twig', [
+            'images' => $images,
             'inputButton' => $inputButton,
             'form' => $form->createView(),
         ]);
@@ -60,6 +67,7 @@ class InputButtonController extends Controller
      */
     public function editAction(Request $request, InputButton $inputButton)
     {
+        $images = self::getImages();
         $form = $this->createForm(InputButtonType::class, $inputButton);
         $form->handleRequest($request);
 
@@ -72,6 +80,7 @@ class InputButtonController extends Controller
         }
 
         return $this->render('VisualizationBundle:inputbutton:form.html.twig', [
+            'images' => $images,
             'inputButton' => $inputButton,
             'form' => $form->createView(),
         ]);
@@ -112,4 +121,82 @@ class InputButtonController extends Controller
 
         return $this->redirectToRoute('inputbutton_edit', ['id' => $inputButton_new->getId()]);
     }
+
+    /**
+     * @return array
+     */
+    private function getImages()
+    {
+        $finder = new Finder();
+        $finder2 = new Finder();
+        $finder->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/system/');
+        $images_system = [];
+        foreach ($finder as $dir) {
+            array_push($images_system, $dir->getRelativePathname());
+        }
+        $finder2->files()->in($this->getParameter('kernel.root_dir') . '/../web/images/user/');
+        $images_user = [];
+        foreach ($finder2 as $dir) {
+            array_push($images_user, $dir->getRelativePathname());
+        }
+        $images['system'] = $images_system;
+        $images['user'] = $images_user;
+
+        return $images;
+    }
+
+    /**
+     * @Route("/image/add ", name="send_image_to_server", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function addImageAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $imagesDir = $this->getParameter('kernel.root_dir') . '/../web';
+            //get data
+            $fileName = $request->get("fileName");
+            //save original file
+            $img = $request->files->get("file");
+
+            $relativePath = '/images/user/';
+            $img->move($imagesDir . $relativePath, $fileName);
+
+            $imagePath = $relativePath . $fileName;
+
+            $ret["fileName"] = $fileName;
+            $ret["url"] = $imagePath;
+            $ret["href"] = $this->generateUrl('remove_image_from_server', ['image_name' => $fileName]);
+
+            return new JsonResponse($ret);
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
+
+    /**
+     * @Route("/image/delete/{image_name}", name="remove_image_from_server")
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function deleteImageFromServerAction(Request $request)
+    {
+        $imagesDir = $this->getParameter('kernel.root_dir') . '/../web/images/';
+        $imageName = $request->get("image_name");
+
+        $finder = new Finder();
+        $finder->files()->name($imageName)->in($this->getParameter('kernel.root_dir') . '/../web/images/');
+        foreach ($finder as $file) {
+            $relativePath = $file->getRelativePathname();
+        }
+        $fs = new Filesystem();
+
+        try {
+            $fs->remove($imagesDir . $relativePath);
+        } catch (IOExceptionInterface $e) {
+            echo "An error occurred while creating your directory at " . $e->getPath();
+        }
+        return $this->redirect($request->headers->get('referer'));
+    }
+
 }
