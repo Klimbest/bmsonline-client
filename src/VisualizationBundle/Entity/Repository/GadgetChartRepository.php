@@ -44,7 +44,7 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
                 ->plotLines([
                     [
                         'value' => $element->getConst(),
-                        'color' => 'white',
+                        'color' => $element->getConstColor(),
                         'width' => 1
                     ],
                 ]);;

@@ -87,6 +87,13 @@ class GadgetChart
     private $const;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="const_color", type="string", length=50, nullable=false)
+     */
+    private $constColor;
+
+    /**
      * @var Page
      *
      * @ORM\ManyToOne(targetEntity="Page", inversedBy="gadgets_clock")
@@ -519,5 +526,29 @@ class GadgetChart
     public function getHourOffset()
     {
         return $this->hourOffset;
+    }
+
+    /**
+     * Set constColor
+     *
+     * @param string $constColor
+     *
+     * @return GadgetChart
+     */
+    public function setConstColor($constColor)
+    {
+        $this->constColor = $constColor;
+
+        return $this;
+    }
+
+    /**
+     * Get constColor
+     *
+     * @return string
+     */
+    public function getConstColor()
+    {
+        return $this->constColor;
     }
 }

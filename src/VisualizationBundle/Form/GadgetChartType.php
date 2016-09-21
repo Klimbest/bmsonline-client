@@ -71,7 +71,7 @@ class GadgetChartType extends AbstractType
             ->add('backgroundColor', ColorType::class, [
                 'label' => 'Kolor',
                 'attr' => [
-                    'oninput' => "updateBackgroundColor('variable')"
+//                    'oninput' => "updateBackgroundColor('variable')"
                 ]
             ])
             ->add('backgroundOpacity', RangeType::class, [
@@ -80,7 +80,7 @@ class GadgetChartType extends AbstractType
                     'min' => 0,
                     'max' => 1,
                     'step' => 0.1,
-                    'oninput' => "updateBackgroundColor('variable')"
+//                    'oninput' => "updateBackgroundColor('variable')"
                 ]
             ])
             ->add('hourOffset', IntegerType::class, [
@@ -90,6 +90,9 @@ class GadgetChartType extends AbstractType
                 'scale' => 2,
                 'label' => 'Stała',
                 'required' => false
+            ])
+            ->add('constColor', ColorType::class, [
+                'label' => 'Kolor stałej',
             ])
             //UKRYTE
             ->add('zIndex', HiddenType::class);
