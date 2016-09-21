@@ -45,7 +45,7 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
                     [
                         'value' => $element->getConst(),
                         'color' => $element->getConstColor(),
-                        'width' => 1
+                        'width' => 1,
                     ],
                 ]);;
             $chart->exporting->enabled(false);

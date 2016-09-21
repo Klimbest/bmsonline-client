@@ -8,6 +8,9 @@
         {% if (gadgetChart.eventLink is not empty) %}
             onclick="ajaxChangePage({{ gadgetChart.eventLink.page.id }});"
         {% endif %}
+        {% if gadgetChart.tooltip %}
+            title="{{ gadgetChart.name }}"
+        {% endif %}
         id="{{ gadgetChart.id }}" class="bms-panel bms-gadgetchart"
         style="
                 top: {{ gadgetChart.topPosition }}px;
