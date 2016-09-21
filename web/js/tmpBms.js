@@ -142,3 +142,22 @@ function setGadgetsCart(charts) {
         });
     }
 }
+
+function writeRegister(value, register_id){
+    console.log("value: " + value);
+    console.log("register id: " + register_id);
+    var data = {
+        value: value,
+        register_id: register_id
+    };
+    $.ajax({
+        type: "POST",
+        datatype: "application/json",
+        url: Routing.generate('write_register'),
+        data: data,
+        success: function (ret) {
+            console.log(ret);
+            ajaxRefreshPage();
+        }
+    });
+}

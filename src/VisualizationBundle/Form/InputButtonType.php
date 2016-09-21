@@ -51,7 +51,10 @@ class InputButtonType extends AbstractType
                 'attr' => [
                     'min' => 0
                 ]
-            ]);
+            ])
+            ->add('destination')
+            ->add('source')
+            ->add('value');
     }
     
     /**

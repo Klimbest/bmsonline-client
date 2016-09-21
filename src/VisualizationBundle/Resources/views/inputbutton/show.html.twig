@@ -1,8 +1,10 @@
 <div
-        {% if (inputButton.eventLink is not empty) %}
-            onclick="ajaxChangePage({{ inputButton.eventLink.page.id }});"
+        {% if (inputButton.value is not empty) and (inputButton.destination is not empty) %}
+            onclick="writeRegister({{ inputButton.value }}, {{ inputButton.destination.id }} );"
         {% endif %}
-        name="{{ inputButton.name }}"
+        {% if inputButton.tooltip %}
+            title="{{ inputButton.name }}"
+        {% endif %}
         id="{{ inputButton.id }}" class="bms-panel bms-inputbutton"
         style="
                 top: {{ inputButton.topPosition }}px;
@@ -11,17 +13,16 @@
                 height: {{ inputButton.height }}px;
                 line-height: {{ inputButton.height }}px;
                 z-index: {{ inputButton.zIndex }};
-        {% if (inputButton.eventLink is not empty) %}
                 cursor: pointer;
-        {% endif %}
                 ">
-    INPUT BUTTON
+    <img class="img-responsive" src="{{ inputButton.source }}"/>
     {% if labels %}
         <span class="label label-primary label-bms-panel">
             <i class="fa fa-font fa-fw"></i> {{ inputButton.id }}
             <a href="{{ path('inputbutton_copy', {'id': inputButton.id }) }}"><i class='fa fa-fw fa-clone fa-blue'></i></a>
             <a href="{{ path('inputbutton_edit', {'id': inputButton.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
-            <a href="{{ path('inputbutton_delete', {'id': inputButton.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
+            <a href="{{ path('inputbutton_delete', {'id': inputButton.id }) }}"><i
+                        class='fa fa-fw fa-trash-o fa-red'></i></a>
         </span>
     {% endif %}
 </div>

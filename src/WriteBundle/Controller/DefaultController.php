@@ -10,12 +10,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use BmsConfigurationBundle\Entity\RegisterWriteData;
 use Symfony\Component\Process\Process;
 
-class DefaultController extends Controller {
+class DefaultController extends Controller
+{
 
     /**
      * @Route("/", name="write_register", options={"expose"=true})
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function writeAction(Request $request) {
+    public function writeAction(Request $request)
+    {
         if ($request->isXmlHttpRequest()) {
 
             $value = $request->get("value");
@@ -25,23 +29,27 @@ class DefaultController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $write = new RegisterWriteData();
             $write->setRegister($register)
-                    ->setGetToProcess(0)
-                    ->setValue($value)
-                    ->setSuccessWrite(0)
-                    ->setTimeOfUpdate(new \DateTime())
-                    ->setUsername($this->getUser());
+                ->setGetToProcess(0)
+                ->setValue($value)
+                ->setSuccessWrite(0)
+                ->setTimeOfUpdate(new \DateTime())
+                ->setUsername($this->getUser());
 
             $em->persist($write);
             $em->flush();
-
-            $host = $request->getHost();
-            $h = explode(".", $host);
-            $exe = "bash ../../_bin/orderToRPi.sh 'bin/addToWrite' " . $h[0] . " ". $register_id . " " . $value . " " . $this->getUser();
+            $vpn = $this->getParameter('vpn');
+            $query = "INSERT INTO register_write_data('register_id', 'value', 'get_to_process', username) VALUES(" . $register_id . ", " . $value . ", 1, " . $this->getUser() . ")";
+//            $h[0] . " " . $register_id . " " . $value . " " . $this->getUser()
+            $exe = "bash mysql -u root -p Modbus123 -h " . $vpn . " < " . $query . " & ";
             $process = new Process($exe);
             //$process->disableOutput();
-            $process->run();
+            $process->start();
+            while ($process->isRunning()) {
+                // waiting for process to finish
+            }
 
-            return new JsonResponse();
+            $ret['output'] = $process->getOutput();
+            return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
         }

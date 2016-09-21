@@ -3,6 +3,7 @@
 namespace VisualizationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use BmsConfigurationBundle\Entity\Register;
 
 /**
  * InputButton
@@ -72,6 +73,29 @@ class InputButton
     private $zIndex;
 
     /**
+     * @var Register
+     *
+     * @ORM\ManyToOne(targetEntity="\BmsConfigurationBundle\Entity\Register")
+     * @ORM\JoinColumn(name="destination", referencedColumnName="id", nullable=true)
+     * })
+     */
+    private $destination;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="value", type="float", precision=9, scale=2, nullable=true)
+     */
+    private $value;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="source", type="string", length=50, nullable=false)
+     */
+    private $source;
+
+    /**
      * @var Page
      *
      * @ORM\ManyToOne(targetEntity="Page", inversedBy="inputs_button")
@@ -79,13 +103,6 @@ class InputButton
      */
     private $page;
 
-    /**
-     * @var EventLink
-     *
-     * @ORM\ManyToOne(targetEntity="EventLink")
-     * @ORM\JoinColumn(name="event_link_id", referencedColumnName="id", nullable=true)
-     */
-    private $eventLink;
 
     /**
      * Constructor
@@ -325,5 +342,77 @@ class InputButton
     public function getEventLink()
     {
         return $this->eventLink;
+    }
+
+    /**
+     * Set value
+     *
+     * @param float $value
+     *
+     * @return InputButton
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return float
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Set source
+     *
+     * @param string $source
+     *
+     * @return InputButton
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return string
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * Set destination
+     *
+     * @param \BmsConfigurationBundle\Entity\Register $destination
+     *
+     * @return InputButton
+     */
+    public function setDestination(\BmsConfigurationBundle\Entity\Register $destination = null)
+    {
+        $this->destination = $destination;
+
+        return $this;
+    }
+
+    /**
+     * Get destination
+     *
+     * @return \BmsConfigurationBundle\Entity\Register
+     */
+    public function getDestination()
+    {
+        return $this->destination;
     }
 }
