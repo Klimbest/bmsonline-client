@@ -41,13 +41,14 @@ class DefaultController extends Controller
             $vpn = $this->getParameter('vpn');
             $exe = "ssh pi@" . $vpn . " ./bin/addToWrite.sh " . $register_id . " " . $value . " " . $this->getUser();
             $process = new Process($exe);
+            $process->start();
 
-            $process->run();
-            if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
+            while ($process->isRunning()) {
+                // waiting for process to finish
             }
 
             $ret['output'] = $process->getOutput();
+
             return new JsonResponse($ret);
         } else {
             throw new AccessDeniedHttpException();
