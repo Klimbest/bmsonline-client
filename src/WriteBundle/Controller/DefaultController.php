@@ -40,8 +40,9 @@ class DefaultController extends Controller
             $em->flush();
             $vpn = $this->getParameter('vpn');
 //            $query = "'INSERT INTO register_write_data('register_id', 'value', 'get_to_process', username)
-            $query = "INSERT INTO register_write_data(register_id, value, get_to_process, username) VALUES(" . $register_id . ", " . $value . ", 1, " . $this->getUser() . ");";
-            $exe = "ssh pi@" . $vpn . " mysql -u root -p modbus KbScanner -e \"" . $query . "\"";
+//            $query = INSERT INTO \'register_write_data\'(\'register_id\', \'value\', \'get_to_process\', \'username\') VALUES(' . $register_id . ', ' . $value . ', 1, ' . $this->getUser() . ")"
+//            mysql -u root -p modbus KbScanner -e \"" . $query . "\";
+            $exe = "ssh pi@" . $vpn . " ./bin/writeRegister.sh " . $register_id . " " . $value . " " . $this->getUser();
             $process = new Process($exe);
 
             $process->run();
