@@ -154,7 +154,6 @@ function writeRegister(value, register_id){
         url: Routing.generate('write_register'),
         data: data,
         success: function (ret) {
-            console.log(ret);
             ajaxRefreshPage();
         }
     });
