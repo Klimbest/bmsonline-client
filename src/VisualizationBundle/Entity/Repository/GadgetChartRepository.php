@@ -20,13 +20,13 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
 
         foreach ($data as $element) {
             $id = $element->getId();
-
+            $backgroundColor = self::hex2rgba($element->getBackgroundColor(), $element->getBackgroundOpacity());
             $chart = new Highchart();
             $chart->global->useUTC(false);
             $chart->chart
                 ->animation(false)
                 ->renderTo('chart_' . $id)
-                ->backgroundColor('rgba(255, 255, 255, 0)')
+                ->backgroundColor($backgroundColor)
                 ->height($element->getHeight())
                 ->margin([2, 2, 2, 2]);
             $chart->title->text(null);
@@ -115,6 +115,38 @@ class GadgetChartRepository extends \Doctrine\ORM\EntityRepository
                 . ' AND rad.timeOfInsert >= \'' . $from->format('Y-m-d H:i:s') . '\''
             )
             ->getResult();
+    }
+
+    function hex2rgba($color, $opacity = false) {
+
+        $default = 'rgb(0,0,0)';
+
+        //Return default if no color provided
+        if(empty($color))
+            return $default;
+
+        //Sanitize $color if "#" is provided
+        if ($color[0] == '#' ) {
+            $color = substr( $color, 1 );
+        }
+
+        //Check if color has 6 or 3 characters and get values
+        if (strlen($color) == 6) {
+            $hex = array( $color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5] );
+        } elseif ( strlen( $color ) == 3 ) {
+            $hex = array( $color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2] );
+        } else {
+            return $default;
+        }
+
+        //Convert hexadec to rgb
+        $rgb =  array_map('hexdec', $hex);
+
+        //Add opacity
+        $output = 'rgba('.implode(",",$rgb).','.$opacity.')';
+
+        //Return rgb(a) color string
+        return $output;
     }
 
 }
