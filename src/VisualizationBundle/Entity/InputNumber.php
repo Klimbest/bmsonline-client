@@ -3,6 +3,7 @@
 namespace VisualizationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use BmsConfigurationBundle\Entity\Register;
 
 /**
  * InputNumber
@@ -72,6 +73,29 @@ class InputNumber
     private $zIndex;
 
     /**
+     * @var Register
+     *
+     * @ORM\ManyToOne(targetEntity="\BmsConfigurationBundle\Entity\Register")
+     * @ORM\JoinColumn(name="destination", referencedColumnName="id", nullable=true)
+     * })
+     */
+    private $destination;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="range_min", type="decimal", precision=9, scale=2, nullable=false)
+     */
+    private $rangeMin;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="range_max", type="decimal", precision=9, scale=2, nullable=false)
+     */
+    private $rangeMax;
+
+    /**
      * @var Page
      *
      * @ORM\ManyToOne(targetEntity="Page", inversedBy="inputs_number")
@@ -79,13 +103,6 @@ class InputNumber
      */
     private $page;
 
-    /**
-     * @var EventLink
-     *
-     * @ORM\ManyToOne(targetEntity="EventLink")
-     * @ORM\JoinColumn(name="event_link_id", referencedColumnName="id", nullable=true)
-     */
-    private $eventLink;
 
     /**
      * Constructor
@@ -97,7 +114,7 @@ class InputNumber
         $this->topPosition = 0;
         $this->leftPosition = 0;
         $this->width = 100;
-        $this->height = 50;
+        $this->height = 30;
         $this->zIndex = 5;
     }
 
@@ -304,26 +321,74 @@ class InputNumber
     }
 
     /**
-     * Set eventLink
+     * Set destination
      *
-     * @param EventLink $eventLink
+     * @param Register $destination
      *
      * @return InputNumber
      */
-    public function setEventLink(EventLink $eventLink = null)
+    public function setDestination(Register $destination = null)
     {
-        $this->eventLink = $eventLink;
+        $this->destination = $destination;
 
         return $this;
     }
 
     /**
-     * Get eventLink
+     * Get destination
      *
-     * @return EventLink
+     * @return Register
      */
-    public function getEventLink()
+    public function getDestination()
     {
-        return $this->eventLink;
+        return $this->destination;
+    }
+
+    /**
+     * Set rangeMin
+     *
+     * @param string $rangeMin
+     *
+     * @return InputNumber
+     */
+    public function setRangeMin($rangeMin)
+    {
+        $this->rangeMin = $rangeMin;
+
+        return $this;
+    }
+
+    /**
+     * Get rangeMin
+     *
+     * @return string
+     */
+    public function getRangeMin()
+    {
+        return $this->rangeMin;
+    }
+
+    /**
+     * Set rangeMax
+     *
+     * @param string $rangeMax
+     *
+     * @return InputNumber
+     */
+    public function setRangeMax($rangeMax)
+    {
+        $this->rangeMax = $rangeMax;
+
+        return $this;
+    }
+
+    /**
+     * Get rangeMax
+     *
+     * @return string
+     */
+    public function getRangeMax()
+    {
+        return $this->rangeMax;
     }
 }

@@ -61,7 +61,7 @@ function setPanelEvents() {
         var element_type = setElementType($(this));
         var handle;
         var old_zIndex = $(this).css("zIndex");
-        if (element_type == "GadgetProgressBar") {
+        if (element_type == "GadgetProgressBar" || element_type == "InputNumber") {
             handle = "e, w";
         } else {
             handle = "se, sw";

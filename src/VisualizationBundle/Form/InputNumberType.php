@@ -9,6 +9,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class InputNumberType extends AbstractType
 {
@@ -46,10 +49,29 @@ class InputNumberType extends AbstractType
                     'min' => 0
                 ]
             ])
-            ->add('height', IntegerType::class, [
-                'label' => 'Wysokość',
+            ->add('destination', EntityType::class, [
+                'label' => 'Zmienna',
+                'class' => 'BmsConfigurationBundle:Register',
+                'query_builder' => function (EntityRepository $repository) {
+                    return $repository->createQueryBuilder('r')
+                        ->where('r.writeRegister = 1');
+                },
                 'attr' => [
-                    'min' => 0
+                    'data-live-search' => true
+                ]
+            ])
+            ->add('rangeMin', NumberType::class, [
+                'scale' => 2,
+                'label' => 'Dozwolone minimum',
+                'attr' => [
+                    'step' => 0.01
+                ]
+            ])
+            ->add('rangeMax', NumberType::class, [
+                'scale' => 2,
+                'label' => 'Dozwolone maximum',
+                'attr' => [
+                    'step' => 0.01
                 ]
             ]);
     }

@@ -145,11 +145,23 @@ function setGadgetsCart(charts) {
     }
 }
 
-function writeRegister(value, register_id) {
-    var data = {
-        value: value,
-        register_id: register_id
-    };
+function writeRegister(value, register_id, element_id) {
+    if (value === null) {
+        var v = $(element_id).parent().find('input').val();
+        if (v == "") {
+            alert("Błędna wartość! Przykład: 22,99");
+        } else {
+            var data = {
+                value: v,
+                register_id: register_id
+            };
+        }
+    } else {
+        var data = {
+            value: value,
+            register_id: register_id
+        };
+    }
     $.ajax({
         type: "POST",
         datatype: "application/json",

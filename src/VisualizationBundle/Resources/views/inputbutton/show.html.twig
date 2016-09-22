@@ -1,6 +1,6 @@
 <div
         {% if (inputButton.value is not empty) and (inputButton.destination is not empty) %}
-            onclick="writeRegister({{ inputButton.value }}, {{ inputButton.destination.id }} );"
+            onclick="writeRegister({{ inputButton.value }}, {{ inputButton.destination.id }}, {{ inputButton.id }});"
         {% endif %}
         {% if inputButton.tooltip %}
             title="{{ inputButton.name }}"

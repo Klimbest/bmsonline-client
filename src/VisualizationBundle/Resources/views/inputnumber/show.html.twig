@@ -1,8 +1,7 @@
 <div
-        {% if (inputNumber.eventLink is not empty) %}
-            onclick="ajaxChangePage({{ inputNumber.eventLink.page.id }});"
+        {% if inputNumber.tooltip %}
+            title="{{ inputNumber.name }}"
         {% endif %}
-        name="{{ inputNumber.name }}"
         id="{{ inputNumber.id }}" class="bms-panel bms-inputnumber"
         style="
                 top: {{ inputNumber.topPosition }}px;
@@ -11,17 +10,26 @@
                 height: {{ inputNumber.height }}px;
                 line-height: {{ inputNumber.height }}px;
                 z-index: {{ inputNumber.zIndex }};
-        {% if (inputNumber.eventLink is not empty) %}
-                cursor: pointer;
-        {% endif %}
                 ">
-    INPUT NUMBER
+    <form>
+        <div class="input-group input-group-sm">
+            <input type="number" class="form-control form-control-sm" id="input_number_value"
+                   placeholder="Wartość" {% if labels %} disabled {% endif %}
+                   min="{{ inputNumber.rangeMin }}" max="{{ inputNumber.rangeMax }}">
+            <span type="submit" class="input-group-addon "
+                    {% if (inputNumber.destination is not empty) and (not labels) %}
+                        onclick="writeRegister(null, {{ inputNumber.destination.id }}, this);"
+                    {% endif %}
+            ><i class="fa fa-chevron-right" style="cursor: pointer"></i></span>
+        </div>
+    </form>
     {% if labels %}
         <span class="label label-primary label-bms-panel">
             <i class="fa fa-edit fa-fw"></i> {{ inputNumber.id }}
             <a href="{{ path('inputnumber_copy', {'id': inputNumber.id }) }}"><i class='fa fa-fw fa-clone fa-blue'></i></a>
             <a href="{{ path('inputnumber_edit', {'id': inputNumber.id }) }}"><i class='fa fa-fw fa-cogs fa-yellow'></i></a>
-            <a href="{{ path('inputnumber_delete', {'id': inputNumber.id }) }}"><i class='fa fa-fw fa-trash-o fa-red'></i></a>
+            <a href="{{ path('inputnumber_delete', {'id': inputNumber.id }) }}"><i
+                        class='fa fa-fw fa-trash-o fa-red'></i></a>
         </span>
     {% endif %}
 </div>
