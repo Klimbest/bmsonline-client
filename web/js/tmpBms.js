@@ -104,7 +104,7 @@ function setProgressBars(progressbars) {
                 if (this.value === null || this.value < 0 || this.value > 100) {
                     gadgetProgressBar.find("div#value").hide();
                 } else {
-                    gadgetProgressBar.find("div#value").animate({
+                    gadgetProgressBar.find("div#value").show().animate({
                         left: this.value + "%"
                     }, 500, "linear");
                 }
@@ -112,7 +112,7 @@ function setProgressBars(progressbars) {
                 if (this.set === null || this.set < 0 || this.set > 100) {
                     gadgetProgressBar.find("div#set").hide();
                 } else {
-                    gadgetProgressBar.find("div#set").animate({
+                    gadgetProgressBar.find("div#set").show().animate({
                         left: this.set + "%"
                     }, 500, "linear");
                 }
