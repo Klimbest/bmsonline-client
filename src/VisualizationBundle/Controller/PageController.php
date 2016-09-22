@@ -149,9 +149,4 @@ class PageController extends Controller
         return $this->redirectToRoute('visualization');
     }
 
-    private function generateCharts()
-    {
-
-    }
-
 }
