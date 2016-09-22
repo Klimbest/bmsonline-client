@@ -155,8 +155,10 @@ function writeRegister(value, register_id, element_id) {
             alert("Błędna wartość! Przykład: 22,99");
         } else {
             if (v < min) {
+                input.val(min);
                 v = min;
             } else if (v > max) {
+                input.val(max);
                 v = max;
             }
             var data = {
