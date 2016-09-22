@@ -147,10 +147,18 @@ function setGadgetsCart(charts) {
 
 function writeRegister(value, register_id, element_id) {
     if (value === null) {
-        var v = $(element_id).parent().find('input').val();
+        var input = $(element_id).parent().find('input');
+        var v = input.val();
+        var min = input.attr('min');
+        var max = input.attr('max');
         if (v == "") {
             alert("Błędna wartość! Przykład: 22,99");
         } else {
+            if (v < min) {
+                v = min;
+            } else if (v > max) {
+                v = max;
+            }
             var data = {
                 value: v,
                 register_id: register_id

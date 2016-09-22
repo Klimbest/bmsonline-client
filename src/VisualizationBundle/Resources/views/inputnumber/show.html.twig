@@ -14,13 +14,13 @@
     <form>
         <div class="input-group input-group-sm">
             <input type="number" class="form-control form-control-sm" id="input_number_value"
-                   placeholder="Wartość" {% if labels %} disabled {% endif %}
-                   min="{{ inputNumber.rangeMin }}" max="{{ inputNumber.rangeMax }}">
-            <span type="submit" class="input-group-addon "
+                    {% if labels %} disabled {% endif %} min="{{ inputNumber.rangeMin }}"
+                   max="{{ inputNumber.rangeMax }}">
+            <span style="cursor: pointer" type="submit" class="input-group-addon "
                     {% if (inputNumber.destination is not empty) and (not labels) %}
                         onclick="writeRegister(null, {{ inputNumber.destination.id }}, this);"
                     {% endif %}
-            ><i class="fa fa-chevron-right" style="cursor: pointer"></i></span>
+            ><i class="fa fa-chevron-right"></i></span>
         </div>
     </form>
     {% if labels %}
