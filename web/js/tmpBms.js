@@ -101,20 +101,25 @@ function setProgressBars(progressbars) {
     if (progressbars) {
         $.each(progressbars, function () {
             var gadgetProgressBar = $("div#" + this.id + ".bms-gadgetprogressbar");
-            if (this.value < 0 || this.value > 100) {
-                gadgetProgressBar.find("div#value").hide();
-            } else {
-                gadgetProgressBar.find("div#value").animate({
-                    left: this.value + "%"
-                }, 500, "linear");
+            if (this.value < 0) {
+                this.value = 0;
             }
-            if (this.value < 0 || this.value > 100) {
-                gadgetProgressBar.find("div#set").hide();
-            } else {
-                gadgetProgressBar.find("div#set").animate({
-                    left: this.set + "%"
-                }, 500, "linear");
+            if (this.value > 100) {
+                this.value = 100;
             }
+            gadgetProgressBar.find("div#value").animate({
+                left: this.value + "%"
+            }, 500, "linear");
+
+            if (this.set < 0) {
+                this.set = 0;
+            }
+            if (this.set > 100) {
+                this.set = 100;
+            }
+            gadgetProgressBar.find("div#set").animate({
+                left: this.set + "%"
+            }, 500, "linear");
 
         });
     }
