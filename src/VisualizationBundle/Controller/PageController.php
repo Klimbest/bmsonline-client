@@ -109,6 +109,10 @@ class PageController extends Controller
     public function deleteAction(Page $page)
     {
         $em = $this->getDoctrine()->getManager();
+        $eventLinkRepo = $em->getRepository('VisualizationBundle:EventLink');
+        $eventLink = $eventLinkRepo->findOneBy(['page' => $page->getId()]);
+        $em->remove($eventLink);
+
         foreach($page->getPanelsImage() as $element){
             $em->remove($element);
         }
@@ -133,6 +137,9 @@ class PageController extends Controller
             $em->remove($element);
         }
         foreach($page->getGadgetsProgressBar() as $element){
+            $em->remove($element);
+        }
+        foreach($page->getGadgetsChart() as $element){
             $em->remove($element);
         }
 
