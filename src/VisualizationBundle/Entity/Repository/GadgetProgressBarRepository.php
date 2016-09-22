@@ -18,18 +18,33 @@ class GadgetProgressBarRepository extends EntityRepository
         $data = self::findBy(['page' => $page_id]);
         $ret = [];
         foreach ($data as $element) {
+            //prepare set
             $setRegister = $element->getSetRegisterId();
             if (!empty($setRegister)) {
                 $set = $setRegister->getRegisterCurrentData()->getFixedValue();
-                $set_percent = ($set - $element->getRangeMin()) / ($element->getRangeMax() - $element->getRangeMin()) * 100;
+                if (!empty($set)) {
+                    $set_percent = ($set - $element->getRangeMin()) / ($element->getRangeMax() - $element->getRangeMin()) * 100;
+                    $set_percent = round($set_percent, 2);
+                } else {
+                    $set = null;
+                    $set_percent = null;
+                }
             } else {
                 $set = null;
                 $set_percent = null;
             }
-            $value = $element->getValueRegisterId()->getRegisterCurrentData()->getFixedValue();
-            $value_percent = ($value - $element->getRangeMin()) / ($element->getRangeMax() - $element->getRangeMin()) * 100;
-            array_push($ret, ['id' => $element->getId(), 'set' => round($set_percent, 2), 'value' => round($value_percent, 2)]);
 
+            //prepare value
+            $value = $element->getValueRegisterId()->getRegisterCurrentData()->getFixedValue();
+            if ($value === null) {
+                $value = null;
+                $value_percent = null;
+            } else {
+                $value_percent = ($value - $element->getRangeMin()) / ($element->getRangeMax() - $element->getRangeMin()) * 100;
+                $value_percent = round($value_percent, 2);
+            }
+            //push record
+            array_push($ret, ['id' => $element->getId(), 'set' => $set_percent, 'value' => $value_percent]);
         }
 
         return $ret;
